@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#D9594C</color>
+    <color name="colorPrimaryDark">#616161</color>
+    <color name="colorAccent">#0277BD</color>
+
+
+    <color name="black">#212121</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent_white">#B2FFFFFF</color>
+    <color name="green">#00E676</color>
+    <color name="red">#F44336</color>
+    <color name="redStatus">#F44336</color>
+    <color name="colorBorderText">#9E9E9E</color>
+    <color name="colorCode">#55c5f7</color>
+    <color name="color_stamp">#F5F5F5</color>
+
+
+    <color name="colorMain">#D9594C</color>
+    <color name="colorMainPress">#9b4037</color>
+    <color name="colorButtonRegister">#A6C36F</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBackground_Actionbar">#F5F5F5</color>
+    <color name="colorStroke">#E0E0E0</color>
+    <color name="colorTable">#ECEFF1</color>
+    <color name="colorTextMain">#424242</color>
+    <color name="colorTextSecond">#616161</color>
+    <color name="colorTextDisable">#BDBDBD</color>
+    <color name="colorTextSelected">#FFFFFF</color>
+    <color name="colorText">#2d2d2d</color>
+    <color name="blumine">#59c1ec</color>
+    <color name="store_name_in_list_store_checked_in">#317886</color>
+    <color name="store_name_in_list_store_checked_in_press">#27606b</color>
+    <color name="whitePress">#ececec</color>
+
+    <color name="outside_color_trans">#3b252525</color>
+    <color name="holo_blue">#33b5e5</color>
+    <color name="holo_purple">#aa66cc</color>
+    <color name="holo_green">#99cc00</color>
+    <color name="holo_orange">#ffbb33</color>
+    <color name="holo_red">#ff4444</color>
+    <color name="holo_white">#b6f7fd</color>
+
+
+</resources>

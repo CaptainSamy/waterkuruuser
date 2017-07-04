@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              android:layout_marginBottom="20dp"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:layout_marginTop="20dp"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:weightSum="2">
+
+
+    <ImageView
+        android:id="@+id/tvLogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1"
+        android:src="@drawable/img_introduction"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvLogin"
+                style="@style/ViewBorderTheme"
+                android:background="@drawable/bg_red_button"
+                android:gravity="center"
+                android:text="@string/button_login"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvRegisterAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvLogin"
+                android:background="@drawable/bg_cydia_button"
+                android:gravity="center"
+                android:paddingBottom="15dp"
+                android:paddingTop="15dp"
+                android:singleLine="true"
+                android:text="@string/register_account"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvHowToUsed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvRegisterAccount"
+                android:gravity="center"
+                android:text="@string/how_to_used_1"
+                android:textColor="@color/colorTextMain"
+                android:textSize="20dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvHowToUsed"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/how_to_used_2"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

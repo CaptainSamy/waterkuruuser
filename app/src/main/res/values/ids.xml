@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="menu_logout" type="id"/>
+    <item name="menu_push_notification" type="id"/>
+    <item name="shared_drawable" type="id"/>
+    <item name="menu_change_password" type="id"/>
+    <item name="menu_how_to_use" type="id"/>
+    <item name="menu_question_answer" type="id"/>
+    <item name="menu_contact_us" type="id"/>
+    <item name="menu_term_of_service" type="id"/>
+    <item name="menu_privacy_policy" type="id"/>
+    <item name="menu_version" type="id"/>
+</resources>

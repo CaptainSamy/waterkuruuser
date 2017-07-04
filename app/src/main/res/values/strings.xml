@@ -1,0 +1,191 @@
+<resources>
+    <string name="app_name">ウォータークル</string>
+
+    <string name="success">成功</string>
+    <string name="failure">エラーが発生しました</string>
+    <string name="permission_denied">アクセス拒否</string>
+    <string name="network_error">インターネットは接続できませんでした。</string>
+    <string name="message_read_qr_code_failure">エラーが発生されました。インターネットの接続を確認してください。</string>
+    <string name="select_photo">画像選択</string>
+    <!--Splash fragment-->
+    <string name="introduction_app">アプリの紹介</string>
+    <string name="how_to_used_1">スマホでかんたんツナグアプリ</string>
+    <string name="how_to_used_2">ウォーターメルは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
+    <string name="test"> You have a new message You have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \n</string>
+
+    <!--Login fragment-->
+    <string name="login_email">ログインID</string>
+    <string name="login_password">パスワード</string>
+    <string name="button_login">ログイン</string>
+    <string name="cancel">キャンセル</string>
+    <string name="reset_password">パスワードが忘れた方</string>
+    <string name="register_account">新規登録</string>
+    <string name="user_login_not_null">ログインIDを入力してください。</string>
+    <string name="password_login_not_null">パスワードを入力してください。</string>
+    <string name="confirm_password_not_null">パスワード（確認）を入力していませんでした。入力してください。</string>
+
+    <!--Reset/change password fragment-->
+    <string name="title_screen_reset_password">パスワード初期化</string>
+    <string name="title_screen_change_password">パスワード変更</string>
+    <string name="title_user">ログインIDまたはメールアドレス</string>
+    <string name="reset">リセット</string>
+    <string name="back">キャンセル</string>
+    <string name="title_new_password">新パスワード</string>
+    <string name="title_confirm_new_password">新パースワード(確認)</string>
+    <string name="changer_password">変更</string>
+    <string name="user_id_reset_not_null"> ログインIDまたはメールアドレスを入力してください。</string>
+    <string name="reset_success">登録されたメールアドレスへ認証コードを送信しました</string>
+    <string name="title_changer_password">パスワード初期化</string>
+    <string name="hint_code">認証コード</string>
+    <string name="code_not_null">認証コードを入力してください。</string>
+    <string name="code_different">認証コードは正しくありません。</string>
+    <string name="new_password_not_null">パスワードを入力してください。</string>
+    <string name="confirm_new_password_not_null">パスワード（確認）を入力してください。</string>
+    <string name="confirm_different_new_password">パスワード（確認）はパスワードに誤りがあります。</string>
+    <string name="change_password_success">パスワードを初期化しました。</string>
+    <string name="email_not_format">メーリアドレスを正しく入力してください。</string>
+    <!--Register account fragment-->
+    <string name="title_register">新規登録</string>
+    <string name="register">登録</string>
+    <string name="user_name_not_null">名前を入力してください。</string>
+    <string name="user_not_null">ログイン IDを入力していませんでした。入力してください。</string>
+    <string name="password_length">パスワードを8～14桁で入力してください。</string>
+    <string name="password_not_null">パスワードを入力していませんでした。入力してください。</string>
+    <string name="different_password">パスワードとパスワード（確認）が異なります。正しく入力してください。</string>
+    <string name="email_not_null">メールアドレスを入力していませんでした。入力してください。</string>
+    <string name="email_container_chars">Email must container chars</string>
+    <string name="email_validate">メールアドレスに誤りがあります。正しく入力してください。</string>
+    <string name="term_of_service">上の会員登録ボタンを押すことにより、\n利用規約に同意したことになります</string>
+    <string name="link">利用規約</string>
+    <string name="register_success">登録できました。ログインしてください。</string>
+    <string name="input_user_name">名前</string>
+    <string name="input_user_id">ログインID</string>
+    <string name="input_email">メールアドレス</string>
+    <string name="input_password">パスワード</string>
+    <string name="input_confirm_password">パスワード(確認)</string>
+
+
+    <!--Home fragment-->
+    <string name="title_home">ホーム</string>
+    <string name="title_bottom_stamp">マイスタンプ</string>
+    <string name="title_bottom_another">要望</string>
+    <string name="read_qr_code">QRコードリーダー</string>
+    <string name="show_qr_code">QR \n コード</string>
+    <string name="show_bar_code">バー\nコード</string>
+
+
+    <!--Another fragment-->
+    <string name="title_screen_another">要望記入</string>
+    <!-- Navigation -->
+    <string name="menu_notifications">Notifications</string>
+
+    <!--Check In Fragment-->
+    <string name="title_info_store">店の情報</string>
+    <string name="title_address_store">住所 :</string>
+    <string name="title_store_name">店名称 :</string>
+    <string name="button_check_in">チェックイン</string>
+    <string name="button_cancel_check_in">キャンセル</string>
+
+    <!--Note Fragment-->
+    <string name="title_service_name">サービス名称：</string>
+    <string name="title_note">要望内容：</string>
+    <string name="hint_note">要望内容...</string>
+
+    <!-- Firebase -->
+    <string name="msg_parse_message_failure">Parse message failure</string>
+
+    <!--Stamp Fragment-->
+    <string name="title_screen_stamp">マイスタンプ</string>
+    <string name="stamp_date">%1$s/%2$s</string>
+    <string name="add_service">要望</string>
+    <string name="unused_card_title">店名称：</string>
+    <string name="can_use_card_title">使用可能サンタプカード</string>
+    <string name="used_card_title">使用済一覧</string>
+    <string name="card_amount">利用可能スタンプカード：%1$s枚</string>
+    <string name="list_store">店舗の状態確認</string>
+    <string name="rating">評価する</string>
+
+    <!-- menu -->
+    <string name="menu_logout">ログアウト</string>
+    <string name="menu_push_notification">通知一覧</string>
+    <string name="change_password">パスワード変更</string>
+    <string name="how_to_use">アプリの使い方</string>
+    <string name="question_answer">よくある質問</string>
+    <string name="contact_us">お問い合わせ</string>
+    <string name="term_of_service_menu">利用規約</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="version_menu">バージョン</string>
+
+    <!-- User memo -->
+    <string name="title_screen_user_memo">要望</string>
+    <string name="save_button">保存</string>
+
+    <!--Manager Stamp-->
+    <string name="title_screen_manager_stamp">チェックイン中</string>
+    <!--Wait confirm-->
+    <string name="title_screen_wait_confirm">処理中</string>
+    <string name="text_waiting_1">お客様の前は</string>
+    <string name="text_waiting_2">人が待っています。お客様の待ち時間はおよそ</string>
+    <string name="text_waiting_3">くらいです。</string>
+    <!-- Animation -->
+    <string name="title_waiting_store_confirm_checkin">処理中</string>
+    <string name="waiting_store_confirm_checkin">処理中...</string>
+    <string name="expand_waiting_confirm_checkin">しばらくお待ちください\n お客様番号： %1$s\nただ今お待ち人数：  %2$s人\n お呼出しまでおよそ %3$sになります</string>
+    <string name="number_customer_waiting"> %1$s人</string>
+    <string name="expand_waiting_confirm_prepare_finish">しばらくチェックインします\nアプリを閉じずにこのままお待ちください。</string>
+
+    <!-- Notification -->
+    <string name="title_push_notification_list">通知一覧</string>
+    <string name="notification_date">%1$s</string>
+    <!--List store checked in-->
+    <string name="title_list_store_checked_in">最新ご利用のお店舗を表示</string>
+    <string name="time_waiting">現在のお待ち時間</string>
+    <string name="people_waiting">現在のお待ち人</string>
+    <string name="number_used_service">ご利用回数</string>
+    <string name="time_last_used_service">最後の利用日</string>
+    <string name="content_time_waiting">  %1$s時%2$s分</string>
+    <string name="content_people_waiting">  %1$s人</string>
+    <string name="content_number_user_store">  %1$s回</string>
+    <string name="content_time_last_used">  %1$s年%2$s月%3$s日</string>
+    <string name="app_google">com.google.android.apps.maps</string>
+    <string name="position_map">geo:%1$s, %2$s</string>0,0
+    <string name="position_map_address">geo:0,0?q=%1$s, %2$s(%3$s)</string>// geo:0,0?q=%1$s
+    <!--Term of service-->
+    <string name="title_term_of_service">利用規約</string>
+    <string name="content_term_of_service">WATERKURU利用規約</string>
+    <!--How to use-->
+    <string name="title_screen_how_to_use">アプリの使い方</string>
+    <string name="content_introduction">・アカウント登録について
+　起動画面にて「新規登録」ボタンをクリックすると登録画面が表示します。</string>
+    <string name="content_register">・項目欄に入力してから「登録」ボタンをクリックしたら会員登録が完了します。</string>
+    <string name="content_check_in">・パスワード変更について
+　右上のメニューから「パスワード変更」メニューを選択してらパスワード変
+更画面が表示します。現パスワードと新パスワードを入力して「パスワード変更」ボタンを押下し
+たらパスワード変更します。\n
+    ・サービス利用についてホーム画面から店のQRコードを読み込んで表示されたポップアップの「チェックイン」ボタンをタッチすると店にサービス利用するチェックインを行います。</string>
+
+    <string name="content_wait">・チェックイン後待ち中画面によりお客様の予約番号、待ち人数、待ち時間などがわかります。</string>
+    <string name="content_end">・チェックインぜずに店舗の状況確認について\n・要望記入について</string>
+
+
+    <!--QA-->
+    <string name="title_screen_qa">よくある質問</string>
+    <string name="content_qa">・利用したことがない店に対してどう会員登録すればいいですか。\n→新しい店舗を利用する際に登録必要がありません。店舗でチェックインしてから自動的に店舗の会員登録をします。\n
+
+・要望の目的はなんですか。\n→要望というのは、サービスに対して臨時的にサービスを提供する店舗のスタッフさんへ要望を伝える機能です。※注意：お客様の要望は同一サービスを提供する全ての店舗は見えます。\n
+
+・店舗の評価したい場合はどうすればいいですか。\n→アプリにてアイスタンプメニューをタッチし、評価したい店を選択するとその店のスタンプカードが表示されます。スタンプに付与された評価するボタンをタッチして評価する画面が表示します。\n
+
+・行きたいお店の空席や待ち時間などをチェックしたい時はどうすればいいですか。\n→マイスタンプ画面から行きたい店のスタンプカードをたどり、店舗の状態確認ボタンを押下すると行った店一覧が表示します。全ての店舗状況を確認できます。\n
+
+・パスワードが忘れた時にどうすればいいですか。\n→ログイン画面にてパスワードが忘れた方のリンクを押下して、メールアドレスまたはログインIDを記入し、初期化ボタンを押下すると新しいパスワードを
+
+メールで送ります。</string>
+    <!--Contact-->
+    <string name="title_screen_contact">お問い合わせ</string>
+    <string name="title_user_name_contact">お名前</string>
+    <string name="title_user_email_contact">メールアドレス</string>
+    <string name="title_content_contact">お問い合わせ内容</string>
+    <string name="button_contact">お問い合わせする</string>
+
+</resources>

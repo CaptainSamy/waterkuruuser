@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/etUserName"
+            style="@style/EditTextTheme"
+            android:hint="@string/input_user_name" />
+
+        <TextView
+            android:id="@+id/tvUserNameError"
+            style="@style/TextViewError" />
+
+        <EditText
+            android:id="@+id/etUserId"
+            style="@style/EditTextTheme"
+            android:hint="@string/input_user_id" />
+
+        <TextView
+            android:id="@+id/tvUserIdError"
+            style="@style/TextViewError" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            style="@style/EditTextTheme"
+            android:hint="@string/input_email" />
+
+        <TextView
+            android:id="@+id/tvEmailError"
+            style="@style/TextViewError" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            style="@style/EditTextTheme"
+            android:hint="@string/input_password"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/tvPasswordError"
+            style="@style/TextViewError" />
+
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            style="@style/EditTextTheme"
+            android:hint="@string/input_confirm_password"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/tvConfirmPasswordError"
+            style="@style/TextViewError" />
+
+        <TextView
+            android:id="@+id/tvRegisterAccount"
+            style="@style/ViewBorderTheme"
+            android:background="@drawable/bg_red_button"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tvTermOfService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+
+</ScrollView>

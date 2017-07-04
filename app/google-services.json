@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "1036924670256",
+    "firebase_url": "https://waterkuru-4a5cf.firebaseio.com",
+    "project_id": "waterkuru-4a5cf",
+    "storage_bucket": "waterkuru-4a5cf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036924670256:android:f3837fb14e831c3e",
+        "android_client_info": {
+          "package_name": "jp.co.wssj.waterkuru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036924670256-6g6t4h9s21cim9abb92j3i7volehit8o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.co.wssj.waterkuru",
+            "certificate_hash": "c115955b1ffddcd5644e1c73607081d9adaacf31"
+          }
+        },
+        {
+          "client_id": "1036924670256-sbhunsbtkrt5c4620srk6r2kr4d0nt84.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.co.wssj.waterkuru",
+            "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
+          }
+        },
+        {
+          "client_id": "1036924670256-2k2m9v8lqlilr1edfqnj7eg4gi44foc8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp5kSIm0xIKXEUTYtwFQhpXbyH8Ulu5ZM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036924670256-2k2m9v8lqlilr1edfqnj7eg4gi44foc8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

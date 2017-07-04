@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/navigation_menu"
+        android:checkableBehavior="single">
+        <item
+            android:id="@id/menu_push_notification"
+            android:icon="@drawable/notification"
+            android:title="@string/menu_push_notification"/>
+
+        <item
+            android:id="@id/menu_change_password"
+            android:icon="@drawable/change_password"
+            android:title="@string/change_password"/>
+        <item
+            android:id="@id/menu_how_to_use"
+            android:icon="@drawable/how_to_use"
+            android:title="@string/how_to_use"/>
+        <item
+            android:id="@id/menu_question_answer"
+            android:icon="@drawable/qa"
+            android:title="@string/question_answer"/>
+        <item
+            android:id="@id/menu_contact_us"
+            android:icon="@drawable/contact"
+            android:title="@string/contact_us"/>
+        <item
+            android:id="@id/menu_term_of_service"
+            android:icon="@drawable/term_of_service"
+            android:title="@string/term_of_service_menu"/>
+
+        <item
+            android:id="@id/menu_privacy_policy"
+            android:icon="@drawable/privacy_policy"
+            android:title="@string/privacy_policy"/>
+        <item
+            android:id="@id/menu_version"
+            android:icon="@drawable/version"
+            android:title="@string/version_menu"/>
+
+
+        <item
+            android:id="@id/menu_logout"
+            android:icon="@drawable/logout"
+            android:title="@string/menu_logout"/>
+    </group>
+</menu>

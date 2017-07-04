@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+    defaultConfig {
+        vectorDrawables.useSupportLibrary = true
+    }
+    productFlavors {
+        development {
+            applicationId "jp.co.wssj.waterkuru"
+            buildConfigField "String", "HOST", "\"http://54.92.40.147\""
+            buildConfigField "String", "HOST_AWS", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
+            minSdkVersion 17
+            targetSdkVersion 25
+            versionCode 1
+            versionName "1.0.dev"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+        demo {
+            applicationId "jp.co.wssj.waterkuru"
+            buildConfigField "String", "HOST", "\"http://133.130.73.227:7777\""
+            buildConfigField "String", "HOST_AWS", "\"http://133.130.73.227:7777\""
+            minSdkVersion 17
+            targetSdkVersion 25
+            versionCode 1
+            versionName "1.0.demo"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+        product {
+            applicationId "jp.co.wssj.waterkuru"
+            buildConfigField "String", "HOST", "\"http://54.92.40.147\""
+            buildConfigField "String", "HOST_AWS", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
+            minSdkVersion 17
+            targetSdkVersion 25
+            versionCode 1
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:support-v4:25.3.1'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile 'com.github.yalantis:ucrop:2.2.1'
+    compile "com.google.android.gms:play-services-location:10.2.6"
+    compile 'com.github.esafirm.android-image-picker:imagepicker:1.7.2@aar'
+    compile 'com.google.android.gms:play-services-vision:10.2.6'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:support-vector-drawable:25.3.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.google.firebase:firebase-messaging:10.2.6'
+    compile 'com.iarcuschin:simpleratingbar:0.1.5'
+    compile 'com.github.michaelye.easydialog:easydialog:1.4'
+
+}
+apply plugin: 'com.google.gms.google-services'
