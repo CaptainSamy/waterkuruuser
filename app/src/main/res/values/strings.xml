@@ -39,11 +39,19 @@
     <string name="hint_code">認証コード</string>
     <string name="code_not_null">認証コードを入力してください。</string>
     <string name="code_different">認証コードは正しくありません。</string>
-    <string name="new_password_not_null">パスワードを入力してください。</string>
-    <string name="confirm_new_password_not_null">パスワード（確認）を入力してください。</string>
-    <string name="confirm_different_new_password">パスワード（確認）はパスワードに誤りがあります。</string>
+    <string name="new_password_by_code_not_null">パスワードを入力してください。</string>
+    <string name="confirm_new_password_by_code_not_null">パスワード（確認）を入力してください。</string>
+    <string name="confirm_different_new_password_by_code">パスワード（確認）はパスワードに誤りがあります。</string>
     <string name="change_password_success">パスワードを初期化しました。</string>
     <string name="email_not_format">メーリアドレスを正しく入力してください。</string>
+    <string name="title_password_old">パスワード変更</string>
+    <string name="text_hint_password_old">現在のパスワード</string>
+
+
+    <string name="current_password_not_null">パスワードを入力してください。</string>
+    <string name="new_password_not_null"> 新パスワードを入力してください。</string>
+    <string name="confirm_new_password_not_null">新パスワード(確認)を入力してください。</string>
+    <string name="confirm_different_new_password">新パスワード(確認)はパスワードに誤りがあります。</string>
     <!--Register account fragment-->
     <string name="title_register">新規登録</string>
     <string name="register">登録</string>

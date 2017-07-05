@@ -50,13 +50,13 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:isIndicator="false"
-            android:numStars="5"
-            android:stepSize="0.5"
             app:srb_fillColor="@color/colorAccent"
+            app:srb_numberOfStars="5"
             app:srb_starBackgroundColor="@color/colorBorderText"
             app:srb_starBorderWidth="0.1"
             app:srb_starCornerRadius="1"
             app:srb_starSize="50dp"
+            app:srb_stepSize="0.5"
             />
 
         <RelativeLayout
@@ -74,9 +74,9 @@
                 android:layout_alignTop="@+id/tvStar"
                 app:srb_borderColor="@color/colorBorderText"
                 app:srb_fillColor="@color/colorBorderText"
+                app:srb_isIndicator="true"
                 app:srb_numberOfStars="1"
                 app:srb_rating="1"
-                app:srb_isIndicator="true"
                 app:srb_starBorderWidth="0.1"
                 app:srb_starCornerRadius="1"
                 />

@@ -11,4 +11,6 @@ interface IChangePasswordView extends IFragmentView {
     void onValidateFailure(String message);
 
     void onChangePasswordSuccess(String message);
+
+    void onChangePasswordFailure(String message);
 }

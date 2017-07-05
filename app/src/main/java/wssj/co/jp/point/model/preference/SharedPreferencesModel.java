@@ -13,23 +13,17 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_TOKEN = "token";
 
-    private static final String KEY_TOKEN_AWS = "token_aws";
-
     private static final String KEY_EXPIRE_DATE = "expire_date";
-
-    private static final String KEY_EXPIRE_DATE_AWS = "expire_date_aws";
 
     private static final String KEY_SESSION = "session";
 
-    private static final String KEY_SESSION_AWS = "session_aws";
-
     private static final String KEY_SERVICE_ID = "service_id";
-
-    private static final String KEY_SERVICE_ID_AWS = "service_id_aws";
 
     private static final String KEY_SERVICE_COMPANY_ID = "service_company_id";
 
-    private static final String KEY_SERVICE_COMPANY_ID_AWS = "service_company_id_aws";
+    private static final String KEY_USER_NAME = "user_name";
+
+    private static final String KEY_EMAIL = "email";
 
     private final SharedPreferencesHelper mSharedPreference;
 
@@ -80,14 +74,29 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getInt(KEY_SERVICE_COMPANY_ID);
     }
 
+    public void putUserName(String userName) {
+        mSharedPreference.put(KEY_USER_NAME, userName);
+    }
+
+    public String getUserName() {
+        return mSharedPreference.getString(KEY_USER_NAME);
+    }
+
+    public void putEmail(String userName) {
+        mSharedPreference.put(KEY_EMAIL, userName);
+    }
+
+    public String getEmail() {
+        return mSharedPreference.getString(KEY_EMAIL);
+    }
+
     public void clearSession() {
         mSharedPreference.remove(KEY_SESSION);
         mSharedPreference.remove(KEY_SERVICE_ID);
         mSharedPreference.remove(KEY_SERVICE_COMPANY_ID);
+        mSharedPreference.remove(KEY_USER_NAME);
+        mSharedPreference.remove(KEY_EMAIL);
 
-        mSharedPreference.remove(KEY_SESSION_AWS);
-        mSharedPreference.remove(KEY_SERVICE_ID_AWS);
-        mSharedPreference.remove(KEY_SERVICE_COMPANY_ID_AWS);
     }
 
     public void clearAll() {

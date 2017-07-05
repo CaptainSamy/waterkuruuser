@@ -62,7 +62,9 @@ public class AuthModel extends BaseModel {
 
         void onValidateFailure(String message);
 
-        void onChangePasswordSuccess(String message);
+        void onChangePasswordSuccess(RegisterData data, String message);
+
+        void onChangePasswordFailure(String message);
 
     }
 
@@ -106,7 +108,7 @@ public class AuthModel extends BaseModel {
         } else if (TextUtils.isEmpty(password)) {
             errorMessage = new ErrorMessage(getContext().getString(R.string.password_not_null));
             code = 4;
-        } else if (password.length() < 8 || password.length() > 16) {
+        } else if (password.length() < 8 || password.length() > 14) {
             errorMessage = new ErrorMessage(getContext().getString(R.string.password_length));
             code = 4;
         } else if (TextUtils.isEmpty(confirmPassword)) {
@@ -235,25 +237,113 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequest(resetPassword);
     }
 
-    public String validateChangePassword(String code, String newPassword, String confirmNewPassword) {
+    public String validateChangePasswordByCode(String code, String newPassword, String confirmNewPassword) {
         String message = Constants.EMPTY_STRING;
         if (TextUtils.isEmpty(code.trim())) {
             message = getStringResource(R.string.code_not_null);
         } else if (TextUtils.isEmpty(newPassword.trim())) {
-            message = getStringResource(R.string.new_password_not_null);
+            message = getStringResource(R.string.new_password_by_code_not_null);
         } else if ((TextUtils.isEmpty(confirmNewPassword.trim()))) {
-            message = getStringResource(R.string.confirm_password_not_null);
+            message = getStringResource(R.string.confirm_new_password_by_code_not_null);
         } else if (!TextUtils.equals(newPassword, confirmNewPassword)) {
-            message = getStringResource(R.string.confirm_different_new_password);
+            message = getStringResource(R.string.confirm_different_new_password_by_code);
+        } else if (newPassword.length() < 8 || newPassword.length() > 14) {
+            message = getStringResource(R.string.password_length);
         }
         return message;
     }
 
-    public void changePassword(String code, String newPassword, String confirmNewPassword, IOnChangePasswordCallback callback) {
-        String isValid = validateChangePassword(code, newPassword, confirmNewPassword);
+    public void changePasswordByCode(String code, String newPassword, String confirmNewPassword, final IOnChangePasswordCallback callback) {
+        String isValid = validateChangePasswordByCode(code, newPassword, confirmNewPassword);
         if (TextUtils.isEmpty(isValid)) {
-            //TODO call API change password
-            callback.onChangePasswordSuccess(getStringResource(R.string.change_password_success));
+            Request resetPassword = APICreator.changePasswordByCode(code, newPassword,
+                    new Response.Listener<RegisterResponse>() {
+
+                        @Override
+                        public void onResponse(RegisterResponse response) {
+                            Logger.d(TAG, "#changePasswordByCode => onResponse");
+                            if (response.isSuccess()) {
+                                if (TextUtils.isEmpty(response.getMessage())) {
+                                    String message = getStringResource(R.string.change_password_success);
+                                    callback.onChangePasswordSuccess(response.getData(), message);
+                                } else {
+                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
+                                }
+                            } else {
+                                callback.onChangePasswordFailure(response.getMessage());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Logger.d(TAG, "#changePasswordByCode => onErrorResponse");
+                            ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                            if (errorResponse != null) {
+                                callback.onChangePasswordFailure(errorResponse.getMessage());
+                            } else {
+                                callback.onChangePasswordFailure(getStringResource(R.string.network_error));
+                            }
+                        }
+                    });
+            VolleySequence.getInstance().addRequest(resetPassword);
+        } else {
+            callback.onValidateFailure(isValid);
+        }
+    }
+
+    public String validateChangePassword(String currentPassword, String newPassword, String confirmNewPassword) {
+        String message = Constants.EMPTY_STRING;
+        if (TextUtils.isEmpty(currentPassword.trim())) {
+            message = getStringResource(R.string.current_password_not_null);
+        } else if (TextUtils.isEmpty(newPassword.trim())) {
+            message = getStringResource(R.string.new_password_not_null);
+        } else if ((TextUtils.isEmpty(confirmNewPassword.trim()))) {
+            message = getStringResource(R.string.confirm_new_password_not_null);
+        } else if (!TextUtils.equals(newPassword, confirmNewPassword)) {
+            message = getStringResource(R.string.confirm_different_new_password);
+        } else if (newPassword.length() < 8 || newPassword.length() > 14) {
+            message = getStringResource(R.string.password_length);
+        }
+        return message;
+    }
+
+    public void changePassword(String token, String currentPassword, String newPassword, String confirmNewPassword, final IOnChangePasswordCallback callback) {
+        String isValid = validateChangePassword(currentPassword, newPassword, confirmNewPassword);
+        if (TextUtils.isEmpty(isValid)) {
+            Request resetPassword = APICreator.changePassword(token, currentPassword, newPassword,
+                    new Response.Listener<RegisterResponse>() {
+
+                        @Override
+                        public void onResponse(RegisterResponse response) {
+                            Logger.d(TAG, "#changePassword => onResponse");
+                            if (response.isSuccess()) {
+                                if (TextUtils.isEmpty(response.getMessage())) {
+                                    String message = getStringResource(R.string.change_password_success);
+                                    callback.onChangePasswordSuccess(response.getData(), message);
+                                } else {
+                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
+                                }
+                            } else {
+                                callback.onChangePasswordFailure(response.getMessage());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Logger.d(TAG, "#changePassword => onErrorResponse");
+                            ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                            if (errorResponse != null) {
+                                callback.onChangePasswordFailure(errorResponse.getMessage());
+                            } else {
+                                callback.onChangePasswordFailure(getStringResource(R.string.network_error));
+                            }
+                        }
+                    });
+            VolleySequence.getInstance().addRequest(resetPassword);
         } else {
             callback.onValidateFailure(isValid);
         }

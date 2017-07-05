@@ -104,7 +104,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
 
     @Override
     public void displayChangePasswordScreen() {
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_CHANGE_PASSWORD, true, true);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_CHANGE_PASSWORD_CODE, true, true);
     }
 
     @Override

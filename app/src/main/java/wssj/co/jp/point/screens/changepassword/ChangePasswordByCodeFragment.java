@@ -10,25 +10,25 @@ import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
 
 /**
- * Created by Nguyen Huu Ta on 5/7/2017.
+ * Created by Nguyen Huu Ta on 11/5/2017.
  */
 
-public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, ChangePasswordPresenter> implements IChangePasswordView {
+public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordView, ChangePasswordPresenter> implements IChangePasswordView {
 
-    private static final String TAG = "ChangePasswordFragment";
+    private static final String TAG = "ChangePasswordByCodeFragment";
 
-    private EditText mInputCurrentPassword, mInputNewPassword, mInputConfirmPassword;
+    private EditText mInputCode, mInputNewPassword, mInputConfirmPassword;
 
     private TextView mButtonChangePassword;
 
     @Override
     public int getFragmentId() {
-        return IMainView.FRAGMENT_CHANGE_PASSWORD;
+        return IMainView.FRAGMENT_CHANGE_PASSWORD_CODE;
     }
 
     @Override
     protected int getResourceLayout() {
-        return R.layout.fragment_change_password;
+        return R.layout.fragment_confirm_reset_password;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
     @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
-        mInputCurrentPassword = (EditText) rootView.findViewById(R.id.inputCurrentPassword);
+        mInputCode = (EditText) rootView.findViewById(R.id.inputCode);
         mInputNewPassword = (EditText) rootView.findViewById(R.id.inputNewPassword);
         mInputConfirmPassword = (EditText) rootView.findViewById(R.id.inputConfirmPassword);
         mButtonChangePassword = (TextView) rootView.findViewById(R.id.buttonChangePassword);
@@ -82,10 +82,10 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
 
             @Override
             public void onClick(View v) {
-                String currentPassword = mInputCurrentPassword.getText().toString().trim();
+                String code = mInputCode.getText().toString().trim();
                 String newPassword = mInputNewPassword.getText().toString().trim();
                 String confirmPassword = mInputConfirmPassword.getText().toString().trim();
-                getPresenter().onChangePasswordClicked(currentPassword, newPassword, confirmPassword);
+                getPresenter().onChangePasswordByCodeClicked(code, newPassword, confirmPassword);
             }
         });
     }

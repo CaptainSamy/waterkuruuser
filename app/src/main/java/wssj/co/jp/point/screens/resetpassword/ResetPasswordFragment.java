@@ -93,12 +93,12 @@ public class ResetPasswordFragment extends BaseFragment<IResetPasswordView, Rese
     @Override
     public void onResetSuccess(String message) {
         showToast(message);
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_CHANGE_PASSWORD, true, true);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_CHANGE_PASSWORD_CODE, true, false);
 
     }
 
     @Override
     public void onResetFailure(String message) {
-
+        showToast(message);
     }
 }

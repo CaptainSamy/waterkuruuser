@@ -26,7 +26,7 @@ public final class Constants {
 
     public static final int INIT_PAGE = 1;
 
-    public static final int LIMIT = 10;
+    public static final int LIMIT = 20;
 
     public static final String ACTION_SERVICE_ACTIVITY = "WATERKURU";
 

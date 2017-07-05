@@ -17,7 +17,7 @@ public interface IMainView extends IView {
 
     int FRAGMENT_RESET_PASSWORD = 3;
 
-    int FRAGMENT_CHANGE_PASSWORD = 4;
+    int FRAGMENT_CHANGE_PASSWORD_CODE = 4;
 
     int FRAGMENT_REGISTER_ACCOUNT = 5;
 
@@ -50,6 +50,8 @@ public interface IMainView extends IView {
     int FRAGMENT_QA = 20;
 
     int FRAGMENT_CONTACT_US = 21;
+
+    int FRAGMENT_CHANGE_PASSWORD = 22;
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 

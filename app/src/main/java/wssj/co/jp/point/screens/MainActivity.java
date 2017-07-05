@@ -36,6 +36,7 @@ import wssj.co.jp.point.R;
 import wssj.co.jp.point.firebase.FirebaseMsgService;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
 import wssj.co.jp.point.screens.base.BaseFragment;
+import wssj.co.jp.point.screens.changepassword.ChangePasswordByCodeFragment;
 import wssj.co.jp.point.screens.changepassword.ChangePasswordFragment;
 import wssj.co.jp.point.screens.checkin.ManageStampFragment;
 import wssj.co.jp.point.screens.contact.ContactUsFragment;
@@ -301,6 +302,7 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST, true, true, null);
                     break;
                 case R.id.menu_change_password:
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_CHANGE_PASSWORD, true, true, null);
                     break;
                 case R.id.menu_how_to_use:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_HOW_TO_USE, true, true, null);
@@ -375,8 +377,8 @@ public class MainActivity extends AppCompatActivity
             case FRAGMENT_RESET_PASSWORD:
                 replaceFragment(new ResetPasswordFragment(), hasAnimation, addToBackStack);
                 break;
-            case FRAGMENT_CHANGE_PASSWORD:
-                replaceFragment(new ChangePasswordFragment(), hasAnimation, addToBackStack);
+            case FRAGMENT_CHANGE_PASSWORD_CODE:
+                replaceFragment(new ChangePasswordByCodeFragment(), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_REGISTER_ACCOUNT:
                 replaceFragment(new RegisterAccountFragment(), hasAnimation, addToBackStack);
@@ -425,6 +427,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case IMainView.FRAGMENT_CONTACT_US:
                 replaceFragment(new ContactUsFragment(), hasAnimation, addToBackStack);
+                break;
+            case IMainView.FRAGMENT_CHANGE_PASSWORD:
+                replaceFragment(new ChangePasswordFragment(), hasAnimation, addToBackStack);
                 break;
         }
     }

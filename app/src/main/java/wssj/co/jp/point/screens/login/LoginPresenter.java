@@ -4,7 +4,6 @@ import wssj.co.jp.point.model.ErrorMessage;
 import wssj.co.jp.point.model.auth.AuthModel;
 import wssj.co.jp.point.model.auth.LoginResponse;
 import wssj.co.jp.point.model.checkin.CheckInModel;
-import wssj.co.jp.point.model.checkin.CheckInStatusResponse;
 import wssj.co.jp.point.model.firebase.FirebaseModel;
 import wssj.co.jp.point.model.preference.SharedPreferencesModel;
 import wssj.co.jp.point.screens.base.FragmentPresenter;
@@ -65,27 +64,5 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
     @Override
     public void validateFailure(ErrorMessage errorMessage) {
         getView().showListMessageValidate(errorMessage);
-    }
-
-    public void getCheckInStatusByUser(String token, final boolean isRequireResetPassword) {
-        getModel(CheckInModel.class).getCheckInStatus(token, new CheckInModel.IGetCheckInStatusCallback() {
-
-            @Override
-            public void onCheckInStatusSuccess(CheckInStatusResponse.CheckInStatusData data) {
-                getView().hideProgress();
-                if (data != null) {
-                    getModel(SharedPreferencesModel.class).putSession(data.getSessionId());
-                    getModel(SharedPreferencesModel.class).putServiceId(data.getServiceId());
-                    getModel(SharedPreferencesModel.class).putServiceCompanyId(data.getServiceCompanyId());
-                }
-
-            }
-
-            @Override
-            public void onCheckInStatusFailure(ErrorMessage errorMessage) {
-                getView().hideProgress();
-                getView().showLoginFailureMessage(errorMessage.getMessage());
-            }
-        });
     }
 }
