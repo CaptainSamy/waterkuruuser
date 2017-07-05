@@ -10,6 +10,12 @@ import wssj.co.jp.point.model.GsonSerializable;
 
 public class RegisterData implements GsonSerializable {
 
+    @SerializedName("username")
+    private String mUserName;
+
+    @SerializedName("email")
+    private String mEmail;
+
     @SerializedName("token")
     private String mToken;
 
@@ -22,5 +28,13 @@ public class RegisterData implements GsonSerializable {
 
     public long getExpireDate() {
         return mExpireDate;
+    }
+
+    public String getUserName() {
+        return mUserName;
+    }
+
+    public String getEmail() {
+        return mEmail;
     }
 }

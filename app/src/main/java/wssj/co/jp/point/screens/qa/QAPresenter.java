@@ -1,5 +1,10 @@
 package wssj.co.jp.point.screens.qa;
 
+import java.util.List;
+
+import wssj.co.jp.point.model.menu.MenuModel;
+import wssj.co.jp.point.model.menu.QAResponse;
+import wssj.co.jp.point.model.preference.SharedPreferencesModel;
 import wssj.co.jp.point.screens.base.FragmentPresenter;
 
 /**
@@ -10,5 +15,30 @@ public class QAPresenter extends FragmentPresenter<IQAView> {
 
     protected QAPresenter(IQAView view) {
         super(view);
+        registerModel(new MenuModel(view.getViewContext()));
+        registerModel(new SharedPreferencesModel(view.getViewContext()));
+    }
+
+    public MenuModel getMenuModel() {
+        return getModel(MenuModel.class);
+    }
+
+    public void getListQA(int page, int limit) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getView().showProgress();
+        getMenuModel().getListQA(token, page, limit, new MenuModel.IOnGetListQACallback() {
+
+            @Override
+            public void onGetListQASuccess(int currentPage, int totalPage, List<QAResponse.ListQAData.QAData> data) {
+                getView().hideProgress();
+                getView().onGetListQASuccess(currentPage, totalPage, data);
+            }
+
+            @Override
+            public void onGetListQAFailure(String message) {
+                getView().hideProgress();
+                getView().onGetListQAFailure(message);
+            }
+        });
     }
 }

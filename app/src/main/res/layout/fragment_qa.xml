@@ -1,13 +1,14 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:baselineAligned="false">
 
-    <TextView
+    <ExpandableListView
+        android:id="@+id/listViewQA"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        android:text="@string/content_qa"
-        android:textColor="@color/black"/>
+        android:dividerHeight="0dp"
+        android:groupIndicator="@null"
+        />
 
-</ScrollView>
+</LinearLayout>

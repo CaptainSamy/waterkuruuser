@@ -41,24 +41,15 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
         return new ChangePasswordPresenter(view);
     }
 
-    @Override
-    public boolean isDisplayIconNotification() {
-        return false;
-    }
-
-    @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
-    public boolean isDisplayExtraNavigationButton() {
-        return false;
-    }
 
     @Override
     protected String getLogTag() {
         return TAG;
+    }
+
+    @Override
+    public int getNavigationMenuID() {
+        return R.id.menu_change_password;
     }
 
     @Override

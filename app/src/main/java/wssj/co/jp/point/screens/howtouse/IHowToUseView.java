@@ -8,4 +8,7 @@ import wssj.co.jp.point.screens.base.IFragmentView;
 
 public interface IHowToUseView extends IFragmentView {
 
+    void onHowUseAppSuccess(String html);
+
+    void onHowUseAppFailure(String message);
 }

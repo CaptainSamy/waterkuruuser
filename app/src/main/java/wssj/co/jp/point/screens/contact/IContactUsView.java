@@ -8,4 +8,9 @@ import wssj.co.jp.point.screens.base.IFragmentView;
 
 public interface IContactUsView extends IFragmentView {
 
+    void getInfoUser(String userName, String email);
+
+    void onFeedBackSuccess(String message);
+
+    void onFeedBackFailure(String message);
 }

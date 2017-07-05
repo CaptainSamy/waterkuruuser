@@ -272,8 +272,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (!mFragmentBackStackManager.popBackStackImmediate()) {
-            finish();
+        if (mNavigationView != null && mDrawerLayout != null && mNavigationView.isShown()) {
+            mDrawerLayout.closeDrawer(GravityCompat.END);
+        } else {
+            if (!mFragmentBackStackManager.popBackStackImmediate()) {
+                finish();
+            }
+
         }
     }
 
@@ -525,8 +530,10 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
             if (fragment.getNavigationMenuID() != 0) {
+                Logger.d(TAG, fragment.toString());
                 mNavigationView.setCheckedItem(fragment.getNavigationMenuID());
             } else {
+                Logger.d(TAG, "else");
                 int size = mNavigationView.getMenu().size();
                 for (int i = 0; i < size; i++) {
                     mNavigationView.getMenu().getItem(i).setChecked(false);
@@ -551,6 +558,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
     }
 }

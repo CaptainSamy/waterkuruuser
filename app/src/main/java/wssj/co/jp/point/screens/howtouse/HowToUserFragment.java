@@ -1,5 +1,9 @@
 package wssj.co.jp.point.screens.howtouse;
 
+import android.text.TextUtils;
+import android.view.View;
+import android.webkit.WebView;
+
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
@@ -11,6 +15,8 @@ import wssj.co.jp.point.screens.base.BaseFragment;
 public class HowToUserFragment extends BaseFragment<IHowToUseView, HowToUsePresenter> implements IHowToUseView {
 
     private static String TAG = "HowToUserFragment";
+
+    private WebView mWebHowUseAPp;
 
     @Override
     protected String getLogTag() {
@@ -50,5 +56,35 @@ public class HowToUserFragment extends BaseFragment<IHowToUseView, HowToUsePrese
     @Override
     public boolean isDisplayBottomNavigationMenu() {
         return true;
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        super.initViews(rootView);
+        mWebHowUseAPp = (WebView) rootView.findViewById(R.id.howUseApp);
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        getPresenter().getHowUseApp();
+    }
+
+    @Override
+    protected void initAction() {
+        super.initAction();
+    }
+
+    @Override
+    public void onHowUseAppSuccess(String html) {
+        if (!TextUtils.isEmpty(html)) {
+            mWebHowUseAPp.getSettings().setJavaScriptEnabled(true);
+            mWebHowUseAPp.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+        }
+    }
+
+    @Override
+    public void onHowUseAppFailure(String message) {
+        showToast(message);
     }
 }

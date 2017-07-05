@@ -13,6 +13,12 @@ public class LoginResponse extends ResponseData<LoginResponse.LoginData> {
 
     public class LoginData implements GsonSerializable {
 
+        @SerializedName("username")
+        private String mUserName;
+
+        @SerializedName("email")
+        private String mEmail;
+
         @SerializedName("token")
         private String mToken;
 
@@ -21,6 +27,14 @@ public class LoginResponse extends ResponseData<LoginResponse.LoginData> {
 
         @SerializedName("reset_password_required")
         private boolean mIsRequireReset;
+
+        public String getUserName() {
+            return mUserName;
+        }
+
+        public String getEmail() {
+            return mEmail;
+        }
 
         public String getToken() {
             return mToken;

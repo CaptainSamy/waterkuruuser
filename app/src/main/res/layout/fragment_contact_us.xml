@@ -16,32 +16,38 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
-            android:text="@string/title_user_name_contact"/>
+            android:text="@string/title_user_name_contact"
+            android:textColor="@color/colorText"/>
 
         <EditText
             android:id="@+id/user_name"
             style="@style/ViewBorderTheme"
+            android:enabled="false"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:text="@string/title_user_email_contact"/>
+            android:text="@string/title_user_email_contact"
+            android:textColor="@color/colorText"
+            />
 
         <EditText
             android:id="@+id/email_user"
             style="@style/ViewBorderTheme"
+            android:enabled="false"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
-            android:text="@string/title_content_contact"/>
+            android:text="@string/title_content_contact"
+            android:textColor="@color/colorText"/>
 
         <EditText
-            android:id="@+id/inputContact"
+            android:id="@+id/inputFeedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
@@ -52,7 +58,7 @@
             />
 
         <TextView
-            android:id="@+id/button_contact"
+            android:id="@+id/buttonFeedback"
             style="@style/ViewBorderTheme"
             android:background="@drawable/bg_red_button"
             android:gravity="center"

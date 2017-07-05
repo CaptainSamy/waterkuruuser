@@ -45,6 +45,8 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> i
     public void onRegisterSuccess(final RegisterData data) {
         getModel(SharedPreferencesModel.class).putToken(data.getToken());
         getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
+        getModel(SharedPreferencesModel.class).putUserName(data.getUserName());
+        getModel(SharedPreferencesModel.class).putEmail(data.getEmail());
         getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
         getView().hideProgress();
         Handler handler = new Handler();
