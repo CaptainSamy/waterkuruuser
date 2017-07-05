@@ -67,7 +67,7 @@ public interface IMainView extends IView {
 
     void showListPushNotification(List<NotificationMessage> list, int page, int totalPage, int numberNotificationNotReadThisPage, int totalPushUnRead);
 
-    void setListPushUnReadSuccess();
+    void setListPushUnReadSuccess(int numberNotificationUnRead);
 
     void displayErrorMessage(String message);
 }

@@ -165,7 +165,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 showListNotification();
-                mToolbar.setShowNumberNotification(false);
             }
         });
     }
@@ -177,6 +176,8 @@ public class MainActivity extends AppCompatActivity
     private EasyDialog mEasyDialog;
 
     private ListView mListViewNotification;
+
+    private int mTotalNotificationUnRead;
 
     public void showListNotification() {
         if (mListNotification != null && mListNotification.size() > 0) {
@@ -214,33 +215,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage, int numberNotificationUnReadThisPage, int totalPushUnRead) {
+    public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage, int numberNotificationUnReadThisPage, int totalNotificationUnRead) {
+        mTotalNotificationUnRead = totalNotificationUnRead;
         if (list != null) {
             if (mListNotification == null) {
                 mListNotification = new ArrayList<>();
                 mPushNotificationAdapter = new PushNotificationAdapter(this, R.layout.item_push_notification, mListNotification);
-                mToolbar.setShowNumberNotification(true);
+                mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+                    @Override
+                    public void onEndOfListView() {
+                        if (page < totalPage) {
+                            mPresenter.getListPushNotification(page + 1, Constants.LIMIT);
+                        }
+                    }
+                });
             }
             if (page == 1) {
-                mToolbar.setNumberNotification(totalPushUnRead);
+                mToolbar.setNumberNotificationUnRead(totalNotificationUnRead);
                 mListNotification.clear();
                 mListNotification.addAll(list);
                 mPushNotificationAdapter.notifyDataSetChanged();
             } else {
-                mToolbar.setNumberNotification(totalPushUnRead - numberNotificationUnReadThisPage);
+                mPresenter.setListPushUnRead(list);
                 mListNotification.addAll(list);
                 mPushNotificationAdapter.notifyDataSetChanged();
             }
         }
-        mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-
-            @Override
-            public void onEndOfListView() {
-                if (page < totalPage) {
-                    mPresenter.getListPushNotification(page + 1, Constants.LIMIT);
-                }
-            }
-        });
 
     }
 
@@ -252,8 +253,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void setListPushUnReadSuccess() {
-
+    public void setListPushUnReadSuccess(int currentNumberNotificationUnRead) {
+        mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead - currentNumberNotificationUnRead);
     }
 
     @Override

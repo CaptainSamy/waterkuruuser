@@ -97,13 +97,19 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
+                String values = "";
                 JSONArray object = new JSONArray();
                 if (listIdPush != null) {
                     for (int id : listIdPush) {
-                        object.put(id);
+//                        object.put(id);
+                        if (listIdPush.indexOf(id) == (listIdPush.size() - 1)) {
+                            values = values + id;
+                        } else {
+                            values = values + id + ",";
+                        }
                     }
                 }
-                map.put("push_id_list", object);
+                map.put("push_id_list", values);
                 return map;
             }
         };

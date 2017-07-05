@@ -78,8 +78,8 @@ class MainPresenter extends BasePresenter<IMainView> {
             getModel(PushNotificationModel.class).setListPushUnRead(token, listPustNotification, new PushNotificationModel.ISetListPushNotificationCallback() {
 
                 @Override
-                public void onSetListPushNotificationSuccess() {
-                    getView().setListPushUnReadSuccess();
+                public void onSetListPushNotificationSuccess(int numberNotificationUnRead) {
+                    getView().setListPushUnReadSuccess(numberNotificationUnRead);
                 }
 
                 @Override

@@ -33,7 +33,7 @@ public class PushNotificationModel extends BaseModel {
 
     public interface ISetListPushNotificationCallback {
 
-        void onSetListPushNotificationSuccess();
+        void onSetListPushNotificationSuccess(int numberNotificationUnRead);
 
         void onSetListPushNotificationFailure();
     }
@@ -79,18 +79,19 @@ public class PushNotificationModel extends BaseModel {
             }
 
         }
-        if (listIdPush.size() > 0) {
+        final int numberNotificationUnRead = listIdPush.size();
+        if (numberNotificationUnRead > 0) {
             Request request = APICreator.setListNotificationUnRead(token, listIdPush, new Response.Listener<ResponseData>() {
 
                 @Override
                 public void onResponse(ResponseData response) {
-                    callback.onSetListPushNotificationSuccess();
+                    callback.onSetListPushNotificationSuccess(numberNotificationUnRead);
                 }
             }, new Response.ErrorListener() {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    callback.onSetListPushNotificationSuccess();
+                    callback.onSetListPushNotificationFailure();
                 }
             });
             VolleySequence.getInstance().addRequest(request);

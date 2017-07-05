@@ -99,8 +99,9 @@ public class CenterTitleToolbar extends Toolbar {
         return mIconNotification;
     }
 
-    public void setNumberNotification(int number) {
-        if (number != 0) {
+    public void setNumberNotificationUnRead(int number) {
+        if (number > 0) {
+            mCountNotification.setVisibility(VISIBLE);
             mCountNotification.setText(String.valueOf(number));
         } else {
             mCountNotification.setVisibility(GONE);
