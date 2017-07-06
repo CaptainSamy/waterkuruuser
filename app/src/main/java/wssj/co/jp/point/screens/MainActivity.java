@@ -35,6 +35,7 @@ import io.fabric.sdk.android.Fabric;
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.firebase.FirebaseMsgService;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
+import wssj.co.jp.point.screens.about.AboutFragment;
 import wssj.co.jp.point.screens.base.BaseFragment;
 import wssj.co.jp.point.screens.changepassword.ChangePasswordByCodeFragment;
 import wssj.co.jp.point.screens.changepassword.ChangePasswordFragment;
@@ -303,7 +304,6 @@ public class MainActivity extends AppCompatActivity
                         replaceFragment(new MemoManagerFragment(), true, true);
                     }
                     return true;
-
                 case R.id.menu_push_notification:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST, true, true, null);
                     break;
@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_POLICY, true, true, null);
                     break;
                 case R.id.menu_version:
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_ABOUT, true, true, null);
                     break;
                 case R.id.menu_logout:
                     mDrawerLayout.closeDrawer(GravityCompat.END);
@@ -440,6 +441,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case IMainView.FRAGMENT_POLICY:
                 replaceFragment(new PolicyFragment(), hasAnimation, addToBackStack);
+                break;
+            case IMainView.FRAGMENT_ABOUT:
+                replaceFragment(new AboutFragment(), hasAnimation, addToBackStack);
                 break;
         }
     }

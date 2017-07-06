@@ -121,7 +121,8 @@
     <string name="contact_us">お問い合わせ</string>
     <string name="term_of_service_menu">利用規約</string>
     <string name="privacy_policy">プライバシーポリシー</string>
-    <string name="version_menu">バージョン</string>
+    <string name="menu_version">バージョン</string>
+    <string name="content_version">バージョン %1$s</string>
 
     <!-- User memo -->
     <string name="title_screen_user_memo">要望</string>

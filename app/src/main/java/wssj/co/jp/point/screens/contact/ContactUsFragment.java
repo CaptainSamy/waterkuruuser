@@ -85,7 +85,9 @@ public class ContactUsFragment extends BaseFragment<IContactUsView, ContactUsPre
             @Override
             public void onClick(View v) {
                 String feedback = mInputFeedback.getText().toString();
-                getPresenter().feedback(feedback);
+                if (!TextUtils.isEmpty(feedback)) {
+                    getPresenter().feedback(feedback);
+                }
             }
         });
     }

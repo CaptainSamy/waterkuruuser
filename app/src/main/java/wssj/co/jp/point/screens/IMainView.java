@@ -55,6 +55,8 @@ public interface IMainView extends IView {
 
     int FRAGMENT_POLICY = 23;
 
+    int FRAGMENT_ABOUT = 24;
+
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
     void goBack();

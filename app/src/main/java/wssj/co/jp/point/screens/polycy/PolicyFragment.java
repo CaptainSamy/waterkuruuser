@@ -10,7 +10,7 @@ import wssj.co.jp.point.screens.base.BaseFragment;
 
 public class PolicyFragment extends BaseFragment<IPolicyView, PolicyPresenter> implements IPolicyView {
 
-    private static String TAG = "ContactUsFragment";
+    private static String TAG = "PolicyFragment";
 
     @Override
     protected String getLogTag() {

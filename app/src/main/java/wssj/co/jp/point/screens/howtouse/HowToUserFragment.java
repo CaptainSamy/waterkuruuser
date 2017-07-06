@@ -79,6 +79,8 @@ public class HowToUserFragment extends BaseFragment<IHowToUseView, HowToUsePrese
     public void onHowUseAppSuccess(String html) {
         if (!TextUtils.isEmpty(html)) {
             mWebHowUseAPp.getSettings().setJavaScriptEnabled(true);
+            mWebHowUseAPp.getSettings().setBuiltInZoomControls(true);
+            mWebHowUseAPp.getSettings().setDisplayZoomControls(false);
             mWebHowUseAPp.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
         }
     }

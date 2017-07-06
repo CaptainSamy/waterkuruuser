@@ -1,6 +1,5 @@
 package wssj.co.jp.point.model.memo;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -10,12 +9,11 @@ import java.util.Map;
 
 import wssj.co.jp.point.model.ResponseData;
 import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
+import wssj.co.jp.point.model.volleylistener.ResponseListener;
 import wssj.co.jp.point.model.volleyrequest.GsonJsonRequest;
-import wssj.co.jp.point.model.volleyrequest.GsonMultipartRequest;
 import wssj.co.jp.point.model.volleyrequest.GsonRequest;
 import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.Logger;
-import wssj.co.jp.point.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 19/5/2017.
@@ -83,30 +81,12 @@ final class APICreator {
         });
     }
 
-    static GsonRequest<UserMemoResponse> getUserMemoRequest(String token, final int servicesId, final Response.Listener<UserMemoResponse> listener, final Response.ErrorListener errorListener) {
+    static GsonRequest<UserMemoResponse> getUserMemoRequest(String token, final int servicesId, final Response.Listener<UserMemoResponse> responseListener, final Response.ErrorListener errorListener) {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", token);
         header.put("Accept", "application/json");
-        return new GsonJsonRequest<UserMemoResponse>(Request.Method.POST, GET_USER_MEMO_URL, UserMemoResponse.class, header, new Response.Listener<UserMemoResponse>() {
-
-            @Override
-            public void onResponse(UserMemoResponse response) {
-                Logger.i(TAG, "#getUserMemoRequest => onResponse");
-                if (listener != null) {
-                    listener.onResponse(response);
-                }
-            }
-        },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Logger.i(TAG, "#getUserMemoRequest => onErrorResponse");
-                        if (errorListener != null) {
-                            errorListener.onErrorResponse(error);
-                        }
-                    }
-                }) {
+        ResponseListener<UserMemoResponse> listener = new ResponseListener<>(TAG, "#updateUserMemo", responseListener, errorListener);
+        return new GsonJsonRequest<UserMemoResponse>(Request.Method.POST, GET_USER_MEMO_URL, UserMemoResponse.class, header, listener, listener) {
 
             @Override
             protected Map<String, Object> getBodyParams() {
@@ -117,60 +97,88 @@ final class APICreator {
         };
     }
 
-    static GsonMultipartRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final UpdateMemoPhotoData[] images, final Response.Listener<ResponseData> listener, final Response.ErrorListener errorListener) {
+    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final UpdateMemoPhotoData[] images, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", token);
         header.put("Accept", "application/json");
-        return new GsonMultipartRequest<ResponseData>(
+        ResponseListener<ResponseData> listener = new ResponseListener<>(TAG, "#updateUserMemo", responseListener, errorListener);
+        return new GsonJsonRequest<ResponseData>(
+                Request.Method.POST,
                 UPDATE_USER_MEMO_URL,
-                header,
                 ResponseData.class,
-                new Response.Listener<ResponseData>() {
-
-                    @Override
-                    public void onResponse(ResponseData response) {
-                        Logger.i(TAG, "@updateUserMemo => onResponse");
-                        if (listener != null) {
-                            listener.onResponse(response);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Logger.i(TAG, "@updateUserMemo => onErrorResponse");
-                        if (errorListener != null) {
-                            errorListener.onErrorResponse(error);
-                        }
-                    }
-                }) {
+                header,
+                listener,
+                listener) {
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("service_id", String.valueOf(serviceId));
-                params.put("note", note);
-                for (int i = 0; i < images.length; i++) {
-                    if (images[i].getUpdateFlag() == UpdateMemoPhotoData.FLAG_DELETE) {
-                        params.put("photo_" + (i + 1), UpdateMemoPhotoData.PARAM_DELETE);
-                    }
-                }
-                return params;
-            }
-
-            @Override
-            protected Map<String, DataPart> getByteData() throws AuthFailureError {
-                Map<String, DataPart> params = new HashMap<>();
-                UpdateMemoPhotoData data;
-                for (int i = 0; i < images.length; i++) {
-                    data = images[i];
-                    if (data != null && data.getUpdateFlag() == UpdateMemoPhotoData.FLAG_MODIFIED) {
-                        params.put("photo_" + (i + 1), new DataPart(Utils.getUploadImageFileName(), data.getImage(), "image/jpeg"));
-                    }
-                }
-                return params;
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("service_id", String.valueOf(serviceId));
+                map.put("note", note);
+                map.put("photo_1", Constants.EMPTY_STRING);
+                map.put("photo_2", Constants.EMPTY_STRING);
+                map.put("photo_3", Constants.EMPTY_STRING);
+                map.put("photo_4", Constants.EMPTY_STRING);
+                return map;
             }
         };
+
+//    static GsonMultipartRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final UpdateMemoPhotoData[] images, final Response.Listener<ResponseData> listener, final Response.ErrorListener errorListener) {
+//        Map<String, String> header = new HashMap<>();
+//        header.put("Authorization", token);
+//        header.put("Accept", "application/json");
+//
+//        return new GsonMultipartRequest<ResponseData>(
+//                UPDATE_USER_MEMO_URL,
+//                header,
+//                ResponseData.class,
+//                new Response.Listener<ResponseData>() {
+//
+//                    @Override
+//                    public void onResponse(ResponseData response) {
+//                        Logger.i(TAG, "@updateUserMemo => onResponse");
+//                        if (listener != null) {
+//                            listener.onResponse(response);
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Logger.i(TAG, "@updateUserMemo => onErrorResponse");
+//                        if (errorListener != null) {
+//                            errorListener.onErrorResponse(error);
+//                        }
+//                    }
+//                }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("service_id", String.valueOf(serviceId));
+//                params.put("note", note);
+//                for (int i = 0; i < images.length; i++) {
+//                    if (images[i].getUpdateFlag() == UpdateMemoPhotoData.FLAG_DELETE) {
+//                        params.put("photo_" + (i + 1), UpdateMemoPhotoData.PARAM_DELETE);
+//                    }
+//                }
+//                return params;
+//            }
+//
+//            @Override
+//            protected Map<String, DataPart> getByteData() throws AuthFailureError {
+//                Map<String, DataPart> params = new HashMap<>();
+//                UpdateMemoPhotoData data;
+//                for (int i = 0; i < images.length; i++) {
+//                    data = images[i];
+//                    if (data != null && data.getUpdateFlag() == UpdateMemoPhotoData.FLAG_MODIFIED) {
+//                        params.put("photo_" + (i + 1), new DataPart(Utils.getUploadImageFileName(), data.getImage(), "image/jpeg"));
+//                    }
+//                }
+//                return params;
+//            }
+//        };
+//    }
     }
 }

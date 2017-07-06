@@ -36,7 +36,7 @@
         <item
             android:id="@id/menu_version"
             android:icon="@drawable/version"
-            android:title="@string/version_menu"/>
+            android:title="@string/menu_version"/>
 
 
         <item
