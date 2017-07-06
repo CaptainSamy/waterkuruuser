@@ -163,37 +163,15 @@
     <string name="content_term_of_service">WATERKURU利用規約</string>
     <!--How to use-->
     <string name="title_screen_how_to_use">アプリの使い方</string>
-    <string name="content_introduction">・アカウント登録について
-　起動画面にて「新規登録」ボタンをクリックすると登録画面が表示します。</string>
-    <string name="content_register">・項目欄に入力してから「登録」ボタンをクリックしたら会員登録が完了します。</string>
-    <string name="content_check_in">・パスワード変更について
-　右上のメニューから「パスワード変更」メニューを選択してらパスワード変
-更画面が表示します。現パスワードと新パスワードを入力して「パスワード変更」ボタンを押下し
-たらパスワード変更します。\n
-    ・サービス利用についてホーム画面から店のQRコードを読み込んで表示されたポップアップの「チェックイン」ボタンをタッチすると店にサービス利用するチェックインを行います。</string>
-
-    <string name="content_wait">・チェックイン後待ち中画面によりお客様の予約番号、待ち人数、待ち時間などがわかります。</string>
-    <string name="content_end">・チェックインぜずに店舗の状況確認について\n・要望記入について</string>
-
 
     <!--QA-->
     <string name="title_screen_qa">よくある質問</string>
-    <string name="content_qa">・利用したことがない店に対してどう会員登録すればいいですか。\n→新しい店舗を利用する際に登録必要がありません。店舗でチェックインしてから自動的に店舗の会員登録をします。\n
-
-・要望の目的はなんですか。\n→要望というのは、サービスに対して臨時的にサービスを提供する店舗のスタッフさんへ要望を伝える機能です。※注意：お客様の要望は同一サービスを提供する全ての店舗は見えます。\n
-
-・店舗の評価したい場合はどうすればいいですか。\n→アプリにてアイスタンプメニューをタッチし、評価したい店を選択するとその店のスタンプカードが表示されます。スタンプに付与された評価するボタンをタッチして評価する画面が表示します。\n
-
-・行きたいお店の空席や待ち時間などをチェックしたい時はどうすればいいですか。\n→マイスタンプ画面から行きたい店のスタンプカードをたどり、店舗の状態確認ボタンを押下すると行った店一覧が表示します。全ての店舗状況を確認できます。\n
-
-・パスワードが忘れた時にどうすればいいですか。\n→ログイン画面にてパスワードが忘れた方のリンクを押下して、メールアドレスまたはログインIDを記入し、初期化ボタンを押下すると新しいパスワードを
-
-メールで送ります。</string>
     <!--Contact-->
     <string name="title_screen_contact">お問い合わせ</string>
     <string name="title_user_name_contact">お名前</string>
     <string name="title_user_email_contact">メールアドレス</string>
     <string name="title_content_contact">お問い合わせ内容</string>
     <string name="button_contact">お問い合わせする</string>
+    <string name="feedback_success">お問い合わせを送信しました。</string>
 
 </resources>

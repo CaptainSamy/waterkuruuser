@@ -319,12 +319,8 @@ public class AuthModel extends BaseModel {
                         public void onResponse(RegisterResponse response) {
                             Logger.d(TAG, "#changePassword => onResponse");
                             if (response.isSuccess()) {
-                                if (TextUtils.isEmpty(response.getMessage())) {
-                                    String message = getStringResource(R.string.change_password_success);
-                                    callback.onChangePasswordSuccess(response.getData(), message);
-                                } else {
-                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
-                                }
+                                String message = getStringResource(R.string.change_password_success);
+                                callback.onChangePasswordSuccess(response.getData(), message);
                             } else {
                                 callback.onChangePasswordFailure(response.getMessage());
                             }

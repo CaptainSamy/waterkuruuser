@@ -79,7 +79,7 @@ public class MenuModel extends BaseModel {
             @Override
             public void onResponse(ResponseData response) {
                 if (response.isSuccess()) {
-                    callback.onFeedBackSuccess(getStringResource(R.string.success));
+                    callback.onFeedBackSuccess(getStringResource(R.string.feedback_success));
                 } else {
                     callback.onFeedBackFailure(response.getMessage());
                 }
