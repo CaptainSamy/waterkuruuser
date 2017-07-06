@@ -11,7 +11,6 @@
     <string name="introduction_app">アプリの紹介</string>
     <string name="how_to_used_1">スマホでかんたんツナグアプリ</string>
     <string name="how_to_used_2">ウォーターメルは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
-    <string name="test"> You have a new message You have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \nYou have a new message \n</string>
 
     <!--Login fragment-->
     <string name="login_email">ログインID</string>
@@ -65,7 +64,7 @@
     <string name="email_validate">メールアドレスに誤りがあります。正しく入力してください。</string>
     <string name="term_of_service">上の会員登録ボタンを押すことにより、\n利用規約に同意したことになります</string>
     <string name="link">利用規約</string>
-    <string name="register_success">登録できました。ログインしてください。</string>
+    <string name="register_success">登録を完了しました。これからご利用できます。</string>
     <string name="input_user_name">名前</string>
     <string name="input_user_id">ログインID</string>
     <string name="input_email">メールアドレス</string>
