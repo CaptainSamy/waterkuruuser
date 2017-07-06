@@ -75,7 +75,7 @@ public class PushNotificationModel extends BaseModel {
 
         for (NotificationMessage message : listNotification) {
             if (message.getStatusRead() == 0) {
-                listIdPush.add(message.getPushId());
+                listIdPush.add((int) message.getPushId());
             }
 
         }

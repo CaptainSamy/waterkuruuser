@@ -72,9 +72,9 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setSmallIcon(R.mipmap.logo_app);
                     Intent intent = new Intent(FirebaseMsgService.this, MainActivity.class);
                     intent.putExtra(EXTRA_NOTIFICATION, notificationMessage);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMsgService.this, notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     builder.setContentIntent(pendingIntent);
-                    mNotificationManager.notify(notificationMessage.getPushId(), builder.build());
+                    mNotificationManager.notify((int) notificationMessage.getPushId(), builder.build());
                 }
 
                 @Override

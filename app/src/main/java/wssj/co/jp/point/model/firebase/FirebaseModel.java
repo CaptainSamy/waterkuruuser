@@ -14,6 +14,7 @@ import java.util.Map;
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.BaseModel;
 import wssj.co.jp.point.model.ErrorMessage;
+import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.VolleySequence;
 
 /**
@@ -23,17 +24,18 @@ import wssj.co.jp.point.utils.VolleySequence;
 public class FirebaseModel extends BaseModel {
 
     public interface IUploadDeviceTokenCallback {
+
         void onSuccess();
 
         void onFailure(ErrorMessage errorMessage);
     }
 
     public interface IParseNotificationCallback {
+
         void onSuccess(NotificationMessage notificationMessage);
 
         void onFailure(ErrorMessage errorMessage);
     }
-
 
     public FirebaseModel(Context context) {
         super(context);
@@ -44,6 +46,7 @@ public class FirebaseModel extends BaseModel {
         String androidId = Settings.Secure.getString(getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         Request request = APICreator.getUploadDeviceTokenRequest(loginToken, deviceToken, androidId, new Response.Listener<UploadTokenReponse>() {
+
             @Override
             public void onResponse(UploadTokenReponse response) {
                 if (callback != null) {
@@ -55,6 +58,7 @@ public class FirebaseModel extends BaseModel {
                 }
             }
         }, new Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (callback != null) {
@@ -69,14 +73,21 @@ public class FirebaseModel extends BaseModel {
         String title = data.get("title");
         String message = data.get("body");
         String pushIdText = data.get("push_id");
-        int pushId = 1;
+        String actionPush = Constants.EMPTY_STRING;
+        int stampId = 0;
+        String[] splitAction = data.get("click_action").split(Constants.SPLIT);
+        if (splitAction != null && splitAction.length == 2) {
+            actionPush = splitAction[0];
+            stampId = Integer.parseInt(splitAction[1]);
+        }
+        long pushId = 1;
         if (!TextUtils.isEmpty(pushIdText)) {
-            pushId = Integer.parseInt(pushIdText);
+            pushId = Long.parseLong(pushIdText);
         }
         if (TextUtils.isEmpty(message)) {
             callback.onFailure(new ErrorMessage(getStringResource(R.string.msg_parse_message_failure)));
         } else {
-            callback.onSuccess(new NotificationMessage(pushId, title, message));
+            callback.onSuccess(new NotificationMessage(pushId, title, message, actionPush, stampId));
         }
     }
 

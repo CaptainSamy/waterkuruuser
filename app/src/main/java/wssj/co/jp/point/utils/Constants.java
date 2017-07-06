@@ -30,6 +30,8 @@ public final class Constants {
 
     public static final String ACTION_SERVICE_ACTIVITY = "WATERKURU";
 
+    public static final String SPLIT = "\\.";
+
     private Constants() {
     }
 
@@ -55,5 +57,14 @@ public final class Constants {
 
         private CardTypes() {
         }
+    }
+
+    public static final class PushNotification {
+
+        public static final String TYPE_NOTIFICATION = "action_push";
+
+        public static final String TYPE_REMIND = "action_remind";
+
+        public static final String TYPE_REQUEST_REVIEW = "action_request_review";
     }
 }

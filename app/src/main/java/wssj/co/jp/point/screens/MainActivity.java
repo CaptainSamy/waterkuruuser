@@ -469,9 +469,12 @@ public class MainActivity extends AppCompatActivity
         if (intent != null) {
             if (intent.getSerializableExtra(FirebaseMsgService.EXTRA_NOTIFICATION) != null) {
                 NotificationMessage notificationMessage = (NotificationMessage) intent.getSerializableExtra(FirebaseMsgService.EXTRA_NOTIFICATION);
-                mListNotification.add(notificationMessage);
+                if (mListNotification != null) {
+                    mListNotification.add(0, notificationMessage);
+                }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
+                bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         }

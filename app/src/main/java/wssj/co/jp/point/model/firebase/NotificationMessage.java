@@ -13,7 +13,7 @@ import wssj.co.jp.point.model.GsonSerializable;
 public class NotificationMessage implements GsonSerializable, Serializable {
 
     @SerializedName("id")
-    private int mPushId;
+    private long mPushId;
 
     @SerializedName("title")
     private String mTitle;
@@ -33,12 +33,21 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("status_read")
     private int mStatusRead;
 
+    /*
+    * 1 : TYPE_NOTIFICATION
+    * 2 : TYPE_REMIND
+    * 3 : TYPE_REQUEST_REVIEW
+    * */
     @SerializedName("type")
-    private int mAction;
+    private String mAction;
 
-    public NotificationMessage(int pushId, String title, String message) {
+    private int mStampId;
+
+    public NotificationMessage(long pushId, String title, String message, String action, int stampId) {
         this.mTitle = title;
         this.mMessage = message;
+        mAction = action;
+        mStampId = stampId;
         mPushId = pushId;
         mIsSound = true;
         mPushTime = System.currentTimeMillis();
@@ -48,7 +57,7 @@ public class NotificationMessage implements GsonSerializable, Serializable {
         return mPushTime;
     }
 
-    public int getPushId() {
+    public long getPushId() {
         return mPushId;
     }
 
@@ -68,7 +77,11 @@ public class NotificationMessage implements GsonSerializable, Serializable {
         return mStatusRead;
     }
 
-    public int getAction() {
+    public String getAction() {
         return mAction;
+    }
+
+    public int getStampId() {
+        return mStampId;
     }
 }
