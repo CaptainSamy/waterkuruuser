@@ -8,4 +8,7 @@ import wssj.co.jp.point.screens.base.IFragmentView;
 
 public interface IPolicyView extends IFragmentView {
 
+    void onPolicySuccess(String html);
+
+    void onPolicyFailure(String message);
 }

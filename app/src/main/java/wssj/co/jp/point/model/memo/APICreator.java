@@ -5,10 +5,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import wssj.co.jp.point.model.ResponseData;
-import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
 import wssj.co.jp.point.model.volleylistener.ResponseListener;
 import wssj.co.jp.point.model.volleyrequest.GsonJsonRequest;
 import wssj.co.jp.point.model.volleyrequest.GsonRequest;
@@ -97,7 +97,7 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final UpdateMemoPhotoData[] images, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
+    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final List<String> listImage, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", token);
         header.put("Accept", "application/json");
@@ -115,10 +115,13 @@ final class APICreator {
                 Map<String, Object> map = new HashMap<>();
                 map.put("service_id", String.valueOf(serviceId));
                 map.put("note", note);
-                map.put("photo_1", Constants.EMPTY_STRING);
-                map.put("photo_2", Constants.EMPTY_STRING);
-                map.put("photo_3", Constants.EMPTY_STRING);
-                map.put("photo_4", Constants.EMPTY_STRING);
+                if (listImage != null) {
+                    int position = 1;
+                    for (String url : listImage) {
+                        map.put("photo_" + position, url);
+                        position++;
+                    }
+                }
                 return map;
             }
         };

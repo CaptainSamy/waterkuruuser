@@ -1,5 +1,6 @@
 package wssj.co.jp.point.screens.polycy;
 
+import wssj.co.jp.point.model.menu.MenuModel;
 import wssj.co.jp.point.screens.base.FragmentPresenter;
 
 /**
@@ -10,5 +11,24 @@ public class PolicyPresenter extends FragmentPresenter<IPolicyView> {
 
     protected PolicyPresenter(IPolicyView view) {
         super(view);
+        registerModel(new MenuModel(view.getViewContext()));
+    }
+
+    void getPolicy() {
+        getView().showProgress();
+        getModel(MenuModel.class).policy(new MenuModel.IOnPolicyCallback() {
+
+            @Override
+            public void onPolicySuccess(String html) {
+                getView().hideProgress();
+                getView().onPolicySuccess(html);
+            }
+
+            @Override
+            public void onPolicyFailure(String message) {
+                getView().hideProgress();
+                getView().onPolicyFailure(message);
+            }
+        });
     }
 }

@@ -46,6 +46,13 @@ public class MenuModel extends BaseModel {
         void onHowUseAppFailure(String message);
     }
 
+    public interface IOnPolicyCallback {
+
+        void onPolicySuccess(String html);
+
+        void onPolicyFailure(String message);
+    }
+
     public void getListQA(String token, int page, int limit, final IOnGetListQACallback callback) {
         final Request requestQA = APICreator.getListQA(token, page, limit, new Response.Listener<QAResponse>() {
 
@@ -119,6 +126,32 @@ public class MenuModel extends BaseModel {
                     callback.onHowUseAppFailure(errorResponse.getMessage());
                 } else {
                     callback.onHowUseAppFailure(getStringResource(R.string.failure));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(requestQA);
+    }
+
+    public void policy(final IOnPolicyCallback callback) {
+        final Request requestQA = APICreator.policy(new Response.Listener<HowUseAppResponse>() {
+
+            @Override
+            public void onResponse(HowUseAppResponse response) {
+                if (response.isSuccess() && response.getData() != null) {
+                    callback.onPolicySuccess(response.getData().getHtml());
+                } else {
+                    callback.onPolicyFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onPolicyFailure(errorResponse.getMessage());
+                } else {
+                    callback.onPolicyFailure(getStringResource(R.string.failure));
                 }
             }
         });

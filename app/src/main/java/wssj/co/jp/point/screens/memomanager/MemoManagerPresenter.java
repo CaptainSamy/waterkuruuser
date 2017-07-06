@@ -2,7 +2,9 @@ package wssj.co.jp.point.screens.memomanager;
 
 import android.graphics.drawable.Drawable;
 
-import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
+import java.util.ArrayList;
+import java.util.List;
+
 import wssj.co.jp.point.model.memo.ListServiceResponse;
 import wssj.co.jp.point.model.memo.UserMemoModel;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
@@ -44,21 +46,47 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
         });
     }
 
-    void updateUserMemo(int serviceId, String note, UpdateMemoPhotoData[] listImage) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
+//    void updateUserMemo(int serviceId, String note, UpdateMemoPhotoData[] listImage) {
+//        String token = getModel(SharedPreferencesModel.class).getToken();
+//        getView().showProgress();
+//        getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listImage, new UserMemoModel.IUpdateUserMemoCallback() {
+//
+//            @Override
+//            public void onUpdateUserMemoSuccess(String message) {
+//                getView().hideProgress();
+//                getView().onUpdateUserMemoSuccess(message);
+//            }
+//
+//            @Override
+//            public void onUpdateUserMemoFailure(String message) {
+//                getView().hideProgress();
+//                getView().onUpdateUserMemoFailure(message);
+//            }
+//        });
+//    }
+
+    void updateUserMemo(final int serviceId, final String note, String[] listImage) {
+        final String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
-        getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listImage, new UserMemoModel.IUpdateUserMemoCallback() {
+        List<String> list = new ArrayList<>();
+        getModel(UserMemoModel.class).uploadImageAWS(listImage, 0, list, new UserMemoModel.IUpdateAWSCallback() {
 
             @Override
-            public void onUpdateUserMemoSuccess(String message) {
-                getView().hideProgress();
-                getView().onUpdateUserMemoSuccess(message);
-            }
+            public void onUpdateUserMemoSuccess(final List<String> list) {
+                getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, list, new UserMemoModel.IUpdateUserMemoCallback() {
 
-            @Override
-            public void onUpdateUserMemoFailure(String message) {
-                getView().hideProgress();
-                getView().onUpdateUserMemoFailure(message);
+                    @Override
+                    public void onUpdateUserMemoSuccess(String message) {
+                        getView().hideProgress();
+                        getView().onUpdateUserMemoSuccess(message);
+                    }
+
+                    @Override
+                    public void onUpdateUserMemoFailure(String message) {
+                        getView().hideProgress();
+                        getView().onUpdateUserMemoFailure(message);
+                    }
+                });
             }
         });
     }

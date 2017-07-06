@@ -326,7 +326,6 @@ public final class Utils {
         }
     }
 
-
     public static void setupUI(View view, final Dialog context) {
 
         // Set up touch listener for non-text box views to hide keyboard.
@@ -358,7 +357,6 @@ public final class Utils {
                     activity.getCurrentFocus().getWindowToken(), 0);
     }
 
-
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
@@ -368,5 +366,18 @@ public final class Utils {
                     activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    public static String getFileName(String filePath) {
+        if (TextUtils.isEmpty(filePath)) return Constants.EMPTY_STRING;
+        if (!TextUtils.isEmpty(filePath)) {
+            String fileNameJPG = filePath.substring(filePath.lastIndexOf("/") + 1);
+            String[] listFileName = fileNameJPG.split(Constants.SPLIT);
+            String fileName = null;
+            if (listFileName.length > 1) {
+                fileName = listFileName[0];
+            }
+            return fileName + System.currentTimeMillis();
+        }
+        return Constants.EMPTY_STRING;
+    }
 
 }

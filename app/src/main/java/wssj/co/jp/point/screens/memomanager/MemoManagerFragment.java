@@ -86,6 +86,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private final UpdateMemoPhotoData[] mListPhoto = new UpdateMemoPhotoData[4];
 
+    private final String[] mListPathImage = new String[4];
+
     private List<ListServiceResponse.Service> mListService;
 
     private int mCurrentServiceId;
@@ -295,7 +297,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                     }
                 }
                 if (mCurrentServiceId != 0 && (isChangeNote || isChangeImage)) {
-                    getPresenter().updateUserMemo(mCurrentServiceId, mInputNote.getText().toString().trim(), mListPhoto);
+                    getPresenter().updateUserMemo(mCurrentServiceId, mInputNote.getText().toString().trim(), mListPathImage);
                 }
                 break;
         }
@@ -388,21 +390,25 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             case REQUEST_CODE_CAMERA_PHOTO_1:
                 photoData = mListPhoto[0];
                 imageView = mPhoto1;
+                mListPathImage[0] = imagePath;
                 break;
             case REQUEST_CODE_PICKER_PHOTO_2:
             case REQUEST_CODE_CAMERA_PHOTO_2:
                 photoData = mListPhoto[1];
                 imageView = mPhoto2;
+                mListPathImage[1] = imagePath;
                 break;
             case REQUEST_CODE_PICKER_PHOTO_3:
             case REQUEST_CODE_CAMERA_PHOTO_3:
                 photoData = mListPhoto[2];
                 imageView = mPhoto3;
+                mListPathImage[2] = imagePath;
                 break;
             case REQUEST_CODE_PICKER_PHOTO_4:
             case REQUEST_CODE_CAMERA_PHOTO_4:
                 photoData = mListPhoto[3];
                 imageView = mPhoto4;
+                mListPathImage[3] = imagePath;
                 break;
         }
         if (!TextUtils.isEmpty(imagePath) && imageView != null) {
@@ -483,13 +489,12 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                 mListPhoto[1] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
                 mListPhoto[2] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
                 mListPhoto[3] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-
             }
         }
     }
 
     private void fillImage(String photo, final ImageView imageView, boolean fromLocal) {
-        String imgPath = fromLocal ? photo : Constants.BASE_URL + photo;
+        String imgPath = fromLocal ? photo : photo;
         Glide.with(getActivityContext().getApplicationContext())
                 .load(imgPath)
                 .placeholder(R.drawable.ic_add_image)
@@ -536,10 +541,12 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             case REQUEST_CODE_PICKER_PHOTO_1:
                 imageView = mPhoto1;
                 photoData = mListPhoto[0];
+                mListPathImage[0] = Constants.EMPTY_STRING;
                 break;
             case REQUEST_CODE_PICKER_PHOTO_2:
                 imageView = mPhoto2;
                 photoData = mListPhoto[1];
+                mListPathImage[1] = Constants.EMPTY_STRING;
                 break;
             case REQUEST_CODE_PICKER_PHOTO_3:
                 imageView = mPhoto3;
@@ -548,6 +555,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             case REQUEST_CODE_PICKER_PHOTO_4:
                 imageView = mPhoto4;
                 photoData = mListPhoto[3];
+                mListPathImage[3] = Constants.EMPTY_STRING;
                 break;
         }
         if (photoData != null) {

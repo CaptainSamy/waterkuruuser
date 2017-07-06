@@ -1,5 +1,9 @@
 package wssj.co.jp.point.screens.polycy;
 
+import android.text.TextUtils;
+import android.view.View;
+import android.webkit.WebView;
+
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
@@ -11,6 +15,8 @@ import wssj.co.jp.point.screens.base.BaseFragment;
 public class PolicyFragment extends BaseFragment<IPolicyView, PolicyPresenter> implements IPolicyView {
 
     private static String TAG = "PolicyFragment";
+
+    private WebView mPolicy;
 
     @Override
     protected String getLogTag() {
@@ -46,4 +52,31 @@ public class PolicyFragment extends BaseFragment<IPolicyView, PolicyPresenter> i
     public int getNavigationMenuID() {
         return R.id.menu_privacy_policy;
     }
+
+    @Override
+    protected void initViews(View rootView) {
+        mPolicy = (WebView) rootView.findViewById(R.id.policy);
+    }
+
+    @Override
+    protected void initData() {
+        getPresenter().getPolicy();
+    }
+
+    @Override
+    public void onPolicySuccess(String html) {
+        if (!TextUtils.isEmpty(html)) {
+            mPolicy.getSettings().setJavaScriptEnabled(true);
+            mPolicy.getSettings().setBuiltInZoomControls(true);
+            mPolicy.getSettings().setDisplayZoomControls(false);
+            mPolicy.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
+        }
+    }
+
+    @Override
+    public void onPolicyFailure(String message) {
+        showToast(message);
+    }
+
+
 }

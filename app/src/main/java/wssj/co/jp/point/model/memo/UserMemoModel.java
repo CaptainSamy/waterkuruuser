@@ -3,15 +3,23 @@ package wssj.co.jp.point.model.memo;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.BaseModel;
 import wssj.co.jp.point.model.ErrorResponse;
 import wssj.co.jp.point.model.ResponseData;
-import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
+import wssj.co.jp.point.utils.AmazonS3Utils;
+import wssj.co.jp.point.utils.Constants;
+import wssj.co.jp.point.utils.Logger;
 import wssj.co.jp.point.utils.Utils;
 import wssj.co.jp.point.utils.VolleySequence;
 
@@ -20,6 +28,8 @@ import wssj.co.jp.point.utils.VolleySequence;
  */
 
 public class UserMemoModel extends BaseModel {
+
+    private static String TAG = "UserMemoModel";
 
     public UserMemoModel(Context context) {
         super(context);
@@ -44,6 +54,12 @@ public class UserMemoModel extends BaseModel {
         void onGetUserMemoSuccess(UserMemoResponse.UserMemoData data);
 
         void onGetUserMemoFailure(String message);
+    }
+
+    public interface IUpdateAWSCallback {
+
+        void onUpdateUserMemoSuccess(List<String> list);
+
     }
 
     public interface IUpdateUserMemoCallback {
@@ -118,11 +134,6 @@ public class UserMemoModel extends BaseModel {
                     @Override
                     public void onResponse(UserMemoResponse response) {
                         callback.onGetUserMemoSuccess(response.getData());
-//                        if (response.isSuccess() && response.getData() != null) {
-//                            callback.onGetUserMemoSuccess(response.getData());
-//                        } else {
-//                            callback.onGetUserMemoSuccess(null);
-//                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -140,30 +151,101 @@ public class UserMemoModel extends BaseModel {
         VolleySequence.getInstance().addRequest(requestNote);
     }
 
-    public void updateUserMemo(String token, int serviceId, String note, UpdateMemoPhotoData[] images, final IUpdateUserMemoCallback callback) {
-        Request requestUpdateMemo = APICreator.updateUserMemo(token, serviceId, note, images, new Response.Listener<ResponseData>() {
+    //    public void updateUserMemo(String token, int serviceId, String note, UpdateMemoPhotoData[] images, final IUpdateUserMemoCallback callback) {
+//        Request requestUpdateMemo = APICreator.updateUserMemo(token, serviceId, note, images, new Response.Listener<ResponseData>() {
+//
+//            @Override
+//            public void onResponse(ResponseData response) {
+//                if (response.isSuccess()) {
+//                    callback.onUpdateUserMemoSuccess(response.getMessage());
+//                } else {
+//                    String message = TextUtils.isEmpty(response.getMessage()) ? getStringResource(R.string.failure) : response.getMessage();
+//                    callback.onUpdateUserMemoFailure(message);
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+//                if (errorResponse != null) {
+//                    callback.onUpdateUserMemoFailure(errorResponse.getMessage());
+//                } else {
+//                    callback.onUpdateUserMemoFailure(getStringResource(R.string.network_error));
+//                }
+//            }
+//        });
+//        VolleySequence.getInstance().addRequest(requestUpdateMemo);
+//    }
 
-            @Override
-            public void onResponse(ResponseData response) {
-                if (response.isSuccess()) {
-                    callback.onUpdateUserMemoSuccess(response.getMessage());
-                } else {
-                    String message = TextUtils.isEmpty(response.getMessage()) ? getStringResource(R.string.failure) : response.getMessage();
-                    callback.onUpdateUserMemoFailure(message);
-                }
-            }
-        }, new Response.ErrorListener() {
+    public void uploadImageAWS(final String[] images, final int position, final List<String> listPathAWS, final IUpdateAWSCallback callback) {
+        if (position < images.length) {
+            final String path = images[position];
+            if (TextUtils.isEmpty(path)) {
+                listPathAWS.add(Constants.EMPTY_STRING);
+                uploadImageAWS(images, position + 1, listPathAWS, callback);
+            } else {
+                final String fileName = Utils.getFileName(path);
+                File file = new File(path);
+                Logger.d(TAG, "#uploadImageAWS " + path + " file name " + fileName);
+                AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                if (errorResponse != null) {
-                    callback.onUpdateUserMemoFailure(errorResponse.getMessage());
-                } else {
-                    callback.onUpdateUserMemoFailure(getStringResource(R.string.network_error));
-                }
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (state == TransferState.COMPLETED) {
+                            listPathAWS.add(AmazonS3Utils.BASE_IMAGE_URL + fileName);
+                            uploadImageAWS(images, position + 1, listPathAWS, callback);
+                        }
+                    }
+
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
+                    }
+
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        Logger.d(TAG, "#onError " + ex);
+                        listPathAWS.add(Constants.EMPTY_STRING);
+                        uploadImageAWS(images, position + 1, listPathAWS, callback);
+                    }
+                });
             }
-        });
+        } else {
+            callback.onUpdateUserMemoSuccess(listPathAWS);
+        }
+
+    }
+
+    public void updateUserMemo(String token, int serviceId, String note, String[] images, final IUpdateUserMemoCallback callback) {
+        List<String> listUrlAWS = new ArrayList<>();
+    }
+
+    public void updateUserMemo(String token, int serviceId, String note, List<String> images, final IUpdateUserMemoCallback callback) {
+        Request requestUpdateMemo = APICreator.updateUserMemo(token, serviceId, note, images,
+                new Response.Listener<ResponseData>() {
+
+                    @Override
+                    public void onResponse(ResponseData response) {
+                        if (response.isSuccess()) {
+                            callback.onUpdateUserMemoSuccess(response.getMessage());
+                        } else {
+                            String message = TextUtils.isEmpty(response.getMessage()) ? getStringResource(R.string.failure) : response.getMessage();
+                            callback.onUpdateUserMemoFailure(message);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                        if (errorResponse != null) {
+                            callback.onUpdateUserMemoFailure(errorResponse.getMessage());
+                        } else {
+                            callback.onUpdateUserMemoFailure(getStringResource(R.string.network_error));
+                        }
+                    }
+                });
         VolleySequence.getInstance().addRequest(requestUpdateMemo);
     }
 }

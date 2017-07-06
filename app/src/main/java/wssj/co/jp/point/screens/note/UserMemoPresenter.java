@@ -76,21 +76,21 @@ class UserMemoPresenter extends FragmentPresenter<IUserMemoView> {
     void updateUserMemo(int serviceId, String note, UpdateMemoPhotoData[] listImage) {
         String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
-        getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listImage, new UserMemoModel.IUpdateUserMemoCallback() {
-
-            @Override
-            public void onUpdateUserMemoSuccess(String message) {
-                getView().hideProgress();
-//                getView().backToPreviousScreen();
-                getView().onUpdateSuccess(message);
-            }
-
-            @Override
-            public void onUpdateUserMemoFailure(String message) {
-                getView().hideProgress();
-                getView().onUpdateSuccess(message);
-            }
-        });
+//        getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listImage, new UserMemoModel.IUpdateUserMemoCallback() {
+//
+//            @Override
+//            public void onUpdateUserMemoSuccess(String message) {
+//                getView().hideProgress();
+////                getView().backToPreviousScreen();
+//                getView().onUpdateSuccess(message);
+//            }
+//
+//            @Override
+//            public void onUpdateUserMemoFailure(String message) {
+//                getView().hideProgress();
+//                getView().onUpdateSuccess(message);
+//            }
+//        });
 
     }
 

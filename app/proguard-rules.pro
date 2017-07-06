@@ -44,6 +44,7 @@
 
 ##---------------End: proguard configuration for Gson ----------
 -dontwarn com.yalantis.ucrop**
+-dontwarn com.amazonaws.**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
 
