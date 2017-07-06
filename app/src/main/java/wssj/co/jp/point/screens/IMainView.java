@@ -53,6 +53,8 @@ public interface IMainView extends IView {
 
     int FRAGMENT_CHANGE_PASSWORD = 22;
 
+    int FRAGMENT_POLICY = 23;
+
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
     void goBack();

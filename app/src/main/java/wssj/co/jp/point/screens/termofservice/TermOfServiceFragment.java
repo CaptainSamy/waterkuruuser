@@ -71,6 +71,11 @@ public class TermOfServiceFragment extends BaseFragment<ITermOfServicesView, Ter
     }
 
     @Override
+    public int getNavigationMenuID() {
+        return R.id.menu_term_of_service;
+    }
+
+    @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
         mContentTermOfService = (TextView) rootView.findViewById(R.id.tvTermOfService);

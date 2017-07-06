@@ -49,6 +49,7 @@ import wssj.co.jp.point.screens.liststorecheckedin.ListStoreCheckedInFragment;
 import wssj.co.jp.point.screens.login.LoginFragment;
 import wssj.co.jp.point.screens.memomanager.MemoManagerFragment;
 import wssj.co.jp.point.screens.note.UserMemoFragment;
+import wssj.co.jp.point.screens.polycy.PolicyFragment;
 import wssj.co.jp.point.screens.pushnotification.PushNotificationAdapter;
 import wssj.co.jp.point.screens.pushnotification.PushNotificationListFragment;
 import wssj.co.jp.point.screens.pushnotification.detail.PushNotificationDetailFragment;
@@ -322,6 +323,7 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_TERM_OF_SERVICE, true, true, null);
                     break;
                 case R.id.menu_privacy_policy:
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_POLICY, true, true, null);
                     break;
                 case R.id.menu_version:
                     break;
@@ -435,6 +437,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case IMainView.FRAGMENT_CHANGE_PASSWORD:
                 replaceFragment(new ChangePasswordFragment(), hasAnimation, addToBackStack);
+                break;
+            case IMainView.FRAGMENT_POLICY:
+                replaceFragment(new PolicyFragment(), hasAnimation, addToBackStack);
                 break;
         }
     }
