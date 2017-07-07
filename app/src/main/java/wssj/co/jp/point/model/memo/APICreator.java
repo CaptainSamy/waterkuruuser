@@ -5,10 +5,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import wssj.co.jp.point.model.ResponseData;
+import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.volleylistener.ResponseListener;
 import wssj.co.jp.point.model.volleyrequest.GsonJsonRequest;
 import wssj.co.jp.point.model.volleyrequest.GsonRequest;
@@ -97,7 +97,7 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final List<String> listImage, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
+    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final StatusMemoData[] listStatusImage, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", token);
         header.put("Accept", "application/json");
@@ -115,10 +115,14 @@ final class APICreator {
                 Map<String, Object> map = new HashMap<>();
                 map.put("service_id", String.valueOf(serviceId));
                 map.put("note", note);
-                if (listImage != null) {
+                if (listStatusImage != null) {
                     int position = 1;
-                    for (String url : listImage) {
-                        map.put("photo_" + position, url);
+                    for (StatusMemoData statusMemoData : listStatusImage) {
+                        if (statusMemoData.isUploadAWSSuccess()) {
+                            map.put("photo_" + position, statusMemoData.getPathNewImage());
+                        } else {
+                            map.put("photo_" + position, statusMemoData.getUrlOriginImage());
+                        }
                         position++;
                     }
                 }

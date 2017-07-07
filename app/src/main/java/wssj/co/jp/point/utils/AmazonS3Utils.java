@@ -45,9 +45,11 @@ public final class AmazonS3Utils {
     }
 
     public void upload(File file, String fileName, TransferListener transferListener) {
-        if (file != null) {
+        if (file != null && file.exists()) {
             TransferObserver transferObserver = mTransferUtility.upload(BUCKET_NAME, fileName, file);
             transferObserver.setTransferListener(transferListener);
+        } else {
+            Logger.d("AmazonS3Utils", "file not found");
         }
     }
 

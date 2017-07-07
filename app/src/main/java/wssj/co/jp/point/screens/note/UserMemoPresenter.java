@@ -2,7 +2,7 @@ package wssj.co.jp.point.screens.note;
 
 import android.graphics.drawable.Drawable;
 
-import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
+import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.memo.UserMemoModel;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
 import wssj.co.jp.point.model.preference.SharedPreferencesModel;
@@ -31,7 +31,7 @@ class UserMemoPresenter extends FragmentPresenter<IUserMemoView> {
             public void onGetUserMemoSuccess(UserMemoResponse.UserMemoData data) {
                 getView().hideProgress();
                 if (data.getUserMemo() != null) {
-                    getView().populateUserMemo(data.getUserMemo());
+                    getView().onGetUserMemoSuccess(data.getUserMemo());
                 }
             }
 
@@ -73,25 +73,29 @@ class UserMemoPresenter extends FragmentPresenter<IUserMemoView> {
         });
     }
 
-    void updateUserMemo(int serviceId, String note, UpdateMemoPhotoData[] listImage) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
+    void updateUserMemo(final int serviceId, final String note, StatusMemoData[] listStatusImage) {
+        final String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
-//        getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listImage, new UserMemoModel.IUpdateUserMemoCallback() {
-//
-//            @Override
-//            public void onUpdateUserMemoSuccess(String message) {
-//                getView().hideProgress();
-////                getView().backToPreviousScreen();
-//                getView().onUpdateSuccess(message);
-//            }
-//
-//            @Override
-//            public void onUpdateUserMemoFailure(String message) {
-//                getView().hideProgress();
-//                getView().onUpdateSuccess(message);
-//            }
-//        });
+        getModel(UserMemoModel.class).uploadImageAWS(listStatusImage, 0, new UserMemoModel.IUpdateAWSCallback() {
 
+            @Override
+            public void onUpdateUserMemoSuccess(StatusMemoData[] listStatusImage) {
+                getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listStatusImage, new UserMemoModel.IUpdateUserMemoCallback() {
+
+                    @Override
+                    public void onUpdateUserMemoSuccess(String message) {
+                        getView().hideProgress();
+                        getView().onUpdateSuccess(message);
+                    }
+
+                    @Override
+                    public void onUpdateUserMemoFailure(String message) {
+                        getView().hideProgress();
+                        getView().onUpdateFailure(message);
+                    }
+                });
+            }
+        });
     }
 
     void onImageViewClicked(Drawable drawable, int requestCodePicker, int requestCodeCamera) {

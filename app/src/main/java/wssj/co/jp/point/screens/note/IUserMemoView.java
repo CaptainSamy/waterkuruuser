@@ -11,7 +11,7 @@ import wssj.co.jp.point.screens.base.IFragmentView;
 
 interface IUserMemoView extends IFragmentView {
 
-    void populateUserMemo(UserMemoResponse.UserMemo response);
+    void onGetUserMemoSuccess(UserMemoResponse.UserMemo response);
 
     void showPhotoDialog(Drawable drawable, int requestCode);
 

@@ -57,6 +57,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     private long mTimeWaiting;
 
+    private ImageView mImageStore;
+
     public static WaitStoreConfirmFragment newInstance(Bundle args) {
         WaitStoreConfirmFragment fragment = new WaitStoreConfirmFragment();
         fragment.setArguments(args);
@@ -98,7 +100,20 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         return true;
     }
 
-    ImageView mImageStore;
+    @Override
+    protected int getResourceLayout() {
+        return R.layout.fragment_wait_store_confirm;
+    }
+
+    @Override
+    protected WaitStoreConfirmPresenter onCreatePresenter(IWaitStoreConfirmView view) {
+        return new WaitStoreConfirmPresenter(view);
+    }
+
+    @Override
+    protected IWaitStoreConfirmView onCreateView() {
+        return this;
+    }
 
     @Override
     protected void initViews(View rootView) {
@@ -184,21 +199,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mTextTimeWaiting.setText(time);
         }
         getPresenter().getCheckInStatus();
-    }
-
-    @Override
-    protected int getResourceLayout() {
-        return R.layout.fragment_wait_store_confirm;
-    }
-
-    @Override
-    protected WaitStoreConfirmPresenter onCreatePresenter(IWaitStoreConfirmView view) {
-        return new WaitStoreConfirmPresenter(view);
-    }
-
-    @Override
-    protected IWaitStoreConfirmView onCreateView() {
-        return this;
     }
 
     @Override

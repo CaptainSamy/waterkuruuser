@@ -2,9 +2,7 @@ package wssj.co.jp.point.screens.memomanager;
 
 import android.graphics.drawable.Drawable;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.memo.ListServiceResponse;
 import wssj.co.jp.point.model.memo.UserMemoModel;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
@@ -46,34 +44,14 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
         });
     }
 
-//    void updateUserMemo(int serviceId, String note, UpdateMemoPhotoData[] listImage) {
-//        String token = getModel(SharedPreferencesModel.class).getToken();
-//        getView().showProgress();
-//        getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listImage, new UserMemoModel.IUpdateUserMemoCallback() {
-//
-//            @Override
-//            public void onUpdateUserMemoSuccess(String message) {
-//                getView().hideProgress();
-//                getView().onUpdateUserMemoSuccess(message);
-//            }
-//
-//            @Override
-//            public void onUpdateUserMemoFailure(String message) {
-//                getView().hideProgress();
-//                getView().onUpdateUserMemoFailure(message);
-//            }
-//        });
-//    }
-
-    void updateUserMemo(final int serviceId, final String note, String[] listImage) {
+    void updateUserMemo(final int serviceId, final String note, StatusMemoData[] listStatusImage) {
         final String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
-        List<String> list = new ArrayList<>();
-        getModel(UserMemoModel.class).uploadImageAWS(listImage, 0, list, new UserMemoModel.IUpdateAWSCallback() {
+        getModel(UserMemoModel.class).uploadImageAWS(listStatusImage, 0, new UserMemoModel.IUpdateAWSCallback() {
 
             @Override
-            public void onUpdateUserMemoSuccess(final List<String> list) {
-                getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, list, new UserMemoModel.IUpdateUserMemoCallback() {
+            public void onUpdateUserMemoSuccess(StatusMemoData[] listStatusImage) {
+                getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listStatusImage, new UserMemoModel.IUpdateUserMemoCallback() {
 
                     @Override
                     public void onUpdateUserMemoSuccess(String message) {

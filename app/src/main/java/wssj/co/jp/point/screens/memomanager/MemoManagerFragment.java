@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wssj.co.jp.point.R;
+import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
 import wssj.co.jp.point.model.memo.ListServiceResponse;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
@@ -84,15 +85,13 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private DialogChoose mDialogChoose;
 
-    private final UpdateMemoPhotoData[] mListPhoto = new UpdateMemoPhotoData[4];
-
-    private final String[] mListPathImage = new String[4];
+    private final StatusMemoData[] mListPhoto = new StatusMemoData[4];
 
     private List<ListServiceResponse.Service> mListService;
 
     private int mCurrentServiceId;
 
-    private String mNoteOld = Constants.EMPTY_STRING;
+    private String mOriginNote = Constants.EMPTY_STRING;
 
     private ImmediateResultCameraModule mCameraModule;
 
@@ -288,16 +287,17 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                 getPresenter().onImageViewClicked((Drawable) v.getTag(R.id.shared_drawable), REQUEST_CODE_PICKER_PHOTO_4, REQUEST_CODE_CAMERA_PHOTO_4);
                 break;
             case R.id.tvSave:
-                boolean isChangeNote = !mNoteOld.equals(mInputNote.getText().toString().trim());
+                String newNote = mInputNote.getText().toString().trim();
+                boolean isChangeNote = !TextUtils.equals(mOriginNote, newNote);
                 boolean isChangeImage = false;
-                for (UpdateMemoPhotoData data : mListPhoto) {
-                    if (data != null && data.getUpdateFlag() != 1) {
+                for (StatusMemoData data : mListPhoto) {
+                    if (data != null && data.getStatus() != 1) {
                         isChangeImage = true;
                         break;
                     }
                 }
                 if (mCurrentServiceId != 0 && (isChangeNote || isChangeImage)) {
-                    getPresenter().updateUserMemo(mCurrentServiceId, mInputNote.getText().toString().trim(), mListPathImage);
+                    getPresenter().updateUserMemo(mCurrentServiceId, mInputNote.getText().toString().trim(), mListPhoto);
                 }
                 break;
         }
@@ -322,10 +322,11 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     @Override
     public void onUpdateUserMemoSuccess(String message) {
-        mNoteOld = mInputNote.getText().toString().trim();
-        for (UpdateMemoPhotoData data : mListPhoto) {
-            if (data != null && data.getUpdateFlag() != 1) {
-                data.setUpdateFlag(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
+        mOriginNote = mInputNote.getText().toString().trim();
+        for (StatusMemoData data : mListPhoto) {
+            if (data != null && data.getStatus() != 1) {
+                data.setStatus(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
+                data.setUrlOriginImage(data.getPathNewImage());
             }
         }
         showToast(message);
@@ -383,40 +384,35 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private void handleCroppedImage(Uri imageUri, int requestCode) {
         String imagePath = imageUri.getPath();
-        UpdateMemoPhotoData photoData = null;
         ImageView imageView = null;
         switch (requestCode) {
             case REQUEST_CODE_PICKER_PHOTO_1:
             case REQUEST_CODE_CAMERA_PHOTO_1:
-                photoData = mListPhoto[0];
                 imageView = mPhoto1;
-                mListPathImage[0] = imagePath;
+                mListPhoto[0].setPathNewImage(imagePath);
+                mListPhoto[0].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_2:
             case REQUEST_CODE_CAMERA_PHOTO_2:
-                photoData = mListPhoto[1];
                 imageView = mPhoto2;
-                mListPathImage[1] = imagePath;
+                mListPhoto[1].setPathNewImage(imagePath);
+                mListPhoto[1].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_3:
             case REQUEST_CODE_CAMERA_PHOTO_3:
-                photoData = mListPhoto[2];
                 imageView = mPhoto3;
-                mListPathImage[2] = imagePath;
+                mListPhoto[2].setPathNewImage(imagePath);
+                mListPhoto[2].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_4:
             case REQUEST_CODE_CAMERA_PHOTO_4:
-                photoData = mListPhoto[3];
                 imageView = mPhoto4;
-                mListPathImage[3] = imagePath;
+                mListPhoto[3].setPathNewImage(imagePath);
+                mListPhoto[3].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
         }
         if (!TextUtils.isEmpty(imagePath) && imageView != null) {
             fillImage(imagePath, imageView, true);
-            if (photoData != null) {
-                photoData.setImagePath(imagePath);
-                photoData.setUpdateFlag(UpdateMemoPhotoData.FLAG_MODIFIED);
-            }
         }
     }
 
@@ -451,50 +447,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         uCrop.start(getActivityContext(), this, requestCode);
     }
 
-    @Override
-    public void onGetUserMemoSuccess(UserMemoResponse.UserMemo response) {
-        if (response != null) {
-            if (response.getNote() != null) {
-                mNoteOld = response.getNote();
-                mInputNote.setText(mNoteOld);
-            }
-            UserMemoResponse.Photo photo = response.getPhoto();
-            if (photo != null) {
-                fillImage(photo.getPhoto1(), mPhoto1, false);
-                if (!TextUtils.isEmpty(photo.getPhoto1())) {
-                    mListPhoto[0] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_DELETE);
-                } else {
-                    mListPhoto[0] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                }
-                fillImage(photo.getPhoto2(), mPhoto2, false);
-                if (!TextUtils.isEmpty(photo.getPhoto2())) {
-                    mListPhoto[1] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_DELETE);
-                } else {
-                    mListPhoto[1] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                }
-                fillImage(photo.getPhoto3(), mPhoto3, false);
-                if (!TextUtils.isEmpty(photo.getPhoto3())) {
-                    mListPhoto[2] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_DELETE);
-                } else {
-                    mListPhoto[2] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                }
-                fillImage(photo.getPhoto4(), mPhoto4, false);
-                if (!TextUtils.isEmpty(photo.getPhoto4())) {
-                    mListPhoto[3] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_DELETE);
-                } else {
-                    mListPhoto[3] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                }
-            } else {
-                mListPhoto[0] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                mListPhoto[1] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                mListPhoto[2] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-                mListPhoto[3] = new UpdateMemoPhotoData(UpdateMemoPhotoData.FLAG_NOT_MODIFY);
-            }
-        }
-    }
-
-    private void fillImage(String photo, final ImageView imageView, boolean fromLocal) {
-        String imgPath = fromLocal ? photo : photo;
+    private void fillImage(String imgPath, final ImageView imageView, boolean fromLocal) {
         Glide.with(getActivityContext().getApplicationContext())
                 .load(imgPath)
                 .placeholder(R.drawable.ic_add_image)
@@ -529,6 +482,43 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     @Override
+    public void onGetUserMemoSuccess(UserMemoResponse.UserMemo response) {
+        if (response != null) {
+            if (response.getNote() != null) {
+                mOriginNote = response.getNote();
+                mInputNote.setText(mOriginNote);
+            }
+            UserMemoResponse.Photo photo = response.getPhoto();
+            if (photo != null) {
+                fillImage(photo.getPhoto1(), mPhoto1, false);
+                if (!TextUtils.isEmpty(photo.getPhoto1())) {
+                    mListPhoto[0] = new StatusMemoData(photo.getPhoto1());
+                } else {
+                    mListPhoto[0] = new StatusMemoData(Constants.EMPTY_STRING);
+                }
+                fillImage(photo.getPhoto2(), mPhoto2, false);
+                if (!TextUtils.isEmpty(photo.getPhoto2())) {
+                    mListPhoto[1] = new StatusMemoData(photo.getPhoto2());
+                } else {
+                    mListPhoto[1] = new StatusMemoData(Constants.EMPTY_STRING);
+                }
+                fillImage(photo.getPhoto3(), mPhoto3, false);
+                if (!TextUtils.isEmpty(photo.getPhoto3())) {
+                    mListPhoto[2] = new StatusMemoData(photo.getPhoto3());
+                } else {
+                    mListPhoto[2] = new StatusMemoData(Constants.EMPTY_STRING);
+                }
+                fillImage(photo.getPhoto4(), mPhoto4, false);
+                if (!TextUtils.isEmpty(photo.getPhoto4())) {
+                    mListPhoto[3] = new StatusMemoData(photo.getPhoto4());
+                } else {
+                    mListPhoto[3] = new StatusMemoData(Constants.EMPTY_STRING);
+                }
+            }
+        }
+    }
+
+    @Override
     public void onGetUserMemoFailure(String message) {
         showToast(message);
     }
@@ -536,30 +526,27 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     @Override
     public void onDeleteClicked(int imageCode) {
         ImageView imageView = null;
-        UpdateMemoPhotoData photoData = null;
         switch (imageCode) {
             case REQUEST_CODE_PICKER_PHOTO_1:
                 imageView = mPhoto1;
-                photoData = mListPhoto[0];
-                mListPathImage[0] = Constants.EMPTY_STRING;
+                mListPhoto[0].setPathNewImage(Constants.EMPTY_STRING);
+                mListPhoto[0].setStatus(StatusMemoData.FLAG_DELETE);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_2:
                 imageView = mPhoto2;
-                photoData = mListPhoto[1];
-                mListPathImage[1] = Constants.EMPTY_STRING;
+                mListPhoto[1].setPathNewImage(Constants.EMPTY_STRING);
+                mListPhoto[1].setStatus(StatusMemoData.FLAG_DELETE);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_3:
                 imageView = mPhoto3;
-                photoData = mListPhoto[2];
+                mListPhoto[2].setPathNewImage(Constants.EMPTY_STRING);
+                mListPhoto[2].setStatus(StatusMemoData.FLAG_DELETE);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_4:
                 imageView = mPhoto4;
-                photoData = mListPhoto[3];
-                mListPathImage[3] = Constants.EMPTY_STRING;
+                mListPhoto[3].setPathNewImage(Constants.EMPTY_STRING);
+                mListPhoto[3].setStatus(StatusMemoData.FLAG_DELETE);
                 break;
-        }
-        if (photoData != null) {
-            photoData.setToFlagOnDelete();
         }
         if (imageView != null) {
             imageView.setImageDrawable(ContextCompat.getDrawable(getActivityContext(), R.drawable.ic_add_image));
