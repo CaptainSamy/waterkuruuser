@@ -44,7 +44,17 @@
 
 ##---------------End: proguard configuration for Gson ----------
 -dontwarn com.yalantis.ucrop**
+##---------------Begin: proguard configuration for AWS ----------
+-keep class org.apache.commons.logging.**               { *; }
+-keep class com.amazonaws.**
+-keep class org.codehaus.**                             { *; }
+
 -dontwarn com.amazonaws.**
+-dontwarn javax.xml.stream.events.**
+-dontwarn org.codehaus.jackson.**
+-dontwarn org.apache.commons.logging.impl.**
+-dontwarn org.apache.http.conn.scheme.**
+##---------------End: proguard configuration for AWS ----------
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
 
