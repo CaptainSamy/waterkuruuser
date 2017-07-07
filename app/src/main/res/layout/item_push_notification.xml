@@ -27,21 +27,12 @@
             android:id="@+id/title_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/date_notification"
             android:maxLines="1"
             android:singleLine="true"
             android:text="夏お得のキャンベーン AA1"
             android:textColor="@color/colorTextMain"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/date_notification"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="7/3 土"
-            android:textSize="14sp"/>
 
         <RelativeLayout
             android:id="@+id/layoutContent"
@@ -115,7 +106,6 @@
 
 
     </RelativeLayout>
-
 
 </RelativeLayout>
 

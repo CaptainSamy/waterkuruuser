@@ -39,7 +39,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     private CircularProgressBar mCircleProgress;
 
-    private TextView mExpandWaitingText, mWaitingText;
+    private TextView mExpandWaitingText;
 
     private TextView mTextStoreName;
 
@@ -139,7 +139,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             }
         }, 1000);
         mExpandWaitingText = (TextView) rootView.findViewById(R.id.expand_wait_text);
-        mWaitingText = (TextView) rootView.findViewById(R.id.waiting_text);
         mLayoutFinishWaiting = (LinearLayout) rootView.findViewById(R.id.finish_wait_layout);
         mLayoutInfo = (LinearLayout) rootView.findViewById(R.id.layoutInfo);
         mExpandWaitingText.animate().alpha(1.0f).setDuration(1000).setStartDelay(500);
@@ -154,7 +153,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
             @Override
             public void onAnimateDone() {
-                mWaitingText.animate().alpha(0).setDuration(500);
                 mLayoutInfo.setVisibility(View.GONE);
                 Animation zoomInAnim = AnimationUtils.loadAnimation(getContext(),
                         R.anim.zoom_in);

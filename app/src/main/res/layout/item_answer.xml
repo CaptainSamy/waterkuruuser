@@ -22,6 +22,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textColor="@color/colorTextMain"
+        android:textSize="14dp"
         />
 
     <View

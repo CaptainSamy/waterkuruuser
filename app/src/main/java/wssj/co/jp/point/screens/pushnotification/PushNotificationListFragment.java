@@ -1,6 +1,7 @@
 package wssj.co.jp.point.screens.pushnotification;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +23,9 @@ import wssj.co.jp.point.utils.Constants;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationListFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter> implements IPushNotificationListView {
+public class PushNotificationListFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter> implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
+
+    private SwipeRefreshLayout mRefreshLayout;
 
     private PushNotificationAdapter mAdapter;
 
@@ -72,6 +75,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     @Override
     protected void initViews(View rootView) {
+        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
     }
 
@@ -80,12 +84,14 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         mListNotification = new ArrayList<>();
         mAdapter = new PushNotificationAdapter(getContext(), R.layout.item_push_notification, mListNotification);
         mListView.setAdapter(mAdapter);
+        mRefreshLayout.setRefreshing(true);
         getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
 
     }
 
     @Override
     protected void initAction() {
+        mRefreshLayout.setOnRefreshListener(this);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -99,7 +105,19 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     }
 
     @Override
+    public void onRefresh() {
+        getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+    }
+
+    public void hideSwipeRefreshLayout() {
+        if (mRefreshLayout != null && mRefreshLayout.isRefreshing()) {
+            mRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
+        hideSwipeRefreshLayout();
         if (list != null) {
             mListNotification.addAll(0, list);
             mAdapter.notifyDataSetChanged();
@@ -109,6 +127,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             @Override
             public void onEndOfListView() {
                 if (page < totalPage) {
+                    mRefreshLayout.setRefreshing(true);
                     getPresenter().getListPushNotification(page + 1, Constants.LIMIT);
                 }
             }
@@ -119,6 +138,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     @Override
     public void displayErrorMessage(ErrorMessage errorMessage) {
+        hideSwipeRefreshLayout();
         if (errorMessage != null && !TextUtils.isEmpty(errorMessage.getMessage()))
             Toast.makeText(getActivityContext(), errorMessage.getMessage(), Toast.LENGTH_SHORT).show();
     }

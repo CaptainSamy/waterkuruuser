@@ -117,6 +117,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvCheckIn:
+                showProgress();
                 getPresenter().onOkButtonClicked(mCode);
                 break;
             case R.id.tvCancelCheckIn:
@@ -129,6 +130,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
     @Override
     public void displayWaitStoreConfirmScreen(ConfirmCheckInResponse.SessionData data) {
         Log.d(TAG, "displayWaitStoreConfirmScreen");
+        hideProgress();
         if (mActivityCallback != null && data != null) {
             Bundle bundle = new Bundle();
             bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, mStoreName);
@@ -140,7 +142,8 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
     }
 
     @Override
-    public void showConfirmFailureMessage(String message) {
+    public void onConfirmFailure(String message) {
+        hideProgress();
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 

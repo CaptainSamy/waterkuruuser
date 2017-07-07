@@ -10,8 +10,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.BaseModel;
@@ -220,10 +218,6 @@ public class UserMemoModel extends BaseModel {
             callback.onUpdateUserMemoSuccess(listStatusImage);
         }
 
-    }
-
-    public void updateUserMemo(String token, int serviceId, String note, String[] images, final IUpdateUserMemoCallback callback) {
-        List<String> listUrlAWS = new ArrayList<>();
     }
 
     public void updateUserMemo(String token, int serviceId, String note, StatusMemoData[] listStatusImage, final IUpdateUserMemoCallback callback) {

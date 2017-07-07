@@ -53,7 +53,7 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
 
     private static class ViewHolder {
 
-        TextView mTitle, mBody, mDate, mTime, mButtonRating;
+        TextView mTitle, mBody, mTime, mButtonRating;
 
         RelativeLayout mItemPush;
 
@@ -61,7 +61,6 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
             mItemPush = (RelativeLayout) root.findViewById(R.id.itemPush);
             mTitle = (TextView) root.findViewById(R.id.title_notification);
             mBody = (TextView) root.findViewById(R.id.body_notification);
-            mDate = (TextView) root.findViewById(R.id.date_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
             mButtonRating = (TextView) root.findViewById(R.id.buttonRating);
         }
@@ -74,13 +73,11 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
             mBody.setText(notificationMessage.getMessage());
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(notificationMessage.getPushTime());
-            String date = String.format(Locale.getDefault(), "%04d", calendar.get(Calendar.YEAR))
-                    + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
-                    + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
             String time = String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.HOUR_OF_DAY))
                     + ":" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MINUTE))
-                    + ":" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.SECOND));
-            mDate.setText(context.getString(R.string.notification_date, date));
+                    + "   " + String.format(Locale.getDefault(), "%04d", calendar.get(Calendar.YEAR))
+                    + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
+                    + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
             mTime.setText(time);
             switch (notificationMessage.getAction()) {
                 case Constants.PushNotification.TYPE_NOTIFICATION:

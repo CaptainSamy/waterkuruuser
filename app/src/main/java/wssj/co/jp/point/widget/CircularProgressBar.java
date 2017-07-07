@@ -12,7 +12,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +33,7 @@ import wssj.co.jp.point.utils.Logger;
 public class CircularProgressBar extends View {
 
     public interface IOnAnimateListener {
+
         public void onAnimateDone();
     }
 
@@ -131,6 +131,7 @@ public class CircularProgressBar extends View {
      * The Marker color paint.
      */
     private Paint mMarkerColorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
     ;
 
     /**
@@ -213,6 +214,7 @@ public class CircularProgressBar extends View {
     private int mVerticalInset = 0;
 
     private int mPinWidth, mPinHeight;
+
     private boolean mIsFirstTime = true;
 
     private Bitmap mPinOn, mPinOff;
@@ -315,7 +317,6 @@ public class CircularProgressBar extends View {
 
     private List<PositionPin> mListPosition = new ArrayList<>();
 
-
     private void initPositionPin() {
         if (mListPosition.size() > 0) {
             return;
@@ -333,7 +334,6 @@ public class CircularProgressBar extends View {
             mListPosition.add(new PositionPin(newX, newY));
         }
     }
-
 
     @Override
     protected void onDraw(final Canvas canvas) {
@@ -488,7 +488,9 @@ public class CircularProgressBar extends View {
     private Random mRandom = new Random();
 
     class PositionPin {
+
         public float mLeft;
+
         public float mTop;
 
         public PositionPin(float left, float top) {
@@ -511,10 +513,13 @@ public class CircularProgressBar extends View {
     }
 
     private boolean isDrawPin;
+
     private boolean isCallback;
+
     private int mProgressPin;
 
     private int mDurationAddPin = 5000;
+
     private int mDurationProgress = 8000;
 
     public void setDurationAddPin(int durationAddPin) {
@@ -531,6 +536,7 @@ public class CircularProgressBar extends View {
         ValueAnimator valueAnimator = ObjectAnimator.ofInt(0, 21);
         valueAnimator.setDuration(mDurationAddPin);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int value = (int) valueAnimator.getAnimatedValue();
@@ -591,6 +597,7 @@ public class CircularProgressBar extends View {
         final ValueAnimator valueAnimator = ObjectAnimator.ofInt(0, 11);
         valueAnimator.setDuration(mDurationAddPin / 2);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int value = (int) valueAnimator.getAnimatedValue();
@@ -619,8 +626,8 @@ public class CircularProgressBar extends View {
         valueAnimator.start();
     }
 
-
     private int mRepeatCount;
+
     public static final int REPEAD_INFINITY = -1;
 
     public void repeatAnimation(int repeatCount) {
@@ -957,7 +964,6 @@ public class CircularProgressBar extends View {
 
         invalidate();
     }
-
 
     /**
      * updates the paint of the progress and the thumb to give them a new visual style

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
@@ -12,7 +13,6 @@ import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
 import wssj.co.jp.point.screens.dialograting.DialogRating;
 import wssj.co.jp.point.utils.Constants;
-import wssj.co.jp.point.utils.Utils;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -24,7 +24,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     public static final String NOTIFICATION_SHOW_RATING = "show_rating";
 
-    private TextView mTitle, mBody, mDate, mTime;
+    private TextView mTitle, mBody, mTime;
 
     private TextView mButtonRating;
 
@@ -52,6 +52,11 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     }
 
     @Override
+    public String getAppBarTitle() {
+        return getString(R.string.title_push_detail);
+    }
+
+    @Override
     public boolean isDisplayIconNotification() {
         return false;
     }
@@ -70,7 +75,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     protected void initViews(View rootView) {
         mTitle = (TextView) rootView.findViewById(R.id.title_notification);
         mBody = (TextView) rootView.findViewById(R.id.body_notification);
-        mDate = (TextView) rootView.findViewById(R.id.date_notification);
         mTime = (TextView) rootView.findViewById(R.id.time_notification);
         mButtonRating = (TextView) rootView.findViewById(R.id.buttonRating);
     }
@@ -98,9 +102,11 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 mBody.setText(mNotificationMessage.getMessage());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(mNotificationMessage.getPushTime());
-                String date = Utils.get2NumbericString(calendar.get(Calendar.DAY_OF_MONTH)) + "/" + Utils.get2NumbericString(calendar.get(Calendar.MONTH) + 1);
-                String time = Utils.get2NumbericString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + Utils.get2NumbericString(calendar.get(Calendar.MINUTE));
-                mDate.setText(getString(R.string.notification_date, date));
+                String time = String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.HOUR_OF_DAY))
+                        + ":" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MINUTE))
+                        + "   " + String.format(Locale.getDefault(), "%04d", calendar.get(Calendar.YEAR))
+                        + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
+                        + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
                 mTime.setText(time);
                 switch (mNotificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_NOTIFICATION:

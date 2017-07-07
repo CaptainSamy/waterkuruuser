@@ -17,7 +17,6 @@ import java.util.List;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.stamp.ListCompanyResponse;
-import wssj.co.jp.point.utils.Constants;
 
 /**
  * Created by HieuPT on 5/19/2017.
@@ -73,7 +72,7 @@ public class ServicesCompanyAdapter extends ArrayAdapter<ListCompanyResponse.Lis
         private void fillData(Context context, ListCompanyResponse.ListCompanyData.CompanyData data) {
             if (!TextUtils.isEmpty(data.getLogo())) {
                 Glide.with(context)
-                        .load(Constants.BASE_URL + data.getLogo())
+                        .load(data.getLogo())
                         .fitCenter()
                         .into(mCompanyLogoImageView);
             } else {

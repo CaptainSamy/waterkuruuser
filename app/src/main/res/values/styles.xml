@@ -87,8 +87,8 @@
 
     <style name="styleTextWaiting">
         <item name="android:paddingTop">6dp</item>
-        <item name="android:paddingLeft">20dp</item>
-        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="android:background">@color/colorBackground_Actionbar</item>
     </style>

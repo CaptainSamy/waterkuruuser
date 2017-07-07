@@ -16,8 +16,8 @@
         android:paddingBottom="10dp"
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
-        android:textColor="@color/black"
-        android:textSize="18dp"
+        android:textColor="@color/colorText"
+        android:textSize="16dp"
         android:textStyle="bold"/>
 
     <TextView

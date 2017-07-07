@@ -6,8 +6,6 @@ package wssj.co.jp.point.model.entities;
 
 public class StatusMemoData {
 
-    public static final int FLAG_DELETE = 0;
-
     public static final int FLAG_NOT_MODIFY = 1;
 
     public static final int FLAG_MODIFIED = 2;
@@ -19,8 +17,6 @@ public class StatusMemoData {
     private int mStatus;
 
     private boolean isUploadAWSSuccess;
-
-    private boolean isUploadWMLSuccess;
 
     public StatusMemoData(String originImage) {
         this.mUrlOriginImage = originImage;
@@ -56,15 +52,8 @@ public class StatusMemoData {
         this.isUploadAWSSuccess = isUploadAWSSuccess;
     }
 
-    public void setIsUploadWMLSuccess(boolean isUploadWMLSuccess) {
-        this.isUploadWMLSuccess = isUploadWMLSuccess;
-    }
-
     public boolean isUploadAWSSuccess() {
         return isUploadAWSSuccess;
     }
 
-    public boolean isUploadWMLSuccess() {
-        return isUploadWMLSuccess;
-    }
 }

@@ -16,5 +16,5 @@ interface IConfirmCheckInView extends IDialogView {
 
     void displayWaitStoreConfirmScreen(ConfirmCheckInResponse.SessionData data);
 
-    void showConfirmFailureMessage(String message);
+    void onConfirmFailure(String message);
 }

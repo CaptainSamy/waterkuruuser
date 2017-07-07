@@ -120,6 +120,7 @@ public class QAAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+
     public interface IEndOfListView {
 
         void onEndOfListView();

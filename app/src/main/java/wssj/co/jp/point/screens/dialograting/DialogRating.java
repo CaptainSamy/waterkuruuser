@@ -88,8 +88,11 @@ public class DialogRating extends BaseDialog<IDialogRatingView, DialogRatingPres
 
             @Override
             public void onClick(View v) {
-                showProgress();
-                getPresenter().reviewServiceByStamp(mStampId, mRating.getRating(), mInputRating.getText().toString().trim());
+                String review = mInputRating.getText().toString().trim();
+                if (mRating.getRating() > 0 || !TextUtils.isEmpty(review)) {
+                    showProgress();
+                    getPresenter().reviewServiceByStamp(mStampId, mRating.getRating(), review);
+                }
 
             }
         });

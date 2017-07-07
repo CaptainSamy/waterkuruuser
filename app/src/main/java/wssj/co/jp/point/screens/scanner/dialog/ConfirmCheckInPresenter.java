@@ -32,13 +32,13 @@ class ConfirmCheckInPresenter extends BasePresenter<IConfirmCheckInView> {
                 getModel(SharedPreferencesModel.class).putSession(data.getSessionId());
                 getModel(SharedPreferencesModel.class).putServiceId(data.getServiceId());
                 getModel(SharedPreferencesModel.class).putServiceCompanyId(data.getServiceCompanyId());
-                getView().dismissDialogView();
                 getView().displayWaitStoreConfirmScreen(data);
+                getView().dismissDialogView();
             }
 
             @Override
             public void onFeedbackFailure(ErrorMessage errorMessage) {
-                getView().showConfirmFailureMessage(errorMessage.getMessage());
+                getView().onConfirmFailure(errorMessage.getMessage());
             }
         });
     }

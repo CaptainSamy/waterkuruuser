@@ -118,7 +118,7 @@ final class APICreator {
                 if (listStatusImage != null) {
                     int position = 1;
                     for (StatusMemoData statusMemoData : listStatusImage) {
-                        if (statusMemoData.isUploadAWSSuccess()) {
+                        if (statusMemoData.getStatus() != 1 && statusMemoData.isUploadAWSSuccess()) {
                             map.put("photo_" + position, statusMemoData.getPathNewImage());
                         } else {
                             map.put("photo_" + position, statusMemoData.getUrlOriginImage());

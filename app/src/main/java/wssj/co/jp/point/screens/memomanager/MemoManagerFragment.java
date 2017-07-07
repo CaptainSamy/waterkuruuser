@@ -515,6 +515,11 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                     mListPhoto[3] = new StatusMemoData(Constants.EMPTY_STRING);
                 }
             }
+        } else {
+            mListPhoto[0] = new StatusMemoData(Constants.EMPTY_STRING);
+            mListPhoto[1] = new StatusMemoData(Constants.EMPTY_STRING);
+            mListPhoto[2] = new StatusMemoData(Constants.EMPTY_STRING);
+            mListPhoto[3] = new StatusMemoData(Constants.EMPTY_STRING);
         }
     }
 
@@ -530,22 +535,22 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             case REQUEST_CODE_PICKER_PHOTO_1:
                 imageView = mPhoto1;
                 mListPhoto[0].setPathNewImage(Constants.EMPTY_STRING);
-                mListPhoto[0].setStatus(StatusMemoData.FLAG_DELETE);
+                mListPhoto[0].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_2:
                 imageView = mPhoto2;
                 mListPhoto[1].setPathNewImage(Constants.EMPTY_STRING);
-                mListPhoto[1].setStatus(StatusMemoData.FLAG_DELETE);
+                mListPhoto[1].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_3:
                 imageView = mPhoto3;
                 mListPhoto[2].setPathNewImage(Constants.EMPTY_STRING);
-                mListPhoto[2].setStatus(StatusMemoData.FLAG_DELETE);
+                mListPhoto[2].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
             case REQUEST_CODE_PICKER_PHOTO_4:
                 imageView = mPhoto4;
                 mListPhoto[3].setPathNewImage(Constants.EMPTY_STRING);
-                mListPhoto[3].setStatus(StatusMemoData.FLAG_DELETE);
+                mListPhoto[3].setStatus(StatusMemoData.FLAG_MODIFIED);
                 break;
         }
         if (imageView != null) {

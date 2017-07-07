@@ -68,15 +68,29 @@ public class QAFragment extends BaseFragment<IQAView, QAPresenter> implements IQ
 
     @Override
     protected void initViews(View rootView) {
-        super.initViews(rootView);
         mListViewQA = (ExpandableListView) rootView.findViewById(R.id.listViewQA);
 
     }
 
     @Override
     protected void initData() {
-        super.initData();
         getPresenter().getListQA(Constants.INIT_PAGE, Constants.LIMIT);
+    }
+
+    @Override
+    protected void initAction() {
+        mListViewQA.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+            int previousItem = -1;
+
+            @Override
+            public void onGroupExpand(int groupPosition) {
+                if (groupPosition != previousItem) {
+                    mListViewQA.collapseGroup(previousItem);
+                }
+                previousItem = groupPosition;
+            }
+        });
     }
 
     @Override
