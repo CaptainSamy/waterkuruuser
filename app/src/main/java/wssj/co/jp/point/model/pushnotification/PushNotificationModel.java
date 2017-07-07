@@ -51,7 +51,6 @@ public class PushNotificationModel extends BaseModel {
                     if (response.getData() != null && response.getData().getListPushNotification() != null) {
                         List<NotificationMessage> listNotification = response.getData().getListPushNotification();
                         int numberNotificationUnReadThisPage = countNotificationNotRead(listNotification);
-                        sort(listNotification);
                         callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage(), numberNotificationUnReadThisPage, response.getData().getUnreadPush());
                     } else {
                         callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0, 0, 0);

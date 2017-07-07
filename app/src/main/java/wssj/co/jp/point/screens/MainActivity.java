@@ -218,21 +218,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage, int numberNotificationUnReadThisPage, int totalNotificationUnRead) {
+    public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage, int numberNotificationUnReadThisPage, final int totalNotificationUnRead) {
         mTotalNotificationUnRead = totalNotificationUnRead;
         if (list != null) {
             if (mListNotification == null) {
                 mListNotification = new ArrayList<>();
                 mPushNotificationAdapter = new PushNotificationAdapter(this, R.layout.item_push_notification, mListNotification);
-                mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-
-                    @Override
-                    public void onEndOfListView() {
-                        if (page < totalPage) {
-                            mPresenter.getListPushNotification(page + 1, Constants.LIMIT);
-                        }
-                    }
-                });
             }
             if (page == 1) {
                 mToolbar.setNumberNotificationUnRead(totalNotificationUnRead);
@@ -244,6 +235,16 @@ public class MainActivity extends AppCompatActivity
                 mListNotification.addAll(list);
                 mPushNotificationAdapter.notifyDataSetChanged();
             }
+            mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+                @Override
+                public void onEndOfListView() {
+                    Logger.d(TAG, "#onEndOfListView " + page + "/" + totalPage);
+                    if (page < totalPage) {
+                        mPresenter.getListPushNotification(page + 1, Constants.LIMIT);
+                    }
+                }
+            });
         }
 
     }
