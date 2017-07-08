@@ -15,9 +15,9 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_centerVertical="true"
-        android:padding="20dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/logo_app"/>
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/icon_logo_menu"/>
 
     <TextView
         android:id="@+id/appName"

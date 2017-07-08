@@ -119,7 +119,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
         if (list != null) {
-            mListNotification.addAll(0, list);
+            mListNotification.addAll(list);
             mAdapter.notifyDataSetChanged();
         }
         mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {

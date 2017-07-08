@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -126,7 +125,6 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)
                 .setFastestInterval(1 * 1000);
-
         mGoogleApiClient.connect();
     }
 
@@ -154,10 +152,11 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
                     break;
                 }
             }
+
             if (isGranted) {
                 initGoogleAPI();
             } else {
-                Toast.makeText(getContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+                getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
             }
         }
     }
@@ -184,23 +183,23 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Logger.d(TAG, "#onConnected");
+        Logger.d(TAG, "#onConnected " + bundle);
         if (ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (location == null) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            } else {
-                Logger.d(TAG, currentLatitude + "/" + currentLongitude);
+            if (location != null) {
                 currentLatitude = location.getLatitude();
                 currentLongitude = location.getLongitude();
-                getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
             }
+//            else {
+//                mGoogleApiClient.reconnect();
+//            }
+            getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
         }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Logger.d(TAG, "#onConnectionSuspended " + i);
     }
 
     @Override
@@ -217,9 +216,9 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
 
     @Override
     public void onLocationChanged(Location location) {
+        Logger.d(TAG, "#onLocationChanged location = " + location.getLatitude() + "/" + location.getLongitude());
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
-
     }
 
     @Override

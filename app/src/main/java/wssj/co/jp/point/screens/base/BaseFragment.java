@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import wssj.co.jp.point.R;
@@ -37,6 +38,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     private Activity mActivity;
 
     private ProgressDialog mProgressDialog;
+
+    private TextView mTextNoItem;
 
     @Override
     public Context getViewContext() {
@@ -78,6 +81,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
             rootView = inflater.inflate(resId, container, false);
             initViews(rootView);
             initAction();
+            mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
         }
         initData();
         if (rootView != null && getActivity() != null) {
@@ -178,6 +182,17 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showTextNoItem(String text, View view) {
+        mTextNoItem.setVisibility(View.VISIBLE);
+        view.setVisibility(View.GONE);
+        mTextNoItem.setText(text);
+    }
+
+    public void hideTextNoItem(boolean isShow, View view) {
+        mTextNoItem.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        view.setVisibility(isShow ? View.GONE : View.VISIBLE);
     }
 
     public boolean isDisplayBottomNavigationMenu() {

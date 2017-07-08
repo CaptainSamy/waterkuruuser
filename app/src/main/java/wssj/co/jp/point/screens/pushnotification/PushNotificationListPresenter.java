@@ -25,7 +25,7 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
         getModel(PushNotificationModel.class).getListPushNotification(token, page, limit, new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override
-            public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage, int numberPushUnreadThisPage, int totalNotificationUnRead) {
+            public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {
                 getView().showListPushNotification(list, page, totalPage);
             }
 

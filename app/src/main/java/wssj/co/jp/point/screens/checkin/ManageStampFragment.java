@@ -81,6 +81,11 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
     }
 
     @Override
+    public boolean isDisplayNavigationButton() {
+        return false;
+    }
+
+    @Override
     protected IManageStampView onCreateView() {
         return this;
     }

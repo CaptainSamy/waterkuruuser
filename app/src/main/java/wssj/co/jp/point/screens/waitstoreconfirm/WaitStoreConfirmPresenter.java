@@ -41,7 +41,7 @@ class WaitStoreConfirmPresenter extends FragmentPresenter<IWaitStoreConfirmView>
                             }
                         } else {
                             if (isViewAttached()) {
-                                getView().backToPreviousScreen();
+                                getView().displayScreenScanCode();
                             }
                         }
                     }

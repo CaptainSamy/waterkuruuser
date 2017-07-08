@@ -7,8 +7,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import wssj.co.jp.point.R;
@@ -26,7 +24,7 @@ public class PushNotificationModel extends BaseModel {
 
     public interface IGetListPushNotificationCallback {
 
-        void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage, int numberPushUnreadThisPage, int totalPushUnread);
+        void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage);
 
         void onGetListPushNotificationFailure(ErrorMessage errorMessage);
     }
@@ -36,6 +34,13 @@ public class PushNotificationModel extends BaseModel {
         void onSetListPushNotificationSuccess(int numberNotificationUnRead);
 
         void onSetListPushNotificationFailure();
+    }
+
+    public interface IGetListPushNotificationUnReadCallback {
+
+        void onGetListPushNotificationUnReadSuccess(List<NotificationMessage> list, int page, int totalPage, int totalPushUnread);
+
+        void onGetListPushNotificationUnReadFailure(String message);
     }
 
     public PushNotificationModel(Context context) {
@@ -50,10 +55,9 @@ public class PushNotificationModel extends BaseModel {
                 if (response.isSuccess()) {
                     if (response.getData() != null && response.getData().getListPushNotification() != null) {
                         List<NotificationMessage> listNotification = response.getData().getListPushNotification();
-                        int numberNotificationUnReadThisPage = countNotificationNotRead(listNotification);
-                        callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage(), numberNotificationUnReadThisPage, response.getData().getUnreadPush());
+                        callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
                     } else {
-                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0, 0, 0);
+                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
                     }
                 } else {
                     callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));
@@ -64,6 +68,32 @@ public class PushNotificationModel extends BaseModel {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
+
+    public void getListPushNotificationUnRead(String token, int page, int limit, final IGetListPushNotificationUnReadCallback callback) {
+        Request request = APICreator.getListPushUnRead(token, page, limit, new Response.Listener<ListNotificationResponse>() {
+
+            @Override
+            public void onResponse(ListNotificationResponse response) {
+                if (response.isSuccess()) {
+                    if (response.getData() != null && response.getData().getListPushNotification() != null) {
+                        List<NotificationMessage> listNotification = response.getData().getListPushNotification();
+                        callback.onGetListPushNotificationUnReadSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage(), response.getData().getUnreadPush());
+                    } else {
+                        callback.onGetListPushNotificationUnReadSuccess(new ArrayList<NotificationMessage>(), 0, 0, 0);
+                    }
+                } else {
+                    callback.onGetListPushNotificationUnReadFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onGetListPushNotificationUnReadFailure(getStringResource(R.string.network_error));
             }
         });
         VolleySequence.getInstance().addRequest(request);
@@ -95,33 +125,6 @@ public class PushNotificationModel extends BaseModel {
             });
             VolleySequence.getInstance().addRequest(request);
         }
-    }
-
-    private int countNotificationNotRead(List<NotificationMessage> list) {
-        if (list == null) return 0;
-        int count = 0;
-        for (NotificationMessage message : list) {
-            if (message.getStatusRead() == 0) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public void sort(List<NotificationMessage> list) {
-        Comparator<NotificationMessage> comparator = new Comparator<NotificationMessage>() {
-
-            @Override
-            public int compare(NotificationMessage left, NotificationMessage right) {
-                if (left.getPushTime() > right.getPushTime()) {
-                    return -1;
-                } else if (left.getPushTime() < right.getPushTime()) {
-                    return 1;
-                }
-                return 0;
-            }
-        };
-        Collections.sort(list, comparator);
     }
 
 }

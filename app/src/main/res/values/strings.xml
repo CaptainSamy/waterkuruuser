@@ -113,9 +113,10 @@
     <string name="unused_card_title">店名称：</string>
     <string name="can_use_card_title">使用可能サンタプカード</string>
     <string name="used_card_title">使用済一覧</string>
-    <string name="card_amount">利用可能スタンプカード：%1$s枚</string>
+    <string name="card_amount">利用可能スタンプカード： %1$s枚</string>
     <string name="list_store">店舗の状態確認</string>
     <string name="rating">評価する</string>
+    <string name="no_item_service">サービススタンプカードがありません。</string>
 
     <!-- menu -->
     <string name="menu_logout">ログアウト</string>

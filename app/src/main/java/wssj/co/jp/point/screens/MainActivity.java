@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "broadcastReceiver");
-            mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+            mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
         }
     };
 
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage, int numberNotificationUnReadThisPage, final int totalNotificationUnRead) {
+    public void showListPushNotificationUnRead(List<NotificationMessage> list, final int page, final int totalPage, final int totalNotificationUnRead) {
         mTotalNotificationUnRead = totalNotificationUnRead;
         if (list != null) {
             if (mListNotification == null) {
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity
                 public void onEndOfListView() {
                     Logger.d(TAG, "#onEndOfListView " + page + "/" + totalPage);
                     if (page < totalPage) {
-                        mPresenter.getListPushNotification(page + 1, Constants.LIMIT);
+                        mPresenter.getListPushNotificationUnRead(page + 1, Constants.LIMIT);
                     }
                 }
             });
@@ -506,7 +506,7 @@ public class MainActivity extends AppCompatActivity
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
             if (mPushNotificationAdapter == null) {
-                mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+                mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
             }
 
             disablePushUpView();

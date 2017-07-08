@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import java.util.List;
 
-import wssj.co.jp.point.model.ErrorMessage;
 import wssj.co.jp.point.model.checkin.CheckInModel;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
 import wssj.co.jp.point.model.preference.SharedPreferencesModel;
@@ -54,28 +53,28 @@ class MainPresenter extends BasePresenter<IMainView> {
         getView().onDisableDrawableLayout();
     }
 
-    public void getListPushNotification(int page, int limit) {
+    public void getListPushNotificationUnRead(int page, int limit) {
         String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
-            getModel(PushNotificationModel.class).getListPushNotification(token, page, limit, new PushNotificationModel.IGetListPushNotificationCallback() {
+            getModel(PushNotificationModel.class).getListPushNotificationUnRead(token, page, limit, new PushNotificationModel.IGetListPushNotificationUnReadCallback() {
 
                 @Override
-                public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage, int numberPushUnreadThisPage, int totalPushUnRead) {
-                    getView().showListPushNotification(list, page, totalPage, numberPushUnreadThisPage, totalPushUnRead);
+                public void onGetListPushNotificationUnReadSuccess(List<NotificationMessage> list, int page, int totalPage, int totalPushUnRead) {
+                    getView().showListPushNotificationUnRead(list, page, totalPage, totalPushUnRead);
                 }
 
                 @Override
-                public void onGetListPushNotificationFailure(ErrorMessage errorMessage) {
-                    getView().displayErrorMessage(errorMessage.getMessage());
+                public void onGetListPushNotificationUnReadFailure(String message) {
+                    getView().displayErrorMessage(message);
                 }
             });
         }
     }
 
-    public void setListPushUnRead(List<NotificationMessage> listPustNotification) {
+    public void setListPushUnRead(List<NotificationMessage> listPushNotification) {
         String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
-            getModel(PushNotificationModel.class).setListPushUnRead(token, listPustNotification, new PushNotificationModel.ISetListPushNotificationCallback() {
+            getModel(PushNotificationModel.class).setListPushUnRead(token, listPushNotification, new PushNotificationModel.ISetListPushNotificationCallback() {
 
                 @Override
                 public void onSetListPushNotificationSuccess(int numberNotificationUnRead) {

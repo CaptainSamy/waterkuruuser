@@ -71,7 +71,7 @@ public interface IMainView extends IView {
 
     void onLogout();
 
-    void showListPushNotification(List<NotificationMessage> list, int page, int totalPage, int numberNotificationNotReadThisPage, int totalPushUnRead);
+    void showListPushNotificationUnRead(List<NotificationMessage> list, int page, int totalPage, int totalPushUnRead);
 
     void setListPushUnReadSuccess(int numberNotificationUnRead);
 

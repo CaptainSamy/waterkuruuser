@@ -59,6 +59,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     private ImageView mImageStore;
 
+    private boolean isAllowCheckIn;
+
     public static WaitStoreConfirmFragment newInstance(Bundle args) {
         WaitStoreConfirmFragment fragment = new WaitStoreConfirmFragment();
         fragment.setArguments(args);
@@ -153,30 +155,34 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
             @Override
             public void onAnimateDone() {
-                mLayoutInfo.setVisibility(View.GONE);
-                Animation zoomInAnim = AnimationUtils.loadAnimation(getContext(),
-                        R.anim.zoom_in);
-                zoomInAnim.setStartOffset(500);
-                mImageStore.setAnimation(zoomInAnim);
+                if (isAllowCheckIn) {
+                    mLayoutInfo.setVisibility(View.GONE);
+                    Animation zoomInAnim = AnimationUtils.loadAnimation(getContext(),
+                            R.anim.zoom_in);
+                    zoomInAnim.setStartOffset(500);
+                    mImageStore.setAnimation(zoomInAnim);
 
-                mExpandWaitingText.setVisibility(View.VISIBLE);
-                mExpandWaitingText.setText(getString(R.string.expand_waiting_confirm_prepare_finish));
-                mLayoutFinishWaiting.setVisibility(View.VISIBLE);
-                mLayoutFinishWaiting.animate().alpha(1.0f).setDuration(1000);
-                Animation zoomOutAnim = AnimationUtils.loadAnimation(getContext(),
-                        R.anim.zoom_out);
-                zoomOutAnim.setStartOffset(500);
-                mLayoutFinishWaiting.startAnimation(zoomOutAnim);
+                    mExpandWaitingText.setVisibility(View.VISIBLE);
+                    mExpandWaitingText.setText(getString(R.string.expand_waiting_confirm_prepare_finish));
+                    mLayoutFinishWaiting.setVisibility(View.VISIBLE);
+                    mLayoutFinishWaiting.animate().alpha(1.0f).setDuration(1000);
+                    Animation zoomOutAnim = AnimationUtils.loadAnimation(getContext(),
+                            R.anim.zoom_out);
+                    zoomOutAnim.setStartOffset(500);
+                    mLayoutFinishWaiting.startAnimation(zoomOutAnim);
 
-                mHandler.postDelayed(new Runnable() {
+                    mHandler.postDelayed(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(KEY_STORE_NAME, mStoreName);
-                        getActivityCallback().displayScreen(IMainView.FRAGMENT_MANAGER_STAMP, true, false, bundle);
-                    }
-                }, 2500);
+                        @Override
+                        public void run() {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(KEY_STORE_NAME, mStoreName);
+                            getActivityCallback().displayScreen(IMainView.FRAGMENT_MANAGER_STAMP, true, false, bundle);
+                        }
+                    }, 2500);
+                } else {
+                    getActivityCallback().displayScreen(IMainView.FRAGMENT_SCANNER, true, false);
+                }
             }
         });
     }
@@ -225,6 +231,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     public void displayScreenManageStamp(int serviceId) {
+        isAllowCheckIn = true;
         mCircleProgress.setRepeat(1);
         new Handler().postDelayed(new Runnable() {
 
@@ -237,7 +244,15 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     public void displayScreenScanCode() {
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_SCANNER, true, false);
+        isAllowCheckIn = false;
+        mCircleProgress.setRepeat(1);
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                mImageStore.clearAnimation();
+            }
+        }, 5000);
     }
 
     public void stopCheckingStatus() {

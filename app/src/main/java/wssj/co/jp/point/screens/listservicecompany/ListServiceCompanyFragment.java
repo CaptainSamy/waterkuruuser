@@ -13,8 +13,8 @@ import wssj.co.jp.point.model.stamp.ListCompanyResponse;
 import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
 import wssj.co.jp.point.screens.listcard.ListCardFragment;
-import wssj.co.jp.point.screens.note.UserMemoFragment;
 import wssj.co.jp.point.screens.listservicecompany.adapter.ServicesCompanyAdapter;
+import wssj.co.jp.point.screens.note.UserMemoFragment;
 import wssj.co.jp.point.utils.Logger;
 
 /**
@@ -59,7 +59,7 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
 
     @Override
     protected int getResourceLayout() {
-        return R.layout.stamp_fragment;
+        return R.layout.fragment_list_service;
     }
 
     @Override
@@ -106,15 +106,20 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
 
     @Override
     public void showListCompany(List<ListCompanyResponse.ListCompanyData.CompanyData> cardList) {
-        hideSwipeRefreshLayout();
-        if (mAdapter == null) {
-            mAdapter = new ServicesCompanyAdapter(getActivityContext(), cardList);
-            mCardListView.setAdapter(mAdapter);
-        } else {
-            if (mCardListView.getAdapter() == null) {
+        if (cardList != null && cardList.size() > 0) {
+            hideTextNoItem(false, mCardListView);
+            hideSwipeRefreshLayout();
+            if (mAdapter == null) {
+                mAdapter = new ServicesCompanyAdapter(getActivityContext(), cardList);
                 mCardListView.setAdapter(mAdapter);
+            } else {
+                if (mCardListView.getAdapter() == null) {
+                    mCardListView.setAdapter(mAdapter);
+                }
+                mAdapter.refreshData(cardList);
             }
-            mAdapter.refreshData(cardList);
+        } else {
+            showTextNoItem(getString(R.string.no_item_service), mCardListView);
         }
     }
 
