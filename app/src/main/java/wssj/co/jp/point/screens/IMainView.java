@@ -63,7 +63,7 @@ public interface IMainView extends IView {
 
     void onOpenDrawableLayout();
 
-    void onCloseDrawableLayout(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
+    void onCloseDrawableLayout(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, int navigationId);
 
     void onEnableDrawableLayout();
 

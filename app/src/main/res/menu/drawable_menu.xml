@@ -38,10 +38,13 @@
             android:icon="@drawable/version"
             android:title="@string/menu_version"/>
 
-
         <item
             android:id="@id/menu_logout"
             android:icon="@drawable/logout"
             android:title="@string/menu_logout"/>
+
+        <item
+            android:id="@id/menu_visible"
+            android:visible="false"/>
     </group>
 </menu>

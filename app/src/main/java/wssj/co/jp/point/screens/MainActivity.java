@@ -289,7 +289,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Logger.d(TAG, "#onNavigationItemSelected");
         if (mCurrentFragment != null) {
-            switch (item.getItemId()) {
+            int menuId = item.getItemId();
+            switch (menuId) {
                 case R.id.navigation_stamp:
                     if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_MY_STAMP) {
                         replaceFragment(new ListServiceCompanyFragment(), true, true);
@@ -306,33 +307,34 @@ public class MainActivity extends AppCompatActivity
                     }
                     return true;
                 case R.id.menu_push_notification:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST, true, true, null, menuId);
+                    return true;
                 case R.id.menu_change_password:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_CHANGE_PASSWORD, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_CHANGE_PASSWORD, true, true, null, menuId);
+                    return true;
                 case R.id.menu_how_to_use:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_HOW_TO_USE, true, true, null);
-                    break;
+                    mNavigationView.setCheckedItem(R.id.menu_how_to_use);
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_HOW_TO_USE, true, true, null, menuId);
+                    return true;
                 case R.id.menu_question_answer:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_QA, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_QA, true, true, null, menuId);
+                    return true;
                 case R.id.menu_contact_us:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_CONTACT_US, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_CONTACT_US, true, true, null, menuId);
+                    return true;
                 case R.id.menu_term_of_service:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_TERM_OF_SERVICE, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_TERM_OF_SERVICE, true, true, null, menuId);
+                    return true;
                 case R.id.menu_privacy_policy:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_POLICY, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_POLICY, true, true, null, menuId);
+                    return true;
                 case R.id.menu_version:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_ABOUT, true, true, null);
-                    break;
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_ABOUT, true, true, null, menuId);
+                    return true;
                 case R.id.menu_logout:
                     mDrawerLayout.closeDrawer(GravityCompat.END);
                     mPresenter.onLogout();
-                    break;
+                    return true;
             }
         }
         return false;
@@ -347,8 +349,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCloseDrawableLayout(final int screenId, final boolean hasAnimation,
-                                      final boolean addToBackStack, final Bundle bundle) {
+                                      final boolean addToBackStack, final Bundle bundle, int navigationId) {
         Logger.i(TAG, "#onCloseDrawableLayout");
+//        mNavigationView.setCheckedItem(navigationId);
         mDrawerLayout.closeDrawer(GravityCompat.END);
         new Handler().postDelayed(new Runnable() {
 
@@ -508,7 +511,6 @@ public class MainActivity extends AppCompatActivity
             if (mPushNotificationAdapter == null) {
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
             }
-
             disablePushUpView();
             mCurrentFragment = fragment;
             mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
@@ -542,15 +544,10 @@ public class MainActivity extends AppCompatActivity
                     mBottomNavigationView.setSelectedItemId(R.id.navigation_stamp);
                     break;
             }
-            if (fragment.getNavigationMenuID() != 0) {
-                Logger.d(TAG, fragment.toString());
-                mNavigationView.setCheckedItem(fragment.getNavigationMenuID());
+            if (fragment.getNavigationMenuID() == 0) {
+                mNavigationView.setCheckedItem(R.id.menu_visible);
             } else {
-                Logger.d(TAG, "else");
-                int size = mNavigationView.getMenu().size();
-                for (int i = 0; i < size; i++) {
-                    mNavigationView.getMenu().getItem(i).setChecked(false);
-                }
+                mNavigationView.setCheckedItem(fragment.getNavigationMenuID());
             }
         }
     }

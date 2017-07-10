@@ -10,4 +10,5 @@
     <item name="menu_term_of_service" type="id"/>
     <item name="menu_privacy_policy" type="id"/>
     <item name="menu_version" type="id"/>
+    <item name="menu_visible" type="id"/>
 </resources>
