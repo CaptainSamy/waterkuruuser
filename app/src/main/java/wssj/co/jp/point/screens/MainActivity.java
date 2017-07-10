@@ -59,7 +59,7 @@ import wssj.co.jp.point.screens.registeraccount.RegisterAccountFragment;
 import wssj.co.jp.point.screens.resetpassword.ResetPasswordFragment;
 import wssj.co.jp.point.screens.scanner.ScannerFragment;
 import wssj.co.jp.point.screens.splash.SplashFragment;
-import wssj.co.jp.point.screens.termofservice.TermOfServiceFragment;
+import wssj.co.jp.point.screens.termofservice.fragment.TermOfServiceFragment;
 import wssj.co.jp.point.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.FragmentBackStackManager;

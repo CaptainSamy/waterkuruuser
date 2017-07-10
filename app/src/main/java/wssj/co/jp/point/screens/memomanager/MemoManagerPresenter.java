@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.memo.ListServiceResponse;
+import wssj.co.jp.point.model.memo.MemoDynamicResponse;
 import wssj.co.jp.point.model.memo.UserMemoModel;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
 import wssj.co.jp.point.model.preference.SharedPreferencesModel;
@@ -84,6 +85,25 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
             public void onGetListServiceFailure(String message) {
                 getView().hideProgress();
                 getView().onGetListServicesFailure(message);
+            }
+        });
+    }
+
+    public void getMemoConfigByServiceId(int serviceId) {
+        getView().showProgress();
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getModel(UserMemoModel.class).getUserMemoConfig(token, serviceId, new UserMemoModel.IGetMemoConfigCallback() {
+
+            @Override
+            public void onGetMemoConfigSuccess(MemoDynamicResponse.ServiceListData data) {
+                getView().hideProgress();
+                getView().onGetMemoConfigSuccess(data);
+            }
+
+            @Override
+            public void onGetMemoConfigFailure(String message) {
+                getView().hideProgress();
+                getView().onGetMemoConfigFailure(message);
             }
         });
     }

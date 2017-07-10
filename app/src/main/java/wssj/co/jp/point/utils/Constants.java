@@ -67,4 +67,16 @@ public final class Constants {
 
         public static final String TYPE_REQUEST_REVIEW = "action_request_review";
     }
+
+    public static final class MemoConfig {
+
+        public static final String TYPE_EDIT_TEXT = "textbox";
+
+        public static final String TYPE_IMAGE = "image";
+
+        public static final String TYPE_RADIO = "radio";
+
+        public static final String TYPE_DROP_LIST = "droplist";
+
+    }
 }

@@ -119,7 +119,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
                     @Override
                     public void onClick(View widget) {
-                        getActivityCallback().displayScreen(IMainView.FRAGMENT_TERM_OF_SERVICE, true, true);
+                        getActivityCallback().displayScreen(IMainView.FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM, true, true);
                     }
 
                     @Override

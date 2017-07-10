@@ -8,4 +8,7 @@ import wssj.co.jp.point.screens.base.IFragmentView;
 
 public interface ITermOfServicesView extends IFragmentView {
 
+    void onGetTermOfServiceSuccess(String html);
+
+    void onGetTermOfServiceFailure(String message);
 }

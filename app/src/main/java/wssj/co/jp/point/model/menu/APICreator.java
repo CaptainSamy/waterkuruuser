@@ -67,30 +67,44 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<HowUseAppResponse> howUseApp(String token, final Response.Listener<HowUseAppResponse> responseListener,
-                                                    final Response.ErrorListener errorListener) {
+    static GsonRequest<HtmlResponse> howUseApp(String token, final Response.Listener<HtmlResponse> responseListener,
+                                               final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
 
-        ResponseListener<HowUseAppResponse> listener = new ResponseListener<>(TAG, "#getListQA", responseListener, errorListener);
+        ResponseListener<HtmlResponse> listener = new ResponseListener<>(TAG, "#getListQA", responseListener, errorListener);
         return new GsonJsonRequest<>(Request.Method.GET,
                 HOW_USE_APP_URL,
-                HowUseAppResponse.class,
+                HtmlResponse.class,
                 headers,
                 listener,
                 listener);
     }
 
-    static GsonRequest<HowUseAppResponse> policy(final Response.Listener<HowUseAppResponse> responseListener,
-                                                 final Response.ErrorListener errorListener) {
+    static GsonRequest<HtmlResponse> policy(final Response.Listener<HtmlResponse> responseListener,
+                                            final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
 
-        ResponseListener<HowUseAppResponse> listener = new ResponseListener<>(TAG, "#getListQA", responseListener, errorListener);
+        ResponseListener<HtmlResponse> listener = new ResponseListener<>(TAG, "#getListQA", responseListener, errorListener);
         return new GsonJsonRequest<>(Request.Method.GET,
                 POLICY_URL,
-                HowUseAppResponse.class,
+                HtmlResponse.class,
+                headers,
+                listener,
+                listener);
+    }
+
+    static GsonRequest<HtmlResponse> termOfService(final Response.Listener<HtmlResponse> responseListener,
+                                                   final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+
+        ResponseListener<HtmlResponse> listener = new ResponseListener<>(TAG, "#termOfService", responseListener, errorListener);
+        return new GsonJsonRequest<>(Request.Method.GET,
+                POLICY_URL,
+                HtmlResponse.class,
                 headers,
                 listener,
                 listener);

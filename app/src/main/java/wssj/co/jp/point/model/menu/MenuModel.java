@@ -53,6 +53,13 @@ public class MenuModel extends BaseModel {
         void onPolicyFailure(String message);
     }
 
+    public interface IOnGetTermOfService {
+
+        void onGetTermOfServiceSuccess(String html);
+
+        void onGetTermOfServiceFailure(String message);
+    }
+
     public void getListQA(String token, int page, int limit, final IOnGetListQACallback callback) {
         final Request requestQA = APICreator.getListQA(token, page, limit, new Response.Listener<QAResponse>() {
 
@@ -107,10 +114,10 @@ public class MenuModel extends BaseModel {
     }
 
     public void howUseApp(String token, final IOnHowUseAppCallback callback) {
-        final Request requestQA = APICreator.howUseApp(token, new Response.Listener<HowUseAppResponse>() {
+        final Request requestQA = APICreator.howUseApp(token, new Response.Listener<HtmlResponse>() {
 
             @Override
-            public void onResponse(HowUseAppResponse response) {
+            public void onResponse(HtmlResponse response) {
                 if (response.isSuccess() && response.getData() != null) {
                     callback.onHowUseAppSuccess(response.getData().getHtml());
                 } else {
@@ -133,10 +140,10 @@ public class MenuModel extends BaseModel {
     }
 
     public void policy(final IOnPolicyCallback callback) {
-        final Request requestQA = APICreator.policy(new Response.Listener<HowUseAppResponse>() {
+        final Request requestQA = APICreator.policy(new Response.Listener<HtmlResponse>() {
 
             @Override
-            public void onResponse(HowUseAppResponse response) {
+            public void onResponse(HtmlResponse response) {
                 if (response.isSuccess() && response.getData() != null) {
                     callback.onPolicySuccess(response.getData().getHtml());
                 } else {
@@ -152,6 +159,32 @@ public class MenuModel extends BaseModel {
                     callback.onPolicyFailure(errorResponse.getMessage());
                 } else {
                     callback.onPolicyFailure(getStringResource(R.string.failure));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(requestQA);
+    }
+
+    public void termOfService(final IOnGetTermOfService callback) {
+        final Request requestQA = APICreator.termOfService(new Response.Listener<HtmlResponse>() {
+
+            @Override
+            public void onResponse(HtmlResponse response) {
+                if (response.isSuccess() && response.getData() != null) {
+                    callback.onGetTermOfServiceSuccess(response.getData().getHtml());
+                } else {
+                    callback.onGetTermOfServiceFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onGetTermOfServiceFailure(errorResponse.getMessage());
+                } else {
+                    callback.onGetTermOfServiceFailure(getStringResource(R.string.failure));
                 }
             }
         });

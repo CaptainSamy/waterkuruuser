@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -38,6 +39,7 @@ import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.entities.UpdateMemoPhotoData;
 import wssj.co.jp.point.model.memo.ListServiceResponse;
+import wssj.co.jp.point.model.memo.MemoDynamicResponse;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
 import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
@@ -72,6 +74,10 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     private static final int REQUEST_CODE_CAMERA_PHOTO_3 = 203;
 
     private static final int REQUEST_CODE_CAMERA_PHOTO_4 = 204;
+
+    private ViewGroup mParentViewMemoConfig;
+
+    private Button mButtonShow;
 
     private Spinner mSpinnerServices;
 
@@ -131,12 +137,19 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     @Override
+    public int getMenuBottomID() {
+        return MENU_MY_REQUEST;
+    }
+
+    @Override
     protected IMemoManagerView onCreateView() {
         return this;
     }
 
     @Override
     protected void initViews(View rootView) {
+//        mParentViewMemoConfig = (ViewGroup) rootView.findViewById(R.id.parentViewMemoConfig);
+//        mButtonShow = (Button) rootView.findViewById(R.id.showContent);
         mSpinnerServices = (Spinner) rootView.findViewById(R.id.spServices);
         mInputNote = (EditText) rootView.findViewById(R.id.etNote);
         mPhoto1 = (ImageView) rootView.findViewById(R.id.ivPhoto1);
@@ -162,6 +175,20 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     protected void initData() {
         mListService = new ArrayList<>();
         getPresenter().getListService();
+//        getPresenter().getMemoConfigByServiceId(0);
+    }
+
+    @Override
+    public void onGetMemoConfigSuccess(MemoDynamicResponse.ServiceListData data) {
+//        List<MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig> mServiceMemoConfigs = data.getListService().get(0).getServiceMemoConfig();
+//        if (mServiceMemoConfigs != null && mServiceMemoConfigs.size() > 0) {
+//            onCreateMemoDynamic(mServiceMemoConfigs);
+//        }
+    }
+
+    @Override
+    public void onGetMemoConfigFailure(String message) {
+
     }
 
     @Override
@@ -559,8 +586,184 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         }
     }
 
-    @Override
-    public int getMenuBottomID() {
-        return MENU_MY_REQUEST;
-    }
+    private List<MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig> mListMemoConfig = new ArrayList<>();
+
+//    /* Handle create memo dynamic*/
+//
+//    public void onCreateMemoDynamic(List<MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig> mServiceMemoConfigs) {
+//        for (MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig memoConfig : mServiceMemoConfigs) {
+//            mListMemoConfig.add(memoConfig);
+//            switch (memoConfig.getType()) {
+//                case Constants.MemoConfig.TYPE_EDIT_TEXT:
+//                    handleCreateEditText(memoConfig);
+//                    break;
+//                case Constants.MemoConfig.TYPE_RADIO:
+//                    handleCreateRadio(memoConfig);
+//                    break;
+//                case Constants.MemoConfig.TYPE_IMAGE:
+//                    handleCreateImage(memoConfig);
+//                    break;
+//                case Constants.MemoConfig.TYPE_DROP_LIST:
+//                    handleCreateDrop(memoConfig);
+//                    break;
+//            }
+//        }
+//        mButtonShow.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                if (mListEditText != null && mListEditText.size() > 0) {
+//                    String text = "";
+//                    for (EditText editText : mListEditText) {
+//                        text = text + editText.getText().toString() + "/";
+//                    }
+//                    showToast(text);
+//                }
+//
+//
+//                if (mListRadioGroup != null && mListRadioGroup.size() > 0) {
+//                    String radio = "";
+//                    for (RadioGroup radioGroup : mListRadioGroup) {
+//                        int radioButtonID = radioGroup.getCheckedRadioButtonId();
+//                        RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
+//                        if (radioButton != null) {
+//                            radio = radio + radioButton.getText().toString() + ",";
+//                        }
+//                    }
+//                    showToast(radio);
+//                }
+//
+//
+//                if (mListSpinner != null && mListSpinner.size() > 0) {
+//                    String spinnerChoose = "";
+//                    for (Spinner spinner : mListSpinner) {
+//                        spinnerChoose = spinnerChoose + spinner.getSelectedItem().toString();
+//                    }
+//                    showToast(spinnerChoose);
+//                }
+//            }
+//        });
+//    }
+//
+//    private List<EditText> mListEditText;
+//
+//    private List<RadioGroup> mListRadioGroup;
+//
+//    private List<Spinner> mListSpinner;
+//
+//    private List<GridView> mListGridView;
+//
+//    /*Handle create edit text*/
+//
+//    public void handleCreateEditText(MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig memoConfig) {
+//        if (memoConfig == null) return;
+//        if (mListEditText == null) {
+//            mListEditText = new ArrayList<>();
+//        }
+//        TextView title;
+//        EditText editText;
+//        View viewEditText = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_edittext, null);
+//        title = (TextView) viewEditText.findViewById(R.id.titleEditText);
+//        editText = (EditText) viewEditText.findViewById(R.id.content);
+//
+//
+//        title.setText(memoConfig.getName());
+//        int line = memoConfig.getConfig().getMultiline();
+//        if (line > 0) {
+//            editText.setLines(line);
+//        }
+//        mListEditText.add(editText);
+//        mParentViewMemoConfig.addView(viewEditText);
+//    }
+//
+//    /*
+//    Handle create Radio
+//    */
+//    public void handleCreateRadio(MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig memoConfig) {
+//        if (memoConfig == null) return;
+//        if (mListRadioGroup == null) {
+//            mListRadioGroup = new ArrayList<>();
+//        }
+//        TextView title;
+//        RadioGroup radioGroup;
+//        View viewRadio = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_radio, null);
+//        title = (TextView) viewRadio.findViewById(R.id.titleRadio);
+//        radioGroup = (RadioGroup) viewRadio.findViewById(R.id.radioGroup);
+//        MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig.Config config = memoConfig.getConfig();
+//        if (config != null && config.getData() != null) {
+//            for (String string : config.getData()) {
+//                RadioButton radioButton = new RadioButton(getContext());
+//                radioButton.setText(string);
+//                radioGroup.addView(radioButton);
+//            }
+//        }
+//        title.setText(memoConfig.getName());
+//        mListRadioGroup.add(radioGroup);
+//        mParentViewMemoConfig.addView(viewRadio);
+//    }
+//
+//    /*
+//       Handle create Image
+//     */
+//    public void handleCreateImage(MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig memoConfig) {
+//        if (memoConfig == null) return;
+//
+//        TextView title;
+//        ExpandableHeightGridView gridView;
+//        if (mListGridView == null) {
+//            mListGridView = new ArrayList<>();
+//        }
+//        List<String> listImage = new ArrayList<>();
+//        listImage.add("1");
+//        listImage.add("1");
+//        listImage.add("1");
+//        listImage.add("1");
+//        listImage.add("1");
+//
+//        View viewGrid = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_images, null);
+//        title = (TextView) viewGrid.findViewById(R.id.titleImages);
+//        gridView = (ExpandableHeightGridView) viewGrid.findViewById(R.id.gridView);
+//        gridView.setExpanded(true);
+//        title.setText(memoConfig.getName());
+//        ImageAdapter imageAdapter = new ImageAdapter(getContext(), listImage);
+//        gridView.setAdapter(imageAdapter);
+//        mParentViewMemoConfig.addView(viewGrid);
+//    }
+//
+//    /*
+//       Handle create Drop
+//     */
+//    public void handleCreateDrop(MemoDynamicResponse.ServiceListData.ServiceList.ServiceMemoConfig memoConfig) {
+//        if (memoConfig == null) return;
+//
+//        TextView title;
+//        Spinner spinner;
+//        if (mListSpinner == null) {
+//            mListSpinner = new ArrayList<>();
+//        }
+//        View viewSpinner = LayoutInflater.from(getContext()).inflate(R.layout.menu_config_spinner, null);
+//        title = (TextView) viewSpinner.findViewById(R.id.titleSpinner);
+//        spinner = (Spinner) viewSpinner.findViewById(R.id.spServices);
+//
+//        List<String> list = memoConfig.getConfig().getData();
+//        if (list != null && list.size() > 0) {
+//            ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list) {
+//
+//                @NonNull
+//                @Override
+//                public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//                    View v = super.getView(position, convertView, parent);
+//                    if (v instanceof TextView) {
+//                        ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+//                    }
+//                    return v;
+//                }
+//            };
+//            spinner.setAdapter(mAdapterSpNumWord);
+//            title.setText(memoConfig.getName());
+//            mListSpinner.add(spinner);
+//            mParentViewMemoConfig.addView(viewSpinner);
+//        }
+//    }
+
 }

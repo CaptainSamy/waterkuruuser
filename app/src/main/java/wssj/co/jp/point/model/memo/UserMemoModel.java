@@ -8,6 +8,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import java.io.File;
 
@@ -33,11 +34,11 @@ public class UserMemoModel extends BaseModel {
         super(context);
     }
 
-    public interface IGetListCompanyCallback {
+    public interface IGetMemoConfigCallback {
 
-        void onGetListCompanySuccess(ListCompanyResponse.ServicesData data);
+        void onGetMemoConfigSuccess(MemoDynamicResponse.ServiceListData data);
 
-        void onGetListCompanyFailure(String message);
+        void onGetMemoConfigFailure(String message);
     }
 
     public interface IGetListServiceCallback {
@@ -65,35 +66,6 @@ public class UserMemoModel extends BaseModel {
         void onUpdateUserMemoSuccess(String message);
 
         void onUpdateUserMemoFailure(String message);
-    }
-
-    public void getListCompany(String token, final IGetListCompanyCallback callback) {
-        Request requestGetListServices = APICreator.getListCompany(token,
-                new Response.Listener<ListCompanyResponse>() {
-
-                    @Override
-                    public void onResponse(ListCompanyResponse response) {
-                        if (response.isSuccess()) {
-                            callback.onGetListCompanySuccess(response.getData());
-                        } else {
-                            String message = TextUtils.isEmpty(response.getMessage()) ? getStringResource(R.string.failure) : response.getMessage();
-                            callback.onGetListCompanyFailure(message);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                        if (errorResponse != null) {
-                            callback.onGetListCompanyFailure(errorResponse.getMessage());
-                        } else {
-                            callback.onGetListCompanyFailure(getStringResource(R.string.failure));
-                        }
-                    }
-                });
-        VolleySequence.getInstance().addRequest(requestGetListServices);
     }
 
     public void getListService(String token, final IGetListServiceCallback callback) {
@@ -148,33 +120,6 @@ public class UserMemoModel extends BaseModel {
                 });
         VolleySequence.getInstance().addRequest(requestNote);
     }
-
-    //    public void updateUserMemo(String token, int serviceId, String note, UpdateMemoPhotoData[] images, final IUpdateUserMemoCallback callback) {
-//        Request requestUpdateMemo = APICreator.updateUserMemo(token, serviceId, note, images, new Response.Listener<ResponseData>() {
-//
-//            @Override
-//            public void onResponse(ResponseData response) {
-//                if (response.isSuccess()) {
-//                    callback.onUpdateUserMemoSuccess(response.getMessage());
-//                } else {
-//                    String message = TextUtils.isEmpty(response.getMessage()) ? getStringResource(R.string.failure) : response.getMessage();
-//                    callback.onUpdateUserMemoFailure(message);
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-//                if (errorResponse != null) {
-//                    callback.onUpdateUserMemoFailure(errorResponse.getMessage());
-//                } else {
-//                    callback.onUpdateUserMemoFailure(getStringResource(R.string.network_error));
-//                }
-//            }
-//        });
-//        VolleySequence.getInstance().addRequest(requestUpdateMemo);
-//    }
 
     public void uploadImageAWS(final StatusMemoData[] listStatusImage, final int position, final IUpdateAWSCallback callback) {
         if (position < listStatusImage.length) {
@@ -246,5 +191,113 @@ public class UserMemoModel extends BaseModel {
                     }
                 });
         VolleySequence.getInstance().addRequest(requestUpdateMemo);
+    }
+
+    public void getUserMemoConfig(String token, int serviceId, final IGetMemoConfigCallback callback) {
+        String data = "{  \"result\":\"success\", \n" +
+                "  \"data\" :{\n" +
+                "    \"service_list\":[       \n" +
+                "        {\"service_id\":1,      \n" +
+                "        \"service_name\":\"Ten service\",    \n" +
+                "        \"service_memo_config\":[         \n" +
+                "          { \"type\":\"textbox\",\n" +
+                "            \"id\":\"title\",\n" +
+                "            \"name\":\"title\",\n" +
+                "            \"config\":{\n" +
+                "              \"multiline\":0,\n" +
+                "              \"max_lengt\":2048\n" +
+                "              }},\n" +
+                "              {\n" +
+                "                \"type\":\"textbox\",\n" +
+                "                \"id\":\"content\",\n" +
+                "                \"name\":\"content\",\n" +
+                "                \"config\":{ \n" +
+                "                  \"multiline\":0,\n" +
+                "                  \"max_lengt\":2048 \n" +
+                "                  }\n" +
+                "                \n" +
+                "              },\n" +
+                "              {\n" +
+                "                \"type\":\"image\",\n" +
+                "                \"id\":\"image\",\n" +
+                "                \"name\":\"image\",\n" +
+                "                \"config\":{\n" +
+                "                  \"numb_image\":4\n" +
+                "                  }\n" +
+                "              },\n" +
+                "             {\n" +
+                "                    \"type\":\"radio\", \n" +
+                "                    \"id\":\"radio\", \n" +
+                "                    \"name\":\"radio\",\n" +
+                "                    \"config\":{\n" +
+                "                      \"data\":[ \n" +
+                "                        \"yes\",\n" +
+                "                        \"no\",\n" +
+                "                        \"ok\" \n" +
+                "                      ] \n" +
+                "                    } \n" +
+                "              },\n" +
+                "                {\n" +
+                "                    \"type\":\"radio\", \n" +
+                "                    \"id\":\"radio1\", \n" +
+                "                    \"name\":\"radio1\",\n" +
+                "                    \"config\":{\n" +
+                "                      \"data\":[ \n" +
+                "                        \"I\",\n" +
+                "                        \"am\",\n" +
+                "                        \"Dai\",\n" +
+                "                        \"Ky\",\n" +
+                "                        \"Sy\" \n" +
+                "                      ] \n" +
+                "                    } \n" +
+                "              },\n" +
+                "                {\n" +
+                "                          \"type\":\"droplist\", \n" +
+                "                          \"id\":\"droplist\",\n" +
+                "                          \"name\":\"droplist\",\n" +
+                "                          \"config\" :{\n" +
+                "                            \"data\":[\n" +
+                "                              \"Option 1\",\n" +
+                "                              \"Option 2\",\n" +
+                "                              \"Option 3\"\n" +
+                "                              ]\n" +
+                "                          }  \n" +
+                "                        }\n" +
+                "                  ] \n" +
+                "              } \n" +
+                "            ]  \n" +
+                "  }   \n" +
+                "  \n" +
+                "}";
+        Gson gson = new Gson();
+        MemoDynamicResponse response = gson.fromJson(data, MemoDynamicResponse.class);
+        callback.onGetMemoConfigSuccess(response.getData());
+
+//        Request requestNote = APICreator.getUserMemoConfigRequest(token, serviceId,
+//                new Response.Listener<MemoDynamicResponse>() {
+//
+//                    @Override
+//                    public void onResponse(MemoDynamicResponse response) {
+//                        if (response.isSuccess()) {
+//                            callback.onGetMemoConfigSuccess(response.getData());
+//                        } else {
+//                            callback.onGetMemoConfigFailure(response.getMessage());
+//                        }
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+//                        if (errorResponse != null) {
+//                            callback.onGetMemoConfigFailure(errorResponse.getMessage());
+//                        } else {
+//                            callback.onGetMemoConfigFailure(getStringResource(R.string.failure));
+//                        }
+//                    }
+//                });
+//        VolleySequence.getInstance().addRequest(requestNote);
     }
 }

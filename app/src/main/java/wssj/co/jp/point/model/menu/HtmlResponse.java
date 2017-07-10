@@ -9,9 +9,9 @@ import wssj.co.jp.point.model.ResponseData;
  * Created by Nguyen Huu Ta on 5/7/2017.
  */
 
-public class HowUseAppResponse extends ResponseData<HowUseAppResponse.HowUseAppData> {
+public class HtmlResponse extends ResponseData<HtmlResponse.HtmlData> {
 
-    public class HowUseAppData implements GsonSerializable {
+    public class HtmlData implements GsonSerializable {
 
         @SerializedName("content")
         private String mHtml;

@@ -1,5 +1,6 @@
 package wssj.co.jp.point.screens.termofservice;
 
+import wssj.co.jp.point.model.menu.MenuModel;
 import wssj.co.jp.point.screens.base.FragmentPresenter;
 
 /**
@@ -10,5 +11,24 @@ public class TermOfServicePresenter extends FragmentPresenter<ITermOfServicesVie
 
     public TermOfServicePresenter(ITermOfServicesView view) {
         super(view);
+        registerModel(new MenuModel(view.getViewContext()));
+    }
+
+    public void getContentTermOfService() {
+        getView().showProgress();
+        getModel(MenuModel.class).termOfService(new MenuModel.IOnGetTermOfService() {
+
+            @Override
+            public void onGetTermOfServiceSuccess(String html) {
+                getView().hideProgress();
+                getView().onGetTermOfServiceSuccess(html);
+            }
+
+            @Override
+            public void onGetTermOfServiceFailure(String message) {
+                getView().hideProgress();
+                getView().onGetTermOfServiceFailure(message);
+            }
+        });
     }
 }

@@ -35,7 +35,7 @@ public interface IMainView extends IView {
 
     int FRAGMENT_LIST_CARD = 13;
 
-    int FRAGMENT_TERM_OF_SERVICE = 14;
+    int FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM = 14;
 
     int FRAGMENT_PUSH_NOTIFICATION_LIST = 15;
 
@@ -56,6 +56,8 @@ public interface IMainView extends IView {
     int FRAGMENT_POLICY = 23;
 
     int FRAGMENT_ABOUT = 24;
+
+    int FRAGMENT_TERM_OF_SERVICE = 25;
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 

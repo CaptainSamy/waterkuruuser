@@ -3,6 +3,7 @@ package wssj.co.jp.point.screens.memomanager;
 import android.graphics.drawable.Drawable;
 
 import wssj.co.jp.point.model.memo.ListServiceResponse;
+import wssj.co.jp.point.model.memo.MemoDynamicResponse;
 import wssj.co.jp.point.model.memo.UserMemoResponse;
 import wssj.co.jp.point.screens.base.IFragmentView;
 
@@ -35,4 +36,8 @@ interface IMemoManagerView extends IFragmentView {
     void onUpdateUserMemoSuccess(String message);
 
     void onUpdateUserMemoFailure(String message);
+
+    void onGetMemoConfigSuccess(MemoDynamicResponse.ServiceListData data);
+
+    void onGetMemoConfigFailure(String message);
 }
