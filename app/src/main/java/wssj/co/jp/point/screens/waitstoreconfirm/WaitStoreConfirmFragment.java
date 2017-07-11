@@ -61,6 +61,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     private boolean isAllowCheckIn;
 
+    private boolean mIsAlreadyChangeStatus;
+
     public static WaitStoreConfirmFragment newInstance(Bundle args) {
         WaitStoreConfirmFragment fragment = new WaitStoreConfirmFragment();
         fragment.setArguments(args);
@@ -136,8 +138,10 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
             @Override
             public void run() {
-                mImageStore.startAnimation(rotateAnimation);
-                mCircleProgress.repeatAnimation(-1);
+                if(!mIsAlreadyChangeStatus) {
+                    mImageStore.startAnimation(rotateAnimation);
+                    mCircleProgress.repeatAnimation(-1);
+                }
             }
         }, 1000);
         mExpandWaitingText = (TextView) rootView.findViewById(R.id.expand_wait_text);
@@ -231,6 +235,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     public void displayScreenManageStamp(int serviceId) {
+        mIsAlreadyChangeStatus = true;
         isAllowCheckIn = true;
         mCircleProgress.setRepeat(1);
         new Handler().postDelayed(new Runnable() {
@@ -244,6 +249,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     public void displayScreenScanCode() {
+        mIsAlreadyChangeStatus = true;
         isAllowCheckIn = false;
         mCircleProgress.setRepeat(1);
         new Handler().postDelayed(new Runnable() {
