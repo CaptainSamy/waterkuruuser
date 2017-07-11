@@ -14,28 +14,16 @@ android {
     productFlavors {
         development {
             applicationId "jp.co.wssj.waterkuru"
-            buildConfigField "String", "HOST", "\"http://54.92.40.147\""
-            buildConfigField "String", "HOST_AWS", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
+            buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
             minSdkVersion 17
             targetSdkVersion 25
             versionCode 1
             versionName "1.0.dev"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
-        demo {
-            applicationId "jp.co.wssj.waterkuru"
-            buildConfigField "String", "HOST", "\"http://133.130.73.227:7777\""
-            buildConfigField "String", "HOST_AWS", "\"http://133.130.73.227:7777\""
-            minSdkVersion 17
-            targetSdkVersion 25
-            versionCode 1
-            versionName "1.0.demo"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        }
         product {
             applicationId "jp.co.wssj.waterkuru"
-            buildConfigField "String", "HOST", "\"http://54.92.40.147\""
-            buildConfigField "String", "HOST_AWS", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
+            buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
             versionCode 1

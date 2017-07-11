@@ -12,9 +12,7 @@ public final class Constants {
 
     public static final String UTF8_ENCODING = "UTF-8";
 
-    public static final String BASE_URL = BuildConfig.HOST;
-
-    public static final String BASE_URL_AWS = BuildConfig.HOST_AWS;
+    public static final String BASE_URL_AWS = BuildConfig.HOST;
 
     public static final String PREFIX_QR_STORE = "store";
 
