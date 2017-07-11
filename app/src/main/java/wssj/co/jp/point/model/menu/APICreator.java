@@ -26,7 +26,9 @@ final class APICreator {
 
     private static final String HOW_USE_APP_URL = Constants.BASE_URL_AWS + "/api/client/users/how-use-app";
 
-    private static final String POLICY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-term-of-service";
+    private static final String TERM_OF_SERVICE_URL = Constants.BASE_URL_AWS + "/api/client/users/get-term-of-service";
+
+    private static final String POLICY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-policy";
 
     static GsonRequest<QAResponse> getListQA(String token, int page, int limit, final Response.Listener<QAResponse> responseListener,
                                              final Response.ErrorListener errorListener) {
@@ -103,7 +105,7 @@ final class APICreator {
 
         ResponseListener<HtmlResponse> listener = new ResponseListener<>(TAG, "#termOfService", responseListener, errorListener);
         return new GsonJsonRequest<>(Request.Method.GET,
-                POLICY_URL,
+                TERM_OF_SERVICE_URL,
                 HtmlResponse.class,
                 headers,
                 listener,
