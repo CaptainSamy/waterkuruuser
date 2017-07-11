@@ -2,6 +2,7 @@ package wssj.co.jp.point.screens.waitstoreconfirm;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -60,8 +61,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
     private ImageView mImageStore;
 
     private boolean isAllowCheckIn;
-
-    private boolean mIsAlreadyChangeStatus;
 
     public static WaitStoreConfirmFragment newInstance(Bundle args) {
         WaitStoreConfirmFragment fragment = new WaitStoreConfirmFragment();
@@ -138,10 +137,9 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
             @Override
             public void run() {
-                if(!mIsAlreadyChangeStatus) {
-                    mImageStore.startAnimation(rotateAnimation);
-                    mCircleProgress.repeatAnimation(-1);
-                }
+                mImageStore.startAnimation(rotateAnimation);
+                mCircleProgress.repeatAnimation(-1);
+                getPresenter().getCheckInStatus();
             }
         }, 1000);
         mExpandWaitingText = (TextView) rootView.findViewById(R.id.expand_wait_text);
@@ -206,9 +204,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             String time = Utils.convertLongToDate(mTimeWaiting);
             mTextTimeWaiting.setText(time);
         }
-        getPresenter().getCheckInStatus();
     }
-
     @Override
     public void recheckStatus(int delayTimeMs, CheckInStatusResponse.CheckInStatusData data) {
         Logger.d(TAG, "#recheckStatus");
@@ -235,7 +231,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     public void displayScreenManageStamp(int serviceId) {
-        mIsAlreadyChangeStatus = true;
+        Logger.d(TAG, "#displayScreenManageStamp");
         isAllowCheckIn = true;
         mCircleProgress.setRepeat(1);
         new Handler().postDelayed(new Runnable() {
@@ -249,7 +245,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     public void displayScreenScanCode() {
-        mIsAlreadyChangeStatus = true;
+        Logger.d(TAG, "#displayScreenScanCode");
         isAllowCheckIn = false;
         mCircleProgress.setRepeat(1);
         new Handler().postDelayed(new Runnable() {
