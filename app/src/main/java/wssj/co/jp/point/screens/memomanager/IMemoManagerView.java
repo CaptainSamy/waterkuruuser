@@ -37,7 +37,7 @@ interface IMemoManagerView extends IFragmentView {
 
     void onUpdateUserMemoFailure(String message);
 
-    void onGetMemoConfigSuccess(MemoDynamicResponse.ServiceListData data);
+    void onGetMemoConfigSuccess(MemoDynamicResponse.UserMemoData data);
 
     void onGetMemoConfigFailure(String message);
 }

@@ -23,8 +23,6 @@ final class APICreator {
 
     private static final String TAG = "Note.APICreator";
 
-    private static final String GET_LIST_COMPANY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-list-company";
-
     private static final String GET_LIST_SERVICES_URL = Constants.BASE_URL_AWS + "/api/client/users/get-service-list";
 
     private static final String GET_USER_MEMO_URL = Constants.BASE_URL_AWS + "/api/client/users/get-memo-user";

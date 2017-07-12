@@ -95,7 +95,7 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
         getModel(UserMemoModel.class).getUserMemoConfig(token, serviceId, new UserMemoModel.IGetMemoConfigCallback() {
 
             @Override
-            public void onGetMemoConfigSuccess(MemoDynamicResponse.ServiceListData data) {
+            public void onGetMemoConfigSuccess(MemoDynamicResponse.UserMemoData data) {
                 getView().hideProgress();
                 getView().onGetMemoConfigSuccess(data);
             }

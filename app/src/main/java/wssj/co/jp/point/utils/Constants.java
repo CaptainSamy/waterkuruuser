@@ -68,13 +68,20 @@ public final class Constants {
 
     public static final class MemoConfig {
 
-        public static final String TYPE_EDIT_TEXT = "textbox";
+        public static final int NUMBER_LINE = 10;
 
-        public static final String TYPE_IMAGE = "image";
+        public static final int TYPE_SHORT_TEXT = 1;
 
-        public static final String TYPE_RADIO = "radio";
+        public static final int TYPE_LONG_TEXT = 2;
 
-        public static final String TYPE_DROP_LIST = "droplist";
+        public static final int TYPE_IMAGE = 3;
+
+        public static final int TYPE_SPINNER = 4;
+
+        public static final int TYPE_RADIO = 5;
+
+        public static final int TYPE_LEVEL = 6;
+
 
     }
 }

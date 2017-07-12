@@ -12,114 +12,120 @@ import wssj.co.jp.point.model.ResponseData;
  * Created by Nguyen Huu Ta on 10/7/2017.
  */
 
-public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.ServiceListData> {
+public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMemoData> {
 
-    public class ServiceListData implements GsonSerializable {
+    public class UserMemoData implements GsonSerializable {
 
-        @SerializedName("service_list")
-        private List<ServiceList> mListService;
+        @SerializedName("user_memo_config")
+        private List<UserMemoConfig> mListMemoConfig;
 
-        public List<ServiceList> getListService() {
-            return mListService;
+        @SerializedName("user_memo_value")
+        private List<UserMemoValue> mListMemoValue;
+
+        public class UserMemoConfig {
+
+            @SerializedName("config")
+            @Expose
+            private Config config;
+
+            @SerializedName("id")
+            @Expose
+            private String id;
+
+            @SerializedName("title")
+            @Expose
+            private String title;
+
+            @SerializedName("type")
+            @Expose
+            private int type;
+
+            public Config getConfig() {
+                return config;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public int getType() {
+                return type;
+            }
+
+            public class Config {
+
+                @SerializedName("length")
+                @Expose
+                private int length;
+
+                @SerializedName("placeholder")
+                @Expose
+                private String placeholder;
+
+                public int getLength() {
+                    return length;
+                }
+
+                public String getPlaceholder() {
+                    return placeholder;
+                }
+            }
+
         }
 
-        public class ServiceList {
+        public class UserMemoValue {
 
-            @SerializedName("service_id")
+            @SerializedName("id")
             @Expose
-            private int serviceId;
+            private String id;
 
-            @SerializedName("service_name")
+            @SerializedName("type")
             @Expose
-            private String serviceName;
+            private int type;
 
-            @SerializedName("service_memo_config")
+            @SerializedName("value")
             @Expose
-            private List<ServiceMemoConfig> serviceMemoConfig = null;
+            private Value value;
 
-            public class ServiceMemoConfig {
-
-                @SerializedName("id")
-                @Expose
-                private String mId;
-
-                @SerializedName("type")
-                @Expose
-                private String mType;
-
-                @SerializedName("name")
-                @Expose
-                private String mName;
-
-                @SerializedName("config")
-                @Expose
-                private Config mConfig;
-
-                public String getType() {
-                    return mType;
-                }
-
-                public String getId() {
-                    return mId;
-                }
-
-                public String getName() {
-                    return mName;
-                }
-
-                public Config getConfig() {
-                    return mConfig;
-                }
-
-                public class Config {
-
-                    @SerializedName("multiline")
-                    @Expose
-                    private int mMultiline;
-
-                    @SerializedName("max_lengt")
-                    @Expose
-                    private int mMaxLenght;
-
-                    @SerializedName("numb_image")
-                    @Expose
-                    private int mNumbImage;
-
-                    @SerializedName("data")
-                    @Expose
-                    private List<String> mListOption = null;
-
-                    public int getMultiline() {
-                        return mMultiline;
-                    }
-
-                    public int getMaxLengt() {
-                        return mMaxLenght;
-                    }
-
-                    public int getNumbImage() {
-                        return mNumbImage;
-                    }
-
-                    public List<String> getData() {
-                        return mListOption;
-                    }
-
-
-                }
+            public String getId() {
+                return id;
             }
 
-            public int getServiceId() {
-                return serviceId;
+            public int getType() {
+                return type;
             }
 
-            public String getServiceName() {
-                return serviceName;
+            public Value getValue() {
+                return value;
             }
 
-            public List<ServiceMemoConfig> getServiceMemoConfig() {
-                return serviceMemoConfig;
+            public class Value {
+
+                @SerializedName("value")
+                @Expose
+                private String value;
+
+                public String getValue() {
+                    return value;
+                }
+
+                public void setValue(String value) {
+                    this.value = value;
+                }
+
             }
+        }
+
+        public List<UserMemoConfig> getListMemoConfig() {
+            return mListMemoConfig;
+        }
+
+        public List<UserMemoValue> getListMemoValue() {
+            return mListMemoValue;
         }
     }
 }
