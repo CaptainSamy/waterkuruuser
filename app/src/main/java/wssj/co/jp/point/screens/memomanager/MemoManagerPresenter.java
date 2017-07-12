@@ -2,11 +2,11 @@ package wssj.co.jp.point.screens.memomanager;
 
 import android.graphics.drawable.Drawable;
 
-import wssj.co.jp.point.model.entities.StatusMemoData;
+import java.util.List;
+
 import wssj.co.jp.point.model.memo.ListServiceResponse;
 import wssj.co.jp.point.model.memo.MemoDynamicResponse;
 import wssj.co.jp.point.model.memo.UserMemoModel;
-import wssj.co.jp.point.model.memo.UserMemoResponse;
 import wssj.co.jp.point.model.preference.SharedPreferencesModel;
 import wssj.co.jp.point.model.util.UtilsModel;
 import wssj.co.jp.point.screens.base.FragmentPresenter;
@@ -24,35 +24,14 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
         registerModel(new UtilsModel(view.getViewContext()));
     }
 
-    void getUserMemoByServiceId(int serviceId) {
-        getView().showProgress();
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(UserMemoModel.class).getUserMemo(token, serviceId, new UserMemoModel.IUserMemoCallback() {
-
-            @Override
-            public void onGetUserMemoSuccess(UserMemoResponse.UserMemoData data) {
-                getView().hideProgress();
-                if (data != null) {
-                    getView().onGetUserMemoSuccess(data.getUserMemo());
-                }
-            }
-
-            @Override
-            public void onGetUserMemoFailure(String message) {
-                getView().hideProgress();
-                getView().onGetUserMemoFailure(message);
-            }
-        });
-    }
-
-    void updateUserMemo(final int serviceId, final String note, StatusMemoData[] listStatusImage) {
+    void updateUserMemo(final int serviceId, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
         final String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
-        getModel(UserMemoModel.class).uploadImageAWS(listStatusImage, 0, new UserMemoModel.IUpdateAWSCallback() {
+        getModel(UserMemoModel.class).uploadImageAWS(memoValues, 0, null, new UserMemoModel.IUpdateAWSCallback() {
 
             @Override
-            public void onUpdateUserMemoSuccess(StatusMemoData[] listStatusImage) {
-                getModel(UserMemoModel.class).updateUserMemo(token, serviceId, note, listStatusImage, new UserMemoModel.IUpdateUserMemoCallback() {
+            public void onUpdateUserMemoSuccess(List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
+                getModel(UserMemoModel.class).updateUserMemo(token, serviceId, memoValues, new UserMemoModel.IUpdateUserMemoCallback() {
 
                     @Override
                     public void onUpdateUserMemoSuccess(String message) {
@@ -153,4 +132,5 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
     void onPickPhotoFromCameraButtonClicked(int requestCode) {
         checkCameraAndWriteExternalStoragePermission(requestCode);
     }
+
 }

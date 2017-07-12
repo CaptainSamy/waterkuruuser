@@ -2,7 +2,7 @@ package wssj.co.jp.point.screens.note;
 
 import android.graphics.drawable.Drawable;
 
-import wssj.co.jp.point.model.memo.UserMemoResponse;
+import wssj.co.jp.point.model.memo.MemoDynamicResponse;
 import wssj.co.jp.point.screens.base.IFragmentView;
 
 /**
@@ -10,8 +10,6 @@ import wssj.co.jp.point.screens.base.IFragmentView;
  */
 
 interface IUserMemoView extends IFragmentView {
-
-    void onGetUserMemoSuccess(UserMemoResponse.UserMemo response);
 
     void showPhotoDialog(Drawable drawable, int requestCode);
 
@@ -21,13 +19,15 @@ interface IUserMemoView extends IFragmentView {
 
     void requestCameraAndWriteStoragePermission(int requestCode);
 
-    void onGetUserMemoFailure(String message);
-
     void requestStoragePermission(int requestCode);
 
     void openChooseImageScreen(int requestCode);
 
-    void onUpdateSuccess(String message);
+    void onGetMemoConfigSuccess(MemoDynamicResponse.UserMemoData data);
 
-    void onUpdateFailure(String message);
+    void onGetMemoConfigFailure(String message);
+
+    void onUpdateUserMemoSuccess(String message);
+
+    void onUpdateUserMemoFailure(String message);
 }

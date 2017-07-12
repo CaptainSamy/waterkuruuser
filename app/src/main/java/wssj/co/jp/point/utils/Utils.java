@@ -219,7 +219,7 @@ public final class Utils {
 
     public static void loadImage(Context context, String url, final ImageView imageView) {
         Glide.with(context)
-                .load("http://54.92.40.147" + url)
+                .load(url)
                 .fitCenter()
                 .placeholder(R.drawable.image_logo)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)

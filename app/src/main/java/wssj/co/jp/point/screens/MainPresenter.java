@@ -42,7 +42,7 @@ class MainPresenter extends BasePresenter<IMainView> {
     }
 
     void onCloseDrawableLayout(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, int navigationId) {
-        getView().onCloseDrawableLayout(screenId, hasAnimation, addToBackStack, bundle,navigationId);
+        getView().onCloseDrawableLayout(screenId, hasAnimation, addToBackStack, bundle, navigationId);
     }
 
     void onEnableDrawableLayout() {

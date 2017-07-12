@@ -10,13 +10,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.io.File;
+import java.util.List;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.BaseModel;
 import wssj.co.jp.point.model.ErrorResponse;
 import wssj.co.jp.point.model.ResponseData;
-import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.utils.AmazonS3Utils;
+import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.Logger;
 import wssj.co.jp.point.utils.Utils;
 import wssj.co.jp.point.utils.VolleySequence;
@@ -56,7 +57,7 @@ public class UserMemoModel extends BaseModel {
 
     public interface IUpdateAWSCallback {
 
-        void onUpdateUserMemoSuccess(StatusMemoData[] listStatusImage);
+        void onUpdateUserMemoSuccess(List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues);
 
     }
 
@@ -120,52 +121,55 @@ public class UserMemoModel extends BaseModel {
         VolleySequence.getInstance().addRequest(requestNote);
     }
 
-    public void uploadImageAWS(final StatusMemoData[] listStatusImage, final int position, final IUpdateAWSCallback callback) {
-        if (position < listStatusImage.length) {
-            if (listStatusImage[position].getStatus() != 1) {
-                final String path = listStatusImage[position].getPathNewImage();
-                if (TextUtils.isEmpty(path)) {
-                    listStatusImage[position].setIsUploadAWSSuccess(true);
-                    uploadImageAWS(listStatusImage, position + 1, callback);
-                } else {
-                    final String fileName = Utils.getFileName(path);
-                    File file = new File(path);
-                    AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
+    public void uploadImageAWS(final List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues, final int position, List<MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image> listImage, final IUpdateAWSCallback callback) {
 
-                        @Override
-                        public void onStateChanged(int id, TransferState state) {
-                            if (state == TransferState.COMPLETED) {
-                                listStatusImage[position].setIsUploadAWSSuccess(true);
-                                listStatusImage[position].setPathNewImage(AmazonS3Utils.BASE_IMAGE_URL + fileName);
-                                uploadImageAWS(listStatusImage, position + 1, callback);
-                            }
-                        }
-
-                        @Override
-                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                            Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
-                        }
-
-                        @Override
-                        public void onError(int id, Exception ex) {
-                            Logger.d(TAG, "#onError " + ex);
-                            listStatusImage[position].setIsUploadAWSSuccess(false);
-                            uploadImageAWS(listStatusImage, position + 1, callback);
-                        }
-                    });
+        if (listImage == null) {
+            for (MemoDynamicResponse.UserMemoData.UserMemoValue userMemoValue : memoValues) {
+                if (userMemoValue.getType() == Constants.MemoConfig.TYPE_IMAGE) {
+                    listImage = userMemoValue.getValue().getListImage();
+                    break;
                 }
+            }
+        }
+        final List<MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image> images = listImage;
+        if (position < listImage.size()) {
+            String path = listImage.get(position).getUrlImage();
+            final String fileName = Utils.getFileName(path);
+            File file = new File(path);
+            if (file != null && file.exists()) {
+                AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
+
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (state == TransferState.COMPLETED) {
+                            images.get(position).setUrlImage(AmazonS3Utils.BASE_IMAGE_URL + fileName);
+                            uploadImageAWS(memoValues, position + 1, images, callback);
+                        }
+                    }
+
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
+                    }
+
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        Logger.d(TAG, "#onError " + ex);
+                        images.get(position).setUrlImage(Constants.EMPTY_STRING);
+                        uploadImageAWS(memoValues, position + 1, images, callback);
+                    }
+                });
             } else {
-                listStatusImage[position].setIsUploadAWSSuccess(true);
-                uploadImageAWS(listStatusImage, position + 1, callback);
+                uploadImageAWS(memoValues, position + 1, images, callback);
             }
         } else {
-            callback.onUpdateUserMemoSuccess(listStatusImage);
+            callback.onUpdateUserMemoSuccess(memoValues);
         }
 
     }
 
-    public void updateUserMemo(String token, int serviceId, String note, StatusMemoData[] listStatusImage, final IUpdateUserMemoCallback callback) {
-        Request requestUpdateMemo = APICreator.updateUserMemo(token, serviceId, note, listStatusImage,
+    public void updateUserMemo(String token, int serviceId, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues, final IUpdateUserMemoCallback callback) {
+        Request requestUpdateMemo = APICreator.updateUserMemo(token, serviceId, memoValues,
                 new Response.Listener<ResponseData>() {
 
                     @Override

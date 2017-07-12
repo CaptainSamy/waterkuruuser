@@ -70,15 +70,19 @@ public final class Constants {
 
         public static final int NUMBER_LINE = 10;
 
+        public static final String KEY_TRUE = "true";
+
+        public static final String KEY_FALSE = "false";
+
         public static final int TYPE_SHORT_TEXT = 1;
 
         public static final int TYPE_LONG_TEXT = 2;
 
         public static final int TYPE_IMAGE = 3;
 
-        public static final int TYPE_SPINNER = 4;
+        public static final int TYPE_COMBO_BOX = 4;
 
-        public static final int TYPE_RADIO = 5;
+        public static final int TYPE_SWITCH = 5;
 
         public static final int TYPE_LEVEL = 6;
 

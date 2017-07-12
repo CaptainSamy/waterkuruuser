@@ -1,116 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layoutService"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/title_service_name"
-                />
-
-            <TextView
-                android:id="@+id/tvServiceName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ヘアカット"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
-
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/title_note"/>
-
-        <EditText
-            android:id="@+id/etNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/border_edit_text"
-            android:gravity="top"
-            android:hint="@string/hint_note"
-            android:minLines="10"
-            android:padding="10dp"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:orientation="horizontal"
-            android:weightSum="4">
-
-            <ImageView
-                android:id="@+id/ivPhoto1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="@drawable/border_image_choose"
-                android:src="@drawable/ic_add_image"/>
-
-            <ImageView
-                android:id="@+id/ivPhoto2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="@drawable/border_image_choose"
-                android:src="@drawable/ic_add_image"/>
-
-            <ImageView
-                android:id="@+id/ivPhoto3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="@drawable/border_image_choose"
-                android:src="@drawable/ic_add_image"/>
-
-            <ImageView
-                android:id="@+id/ivPhoto4"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:background="@drawable/border_image_choose"
-                android:src="@drawable/ic_add_image"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_red_button"
-            android:drawableLeft="@drawable/icon_save"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingLeft="50dp"
-            android:paddingRight="50dp"
-            android:paddingTop="5dp"
+            android:text="@string/title_service_name"
             />
+
+        <TextView
+            android:id="@+id/tvServiceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ヘアカット"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutService"
+        android:fillViewport="true">
 
-</ScrollView>
+        <LinearLayout
+            android:id="@+id/parentViewMemoConfig"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="12dp">
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

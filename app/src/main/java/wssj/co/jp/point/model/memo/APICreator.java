@@ -3,12 +3,16 @@ package wssj.co.jp.point.model.memo;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import wssj.co.jp.point.model.ResponseData;
-import wssj.co.jp.point.model.entities.StatusMemoData;
 import wssj.co.jp.point.model.volleylistener.ResponseListener;
 import wssj.co.jp.point.model.volleyrequest.GsonJsonRequest;
 import wssj.co.jp.point.model.volleyrequest.GsonRequest;
@@ -86,10 +90,12 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final String note, final StatusMemoData[] listStatusImage, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
+    static GsonRequest<ResponseData> updateUserMemo(String token, final int serviceId, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
         Map<String, String> header = new HashMap<>();
         header.put("Authorization", token);
         header.put("Accept", "application/json");
+
+        final String json = new Gson().toJson(memoValues);
         ResponseListener<ResponseData> listener = new ResponseListener<>(TAG, "#updateUserMemo", responseListener, errorListener);
         return new GsonJsonRequest<ResponseData>(
                 Request.Method.POST,
@@ -103,20 +109,43 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
                 map.put("service_id", String.valueOf(serviceId));
-                map.put("note", note);
-                if (listStatusImage != null) {
-                    int position = 1;
-                    for (StatusMemoData statusMemoData : listStatusImage) {
-                        if (statusMemoData.getStatus() != 1 && statusMemoData.isUploadAWSSuccess()) {
-                            map.put("photo_" + position, statusMemoData.getPathNewImage());
-                        } else {
-                            map.put("photo_" + position, statusMemoData.getUrlOriginImage());
-                        }
-                        position++;
+                JSONArray array = new JSONArray();
+                for (MemoDynamicResponse.UserMemoData.UserMemoValue item:memoValues){
+                    Map<String,Object> mapItem = new HashMap<>();
+                    mapItem.put("id",item.getId());
+                    mapItem.put("type",item.getType());
+                    MemoDynamicResponse.UserMemoData.UserMemoValue.Value itemValue = item.getValue();
+                    Map<String,Object> mapValue = new HashMap<>();
+                    switch (item.getType()){
+                        case Constants.MemoConfig.TYPE_LONG_TEXT:
+                        case Constants.MemoConfig.TYPE_LEVEL:
+                        case Constants.MemoConfig.TYPE_SHORT_TEXT:
+                            mapValue.put("value",itemValue.getValue());
+                            break;
+                        case Constants.MemoConfig.TYPE_COMBO_BOX:
+                            mapValue.put("selected_position",itemValue.getSelectedItem());
+                            break;
+                        case Constants.MemoConfig.TYPE_SWITCH:
+                            mapValue.put("status",itemValue.getStatus());
+                            break;
+                        case Constants.MemoConfig.TYPE_IMAGE:
+                            JSONArray arrImg = new JSONArray();
+                            for (MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image itemImage:itemValue.getListImage()){
+                                Map<String,Object> mapItemImage = new HashMap<>();
+                                mapItemImage.put("id",itemImage.getImageId());
+                                mapItemImage.put("value",itemImage.getUrlImage());
+                                arrImg.put(new JSONObject(mapItemImage));
+                            }
+                            mapValue.put("images",arrImg);
+
                     }
+                    mapItem.put("value",new JSONObject(mapValue));
+                    array.put(new JSONObject(mapItem));
                 }
+                map.put("user_memo_value",array);
                 return map;
             }
         };
     }
+
 }

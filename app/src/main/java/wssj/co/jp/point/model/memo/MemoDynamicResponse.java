@@ -58,6 +58,9 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
 
             public class Config {
 
+                /*
+                * Edit Text
+                * */
                 @SerializedName("length")
                 @Expose
                 private int length;
@@ -66,12 +69,44 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 @Expose
                 private String placeholder;
 
+                /*
+                *
+                * CheckBox
+                * */
+                @SerializedName("combo_list")
+                @Expose
+                private List<String> listComboBox;
+
+                /*
+                * Image
+                * */
+                @SerializedName("number_of_image")
+                private int numberImages;
+
+                /*
+                * Level
+                * */
+                @SerializedName("level")
+                private int level;
+
                 public int getLength() {
                     return length;
                 }
 
                 public String getPlaceholder() {
                     return placeholder;
+                }
+
+                public List<String> getListComboBox() {
+                    return listComboBox;
+                }
+
+                public int getNumberImages() {
+                    return numberImages;
+                }
+
+                public int getLevel() {
+                    return level;
                 }
             }
 
@@ -103,11 +138,37 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 return value;
             }
 
+            public void setValue(Value value) {
+                this.value = value;
+            }
+
             public class Value {
 
+                /*
+                * Edit Text
+                * */
                 @SerializedName("value")
                 @Expose
                 private String value;
+
+                /*
+                *Switch
+                * */
+                @SerializedName("status")
+                @Expose
+                private boolean status;
+
+                /*
+                * Combo box
+                * */
+                @SerializedName("selected_position")
+                private int selectedItem;
+
+                /*
+                * Images
+                * */
+                @SerializedName("images")
+                List<Image> listImage;
 
                 public String getValue() {
                     return value;
@@ -117,6 +178,50 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                     this.value = value;
                 }
 
+                public boolean getStatus() {
+                    return status;
+                }
+
+                public void setStatus(boolean status) {
+                    this.status = status;
+                }
+
+                public int getSelectedItem() {
+                    return selectedItem;
+                }
+
+                public void setSelectedItem(int selectedItem) {
+                    this.selectedItem = selectedItem;
+                }
+
+                public List<Image> getListImage() {
+                    return listImage;
+                }
+
+                public void setListImage(List<Image> listImage) {
+                    this.listImage = listImage;
+                }
+
+                public class Image {
+
+                    @SerializedName("id")
+                    private String imageId;
+
+                    @SerializedName("value")
+                    private String urlImage;
+
+                    public String getImageId() {
+                        return imageId;
+                    }
+
+                    public String getUrlImage() {
+                        return urlImage;
+                    }
+
+                    public void setUrlImage(String urlImage) {
+                        this.urlImage = urlImage;
+                    }
+                }
             }
         }
 

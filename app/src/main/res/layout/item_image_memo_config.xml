@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_margin="7dp">
-
-    <ImageView
-        android:id="@+id/imageConfig"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:background="@drawable/border_image_choose"
-        android:src="@drawable/ic_add_image"/>
-</LinearLayout>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+           android:id="@+id/imageConfig"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:adjustViewBounds="true"
+           android:background="@drawable/border_image_choose"
+           android:src="@drawable/ic_add_image"/>

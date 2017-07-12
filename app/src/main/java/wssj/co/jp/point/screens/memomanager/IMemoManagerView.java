@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable;
 
 import wssj.co.jp.point.model.memo.ListServiceResponse;
 import wssj.co.jp.point.model.memo.MemoDynamicResponse;
-import wssj.co.jp.point.model.memo.UserMemoResponse;
 import wssj.co.jp.point.screens.base.IFragmentView;
 
 /**
@@ -12,10 +11,6 @@ import wssj.co.jp.point.screens.base.IFragmentView;
  */
 
 interface IMemoManagerView extends IFragmentView {
-
-    void onGetUserMemoSuccess(UserMemoResponse.UserMemo response);
-
-    void onGetUserMemoFailure(String message);
 
     void requestCameraAndWriteStoragePermission(int requestCode);
 

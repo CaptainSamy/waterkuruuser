@@ -183,9 +183,6 @@ public class MainActivity extends AppCompatActivity
     private int mTotalNotificationUnRead;
 
     public void showListNotification() {
-        if (mListNotification != null && mListNotification.size() > 0) {
-            mPresenter.setListPushUnRead(mListNotification);
-        }
         if (mPushNotificationAdapter == null) return;
         View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
         mListViewNotification = (ListView) view.findViewById(R.id.listView);
@@ -197,7 +194,7 @@ public class MainActivity extends AppCompatActivity
                     .setBackgroundColor(MainActivity.this.getResources().getColor(android.R.color.transparent))
                     .setLocationByAttachedView(mToolbar.getIconNotification())
                     .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 350, getResources().getDisplayMetrics().widthPixels, 0)
-                    .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, 350, 0, getResources().getDisplayMetrics().widthPixels)
+                    .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, 350, 0, -getResources().getDisplayMetrics().widthPixels)
                     .setTouchOutsideDismiss(true)
                     .setMarginLeftAndRight(Utils.convertDpToPixel(MainActivity.this, 80), Utils.convertDpToPixel(MainActivity.this, 4))
                     .setMatchParent(false)
@@ -208,8 +205,12 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mEasyDialog.dismiss();
                 NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
+                mListNotification.remove(position);
+                List<NotificationMessage> messageList = new ArrayList<>();
+                messageList.add(message);
+                mPresenter.setListPushUnRead(messageList);
+                mEasyDialog.dismiss();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
                 displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
@@ -231,7 +232,6 @@ public class MainActivity extends AppCompatActivity
                 mListNotification.addAll(list);
                 mPushNotificationAdapter.notifyDataSetChanged();
             } else {
-                mPresenter.setListPushUnRead(list);
                 mListNotification.addAll(list);
                 mPushNotificationAdapter.notifyDataSetChanged();
             }
