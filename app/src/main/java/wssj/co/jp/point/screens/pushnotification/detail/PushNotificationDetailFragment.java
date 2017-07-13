@@ -13,12 +13,15 @@ import wssj.co.jp.point.screens.IMainView;
 import wssj.co.jp.point.screens.base.BaseFragment;
 import wssj.co.jp.point.screens.dialograting.DialogRating;
 import wssj.co.jp.point.utils.Constants;
+import wssj.co.jp.point.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
  */
 
 public class PushNotificationDetailFragment extends BaseFragment<IPushNotificationDetailView, PushNotificationDetailPresenter> implements IPushNotificationDetailView {
+
+    public static final String TAG = "PushNotificationDetailFragment";
 
     public static final String NOTIFICATION_ARG = "notification";
 
@@ -108,6 +111,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                         + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
                         + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
                 mTime.setText(time);
+                Logger.d("TAG", mNotificationMessage.getAction());
                 switch (mNotificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_NOTIFICATION:
                         mButtonRating.setVisibility(View.GONE);
@@ -120,6 +124,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                         showRating(isShowRating);
                         break;
                     default:
+                        mButtonRating.setVisibility(View.GONE);
                         break;
                 }
             }

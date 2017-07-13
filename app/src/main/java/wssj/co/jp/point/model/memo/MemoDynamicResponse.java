@@ -16,10 +16,10 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
 
     public class UserMemoData implements GsonSerializable {
 
-        @SerializedName("user_memo_config")
+        @SerializedName("memo_config")
         private List<UserMemoConfig> mListMemoConfig;
 
-        @SerializedName("user_memo_value")
+        @SerializedName("memo_value")
         private List<UserMemoValue> mListMemoValue;
 
         public class UserMemoConfig {

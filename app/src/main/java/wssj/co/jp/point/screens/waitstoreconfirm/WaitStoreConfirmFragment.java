@@ -2,7 +2,6 @@ package wssj.co.jp.point.screens.waitstoreconfirm;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -157,13 +156,14 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
             @Override
             public void onAnimateDone() {
+
+                Animation zoomInAnim = AnimationUtils.loadAnimation(getContext(),
+                        R.anim.zoom_in);
+                zoomInAnim.setStartOffset(500);
+                mImageStore.setAnimation(zoomInAnim);
+
                 if (isAllowCheckIn) {
                     mLayoutInfo.setVisibility(View.GONE);
-                    Animation zoomInAnim = AnimationUtils.loadAnimation(getContext(),
-                            R.anim.zoom_in);
-                    zoomInAnim.setStartOffset(500);
-                    mImageStore.setAnimation(zoomInAnim);
-
                     mExpandWaitingText.setVisibility(View.VISIBLE);
                     mExpandWaitingText.setText(getString(R.string.expand_waiting_confirm_prepare_finish));
                     mLayoutFinishWaiting.setVisibility(View.VISIBLE);
@@ -205,6 +205,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mTextTimeWaiting.setText(time);
         }
     }
+
     @Override
     public void recheckStatus(int delayTimeMs, CheckInStatusResponse.CheckInStatusData data) {
         Logger.d(TAG, "#recheckStatus");
@@ -234,13 +235,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         Logger.d(TAG, "#displayScreenManageStamp");
         isAllowCheckIn = true;
         mCircleProgress.setRepeat(1);
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                mImageStore.clearAnimation();
-            }
-        }, 5000);
     }
 
     @Override
@@ -248,13 +242,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         Logger.d(TAG, "#displayScreenScanCode");
         isAllowCheckIn = false;
         mCircleProgress.setRepeat(1);
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                mImageStore.clearAnimation();
-            }
-        }, 5000);
     }
 
     public void stopCheckingStatus() {

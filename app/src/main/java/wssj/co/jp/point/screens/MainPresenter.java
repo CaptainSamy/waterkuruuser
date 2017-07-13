@@ -11,6 +11,7 @@ import wssj.co.jp.point.model.preference.SharedPreferencesModel;
 import wssj.co.jp.point.model.pushnotification.PushNotificationModel;
 import wssj.co.jp.point.model.util.UtilsModel;
 import wssj.co.jp.point.screens.base.BasePresenter;
+import wssj.co.jp.point.utils.Logger;
 
 class MainPresenter extends BasePresenter<IMainView> {
 
@@ -78,12 +79,13 @@ class MainPresenter extends BasePresenter<IMainView> {
 
                 @Override
                 public void onSetListPushNotificationSuccess(int numberNotificationUnRead) {
+                    Logger.d(TAG, "#onSetListPushNotificationSuccess " + numberNotificationUnRead);
                     getView().setListPushUnReadSuccess(numberNotificationUnRead);
                 }
 
                 @Override
                 public void onSetListPushNotificationFailure() {
-
+                    Logger.d(TAG, "#onSetListPushNotificationFailure");
                 }
             });
         }

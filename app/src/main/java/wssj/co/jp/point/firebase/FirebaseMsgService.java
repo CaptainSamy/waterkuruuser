@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -69,7 +70,13 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setVibrate(pattern);
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     builder.setSound(alarmSound);
-                    builder.setSmallIcon(R.mipmap.logo_app);
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder.setColor(getResources().getColor(R.color.colorCode));
+                        builder.setSmallIcon(R.mipmap.logo_app);
+                    } else {
+                        builder.setSmallIcon(R.mipmap.logo_app);
+                    }
+
                     Intent intent = new Intent(FirebaseMsgService.this, MainActivity.class);
                     intent.putExtra(EXTRA_NOTIFICATION, notificationMessage);
                     PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);

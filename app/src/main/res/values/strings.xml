@@ -152,6 +152,7 @@
     <string name="title_push_notification_list">通知一覧</string>
     <string name="notification_date">%1$s</string>
     <string name="title_push_detail">お知らせ一覧</string>
+    <string name="text_no_item">未読の通知がありません。</string>
     <!--List store checked in-->
     <string name="title_list_store_checked_in">最新ご利用のお店舗を表示</string>
     <string name="time_waiting">現在のお待ち時間</string>

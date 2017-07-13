@@ -73,13 +73,16 @@ public class FirebaseModel extends BaseModel {
         String title = data.get("title");
         String message = data.get("body");
         String pushIdText = data.get("push_id");
-        String actionPush = Constants.EMPTY_STRING;
+        String actionPush = Constants.PushNotification.TYPE_NOTIFICATION;
         int stampId = 0;
         String[] splitAction = data.get("click_action").split(Constants.SPLIT);
-        if (splitAction != null && splitAction.length == 2) {
+        if (splitAction != null) {
             actionPush = splitAction[0];
-            stampId = Integer.parseInt(splitAction[1]);
+            if (splitAction.length == 2) {
+                stampId = Integer.parseInt(splitAction[1]);
+            }
         }
+
         long pushId = 1;
         if (!TextUtils.isEmpty(pushIdText)) {
             pushId = Long.parseLong(pushIdText);

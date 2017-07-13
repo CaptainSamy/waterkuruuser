@@ -97,30 +97,6 @@ public class UserMemoModel extends BaseModel {
         VolleySequence.getInstance().addRequest(requestGetListServices);
     }
 
-    public void getUserMemo(String token, int serviceId, final IUserMemoCallback callback) {
-        Request requestNote = APICreator.getUserMemoRequest(token, serviceId,
-                new Response.Listener<UserMemoResponse>() {
-
-                    @Override
-                    public void onResponse(UserMemoResponse response) {
-                        callback.onGetUserMemoSuccess(response.getData());
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                        if (errorResponse != null) {
-                            callback.onGetUserMemoFailure(errorResponse.getMessage());
-                        } else {
-                            callback.onGetUserMemoFailure(getStringResource(R.string.failure));
-                        }
-                    }
-                });
-        VolleySequence.getInstance().addRequest(requestNote);
-    }
-
     public void uploadImageAWS(final List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues, final int position, List<MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image> listImage, final IUpdateAWSCallback callback) {
 
         if (listImage == null) {

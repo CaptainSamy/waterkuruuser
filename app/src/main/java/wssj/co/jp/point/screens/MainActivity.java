@@ -22,6 +22,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         setupFragmentBackStackManager();
         initView();
         initAction();
-        mPresenter.onCreate();
+
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_SERVICE_ACTIVITY));
@@ -180,16 +181,21 @@ public class MainActivity extends AppCompatActivity
 
     private ListView mListViewNotification;
 
+    private View mRootViewNotification;
+
+    private TextView mTextNoItem;
+
     private int mTotalNotificationUnRead;
 
     public void showListNotification() {
         if (mPushNotificationAdapter == null) return;
-        View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
-        mListViewNotification = (ListView) view.findViewById(R.id.listView);
-        mListViewNotification.setAdapter(mPushNotificationAdapter);
-        if (mEasyDialog == null) {
+        if (mRootViewNotification == null) {
+            mRootViewNotification = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
+            mTextNoItem = (TextView) mRootViewNotification.findViewById(R.id.textNoItem);
+            mListViewNotification = (ListView) mRootViewNotification.findViewById(R.id.listView);
+            mListViewNotification.setAdapter(mPushNotificationAdapter);
             mEasyDialog = new EasyDialog(MainActivity.this)
-                    .setLayout(view)
+                    .setLayout(mRootViewNotification)
                     .setGravity(EasyDialog.GRAVITY_BOTTOM)
                     .setBackgroundColor(MainActivity.this.getResources().getColor(android.R.color.transparent))
                     .setLocationByAttachedView(mToolbar.getIconNotification())
@@ -216,6 +222,13 @@ public class MainActivity extends AppCompatActivity
                 displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
+
+        if (mListNotification != null && mListNotification.size() > 0) {
+            mListViewNotification.setVisibility(View.VISIBLE);
+            mTextNoItem.setVisibility(View.GONE);
+        } else {
+            mTextNoItem.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -258,7 +271,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void setListPushUnReadSuccess(int currentNumberNotificationUnRead) {
-        mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead - currentNumberNotificationUnRead);
+        mToolbar.setNumberNotificationUnRead(--mTotalNotificationUnRead);
     }
 
     @Override
@@ -351,7 +364,6 @@ public class MainActivity extends AppCompatActivity
     public void onCloseDrawableLayout(final int screenId, final boolean hasAnimation,
                                       final boolean addToBackStack, final Bundle bundle, int navigationId) {
         Logger.i(TAG, "#onCloseDrawableLayout");
-//        mNavigationView.setCheckedItem(navigationId);
         mDrawerLayout.closeDrawer(GravityCompat.END);
         new Handler().postDelayed(new Runnable() {
 
@@ -489,6 +501,8 @@ public class MainActivity extends AppCompatActivity
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+            } else {
+                mPresenter.onCreate();
             }
         }
     }

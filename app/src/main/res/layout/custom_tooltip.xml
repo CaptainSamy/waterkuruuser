@@ -7,38 +7,9 @@
     android:orientation="vertical"
     android:paddingBottom="110dp">
 
-    <LinearLayout
-        android:id="@+id/iconTriangle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <ImageView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="-4dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/triangle"
-            />
-
-        <android.support.v7.widget.AppCompatImageButton
-            style="?attr/toolbarNavigationButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            />
-    </LinearLayout>
-
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iconTriangle"
         android:background="@drawable/border_layout_tooltip">
 
         <ListView
@@ -48,5 +19,12 @@
             android:clipToPadding="true"/>
     </RelativeLayout>
 
-
+    <TextView
+        android:id="@+id/textNoItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/text_no_item"
+        android:visibility="gone"
+        />
 </RelativeLayout>

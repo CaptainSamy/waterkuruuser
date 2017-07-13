@@ -169,7 +169,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     @Override
     public void onGetMemoConfigFailure(String message) {
-
+        showToast(message);
     }
 
     @Override
