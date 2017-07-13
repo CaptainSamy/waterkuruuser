@@ -4,23 +4,21 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.format.DateUtils;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
 import wssj.co.jp.point.screens.dialograting.DialogRating;
 import wssj.co.jp.point.utils.Constants;
-import wssj.co.jp.point.utils.Logger;
+import wssj.co.jp.point.utils.Utils;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -57,26 +55,31 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
 
         TextView mTitle, mBody, mTime, mButtonRating;
 
+        ImageView mImageCompany;
+
         ViewHolder(View root) {
             mTitle = (TextView) root.findViewById(R.id.title_notification);
             mBody = (TextView) root.findViewById(R.id.body_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
             mButtonRating = (TextView) root.findViewById(R.id.buttonRating);
+            mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
         }
 
         void fillDataToView(final Context context, NotificationMessage notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
-            mBody.setText(notificationMessage.getMessage());
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(notificationMessage.getPushTime());
 
-            calculatorTime(notificationMessage.getPushTime());
-            String time = String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.HOUR_OF_DAY))
-                    + ":" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MINUTE))
-                    + "   " + String.format(Locale.getDefault(), "%04d", calendar.get(Calendar.YEAR))
-                    + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
-                    + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
-            mTime.setText(time);
+            if (notificationMessage.getMessage().length() > 100) {
+                String text = notificationMessage.getMessage().substring(0, 100).trim() + "...";
+                mBody.setText(text);
+            } else {
+                mBody.setText(notificationMessage.getMessage());
+            }
+            Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany);
+
+            String time = Utils.distanceTimes(notificationMessage.getPushTime());
+            if (!TextUtils.isEmpty(time)) {
+                mTime.setText(time);
+            }
             switch (notificationMessage.getAction()) {
                 case Constants.PushNotification.TYPE_NOTIFICATION:
                     mButtonRating.setVisibility(View.GONE);
@@ -105,31 +108,6 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
                 default:
                     break;
             }
-        }
-
-        private void calculatorTime(long time) {
-
-            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Japan"));
-            calendar.setTimeInMillis(time);
-            Calendar calendarCurrent = Calendar.getInstance(TimeZone.getTimeZone("Asia/Japan"));
-            calendar.setTimeInMillis(System.currentTimeMillis());
-
-            CharSequence result = DateUtils.getRelativeTimeSpanString(calendar.getTimeInMillis(), calendarCurrent.getTimeInMillis(), 0);
-            Logger.d("PushNotificationAdapter", result.toString());
-//            Calendar calendarCurrent = Calendar.getInstance();
-//            calendarCurrent.setTimeInMillis(System.currentTimeMillis());
-//            long distanceTime = Math.abs(System.currentTimeMillis() - time);
-//            Calendar calendarDistance = Calendar.getInstance();
-//            calendarDistance.setTimeInMillis(distanceTime);
-//
-//            int year = calendarDistance.get(Calendar.YEAR);
-//            int month = calendarDistance.get(Calendar.MONTH) + 1;
-//            int day = calendarDistance.get(Calendar.DAY_OF_MONTH);
-//            int hour = calendarDistance.get(Calendar.HOUR_OF_DAY);
-//            int minute = calendarDistance.get(Calendar.MINUTE);
-//            int second = calendarDistance.get(Calendar.SECOND);
-
-//            Logger.d("PushNotificationAdapter", year + "-" + month + "-" + day + "  " + hour + "-" + minute + "-" + second);
         }
     }
 

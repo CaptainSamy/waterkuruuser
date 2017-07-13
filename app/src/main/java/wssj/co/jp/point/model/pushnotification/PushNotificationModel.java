@@ -43,6 +43,13 @@ public class PushNotificationModel extends BaseModel {
         void onGetListPushNotificationUnReadFailure(String message);
     }
 
+    public interface IUpdateActionPushCallback {
+
+        void onUpdateActionPushSuccess();
+
+        void onUpdateActionPushFailure();
+    }
+
     public PushNotificationModel(Context context) {
         super(context);
     }
@@ -74,7 +81,7 @@ public class PushNotificationModel extends BaseModel {
     }
 
     public void getListPushNotificationUnRead(String token, int page, int limit, final IGetListPushNotificationUnReadCallback callback) {
-        Request request = APICreator.getListPushUnRead(token, page, limit, new Response.Listener<ListNotificationResponse>() {
+        final Request request = APICreator.getListPushUnRead(token, page, limit, new Response.Listener<ListNotificationResponse>() {
 
             @Override
             public void onResponse(ListNotificationResponse response) {
@@ -125,6 +132,23 @@ public class PushNotificationModel extends BaseModel {
             });
             VolleySequence.getInstance().addRequest(request);
         }
+    }
+
+    public void updateActionPush(String token, long pushId, final IUpdateActionPushCallback callback) {
+        Request request = APICreator.updateActionPush(token, pushId, new Response.Listener<ResponseData>() {
+
+            @Override
+            public void onResponse(ResponseData response) {
+                callback.onUpdateActionPushSuccess();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onUpdateActionPushFailure();
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
     }
 
 }

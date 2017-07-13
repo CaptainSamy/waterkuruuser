@@ -64,6 +64,7 @@ public class ListNotificationResponse extends ResponseData<ListNotificationRespo
         public int getUnreadPush() {
             return mUnreadPush;
         }
+
     }
 
 }

@@ -35,4 +35,5 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
             }
         });
     }
+
 }

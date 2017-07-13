@@ -27,8 +27,6 @@
             android:id="@+id/title_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:singleLine="true"
             android:text="夏お得のキャンベーン AA1"
             android:textColor="@color/colorTextMain"
             android:textSize="16sp"
@@ -61,7 +59,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/clock"
                     android:paddingLeft="4dp"
-                    android:text="12：00"
                     android:textSize="12sp"/>
             </LinearLayout>
 
@@ -79,7 +76,6 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
                     android:layout_toLeftOf="@id/buttonRating"
-                    android:maxLines="2"
                     android:text="XXXXXXXXXX　"
                     android:textColor="@color/colorTextMain"
                     android:textSize="14sp"/>

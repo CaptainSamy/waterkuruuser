@@ -2,10 +2,11 @@ package wssj.co.jp.point.screens.pushnotification.detail;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Calendar;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
@@ -14,6 +15,7 @@ import wssj.co.jp.point.screens.base.BaseFragment;
 import wssj.co.jp.point.screens.dialograting.DialogRating;
 import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.Logger;
+import wssj.co.jp.point.utils.Utils;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -28,6 +30,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     public static final String NOTIFICATION_SHOW_RATING = "show_rating";
 
     private TextView mTitle, mBody, mTime;
+
+    private ImageView mImageCompany;
 
     private TextView mButtonRating;
 
@@ -80,6 +84,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mBody = (TextView) rootView.findViewById(R.id.body_notification);
         mTime = (TextView) rootView.findViewById(R.id.time_notification);
         mButtonRating = (TextView) rootView.findViewById(R.id.buttonRating);
+        mImageCompany = (ImageView) rootView.findViewById(R.id.iconNotification);
     }
 
     @Override
@@ -99,17 +104,15 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         Bundle bundle = getArguments();
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
+            List<NotificationMessage> list = new ArrayList<>();
+            list.add(mNotificationMessage);
+            getPresenter().setListPushUnRead(list);
             boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
+                Utils.fillImage(getActivityContext(), mNotificationMessage.getLogo(), mImageCompany);
                 mTitle.setText(mNotificationMessage.getTitle());
                 mBody.setText(mNotificationMessage.getMessage());
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(mNotificationMessage.getPushTime());
-                String time = String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.HOUR_OF_DAY))
-                        + ":" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MINUTE))
-                        + "   " + String.format(Locale.getDefault(), "%04d", calendar.get(Calendar.YEAR))
-                        + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
-                        + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
+                String time = Utils.convertLongToTime(mNotificationMessage.getPushTime());
                 mTime.setText(time);
                 Logger.d("TAG", mNotificationMessage.getAction());
                 switch (mNotificationMessage.getAction()) {
@@ -138,6 +141,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 @Override
                 public void onButtonRating(float rating, String note, int currentPosition) {
                     mButtonRating.setVisibility(View.GONE);
+                    getPresenter().updateActionPush(mNotificationMessage.getPushId());
                 }
             });
             dialogRating.show(0, mNotificationMessage.getStampId());

@@ -72,7 +72,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setSound(alarmSound);
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         builder.setColor(getResources().getColor(R.color.colorCode));
-                        builder.setSmallIcon(R.mipmap.logo_app);
+                        builder.setSmallIcon(R.drawable.logo_app);
                     } else {
                         builder.setSmallIcon(R.mipmap.logo_app);
                     }

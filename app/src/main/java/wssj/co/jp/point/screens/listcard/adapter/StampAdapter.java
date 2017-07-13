@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.stamp.ListCardResponse.ListCardData.CardData.StampData;
@@ -147,7 +148,7 @@ public class StampAdapter extends ArrayAdapter<StampData> {
             }
             mTextIndex.setText(String.format(Locale.getDefault(), "%02d", position + 1));
             if (data != null) {
-                Calendar calendar = Calendar.getInstance();
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
                 calendar.setTimeInMillis(data.getCreated());
                 mStampChecked.setVisibility(View.VISIBLE);
                 mTextIndex.setVisibility(View.INVISIBLE);

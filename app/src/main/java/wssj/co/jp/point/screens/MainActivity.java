@@ -188,6 +188,7 @@ public class MainActivity extends AppCompatActivity
     private int mTotalNotificationUnRead;
 
     public void showListNotification() {
+        mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
         if (mPushNotificationAdapter == null) return;
         if (mRootViewNotification == null) {
             mRootViewNotification = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
@@ -212,10 +213,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
-                mListNotification.remove(position);
+                mToolbar.setNumberNotificationUnRead(--mTotalNotificationUnRead);
                 List<NotificationMessage> messageList = new ArrayList<>();
                 messageList.add(message);
-                mPresenter.setListPushUnRead(messageList);
                 mEasyDialog.dismiss();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
@@ -234,13 +234,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showListPushNotificationUnRead(List<NotificationMessage> list, final int page, final int totalPage, final int totalNotificationUnRead) {
         mTotalNotificationUnRead = totalNotificationUnRead;
+        mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead);
         if (list != null) {
             if (mListNotification == null) {
                 mListNotification = new ArrayList<>();
                 mPushNotificationAdapter = new PushNotificationAdapter(this, R.layout.item_push_notification, mListNotification);
             }
             if (page == 1) {
-                mToolbar.setNumberNotificationUnRead(totalNotificationUnRead);
                 mListNotification.clear();
                 mListNotification.addAll(list);
                 mPushNotificationAdapter.notifyDataSetChanged();
@@ -252,7 +252,6 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onEndOfListView() {
-                    Logger.d(TAG, "#onEndOfListView " + page + "/" + totalPage);
                     if (page < totalPage) {
                         mPresenter.getListPushNotificationUnRead(page + 1, Constants.LIMIT);
                     }
@@ -267,11 +266,6 @@ public class MainActivity extends AppCompatActivity
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void setListPushUnReadSuccess(int currentNumberNotificationUnRead) {
-        mToolbar.setNumberNotificationUnRead(--mTotalNotificationUnRead);
     }
 
     @Override

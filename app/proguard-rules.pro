@@ -48,7 +48,8 @@
 -keep class org.apache.commons.logging.**               { *; }
 -keep class com.amazonaws.**
 -keep class org.codehaus.**                             { *; }
-
+-keep class org.ocpsoft.prettytime.i18n.**
+-keepnames class ** implements org.ocpsoft.prettytime.TimeUnit
 -dontwarn com.amazonaws.**
 -dontwarn javax.xml.stream.events.**
 -dontwarn org.codehaus.jackson.**

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import wssj.co.jp.point.R;
@@ -109,7 +110,7 @@ public class ListStoreCheckedInAdapter extends BaseAdapter {
 
                 long timeLastUser = store.getTimeLastCheckedIn();
                 timeLastUser = timeLastUser < 0 ? 0 : timeLastUser;
-                Calendar calendar = Calendar.getInstance();
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GTM"));
                 calendar.setTimeInMillis(timeLastUser);
                 String year = String.valueOf(calendar.get(Calendar.YEAR));
                 String month = Utils.get2NumbericString(calendar.get(Calendar.MONTH) + 1);

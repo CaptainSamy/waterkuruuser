@@ -1,18 +1,12 @@
 package wssj.co.jp.point.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -33,17 +27,20 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import wssj.co.jp.point.R;
@@ -57,16 +54,6 @@ import wssj.co.jp.point.model.stamp.ListCardResponse;
 public final class Utils {
 
     private static final String TAG = "Utils";
-
-    public static float dp2px(Resources resources, float dp) {
-        final float scale = resources.getDisplayMetrics().density;
-        return dp * scale + 0.5f;
-    }
-
-    public static float sp2px(Resources resources, float sp) {
-        final float scale = resources.getDisplayMetrics().scaledDensity;
-        return sp * scale;
-    }
 
     @NonNull
     public static List<ListCardResponse.ListCardData.CardData> getListCardByType(List<ListCardResponse.ListCardData.CardData> cards, String cardType) {
@@ -130,89 +117,6 @@ public final class Utils {
                 }
             }
             return bytes;
-        }
-        return null;
-    }
-
-    public static String getUploadImageFileName() {
-        return "image_" + System.currentTimeMillis() + ".jpg";
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
-    private static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-    private static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
-    private static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    @SuppressLint("NewApi")
-    public static String getFilePath(Context context, Uri uri) throws URISyntaxException {
-        String selection = null;
-        String[] selectionArgs = null;
-        // Uri is different in versions after KITKAT (Android 4.4), we need to
-        if (Build.VERSION.SDK_INT >= 19 && DocumentsContract.isDocumentUri(context.getApplicationContext(), uri)) {
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                return Environment.getExternalStorageDirectory() + "/" + split[1];
-            } else if (isDownloadsDocument(uri)) {
-                final String id = DocumentsContract.getDocumentId(uri);
-                uri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-            } else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-                if ("image".equals(type)) {
-                    uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-                selection = "_id=?";
-                selectionArgs = new String[]{
-                        split[1]
-                };
-            }
-        }
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = {
-                    MediaStore.Images.Media.DATA
-            };
-            Cursor cursor = null;
-            try {
-                cursor = context.getContentResolver()
-                        .query(uri, projection, selection, selectionArgs, null);
-                if (cursor != null && cursor.moveToFirst()) {
-                    return cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
-                }
-            } catch (NullPointerException e) {
-                Logger.e(TAG, "NullPointerException: " + e.getMessage());
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
         }
         return null;
     }
@@ -380,4 +284,58 @@ public final class Utils {
         return Constants.EMPTY_STRING;
     }
 
+    public static String distanceTimes(long time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time - 7 * 60 * 60 * 1000);
+
+//        String string = Locale.getDefault().getDisplayLanguage();
+
+        PrettyTime prettyTime = new PrettyTime(new Locale("JA"));//if only setting Japan language, change string =JA
+        return prettyTime.format(calendar.getTime());
+    }
+
+    public static String convertLongToTime(long time) {
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.setTimeInMillis(time);
+
+        return String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.HOUR_OF_DAY))
+                + ":" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MINUTE))
+                + "   " + String.format(Locale.getDefault(), "%04d", calendar.get(Calendar.YEAR))
+                + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.MONTH) + 1)
+                + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public static void fillImage(Context context, String imgPath, final ImageView imageView) {
+        Glide.with(context)
+                .load(imgPath)
+                .placeholder(R.drawable.logo_app)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.drawable.logo_app)
+                .into(new SimpleTarget<GlideDrawable>() {
+
+                    @Override
+                    public void onLoadStarted(Drawable placeholder) {
+                        Logger.d(TAG, "onLoadStarted");
+                        imageView.setEnabled(false);
+                        imageView.setImageDrawable(placeholder);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        Logger.d(TAG, "onLoadFailed");
+                        imageView.setEnabled(true);
+                        imageView.setImageDrawable(errorDrawable);
+                        imageView.setTag(R.id.shared_drawable, null);
+                    }
+
+                    @Override
+                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                        Logger.d(TAG, "onResourceReady");
+                        imageView.setEnabled(true);
+                        imageView.setImageDrawable(resource);
+                        imageView.setTag(R.id.shared_drawable, resource);
+                    }
+                });
+    }
 }

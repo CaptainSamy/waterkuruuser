@@ -24,6 +24,9 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("send_time")
     private long mPushTime;
 
+    @SerializedName("logo")
+    private String mLogo;
+
     private boolean mIsSound;
 
     /*
@@ -83,5 +86,9 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     public int getStampId() {
         return mStampId;
+    }
+
+    public String getLogo() {
+        return mLogo;
     }
 }
