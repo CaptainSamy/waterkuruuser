@@ -109,6 +109,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 mBody.setText(mNotificationMessage.getMessage());
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime());
                 mTime.setText(time);
+                Utils.fillImage(getActivityContext(), mNotificationMessage.getLogo(), mImageCompany);
                 Logger.d("TAG", mNotificationMessage.getAction());
                 switch (mNotificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_NOTIFICATION:
@@ -131,7 +132,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     public void showRating(boolean isShowRating) {
         if (isShowRating && mNotificationMessage != null) {
-            DialogRating dialogRating = new DialogRating(getContext(), new DialogRating.IOnClickListenerRating() {
+            DialogRating dialogRating = new DialogRating(getActivityContext(), new DialogRating.IOnClickListenerRating() {
 
                 @Override
                 public void onButtonRating(float rating, String note, int currentPosition) {

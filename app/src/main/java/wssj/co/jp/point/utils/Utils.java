@@ -308,8 +308,7 @@ public final class Utils {
     public static void fillImage(Context context, String imgPath, final ImageView imageView) {
         Glide.with(context)
                 .load(imgPath)
-                .placeholder(R.drawable.logo_app)
-                .skipMemoryCache(true)
+                .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.drawable.logo_app)
                 .into(new SimpleTarget<GlideDrawable>() {

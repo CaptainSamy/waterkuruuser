@@ -78,11 +78,11 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
     }
-
     @Override
     protected void initData() {
+        
         mListNotification = new ArrayList<>();
-        mAdapter = new PushNotificationAdapter(getContext(), R.layout.item_push_notification, mListNotification);
+        mAdapter = new PushNotificationAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
         mListView.setAdapter(mAdapter);
         mRefreshLayout.setRefreshing(true);
         getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);

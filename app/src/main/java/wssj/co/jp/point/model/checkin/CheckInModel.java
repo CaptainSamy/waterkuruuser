@@ -117,6 +117,9 @@ public class CheckInModel extends BaseModel {
                     @Override
                     public void onResponse(CheckInStatusResponse response) {
                         Logger.i(TAG, "#getCheckInStatusByUser => onResponse message");
+                        if (response != null && response.getData() != null) {
+                            Logger.i(TAG, "#getCheckInStatusByUser => onResponse message " + response.getData().getStatus());
+                        }
                         callback.onCheckInStatusSuccess(response.getData());
 
                     }

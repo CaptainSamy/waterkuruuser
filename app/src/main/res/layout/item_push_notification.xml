@@ -14,7 +14,7 @@
         android:layout_alignTop="@+id/layoutInfoNotification"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/logo_app"/>
+        />
 
     <RelativeLayout
         android:id="@+id/layoutInfoNotification"

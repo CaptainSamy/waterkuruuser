@@ -41,7 +41,7 @@ class ManageStampPresenter extends FragmentPresenter<IManageStampView> {
                 @Override
                 public void onCheckInStatusFailure(ErrorMessage errorMessage) {
                     Logger.d("ManageStampPresenter", "#onCheckInStatusSuccess");
-                    if (isViewAttached() && errorMessage != null && errorMessage.getMessage().equals(Constants.CheckInStatus.STATUS_CANCEL_OR_CHECKED_OUT)) {
+                    if (isViewAttached() && errorMessage != null && errorMessage.getMessage().equals(Constants.CheckInStatus.STATUS_CHECKED_OUT)) {
                         getModel(SharedPreferencesModel.class).clearSession();
                         getView().displayMyStampScreen();
                     }

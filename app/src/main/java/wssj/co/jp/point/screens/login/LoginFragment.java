@@ -84,11 +84,12 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     protected void initAction() {
         mButtonLogin.setOnClickListener(this);
         mTextResetPassword.setOnClickListener(this);
+        
     }
 
     @Override
     public void showListMessageValidate(ErrorMessage errorMessage) {
-        Toast.makeText(getContext(), errorMessage.getMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivityContext(), errorMessage.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     @Override

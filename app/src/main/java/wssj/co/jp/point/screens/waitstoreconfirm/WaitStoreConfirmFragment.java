@@ -2,6 +2,7 @@ package wssj.co.jp.point.screens.waitstoreconfirm;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -28,6 +29,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         implements IWaitStoreConfirmView {
 
     private static final String TAG = "WaitStoreConfirmFragment";
+
+    public static final String KEY_STATUS_CHECK_IN = "KEY_STATUS_CHECK_IN";
 
     public static final String KEY_STORE_NAME = "KEY_STORE_NAME";
 
@@ -119,26 +122,39 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     protected void initViews(View rootView) {
+        mImageStore = (ImageView) rootView.findViewById(R.id.imageStore);
+        mCircleProgress = (CircularProgressBar) rootView.findViewById(R.id.circle_progress);
+        mTextPositionCustomer = (TextView) rootView.findViewById(R.id.tvPositionCustomer);
+        mTextNumberCustomer = (TextView) rootView.findViewById(R.id.tvNumberCustomer);
+        mTextTimeWaiting = (TextView) rootView.findViewById(R.id.tvTimeWaiting);
+        mCircleProgress.setProgress(0.0f);
         final RotateAnimation rotateAnimation = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setInterpolator(new LinearInterpolator());
         rotateAnimation.setDuration(5000);
         rotateAnimation.setRepeatCount(Animation.INFINITE);
         rotateAnimation.setFillAfter(true);
         rotateAnimation.setFillEnabled(true);
-        mImageStore = (ImageView) rootView.findViewById(R.id.imageStore);
-
-        mCircleProgress = (CircularProgressBar) rootView.findViewById(R.id.circle_progress);
-        mTextPositionCustomer = (TextView) rootView.findViewById(R.id.tvPositionCustomer);
-        mTextNumberCustomer = (TextView) rootView.findViewById(R.id.tvNumberCustomer);
-        mTextTimeWaiting = (TextView) rootView.findViewById(R.id.tvTimeWaiting);
-        mCircleProgress.setProgress(0.0f);
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 mImageStore.startAnimation(rotateAnimation);
                 mCircleProgress.repeatAnimation(-1);
-                getPresenter().getCheckInStatus();
+                if (!TextUtils.isEmpty(mStatusCheckIn)) {
+                    switch (mStatusCheckIn) {
+                        case Constants.CheckInStatus.STATUS_WAIT_CONFIRM:
+                            getPresenter().getCheckInStatus();
+                            break;
+                        case Constants.CheckInStatus.STATUS_CHECKED_IN:
+                            isAllowCheckIn = true;
+                            mCircleProgress.setRepeat(1);
+                            break;
+                        case Constants.CheckInStatus.STATUS_CHECKED_OUT:
+                            isAllowCheckIn = true;
+                            mCircleProgress.setRepeat(1);
+                            break;
+                    }
+                }
             }
         }, 1000);
         mExpandWaitingText = (TextView) rootView.findViewById(R.id.expand_wait_text);
@@ -150,29 +166,24 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     @Override
     protected void initAction() {
-
-
         mCircleProgress.setAnimateListener(new CircularProgressBar.IOnAnimateListener() {
 
             @Override
             public void onAnimateDone() {
-
-                Animation zoomInAnim = AnimationUtils.loadAnimation(getContext(),
+                Animation zoomInAnim = AnimationUtils.loadAnimation(getActivityContext(),
                         R.anim.zoom_in);
                 zoomInAnim.setStartOffset(500);
                 mImageStore.setAnimation(zoomInAnim);
-
                 if (isAllowCheckIn) {
                     mLayoutInfo.setVisibility(View.GONE);
                     mExpandWaitingText.setVisibility(View.VISIBLE);
                     mExpandWaitingText.setText(getString(R.string.expand_waiting_confirm_prepare_finish));
                     mLayoutFinishWaiting.setVisibility(View.VISIBLE);
                     mLayoutFinishWaiting.animate().alpha(1.0f).setDuration(1000);
-                    Animation zoomOutAnim = AnimationUtils.loadAnimation(getContext(),
+                    Animation zoomOutAnim = AnimationUtils.loadAnimation(getActivityContext(),
                             R.anim.zoom_out);
                     zoomOutAnim.setStartOffset(500);
                     mLayoutFinishWaiting.startAnimation(zoomOutAnim);
-
                     mHandler.postDelayed(new Runnable() {
 
                         @Override
@@ -189,10 +200,13 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         });
     }
 
+    private String mStatusCheckIn;
+
     @Override
     protected void initData() {
         Bundle bundle = getArguments();
         if (bundle != null) {
+            mStatusCheckIn = bundle.getString(KEY_STATUS_CHECK_IN);
             mStoreName = bundle.getString(KEY_STORE_NAME);
             mNumberCustomer = bundle.getInt(KEY_NUMBER_PEOPLE);
             mPositionCustomer = bundle.getInt(KEY_NUMBER_SESSION);
@@ -203,6 +217,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
             String time = Utils.convertLongToDate(mTimeWaiting);
             mTextTimeWaiting.setText(time);
+
+
         }
     }
 

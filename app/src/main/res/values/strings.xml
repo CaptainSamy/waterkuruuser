@@ -182,5 +182,6 @@
     <string name="button_contact">お問い合わせする</string>
     <string name="feedback_success">お問い合わせを送信しました。</string>
     <string name="hint_feedback">"評価内容を入力してください。</string>
+    <string name="content_feedback_not_empty"> 内容を入力してください。</string>
 
 </resources>

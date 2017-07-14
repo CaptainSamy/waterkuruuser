@@ -6,6 +6,7 @@ import wssj.co.jp.point.model.checkin.CheckInStatusResponse;
 import wssj.co.jp.point.model.preference.SharedPreferencesModel;
 import wssj.co.jp.point.screens.base.FragmentPresenter;
 import wssj.co.jp.point.utils.Constants;
+import wssj.co.jp.point.utils.Logger;
 
 /**
  * Created by HieuPT on 5/19/2017.
@@ -34,21 +35,29 @@ class WaitStoreConfirmPresenter extends FragmentPresenter<IWaitStoreConfirmView>
                     @Override
                     public void onCheckInStatusSuccess(CheckInStatusResponse.CheckInStatusData data) {
                         if (isViewAttached() && data != null) {
-                            if (Constants.CheckInStatus.STATUS_CHECKED_IN.equals(data.getStatus())) {
-                                getView().displayScreenManageStamp(serviceId);
-                            } else {
-                                getView().recheckStatus(Constants.TIME_DELAYS, data);
+                            switch (data.getStatus()) {
+                                case Constants.CheckInStatus.STATUS_CHECKED_IN:
+                                    getView().displayScreenManageStamp(serviceId);
+                                    break;
+                                case Constants.CheckInStatus.STATUS_WAIT_CONFIRM:
+                                    getView().recheckStatus(Constants.TIME_DELAYS, data);
+                                    break;
+                                case Constants.CheckInStatus.STATUS_CANCEL:
+                                    getView().displayScreenScanCode();
+                                    break;
                             }
                         } else {
+                            Logger.d("onCheckInStatusSuccess", "data null");
                             if (isViewAttached()) {
-                                getView().displayScreenScanCode();
+                                getView().displayScreenManageStamp(serviceId);
                             }
                         }
                     }
 
                     @Override
                     public void onCheckInStatusFailure(ErrorMessage errorMessage) {
-                        if (isViewAttached() && errorMessage != null && errorMessage.getMessage().equals(Constants.CheckInStatus.STATUS_CANCEL_OR_CHECKED_OUT)) {
+                        if (isViewAttached() && errorMessage != null && errorMessage.getMessage().equals(Constants.CheckInStatus.STATUS_CHECKED_OUT)) {
+                            Logger.d("onCheckInStatusFailure", "data null");
                             getView().displayScreenScanCode();
                         } else {
                             getView().recheckStatus(Constants.TIME_DELAYS, null);

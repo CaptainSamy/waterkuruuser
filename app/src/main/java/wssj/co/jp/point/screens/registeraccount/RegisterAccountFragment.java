@@ -125,7 +125,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
                     @Override
                     public void updateDrawState(TextPaint ds) {
                         super.updateDrawState(ds);
-                        int linkColor = ContextCompat.getColor(getContext(), R.color.blumine);
+                        int linkColor = ContextCompat.getColor(getActivityContext(), R.color.blumine);
                         ds.setColor(linkColor);
                         ds.setUnderlineText(true);
                     }
@@ -209,7 +209,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     @Override
     public void onRegisterFailure(ErrorMessage errorMessage) {
         if (errorMessage != null && !TextUtils.isEmpty(errorMessage.getMessage())) {
-            Toast.makeText(getContext(), errorMessage.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivityContext(), errorMessage.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 }

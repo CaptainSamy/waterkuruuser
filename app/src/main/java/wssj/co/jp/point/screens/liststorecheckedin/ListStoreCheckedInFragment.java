@@ -115,7 +115,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
     }
 
     public void initGoogleAPI() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivityContext())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -224,7 +224,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
     @Override
     public void onGetListStoreCheckedInSuccess(List<ListStoreCheckedResponse.StoreCheckedIn> listStores) {
         mTitleListView.setVisibility(View.VISIBLE);
-        mAdapter = new ListStoreCheckedInAdapter(getContext(), listStores);
+        mAdapter = new ListStoreCheckedInAdapter(getActivityContext(), listStores);
         mListStoreCheckedIn.setAdapter(mAdapter);
     }
 

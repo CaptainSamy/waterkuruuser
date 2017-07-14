@@ -39,7 +39,9 @@ public final class Constants {
 
         public static final String STATUS_CHECKED_IN = "checked_in";
 
-        public static final String STATUS_CANCEL_OR_CHECKED_OUT = "来店中の顧客ではありません";
+        public static final String STATUS_CHECKED_OUT = "check_out";
+
+        public static final String STATUS_CANCEL = "cancel";
 
         private CheckInStatus() {
         }
@@ -70,9 +72,7 @@ public final class Constants {
 
         public static final int NUMBER_LINE = 10;
 
-        public static final String KEY_TRUE = "true";
-
-        public static final String KEY_FALSE = "false";
+        public static final int TIME_DELAY_SHOW_VIEW = 200;
 
         public static final int TYPE_SHORT_TEXT = 1;
 

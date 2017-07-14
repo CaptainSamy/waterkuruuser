@@ -91,7 +91,7 @@ public class HomeFragment extends BaseFragment<IHomeView, HomePresenter> impleme
             if (Manifest.permission.CAMERA.equals(permissions[0]) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 switchScreen(IMainView.FRAGMENT_SCANNER, true, false, null);
             } else {
-                Toast.makeText(getContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivityContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
             }
         }
     }

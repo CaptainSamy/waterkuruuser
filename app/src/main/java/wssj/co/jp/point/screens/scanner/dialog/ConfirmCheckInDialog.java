@@ -86,7 +86,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
         if (data != null) {
             mStoreName = data.getStoreName();
             mStoreNameTextView.setText(mStoreName);
-            Utils.loadImage(getContext(), data.getLogoCompany(), mImageLogoCompany);
+            Utils.fillImage(getContext(), data.getLogoCompany(), mImageLogoCompany);
             showView();
         }
     }
@@ -133,6 +133,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
         hideProgress();
         if (mActivityCallback != null && data != null) {
             Bundle bundle = new Bundle();
+            bundle.putString(WaitStoreConfirmFragment.KEY_STATUS_CHECK_IN, data.getStatus());
             bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, mStoreName);
             bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
             bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());

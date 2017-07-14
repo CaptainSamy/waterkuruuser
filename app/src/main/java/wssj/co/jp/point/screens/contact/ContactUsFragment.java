@@ -87,6 +87,8 @@ public class ContactUsFragment extends BaseFragment<IContactUsView, ContactUsPre
                 String feedback = mInputFeedback.getText().toString();
                 if (!TextUtils.isEmpty(feedback)) {
                     getPresenter().feedback(feedback);
+                } else {
+                    showToast(getString(R.string.content_feedback_not_empty));
                 }
             }
         });

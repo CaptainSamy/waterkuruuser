@@ -97,7 +97,7 @@ public class QAFragment extends BaseFragment<IQAView, QAPresenter> implements IQ
     public void onGetListQASuccess(final int currentPage, final int totalPage, List<QAResponse.ListQAData.QAData> data) {
         if (mAdapter == null) {
             mListQA = new ArrayList<>();
-            mAdapter = new QAAdapter(getContext(), mListQA, new QAAdapter.IEndOfListView() {
+            mAdapter = new QAAdapter(getActivityContext(), mListQA, new QAAdapter.IEndOfListView() {
 
                 @Override
                 public void onEndOfListView() {

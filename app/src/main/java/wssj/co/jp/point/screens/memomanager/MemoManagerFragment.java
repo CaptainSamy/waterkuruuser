@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +17,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -88,7 +91,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private List<ListServiceResponse.Service> mListService;
 
-    private int mCurrentServiceId;
+    private int mServiceId;
 
     private ImmediateResultCameraModule mCameraModule;
 
@@ -141,8 +144,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     protected void initViews(View rootView) {
         mParentViewMemoConfig = (ViewGroup) rootView.findViewById(R.id.parentViewMemoConfig);
         mSpinnerServices = (Spinner) rootView.findViewById(R.id.spServices);
-        mPhotoDialog = new PhotoDialog(getContext(), this);
-        mDialogChoose = new DialogChoose(getContext());
+        mPhotoDialog = new PhotoDialog(getActivityContext(), this);
+        mDialogChoose = new DialogChoose(getActivityContext());
     }
 
     @Override
@@ -161,9 +164,10 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         if (userConfig == null) return;
         List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfig = userConfig.getListMemoConfig();
         List<MemoDynamicResponse.UserMemoData.UserMemoValue> valuesConfig = userConfig.getListMemoValue();
-
         if (memoConfig != null && memoConfig.size() > 0) {
-            onCreateMemoDynamic(memoConfig, valuesConfig);
+//            if (isAdded()) {
+            onCreateMemoDynamic(memoConfig, valuesConfig, 0);
+//            }
         }
     }
 
@@ -181,7 +185,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                 list.add(services.getServiceName());
             }
         }
-        ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list) {
+        ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getActivityContext(), android.R.layout.simple_list_item_1, list) {
 
             @NonNull
             @Override
@@ -204,9 +208,9 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (mListService != null && mListService.size() > 0) {
-            mCurrentServiceId = mListService.get(position).getId();
+            mServiceId = mListService.get(position).getId();
             mParentViewMemoConfig.removeAllViews();
-            getPresenter().getMemoConfigByServiceId(mCurrentServiceId);
+            getPresenter().getMemoConfigByServiceId(mServiceId);
         }
     }
 
@@ -268,10 +272,10 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             if (isGranted) {
                 pickImageFromCamera(requestCode);
             } else {
-                Toast.makeText(getContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivityContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(getContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivityContext(), getString(R.string.permission_denied), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -348,7 +352,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private void handleCroppedImage(Uri imageUri, int requestCode) {
         String imagePath = imageUri.getPath();
-        if (!TextUtils.isEmpty(imagePath)) {
+        if (!TextUtils.isEmpty(imagePath) && mListImage != null) {
             fillImage(imagePath, mCurrentImageClicked, true);
             mListImage.get(mPositionImageClicked).setUrlImage(imagePath);
         }
@@ -432,70 +436,78 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     /* Handle create memo dynamic*/
 
-    public void onCreateMemoDynamic(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig) {
-        for (int i = 0; i < listMemoConfig.size(); i++) {
-            MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(i);
-            MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(i);
+    public void onCreateMemoDynamic(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, int position) {
+        if (position < listMemoConfig.size()) {
+            MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
             switch (memoConfig.getType()) {
                 case Constants.MemoConfig.TYPE_SHORT_TEXT:
-                    handleCreateEditText(memoConfig, memoValue);
+                    handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LONG_TEXT:
-                    handleCreateEditText(memoConfig, memoValue);
+                    handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_IMAGE:
-                    handleCreateImage(memoConfig, memoValue);
+                    handleCreateImage(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_COMBO_BOX:
                     //check box in android
-                    handleCreateComboBox(memoConfig, memoValue);
+                    handleCreateComboBox(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_SWITCH:
-                    handleCreateSwitch(memoConfig, memoValue);
+                    handleCreateSwitch(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
-//                    handleCreateComboBox(memoConfig);
+//                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
+                    break;
+                default:
+                    onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
             }
-        }
-        View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
-        TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
-        mParentViewMemoConfig.addView(view);
-        mButtonSave.setOnClickListener(new View.OnClickListener() {
+        } else {
+            View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
+            TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
+            mParentViewMemoConfig.addView(view);
+            mButtonSave.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                getPresenter().updateUserMemo(mCurrentServiceId, listValuesConfig);
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    getPresenter().updateUserMemo(mServiceId, listValuesConfig);
+                }
+            });
+        }
     }
 
-    private List<EditText> mListEditText;
+    public void loopCreateMemoDynamic(View viewChild, final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
+        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.slide_bottom_top);
+        viewChild.startAnimation(animation);
+        mParentViewMemoConfig.addView(viewChild);
+        new Handler().
 
-    private List<Switch> mListRadioGroup;
+                postDelayed(new Runnable() {
 
-    private List<Spinner> mListSpinner;
-
-    private List<ExpandableHeightGridView> mListGridView;
+                    @Override
+                    public void run() {
+                        onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
+                    }
+                }, Constants.MemoConfig.TIME_DELAY_SHOW_VIEW);
+    }
 
     /*Handle create edit text*/
-    private String text;
-
-    public void handleCreateEditText(MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig, final MemoDynamicResponse.UserMemoData.UserMemoValue memoValue) {
+    public void handleCreateEditText(final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
+        MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
+        MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(position);
         if (memoConfig == null) return;
         if (mListEditText == null) {
             mListEditText = new ArrayList<>();
+
         }
         TextView title;
         EditText editText;
-        text = new String();
 
         final MemoDynamicResponse.UserMemoData.UserMemoValue.Value value = memoValue.getValue();
-        View viewEditText = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_edittext, null);
+        View viewEditText = LayoutInflater.from(getActivityContext()).inflate(R.layout.memo_config_edittext, null);
         title = (TextView) viewEditText.findViewById(R.id.titleEditText);
         editText = (EditText) viewEditText.findViewById(R.id.content);
-
-
         editText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -513,44 +525,20 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         });
 
         title.setText(memoConfig.getTitle());
-        if (memoConfig.getType() == Constants.MemoConfig.TYPE_LONG_TEXT) {
-            editText.setLines(Constants.MemoConfig.NUMBER_LINE);
-        } else {
-            editText.setSingleLine(true);
-        }
         if (memoConfig.getConfig() != null && memoConfig.getConfig().getPlaceholder() != null) {
             editText.setHint(memoConfig.getConfig().getPlaceholder());
         }
         if (memoValue.getValue() != null) {
             editText.setText(memoValue.getValue().getValue());
         }
-        mListEditText.add(editText);
-        mParentViewMemoConfig.addView(viewEditText);
-    }
-
-    /*
-   Handle create Radio
-   */
-    public void handleCreateSwitch(MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig, final MemoDynamicResponse.UserMemoData.UserMemoValue memoValue) {
-        if (memoConfig == null) return;
-        if (mListRadioGroup == null) {
-            mListRadioGroup = new ArrayList<>();
+        if (memoConfig.getType() == Constants.MemoConfig.TYPE_LONG_TEXT) {
+            editText.setLines(Constants.MemoConfig.NUMBER_LINE);
+        } else {
+            editText.setSingleLine(true);
         }
-        TextView title;
-        final Switch switchView;
-        View viewSwitch = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_switch, null);
-        title = (TextView) viewSwitch.findViewById(R.id.titleSwitch);
-        switchView = (Switch) viewSwitch.findViewById(R.id.switchView);
-        switchView.setChecked(memoValue.getValue().getStatus());
-        switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mListEditText.add(editText);
+        loopCreateMemoDynamic(viewEditText, listMemoConfig, listValuesConfig, position);
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                memoValue.getValue().setStatus(isChecked);
-            }
-        });
-        title.setText(memoConfig.getTitle());
-        mParentViewMemoConfig.addView(viewSwitch);
     }
 
     /*
@@ -560,10 +548,13 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private int mPositionImageClicked;
 
+    private List<ExpandableHeightGridView> mListGridView;
+
     List<MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image> mListImage;
 
-    public void handleCreateImage(MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig, final MemoDynamicResponse.UserMemoData.UserMemoValue memoValue) {
-        if (memoConfig == null) return;
+    public void handleCreateImage(final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
+        MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
+        MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(position);
 
         TextView title;
         final ExpandableHeightGridView gridView;
@@ -571,12 +562,12 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             mListGridView = new ArrayList<>();
         }
         List<MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image> listImage = memoValue.getValue().getListImage();
-        View viewGrid = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_images, null);
+        View viewGrid = LayoutInflater.from(getActivityContext()).inflate(R.layout.memo_config_images, null);
         title = (TextView) viewGrid.findViewById(R.id.titleImages);
         gridView = (ExpandableHeightGridView) viewGrid.findViewById(R.id.gridView);
         gridView.setExpanded(true);
         title.setText(memoConfig.getTitle());
-        ImageAdapter imageAdapter = new ImageAdapter(getContext(), listImage, memoConfig.getConfig().getNumberImages());
+        ImageAdapter imageAdapter = new ImageAdapter(getActivityContext(), listImage, memoConfig.getConfig().getNumberImages());
         gridView.setAdapter(imageAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -589,28 +580,61 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             }
         });
         mListImage = memoValue.getValue().getListImage();
-        memoValue.getValue().setListImage(mListImage);
-        mListGridView.add(gridView);
-        mParentViewMemoConfig.addView(viewGrid);
+        loopCreateMemoDynamic(viewGrid, listMemoConfig, listValuesConfig, position);
+    }
+
+    private List<EditText> mListEditText;
+
+    /*
+   Handle create Radio
+   */
+    private List<Switch> mListRadioGroup;
+
+    public void handleCreateSwitch(final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
+        MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
+        final MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(position);
+        if (memoConfig == null) return;
+        if (mListRadioGroup == null) {
+            mListRadioGroup = new ArrayList<>();
+        }
+        TextView title;
+        final Switch switchView;
+        View viewSwitch = LayoutInflater.from(getActivityContext()).inflate(R.layout.memo_config_switch, null);
+        title = (TextView) viewSwitch.findViewById(R.id.titleSwitch);
+        switchView = (Switch) viewSwitch.findViewById(R.id.switchView);
+        switchView.setChecked(memoValue.getValue().getStatus());
+        switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                memoValue.getValue().setStatus(isChecked);
+            }
+        });
+        title.setText(memoConfig.getTitle());
+        loopCreateMemoDynamic(viewSwitch, listMemoConfig, listValuesConfig, position + 1);
     }
 
     /*
        Handle create Drop
      */
-    public void handleCreateComboBox(final MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig, MemoDynamicResponse.UserMemoData.UserMemoValue memoValue) {
+    private List<Spinner> mListSpinner;
+
+    public void handleCreateComboBox(final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
+        MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
+        final MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(position);
         if (memoConfig == null) return;
         if (mListSpinner == null) {
             mListSpinner = new ArrayList<>();
         }
         TextView title;
         Spinner spinner;
-        View viewSpinner = LayoutInflater.from(getContext()).inflate(R.layout.memo_config_spinner, null);
+        View viewSpinner = LayoutInflater.from(getActivityContext()).inflate(R.layout.memo_config_spinner, null);
         title = (TextView) viewSpinner.findViewById(R.id.titleSpinner);
         spinner = (Spinner) viewSpinner.findViewById(R.id.spServices);
         final MemoDynamicResponse.UserMemoData.UserMemoValue.Value value = memoValue.getValue();
         final List<String> list = memoConfig.getConfig().getListComboBox();
         if (list != null && list.size() > 0) {
-            ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, list) {
+            ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getActivityContext(), android.R.layout.simple_list_item_1, list) {
 
                 @NonNull
                 @Override
@@ -640,7 +664,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             }
         });
         mListSpinner.add(spinner);
-        mParentViewMemoConfig.addView(viewSpinner);
+        loopCreateMemoDynamic(viewSpinner, listMemoConfig, listValuesConfig, position);
     }
 }
 
