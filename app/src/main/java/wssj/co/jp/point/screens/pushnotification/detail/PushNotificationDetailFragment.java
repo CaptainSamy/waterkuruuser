@@ -5,9 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
 import wssj.co.jp.point.screens.IMainView;
@@ -104,11 +101,9 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         Bundle bundle = getArguments();
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
-            List<NotificationMessage> list = new ArrayList<>();
-            list.add(mNotificationMessage);
-            getPresenter().setListPushUnRead(list);
             boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
+                getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
                 Utils.fillImage(getActivityContext(), mNotificationMessage.getLogo(), mImageCompany);
                 mTitle.setText(mNotificationMessage.getTitle());
                 mBody.setText(mNotificationMessage.getMessage());

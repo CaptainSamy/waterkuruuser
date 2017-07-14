@@ -34,21 +34,17 @@
         android:fillViewport="true"
         >
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/parentViewMemoConfig"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="12dp">
 
-            <LinearLayout
-                android:id="@+id/parentViewMemoConfig"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="12dp">
-
-            </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

@@ -31,7 +31,7 @@ public class PushNotificationModel extends BaseModel {
 
     public interface ISetListPushNotificationCallback {
 
-        void onSetListPushNotificationSuccess(int numberNotificationUnRead);
+        void onSetListPushNotificationSuccess();
 
         void onSetListPushNotificationFailure();
     }
@@ -106,32 +106,21 @@ public class PushNotificationModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void setListPushUnRead(String token, List<NotificationMessage> listNotification, final ISetListPushNotificationCallback callback) {
-        List<Integer> listIdPush = new ArrayList<>();
+    public void setListPushUnRead(String token, long pushId, final ISetListPushNotificationCallback callback) {
+        Request request = APICreator.setListNotificationUnRead(token, pushId, new Response.Listener<ResponseData>() {
 
-        for (NotificationMessage message : listNotification) {
-            if (message.getStatusRead() == 0) {
-                listIdPush.add((int) message.getPushId());
+            @Override
+            public void onResponse(ResponseData response) {
+                callback.onSetListPushNotificationSuccess();
             }
+        }, new Response.ErrorListener() {
 
-        }
-        final int numberNotificationUnRead = listIdPush.size();
-        if (numberNotificationUnRead > 0) {
-            Request request = APICreator.setListNotificationUnRead(token, listIdPush, new Response.Listener<ResponseData>() {
-
-                @Override
-                public void onResponse(ResponseData response) {
-                    callback.onSetListPushNotificationSuccess(numberNotificationUnRead);
-                }
-            }, new Response.ErrorListener() {
-
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    callback.onSetListPushNotificationFailure();
-                }
-            });
-            VolleySequence.getInstance().addRequest(request);
-        }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onSetListPushNotificationFailure();
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
     }
 
     public void updateActionPush(String token, long pushId, final IUpdateActionPushCallback callback) {

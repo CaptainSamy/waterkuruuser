@@ -76,7 +76,8 @@
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
                     android:layout_toLeftOf="@id/buttonRating"
-                    android:text="XXXXXXXXXX　"
+                    android:maxLines="2"
+                    android:text="XXXXXXXXXX"
                     android:textColor="@color/colorTextMain"
                     android:textSize="14sp"/>
 

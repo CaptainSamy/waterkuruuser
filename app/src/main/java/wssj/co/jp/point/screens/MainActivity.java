@@ -61,6 +61,7 @@ import wssj.co.jp.point.screens.resetpassword.ResetPasswordFragment;
 import wssj.co.jp.point.screens.scanner.ScannerFragment;
 import wssj.co.jp.point.screens.splash.SplashFragment;
 import wssj.co.jp.point.screens.termofservice.fragment.TermOfServiceFragment;
+import wssj.co.jp.point.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
 import wssj.co.jp.point.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.FragmentBackStackManager;
@@ -214,6 +215,7 @@ public class MainActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
                 mToolbar.setNumberNotificationUnRead(--mTotalNotificationUnRead);
+                mListNotification.remove(position);
                 List<NotificationMessage> messageList = new ArrayList<>();
                 messageList.add(message);
                 mEasyDialog.dismiss();
@@ -222,7 +224,6 @@ public class MainActivity extends AppCompatActivity
                 displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
-
         if (mListNotification != null && mListNotification.size() > 0) {
             mListViewNotification.setVisibility(View.VISIBLE);
             mTextNoItem.setVisibility(View.GONE);
@@ -243,11 +244,10 @@ public class MainActivity extends AppCompatActivity
             if (page == 1) {
                 mListNotification.clear();
                 mListNotification.addAll(list);
-                mPushNotificationAdapter.notifyDataSetChanged();
             } else {
                 mListNotification.addAll(list);
-                mPushNotificationAdapter.notifyDataSetChanged();
             }
+            mPushNotificationAdapter.notifyDataSetChanged();
             mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
 
                 @Override
@@ -258,7 +258,14 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
-
+        if (mListViewNotification != null && mTextNoItem != null) {
+            if (mListNotification != null && mListNotification.size() > 0) {
+                mListViewNotification.setVisibility(View.VISIBLE);
+                mTextNoItem.setVisibility(View.GONE);
+            } else {
+                mTextNoItem.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -425,6 +432,9 @@ public class MainActivity extends AppCompatActivity
             case IMainView.FRAGMENT_TERM_OF_SERVICE:
                 replaceFragment(new TermOfServiceFragment(), hasAnimation, addToBackStack);
                 break;
+            case IMainView.FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM:
+                replaceFragment(new TermOfServiceNoMenuBottom(), hasAnimation, addToBackStack);
+                break;
             case IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST:
                 replaceFragment(new PushNotificationListFragment(), hasAnimation, addToBackStack);
                 break;
@@ -510,6 +520,8 @@ public class MainActivity extends AppCompatActivity
     public void onLogout() {
         clearBackStack();
         displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false);
+        mListNotification.clear();
+        mToolbar.setNumberNotificationUnRead(0);
     }
 
     @Override

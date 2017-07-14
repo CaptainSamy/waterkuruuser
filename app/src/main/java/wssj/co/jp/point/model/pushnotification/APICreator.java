@@ -5,9 +5,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import wssj.co.jp.point.model.ResponseData;
 import wssj.co.jp.point.model.volleyrequest.GsonJsonRequest;
@@ -97,7 +95,7 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> setListNotificationUnRead(final String token, final List<Integer> listIdPush,
+    static GsonRequest<ResponseData> setListNotificationUnRead(final String token, final long pushId,
                                                                final Response.Listener<ResponseData> listener,
                                                                final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -131,17 +129,7 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
-                String values = "";
-                if (listIdPush != null) {
-                    for (int id : listIdPush) {
-                        if (listIdPush.indexOf(id) == (listIdPush.size() - 1)) {
-                            values = values + id;
-                        } else {
-                            values = values + id + ",";
-                        }
-                    }
-                }
-                map.put("push_id_list", values);
+                map.put("push_id_list", String.valueOf(pushId));
                 return map;
             }
         };

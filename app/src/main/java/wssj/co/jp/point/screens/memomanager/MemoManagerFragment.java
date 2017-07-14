@@ -515,6 +515,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         title.setText(memoConfig.getTitle());
         if (memoConfig.getType() == Constants.MemoConfig.TYPE_LONG_TEXT) {
             editText.setLines(Constants.MemoConfig.NUMBER_LINE);
+        } else {
+            editText.setSingleLine(true);
         }
         if (memoConfig.getConfig() != null && memoConfig.getConfig().getPlaceholder() != null) {
             editText.setHint(memoConfig.getConfig().getPlaceholder());
