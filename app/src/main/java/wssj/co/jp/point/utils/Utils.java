@@ -286,7 +286,7 @@ public final class Utils {
 
     public static String distanceTimes(long time) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time - 7 * 60 * 60 * 1000);
+        calendar.setTimeInMillis(time - 9 * 60 * 60 * 1000);
 
 //        String string = Locale.getDefault().getDisplayLanguage();
 
@@ -306,6 +306,7 @@ public final class Utils {
     }
 
     public static void fillImage(Context context, String imgPath, final ImageView imageView) {
+        if (TextUtils.isEmpty(imgPath)) return;
         Glide.with(context)
                 .load(imgPath)
                 .skipMemoryCache(false)

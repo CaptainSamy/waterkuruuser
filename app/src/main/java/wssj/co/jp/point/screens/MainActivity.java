@@ -90,6 +90,22 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentBackStackManager mFragmentBackStackManager;
 
+    private PushNotificationAdapter mPushNotificationAdapter;
+
+    private List<NotificationMessage> mListNotification;
+
+    private EasyDialog mEasyDialog;
+
+    private ListView mListViewNotification;
+
+    private View mRootViewNotification;
+
+    private TextView mTextNoItem;
+
+    private int mTotalNotificationUnRead;
+
+    boolean isRequestFirstNotification = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,20 +190,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private PushNotificationAdapter mPushNotificationAdapter;
-
-    private List<NotificationMessage> mListNotification;
-
-    private EasyDialog mEasyDialog;
-
-    private ListView mListViewNotification;
-
-    private View mRootViewNotification;
-
-    private TextView mTextNoItem;
-
-    private int mTotalNotificationUnRead;
-
     public void showListNotification() {
         mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
         if (mPushNotificationAdapter == null) return;
@@ -237,7 +239,7 @@ public class MainActivity extends AppCompatActivity
         mTotalNotificationUnRead = totalNotificationUnRead;
         mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead);
         if (list != null) {
-            if (mListNotification == null) {
+            if (mPushNotificationAdapter == null) {
                 mListNotification = new ArrayList<>();
                 mPushNotificationAdapter = new PushNotificationAdapter(this, R.layout.item_push_notification, mListNotification);
             }
@@ -521,6 +523,7 @@ public class MainActivity extends AppCompatActivity
         clearBackStack();
         displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false);
         mListNotification.clear();
+        isRequestFirstNotification = true;
         mToolbar.setNumberNotificationUnRead(0);
     }
 
@@ -528,7 +531,9 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-            if (mPushNotificationAdapter == null) {
+
+            if (fragment instanceof HomeFragment && isRequestFirstNotification) {
+                isRequestFirstNotification = false;
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
             }
             disablePushUpView();
