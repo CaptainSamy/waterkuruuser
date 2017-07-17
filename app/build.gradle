@@ -62,9 +62,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.google.firebase:firebase-messaging:10.2.6'
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
-    compile 'com.github.michaelye.easydialog:easydialog:1.4'
     compile 'com.amazonaws:aws-android-sdk-core:2.4.4'
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    compile project(path: ':easydialog')
 }
 apply plugin: 'com.google.gms.google-services'

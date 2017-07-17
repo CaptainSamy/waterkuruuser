@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -154,6 +155,8 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setNavigationIcon(R.drawable.ic_back);
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
+
+        imageNotification = (ImageView) findViewById(R.id.iconTest);
     }
 
     private void initAction() {
@@ -190,6 +193,8 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    ImageView imageNotification;
+
     public void showListNotification() {
         mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
         if (mPushNotificationAdapter == null) return;
@@ -197,18 +202,20 @@ public class MainActivity extends AppCompatActivity
             mRootViewNotification = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
             mTextNoItem = (TextView) mRootViewNotification.findViewById(R.id.textNoItem);
             mListViewNotification = (ListView) mRootViewNotification.findViewById(R.id.listView);
+
             mListViewNotification.setAdapter(mPushNotificationAdapter);
             mEasyDialog = new EasyDialog(MainActivity.this)
                     .setLayout(mRootViewNotification)
                     .setGravity(EasyDialog.GRAVITY_BOTTOM)
-                    .setBackgroundColor(MainActivity.this.getResources().getColor(android.R.color.transparent))
-                    .setLocationByAttachedView(mToolbar.getIconNotification())
+                    .setBackgroundColor(MainActivity.this.getResources().getColor(android.R.color.white))
+                    .setLocationByAttachedView(imageNotification)
                     .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 350, getResources().getDisplayMetrics().widthPixels, 0)
                     .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, 350, 0, -getResources().getDisplayMetrics().widthPixels)
                     .setTouchOutsideDismiss(true)
-                    .setMarginLeftAndRight(Utils.convertDpToPixel(MainActivity.this, 80), Utils.convertDpToPixel(MainActivity.this, 4))
                     .setMatchParent(false)
+                    .setMargin(Utils.convertDpToPixel(MainActivity.this, 80), 0, Utils.convertDpToPixel(MainActivity.this, 8), Utils.convertDpToPixel(MainActivity.this, 110))
                     .setOutsideColor(getResources().getColor(R.color.outside_color_trans));
+
         }
         mEasyDialog.show();
         mListViewNotification.setOnItemClickListener(new AdapterView.OnItemClickListener() {
