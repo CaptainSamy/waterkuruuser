@@ -166,11 +166,38 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
     public void onGetMemoConfigSuccess(MemoDynamicResponse.UserMemoData userConfig) {
         if (userConfig == null) return;
         List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfig = userConfig.getListMemoConfig();
-        List<MemoDynamicResponse.UserMemoData.UserMemoValue> valuesConfig = userConfig.getListMemoValue();
+        List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValue = userConfig.getListMemoValue();
 
-        if (memoConfig != null && memoConfig.size() > 0) {
-            onCreateMemoDynamic(memoConfig, valuesConfig, 0);
+        List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValueSync;
+        if (memoConfig != null && memoValue != null && memoConfig.size() != memoValue.size()) {
+            memoValueSync = syncListMemo(memoConfig, memoValue);
+            if (memoValueSync != null && memoValueSync.size() == memoConfig.size()) {
+                onCreateMemoDynamic(memoConfig, memoValueSync, 0);
+            }
+        } else {
+            if (memoConfig != null && memoConfig.size() > 0) {
+                onCreateMemoDynamic(memoConfig, memoValue, 0);
+            }
         }
+    }
+
+    public List<MemoDynamicResponse.UserMemoData.UserMemoValue> syncListMemo
+            (List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigs, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
+        boolean isSyncDone = true;
+        for (int i = 0; i < memoConfigs.size(); i++) {
+            MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = memoConfigs.get(i);
+            MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = memoValues.get(i);
+            if (!TextUtils.equals(memoConfig.getId(), memoValue.getId())) {
+                memoValues.remove(i);
+                isSyncDone = false;
+                break;
+            }
+
+        }
+        if (isSyncDone) {
+            syncListMemo(memoConfigs, memoValues);
+        }
+        return memoValues;
     }
 
     @Override
@@ -417,6 +444,7 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
 //                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
+                    onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
                 default:
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
@@ -568,7 +596,7 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
             }
         });
         title.setText(memoConfig.getTitle());
-        loopCreateMemoDynamic(viewSwitch, listMemoConfig, listValuesConfig, position + 1);
+        loopCreateMemoDynamic(viewSwitch, listMemoConfig, listValuesConfig, position);
     }
 
     /*

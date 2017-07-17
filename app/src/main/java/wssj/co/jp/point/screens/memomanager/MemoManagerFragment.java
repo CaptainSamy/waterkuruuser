@@ -163,11 +163,29 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     public void onGetMemoConfigSuccess(MemoDynamicResponse.UserMemoData userConfig) {
         if (userConfig == null) return;
         List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfig = userConfig.getListMemoConfig();
-        List<MemoDynamicResponse.UserMemoData.UserMemoValue> valuesConfig = userConfig.getListMemoValue();
-        if (memoConfig != null && memoConfig.size() > 0) {
-//            if (isAdded()) {
-            onCreateMemoDynamic(memoConfig, valuesConfig, 0);
-//            }
+        List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValue = userConfig.getListMemoValue();
+        if (memoConfig != null && memoValue != null && memoConfig.size() != memoValue.size()) {
+            syncListMemo(memoConfig, memoValue);
+        }
+        if (memoConfig != null && memoValue != null && memoConfig.size() == memoValue.size()) {
+            onCreateMemoDynamic(memoConfig, memoValue, 0);
+        }
+    }
+
+    public void syncListMemo(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigs, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
+        if (memoValues.size() == 0) return;
+        boolean isSyncDone = true;
+        for (int i = 0; i < memoConfigs.size(); i++) {
+            MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = memoConfigs.get(i);
+            MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = memoValues.get(i);
+            if (!TextUtils.equals(memoConfig.getId(), memoValue.getId())) {
+                memoValues.remove(i);
+                isSyncDone = false;
+                break;
+            }
+        }
+        if (!isSyncDone) {
+            syncListMemo(memoConfigs, memoValues);
         }
     }
 
@@ -458,6 +476,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
 //                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
+                    onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
                 default:
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
@@ -481,15 +500,13 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.slide_bottom_top);
         viewChild.startAnimation(animation);
         mParentViewMemoConfig.addView(viewChild);
-        new Handler().
+        new Handler().postDelayed(new Runnable() {
 
-                postDelayed(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
-                    }
-                }, Constants.MemoConfig.TIME_DELAY_SHOW_VIEW);
+            @Override
+            public void run() {
+                onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
+            }
+        }, Constants.MemoConfig.TIME_DELAY_SHOW_VIEW);
     }
 
     /*Handle create edit text*/
@@ -611,7 +628,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             }
         });
         title.setText(memoConfig.getTitle());
-        loopCreateMemoDynamic(viewSwitch, listMemoConfig, listValuesConfig, position + 1);
+        loopCreateMemoDynamic(viewSwitch, listMemoConfig, listValuesConfig, position);
     }
 
     /*
