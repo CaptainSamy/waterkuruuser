@@ -25,6 +25,8 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_EMAIL = "email";
 
+    private static final String KEY_LAST_SERVICE_ID = "last_service_company_id";
+
     private final SharedPreferencesHelper mSharedPreference;
 
     public SharedPreferencesModel(Context context) {
@@ -90,12 +92,21 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getString(KEY_EMAIL);
     }
 
+    public void putLastServiceId(int serviceId) {
+        mSharedPreference.put(KEY_LAST_SERVICE_ID, serviceId);
+    }
+
+    public int getLastServiceId() {
+        return mSharedPreference.getInt(KEY_LAST_SERVICE_ID);
+    }
+
     public void clearSession() {
         mSharedPreference.remove(KEY_SESSION);
         mSharedPreference.remove(KEY_SERVICE_ID);
         mSharedPreference.remove(KEY_SERVICE_COMPANY_ID);
         mSharedPreference.remove(KEY_USER_NAME);
         mSharedPreference.remove(KEY_EMAIL);
+        mSharedPreference.remove(KEY_LAST_SERVICE_ID);
 
     }
 

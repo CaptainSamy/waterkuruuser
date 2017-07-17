@@ -197,9 +197,14 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     @Override
     public void onGetListServicesSuccess(ListServiceResponse.ServiceData data) {
         List<String> list = new ArrayList<>();
+        int lastServiceId = getPresenter().onGetLastServiceId();
+        int position = 0;
         if (data != null && data.getListService() != null && data.getListService().size() > 0) {
             mListService = data.getListService();
             for (ListServiceResponse.Service services : mListService) {
+                if (services.getId() == lastServiceId) {
+                    position = mListService.indexOf(services);
+                }
                 list.add(services.getServiceName());
             }
         }
@@ -216,6 +221,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             }
         };
         mSpinnerServices.setAdapter(mAdapterSpNumWord);
+        mSpinnerServices.setSelection(position);
     }
 
     @Override

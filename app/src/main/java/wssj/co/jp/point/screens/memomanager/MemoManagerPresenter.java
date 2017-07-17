@@ -24,6 +24,10 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
         registerModel(new UtilsModel(view.getViewContext()));
     }
 
+    int onGetLastServiceId() {
+        return getModel(SharedPreferencesModel.class).getLastServiceId();
+    }
+
     void updateUserMemo(final int serviceId, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
         final String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
@@ -71,6 +75,7 @@ class MemoManagerPresenter extends FragmentPresenter<IMemoManagerView> {
     public void getMemoConfigByServiceId(int serviceId) {
         getView().showProgress();
         String token = getModel(SharedPreferencesModel.class).getToken();
+        getModel(SharedPreferencesModel.class).putLastServiceId(serviceId);
         getModel(UserMemoModel.class).getUserMemoConfig(token, serviceId, new UserMemoModel.IGetMemoConfigCallback() {
 
             @Override

@@ -209,11 +209,11 @@ public class MainActivity extends AppCompatActivity
                     .setGravity(EasyDialog.GRAVITY_BOTTOM)
                     .setBackgroundColor(MainActivity.this.getResources().getColor(android.R.color.white))
                     .setLocationByAttachedView(imageNotification)
-                    .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 350, getResources().getDisplayMetrics().widthPixels, 0)
-                    .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, 350, 0, -getResources().getDisplayMetrics().widthPixels)
+                    .setAnimationTranslationShow(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, getResources().getDisplayMetrics().widthPixels, 0)
+                    .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, 0, -getResources().getDisplayMetrics().widthPixels)
                     .setTouchOutsideDismiss(true)
                     .setMatchParent(false)
-                    .setMargin(Utils.convertDpToPixel(MainActivity.this, 80), 0, Utils.convertDpToPixel(MainActivity.this, 8), Utils.convertDpToPixel(MainActivity.this, 110))
+                    .setMargin(Utils.convertDpToPixel(MainActivity.this, Constants.MARGIN_LEFT), 0, Utils.convertDpToPixel(MainActivity.this, Constants.MARGIN_RIGHT), Utils.convertDpToPixel(MainActivity.this, Constants.MARGIN_BOTTOM))
                     .setOutsideColor(getResources().getColor(R.color.outside_color_trans));
 
         }
