@@ -65,7 +65,7 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
             mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
         }
 
-        void fillDataToView(final Context context, NotificationMessage notificationMessage) {
+        void fillDataToView(final Context context, final NotificationMessage notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
 
             if (notificationMessage.getMessage().length() > 100) {
@@ -100,7 +100,7 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
 
                                 }
                             });
-                            dialogRating.show(0, 0);
+                            dialogRating.show(0, notificationMessage.getStampId());
                         }
                     });
 
