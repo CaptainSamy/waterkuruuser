@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">イウンゴ </string>
 
+    <string name="facebook_app_id">324203298029083</string>
+
     <string name="success">成功</string>
     <string name="failure">エラーが発生しました</string>
     <string name="permission_denied">アクセス拒否</string>

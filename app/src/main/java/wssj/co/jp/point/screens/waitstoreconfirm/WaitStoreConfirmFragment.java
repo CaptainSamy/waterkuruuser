@@ -170,31 +170,32 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
             @Override
             public void onAnimateDone() {
-                Animation zoomInAnim = AnimationUtils.loadAnimation(getActivityContext(),
-                        R.anim.zoom_in);
-                zoomInAnim.setStartOffset(500);
-                mImageStore.setAnimation(zoomInAnim);
-                if (isAllowCheckIn) {
-                    mLayoutInfo.setVisibility(View.GONE);
-                    mExpandWaitingText.setVisibility(View.VISIBLE);
-                    mExpandWaitingText.setText(getString(R.string.expand_waiting_confirm_prepare_finish));
-                    mLayoutFinishWaiting.setVisibility(View.VISIBLE);
-                    mLayoutFinishWaiting.animate().alpha(1.0f).setDuration(1000);
-                    Animation zoomOutAnim = AnimationUtils.loadAnimation(getActivityContext(),
-                            R.anim.zoom_out);
-                    zoomOutAnim.setStartOffset(500);
-                    mLayoutFinishWaiting.startAnimation(zoomOutAnim);
-                    mHandler.postDelayed(new Runnable() {
+                if (isAdded()) {
+                    Animation zoomInAnim = AnimationUtils.loadAnimation(getActivityContext(), R.anim.zoom_in);
+                    zoomInAnim.setStartOffset(500);
+                    mImageStore.setAnimation(zoomInAnim);
+                    if (isAllowCheckIn) {
+                        mLayoutInfo.setVisibility(View.GONE);
+                        mExpandWaitingText.setVisibility(View.VISIBLE);
+                        mExpandWaitingText.setText(getString(R.string.expand_waiting_confirm_prepare_finish));
+                        mLayoutFinishWaiting.setVisibility(View.VISIBLE);
+                        mLayoutFinishWaiting.animate().alpha(1.0f).setDuration(1000);
+                        Animation zoomOutAnim = AnimationUtils.loadAnimation(getActivityContext(),
+                                R.anim.zoom_out);
+                        zoomOutAnim.setStartOffset(500);
+                        mLayoutFinishWaiting.startAnimation(zoomOutAnim);
+                        mHandler.postDelayed(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(KEY_STORE_NAME, mStoreName);
-                            getActivityCallback().displayScreen(IMainView.FRAGMENT_MANAGER_STAMP, true, false, bundle);
-                        }
-                    }, 2500);
-                } else {
-                    getActivityCallback().displayScreen(IMainView.FRAGMENT_SCANNER, true, false);
+                            @Override
+                            public void run() {
+                                Bundle bundle = new Bundle();
+                                bundle.putString(KEY_STORE_NAME, mStoreName);
+                                getActivityCallback().displayScreen(IMainView.FRAGMENT_MANAGER_STAMP, true, false, bundle);
+                            }
+                        }, 2500);
+                    } else {
+                        getActivityCallback().displayScreen(IMainView.FRAGMENT_SCANNER, true, false);
+                    }
                 }
             }
         });
