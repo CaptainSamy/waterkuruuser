@@ -70,7 +70,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setVibrate(pattern);
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     builder.setSound(alarmSound);
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
                         builder.setColor(getResources().getColor(R.color.colorCode));
                         builder.setSmallIcon(R.drawable.logo_app);
                     } else {

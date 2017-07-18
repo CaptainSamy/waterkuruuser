@@ -44,6 +44,7 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("type")
     private String mAction;
 
+    @SerializedName("stamp_id")
     private int mStampId;
 
     public NotificationMessage(long pushId, String title, String message, String action, int stampId) {

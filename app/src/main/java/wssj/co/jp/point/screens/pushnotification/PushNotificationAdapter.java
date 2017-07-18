@@ -88,7 +88,7 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
                     mButtonRating.setVisibility(View.GONE);
                     break;
                 case Constants.PushNotification.TYPE_REQUEST_REVIEW:
-                    mButtonRating.setVisibility(View.VISIBLE);
+//                    mButtonRating.setVisibility(View.VISIBLE);
                     mButtonRating.setOnClickListener(new View.OnClickListener() {
 
                         @Override

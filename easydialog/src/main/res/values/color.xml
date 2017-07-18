@@ -2,4 +2,5 @@
 <resources>
     <!-- 提示框的背景色 -->
     <color name="background_color_black">#bb000000</color>
+    <color name="colorBackground_Actionbar">#F5F5F5</color>
 </resources>

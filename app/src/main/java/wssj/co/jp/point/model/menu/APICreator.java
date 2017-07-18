@@ -30,7 +30,7 @@ final class APICreator {
 
     private static final String POLICY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-policy";
 
-    static GsonRequest<QAResponse> getListQA(String token, int page, int limit, final Response.Listener<QAResponse> responseListener,
+    static GsonRequest<QAResponse> getListQA(String token, final int page, int limit, final Response.Listener<QAResponse> responseListener,
                                              final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -38,12 +38,24 @@ final class APICreator {
 
         String url = GET_LIST_QA_URL + "?page=" + page + "&limit=" + limit;
         ResponseListener<QAResponse> listener = new ResponseListener<>(TAG, "#getListQA", responseListener, errorListener);
-        return new GsonJsonRequest<>(Request.Method.GET,
+        return new GsonJsonRequest<QAResponse>(Request.Method.POST,
                 url,
                 QAResponse.class,
                 headers,
                 listener,
-                listener);
+                listener) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> param = new HashMap<>();
+                /*
+                * 2 : Ios
+                * 3 : Android
+                * */
+                param.put("system", 3);
+                return param;
+            }
+        };
     }
 
     static GsonRequest<ResponseData> feedback(String token, final String feedback, final Response.Listener<ResponseData> responseListener,
