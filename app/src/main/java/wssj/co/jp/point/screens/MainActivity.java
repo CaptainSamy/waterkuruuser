@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity
             mRootViewNotification = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
             mTextNoItem = (TextView) mRootViewNotification.findViewById(R.id.textNoItem);
             mListViewNotification = (ListView) mRootViewNotification.findViewById(R.id.listView);
-
+            mListViewNotification.setVerticalScrollBarEnabled(false);
             mListViewNotification.setAdapter(mPushNotificationAdapter);
             mEasyDialog = new EasyDialog(MainActivity.this)
                     .setLayout(mRootViewNotification)
@@ -529,7 +529,8 @@ public class MainActivity extends AppCompatActivity
     public void onLogout() {
         clearBackStack();
         displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false);
-        mListNotification.clear();
+        if (mListNotification != null)
+            mListNotification.clear();
         isRequestFirstNotification = true;
         mToolbar.setNumberNotificationUnRead(0);
     }

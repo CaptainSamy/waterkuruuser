@@ -16,7 +16,6 @@ import java.util.List;
 
 import wssj.co.jp.point.R;
 import wssj.co.jp.point.model.firebase.NotificationMessage;
-import wssj.co.jp.point.screens.dialograting.DialogRating;
 import wssj.co.jp.point.utils.Constants;
 import wssj.co.jp.point.utils.Utils;
 
@@ -89,20 +88,20 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
                     break;
                 case Constants.PushNotification.TYPE_REQUEST_REVIEW:
 //                    mButtonRating.setVisibility(View.VISIBLE);
-                    mButtonRating.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            DialogRating dialogRating = new DialogRating(context, new DialogRating.IOnClickListenerRating() {
-
-                                @Override
-                                public void onButtonRating(float rating, String note, int currentPosition) {
-
-                                }
-                            });
-                            dialogRating.show(0, notificationMessage.getStampId());
-                        }
-                    });
+//                    mButtonRating.setOnClickListener(new View.OnClickListener() {
+//
+//                        @Override
+//                        public void onClick(View v) {
+//                            DialogRating dialogRating = new DialogRating(context, new DialogRating.IOnClickListenerRating() {
+//
+//                                @Override
+//                                public void onButtonRating(float rating, String note, int currentPosition) {
+//
+//                                }
+//                            });
+//                            dialogRating.show(0, notificationMessage.getStampId());
+//                        }
+//                    });
 
                     break;
                 default:

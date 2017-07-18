@@ -27,10 +27,10 @@
             android:id="@+id/title_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minLines="2"
             android:text="夏お得のキャンベーン AA1"
             android:textColor="@color/colorTextMain"
             android:textSize="12sp"
-            android:minLines="2"
             android:textStyle="bold"/>
 
         <RelativeLayout
