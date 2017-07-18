@@ -79,6 +79,7 @@
             android:textStyle="bold"/>
     </LinearLayout>
 
+
     <LinearLayout
         android:id="@+id/layoutOnline"
         android:layout_width="match_parent"

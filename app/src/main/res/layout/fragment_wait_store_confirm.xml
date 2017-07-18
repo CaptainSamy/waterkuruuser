@@ -29,7 +29,7 @@
             android:layout_marginTop="15dp">
 
 
-            <wssj.co.jp.point.widget.CircularProgressBar
+            <jp.co.wssj.iungo.widget.CircularProgressBar
                 android:id="@+id/circle_progress"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignWithParentIfMissing="true"
                 android:layout_centerInParent="true"
-                android:src="@drawable/logo_animation"
+                android:src="@drawable/logo_animation_be"
                 android:visibility="visible"/>
 
             <LinearLayout
