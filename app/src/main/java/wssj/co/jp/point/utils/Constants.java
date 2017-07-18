@@ -28,7 +28,7 @@ public final class Constants {
 
     public static final int DURATION_DIALOG_NOTIFICATION = 350;
 
-    public static final int MARGIN_LEFT = 120;
+    public static final int MARGIN_LEFT = 110;
 
     public static final int MARGIN_BOTTOM = 130;
 
