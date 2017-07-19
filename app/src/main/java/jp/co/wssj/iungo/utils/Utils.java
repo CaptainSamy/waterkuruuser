@@ -143,10 +143,11 @@ public final class Utils {
     }
 
     public static String convertLongToDate(long millis) {
+
         return String.format("%02d:%02d",
-                TimeUnit.MILLISECONDS.toHours(millis),
-                TimeUnit.MILLISECONDS.toMinutes(millis) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis))
+                TimeUnit.SECONDS.toHours(millis),
+                TimeUnit.SECONDS.toMinutes(millis) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(millis))
         );
     }
 

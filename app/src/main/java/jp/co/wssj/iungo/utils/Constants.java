@@ -41,6 +41,14 @@ public final class Constants {
     private Constants() {
     }
 
+    public static final class Introduction {
+
+        public static final String TWITTER_KEY = "";
+
+        public static final String TWITTER_SECRET = "";
+
+    }
+
     public static final class CheckInStatus {
 
         public static final String STATUS_WAIT_CONFIRM = "wait_confirm";

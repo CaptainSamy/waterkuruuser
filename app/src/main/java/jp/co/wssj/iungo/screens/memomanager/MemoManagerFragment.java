@@ -174,19 +174,22 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     public void syncListMemo(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigs, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
         if (memoValues.size() == 0) return;
-        boolean isSyncDone = true;
-        for (int i = 0; i < memoConfigs.size(); i++) {
-            MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = memoConfigs.get(i);
-            MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = memoValues.get(i);
-            if (!TextUtils.equals(memoConfig.getId(), memoValue.getId())) {
-                memoValues.remove(i);
-                isSyncDone = false;
-                break;
+
+        List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigsTemp = new ArrayList<>();
+        List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValueTemp = new ArrayList<>();
+        for (MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig : memoConfigs) {
+            for (MemoDynamicResponse.UserMemoData.UserMemoValue memoValue : memoValues) {
+                if (TextUtils.equals(memoConfig.getId(), memoValue.getId())) {
+                    memoConfigsTemp.add(memoConfig);
+                    memoValueTemp.add(memoValue);
+                }
             }
         }
-        if (!isSyncDone) {
-            syncListMemo(memoConfigs, memoValues);
-        }
+        memoConfigs.clear();
+        memoConfigs.addAll(memoConfigsTemp);
+        memoValues.clear();
+        memoValues.addAll(memoValueTemp);
+
     }
 
     @Override

@@ -34,7 +34,7 @@ public class ConfirmCheckInResponse extends ResponseData<ConfirmCheckInResponse.
         @SerializedName("number_of_waiting_people")
         private int mNumberPeople;
 
-        @SerializedName("expire_time")
+        @SerializedName("waiting_time")
         private long mTimeWaiting;
 
         @SerializedName("numerical_session")

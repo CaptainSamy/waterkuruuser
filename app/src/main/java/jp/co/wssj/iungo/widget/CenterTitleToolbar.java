@@ -6,6 +6,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -102,7 +103,12 @@ public class CenterTitleToolbar extends Toolbar {
     public void setNumberNotificationUnRead(int number) {
         if (number > 0) {
             mCountNotification.setVisibility(VISIBLE);
-            mCountNotification.setText(String.valueOf(number));
+            String text = String.valueOf(number);
+            if (number > 99) {
+                number = 99;
+                text = number + "<sup>+</sup>";
+            }
+            mCountNotification.setText(Html.fromHtml(text));
         } else {
             mCountNotification.setVisibility(GONE);
         }

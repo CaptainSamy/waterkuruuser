@@ -134,6 +134,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         rotateAnimation.setRepeatCount(Animation.INFINITE);
         rotateAnimation.setFillAfter(true);
         rotateAnimation.setFillEnabled(true);
+
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -211,9 +212,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mStoreName = bundle.getString(KEY_STORE_NAME);
             mNumberCustomer = bundle.getInt(KEY_NUMBER_PEOPLE);
             mPositionCustomer = bundle.getInt(KEY_NUMBER_SESSION);
-            mTimeWaiting = bundle.getLong(KEY_TIME_WAITING) - System.currentTimeMillis();
+            mTimeWaiting = bundle.getLong(KEY_TIME_WAITING);
             mTextStoreName.setText(mStoreName == null ? Constants.EMPTY_STRING : mStoreName);
-
             mTextPositionCustomer.setText(String.valueOf(mPositionCustomer));
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
             String time = Utils.convertLongToDate(mTimeWaiting);
@@ -229,10 +229,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
         if (data != null) {
             mNumberCustomer = data.getNumberPeople();
             mPositionCustomer = data.getNumberSession();
-            mTimeWaiting = data.getTimeWaiting() - System.currentTimeMillis();
-            if (mTimeWaiting < 0) {
-                mTimeWaiting = 0;
-            }
+            mTimeWaiting = data.getTimeWaiting();
             mTextPositionCustomer.setText(String.valueOf(mPositionCustomer));
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
             String time = Utils.convertLongToDate(mTimeWaiting);

@@ -36,6 +36,7 @@ class ListCardPresenter extends FragmentPresenter<IListCardView> {
                     getView().hideListUnusedCard();
                 }
                 List<CardData> canUseList = Utils.getListCardByType(cards, Constants.CardTypes.CARD_TYPE_CAN_USE);
+
                 if (!canUseList.isEmpty()) {
                     getView().showListCanUseCard(canUseList);
                 } else {
@@ -43,7 +44,7 @@ class ListCardPresenter extends FragmentPresenter<IListCardView> {
                 }
                 List<CardData> usedList = Utils.getListCardByType(cards, Constants.CardTypes.CARD_TYPE_USED);
                 if (!usedList.isEmpty()) {
-                    getView().showListUsedCard(usedList,page,totalPage);
+                    getView().showListUsedCard(usedList, page, totalPage);
                 } else {
                     getView().hideListUsedCard();
                 }

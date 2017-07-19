@@ -38,7 +38,6 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                         Bundle bundle = new Bundle();
                         getModel(SharedPreferencesModel.class).putServiceId(data.getServiceId());
                         getModel(SharedPreferencesModel.class).putServiceCompanyId(data.getServiceCompanyId());
-
                         switch (data.getStatus()) {
                             case Constants.CheckInStatus.STATUS_CHECKED_IN:
                                 bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, data.getStoreName());
@@ -46,6 +45,7 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                                 break;
                             case Constants.CheckInStatus.STATUS_WAIT_CONFIRM:
                                 bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, data.getStoreName());
+                                bundle.putString(WaitStoreConfirmFragment.KEY_STATUS_CHECK_IN, data.getStatus());
                                 bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
                                 bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());
                                 bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_SESSION, data.getNumberSession());

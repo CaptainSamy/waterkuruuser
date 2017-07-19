@@ -1,10 +1,17 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import android.util.Log;
 import android.view.View;
+
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 5/6/2017.
@@ -65,6 +72,13 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     @Override
     protected void initData() {
         super.initData();
+        TwitterConfig config = new TwitterConfig.Builder(getActivityContext())
+                .logger(new DefaultLogger(Log.DEBUG))
+                .twitterAuthConfig(new TwitterAuthConfig(Constants.Introduction.TWITTER_KEY, Constants.Introduction.TWITTER_SECRET))
+                .debug(true)
+                .build();
+        Twitter.initialize(config);
+
         getPresenter().onCreate();
     }
 
