@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -71,16 +72,17 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setVibrate(pattern);
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     builder.setSound(alarmSound);
-//                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-////                        builder.setColor(getResources().getColor(R.color.colorCode));
-////                        builder.setSmallIcon(R.drawable.icon_notification);
-//                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
-//                        builder.setLargeIcon(largeIcon);
-//                    } else {
-//                        builder.setSmallIcon(R.mipmap.logo_app);
-//                    }
-                    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
-                    builder.setSmallIcon(R.mipmap.logo_app).setLargeIcon(largeIcon);
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        builder.setColor(getResources().getColor(R.color.colorMain));
+                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
+                        builder.setLargeIcon(largeIcon);
+                        builder.setSmallIcon(R.drawable.image_notification);
+                    } else {
+                        builder.setSmallIcon(R.mipmap.logo_app);
+                    }
+//                    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
+//                    builder.setSmallIcon(R.mipmap.logo_app).setLargeIcon(largeIcon);
+//                    builder.setLargeIcon(largeIcon);
 
                     Intent intent = new Intent(FirebaseMsgService.this, MainActivity.class);
                     intent.putExtra(EXTRA_NOTIFICATION, notificationMessage);

@@ -1,8 +1,8 @@
 package jp.co.wssj.iungo.screens.pushnotification.detail;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import jp.co.wssj.iungo.R;
@@ -27,8 +27,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     public static final String NOTIFICATION_SHOW_RATING = "show_rating";
 
     private TextView mTitle, mBody, mTime;
-
-    private ImageView mImageCompany;
 
     private TextView mButtonRating;
 
@@ -81,7 +79,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mBody = (TextView) rootView.findViewById(R.id.body_notification);
         mTime = (TextView) rootView.findViewById(R.id.time_notification);
         mButtonRating = (TextView) rootView.findViewById(R.id.buttonRating);
-        mImageCompany = (ImageView) rootView.findViewById(R.id.iconNotification);
     }
 
     @Override
@@ -104,12 +101,11 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
                 getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
-                Utils.fillImage(getActivityContext(), mNotificationMessage.getLogo(), mImageCompany);
-                mTitle.setText(mNotificationMessage.getTitle());
-                mBody.setText(mNotificationMessage.getMessage());
+                mTitle.setText(mNotificationMessage.getTitle().trim());
+                mBody.setText(mNotificationMessage.getMessage().trim());
+                mBody.setMovementMethod(new ScrollingMovementMethod());
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime());
                 mTime.setText(time);
-                Utils.fillImage(getActivityContext(), mNotificationMessage.getLogo(), mImageCompany);
                 Logger.d("TAG", mNotificationMessage.getAction());
                 switch (mNotificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_NOTIFICATION:

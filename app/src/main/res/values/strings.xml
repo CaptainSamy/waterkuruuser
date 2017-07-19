@@ -16,7 +16,7 @@
     <string name="ucrop_label_edit_photo" tools:override="true">エリア選択</string>
     <!--Splash fragment-->
     <string name="introduction_app">アプリの紹介</string>
-    <string name="how_to_used_1"><b>スマホでかんたん<font color="#D9594C">ツナグ</font>アプリ</b></string>
+    <string name="how_to_used_1">スマホでかんたん<font color='red'>ツナグ</font>アプリ</string>
     <string name="how_to_used_2">ウォーターメルは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
 
     <!--Login fragment-->

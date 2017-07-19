@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.screens.introduction;
 
 import android.graphics.Color;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +18,8 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     private static final String TAG = "IntroductionFragment";
 
     private TextView mButtonIntroduction, mButtonLogin, mButtonRegister, mButtonHowToUsed;
+
+    private TextView mTextHowToUse;
 
     @Override
     public int getFragmentId() {
@@ -85,6 +88,9 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     protected void initData() {
         super.initData();
+        String text = "スマホでかんたん<font color='#D9594C'>ツナグ</font>アプリ";
+        mButtonHowToUsed.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+
 
     }
 
