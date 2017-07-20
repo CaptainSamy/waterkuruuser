@@ -57,6 +57,8 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
     private LoginButton mButtonLoginFacebook;
 
+    private CallbackManager mCallbackManager;
+
     @Override
     public int getFragmentId() {
         return IMainView.FRAGMENT_INTRODUCTION_SCREEN;
@@ -117,6 +119,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
         mImageSignInGoogle = (ImageView) rootView.findViewById(R.id.imageSignInGoogle);
         mButtonLoginTwitter = (TwitterLoginButton) rootView.findViewById(R.id.buttonLoginTwitter);
         mButtonLoginFacebook = (LoginButton) rootView.findViewById(R.id.buttonLoginFacebook);
+        mButtonLoginFacebook.setFragment(this);
 
     }
 
@@ -127,6 +130,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
         mButtonHowToUsed.setOnClickListener(this);
         mImageLoginTwitter.setOnClickListener(this);
         mImageSignInGoogle.setOnClickListener(this);
+        mImageLoginFacebook.setOnClickListener(this);
     }
 
     @Override
@@ -182,23 +186,28 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     * Handle Login Facebook
     * */
     private void onLoginFacebook() {
-        CallbackManager callbackManager = CallbackManager.Factory.create();
+//        Check login facebook
+//        Profile profile = Profile.getCurrentProfile();
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
-        mButtonLoginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+        mCallbackManager = CallbackManager.Factory.create();
+        mButtonLoginFacebook.setReadPermissions("email", "public_profile");
+        mButtonLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                Logger.d("onLoginFacebook", "onSuccess");
             }
 
             @Override
             public void onCancel() {
-
+                Logger.d("onLoginFacebook", "onCancel");
             }
 
             @Override
             public void onError(FacebookException error) {
-
+                Logger.d("onLoginFacebook", "onError");
             }
         });
     }
@@ -267,6 +276,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case CODE_LOGIN_FACEBOOK:
                 break;

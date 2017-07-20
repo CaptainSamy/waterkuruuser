@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.screens.pushnotification.detail;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
@@ -104,7 +103,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             if (mNotificationMessage != null) {
                 getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
                 mTitle.setText(mNotificationMessage.getTitle().trim());
-                mBody.setText(Html.fromHtml(mNotificationMessage.getMessage().trim()));
+                mBody.setText(mNotificationMessage.getMessage().trim());//Html.fromHtml(
                 mBody.setMovementMethod(new ScrollingMovementMethod());
                 mBody.setMovementMethod(LinkMovementMethod.getInstance());
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime());

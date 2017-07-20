@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.model.memo;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.GsonSerializable;
@@ -14,7 +15,7 @@ import jp.co.wssj.iungo.model.ResponseData;
 
 public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMemoData> {
 
-    public class UserMemoData implements GsonSerializable {
+    public static class UserMemoData implements GsonSerializable {
 
         @SerializedName("memo_config")
         private List<UserMemoConfig> mListMemoConfig;
@@ -112,7 +113,7 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
 
         }
 
-        public class UserMemoValue {
+        public static class UserMemoValue {
 
             @SerializedName("id")
             @Expose
@@ -142,7 +143,19 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 this.value = value;
             }
 
-            public class Value {
+            public UserMemoValue(String id, int type) {
+                this.id = id;
+                this.type = type;
+                this.value = new Value();
+            }
+
+            public UserMemoValue(String id, int type, int numbImage) {
+                this.id = id;
+                this.type = type;
+                this.value = new Value();
+            }
+
+            public static class Value {
 
                 /*
                 * Edit Text
@@ -169,6 +182,20 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 * */
                 @SerializedName("images")
                 List<Image> listImage;
+
+                public Value() {
+                    value = "";
+                    status = false;
+                    selectedItem = 0;
+                    listImage = new ArrayList<>();
+                }
+
+                public Value(int numbImage) {
+                    this();
+                    for (int i = 1; i <= numbImage; i++) {
+                        listImage.add(new Image("photo_" + i));
+                    }
+                }
 
                 public String getValue() {
                     return value;
@@ -203,6 +230,10 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 }
 
                 public class Image {
+
+                    Image(String imageId) {
+                        this.imageId = imageId;
+                    }
 
                     @SerializedName("id")
                     private String imageId;

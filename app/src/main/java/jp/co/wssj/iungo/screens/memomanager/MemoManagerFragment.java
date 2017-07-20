@@ -175,18 +175,24 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     public void syncListMemo(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigs, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
         if (memoValues.size() == 0) return;
 
-        List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigsTemp = new ArrayList<>();
         List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValueTemp = new ArrayList<>();
         for (MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig : memoConfigs) {
+            boolean isExistValue = false;
             for (MemoDynamicResponse.UserMemoData.UserMemoValue memoValue : memoValues) {
-                if (TextUtils.equals(memoConfig.getId(), memoValue.getId())) {
-                    memoConfigsTemp.add(memoConfig);
+                if (TextUtils.equals(memoConfig.getId(), memoValue.getId()) && memoConfig.getType() == memoValue.getType()) {
                     memoValueTemp.add(memoValue);
+                    isExistValue = true;
                 }
             }
+            if (!isExistValue) {
+                if (memoConfig.getType() == Constants.MemoConfig.TYPE_IMAGE) {
+                    memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType(), memoConfig.getConfig().getNumberImages()));
+                } else {
+                    memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType()));
+                }
+
+            }
         }
-        memoConfigs.clear();
-        memoConfigs.addAll(memoConfigsTemp);
         memoValues.clear();
         memoValues.addAll(memoValueTemp);
 

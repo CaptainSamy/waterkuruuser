@@ -1,5 +1,7 @@
 package jp.co.wssj.iungo.screens.about;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -59,6 +61,14 @@ public class AboutFragment extends BaseFragment<IAboutView, AboutPresenter> impl
 
     @Override
     protected void initData() {
-        mVersion.setText(getString(R.string.content_version, "1.0.0"));
+
+        PackageInfo pInfo;
+        try {
+            pInfo = getActivityContext().getPackageManager().getPackageInfo(getActivityContext().getPackageName(), 0);
+            String version = pInfo.versionName;
+            mVersion.setText(getString(R.string.content_version, version));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

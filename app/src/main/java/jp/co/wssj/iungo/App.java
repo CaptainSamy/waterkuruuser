@@ -1,8 +1,9 @@
 package jp.co.wssj.iungo;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.twitter.sdk.android.core.Twitter;
 
@@ -12,7 +13,7 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by HieuPT on 5/9/2017.
  */
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     private static final String TAG = "Application";
 
@@ -28,7 +29,8 @@ public class App extends Application {
         setInstance(this);
         logToken();
         Twitter.initialize(this);
-        FacebookSdk.sdkInitialize(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     private void logToken() {

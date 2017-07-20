@@ -167,37 +167,38 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
         if (userConfig == null) return;
         List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfig = userConfig.getListMemoConfig();
         List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValue = userConfig.getListMemoValue();
-
-        List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValueSync;
         if (memoConfig != null && memoValue != null && memoConfig.size() != memoValue.size()) {
-            memoValueSync = syncListMemo(memoConfig, memoValue);
-            if (memoValueSync != null && memoValueSync.size() == memoConfig.size()) {
-                onCreateMemoDynamic(memoConfig, memoValueSync, 0);
-            }
-        } else {
-            if (memoConfig != null && memoConfig.size() > 0) {
-                onCreateMemoDynamic(memoConfig, memoValue, 0);
-            }
+            syncListMemo(memoConfig, memoValue);
+        }
+        if (memoConfig != null && memoValue != null && memoConfig.size() == memoValue.size()) {
+            onCreateMemoDynamic(memoConfig, memoValue, 0);
         }
     }
 
-    public List<MemoDynamicResponse.UserMemoData.UserMemoValue> syncListMemo
-            (List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigs, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
-        boolean isSyncDone = true;
-        for (int i = 0; i < memoConfigs.size(); i++) {
-            MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = memoConfigs.get(i);
-            MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = memoValues.get(i);
-            if (!TextUtils.equals(memoConfig.getId(), memoValue.getId())) {
-                memoValues.remove(i);
-                isSyncDone = false;
-                break;
-            }
+    public void syncListMemo(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> memoConfigs, List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValues) {
+        if (memoValues.size() == 0) return;
 
+        List<MemoDynamicResponse.UserMemoData.UserMemoValue> memoValueTemp = new ArrayList<>();
+        for (MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig : memoConfigs) {
+            boolean isExistValue = false;
+            for (MemoDynamicResponse.UserMemoData.UserMemoValue memoValue : memoValues) {
+                if (TextUtils.equals(memoConfig.getId(), memoValue.getId()) && memoConfig.getType() == memoValue.getType()) {
+                    memoValueTemp.add(memoValue);
+                    isExistValue = true;
+                }
+            }
+            if (!isExistValue) {
+                if (memoConfig.getType() == Constants.MemoConfig.TYPE_IMAGE) {
+                    memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType(), memoConfig.getConfig().getNumberImages()));
+                } else {
+                    memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType()));
+                }
+
+            }
         }
-        if (isSyncDone) {
-            syncListMemo(memoConfigs, memoValues);
-        }
-        return memoValues;
+        memoValues.clear();
+        memoValues.addAll(memoValueTemp);
+
     }
 
     @Override

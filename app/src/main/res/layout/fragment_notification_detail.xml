@@ -52,7 +52,6 @@
         android:layout_centerVertical="true"
         android:autoLink="web"
         android:background="@drawable/border_text_view"
-        android:elevation="10dp"
         android:padding="8dp"
         android:scrollbars="vertical"
         android:text="XXXXXXXXXX　"

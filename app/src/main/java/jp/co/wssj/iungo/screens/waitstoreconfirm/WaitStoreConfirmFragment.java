@@ -213,6 +213,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mNumberCustomer = bundle.getInt(KEY_NUMBER_PEOPLE);
             mPositionCustomer = bundle.getInt(KEY_NUMBER_SESSION);
             mTimeWaiting = bundle.getLong(KEY_TIME_WAITING);
+            Logger.d(TAG, "initData " + mTimeWaiting);
             mTextStoreName.setText(mStoreName == null ? Constants.EMPTY_STRING : mStoreName);
             mTextPositionCustomer.setText(String.valueOf(mPositionCustomer));
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
@@ -230,6 +231,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mNumberCustomer = data.getNumberPeople();
             mPositionCustomer = data.getNumberSession();
             mTimeWaiting = data.getTimeWaiting();
+            Logger.d(TAG, "recheckStatus " + mTimeWaiting);
             mTextPositionCustomer.setText(String.valueOf(mPositionCustomer));
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
             String time = Utils.convertLongToDate(mTimeWaiting);
