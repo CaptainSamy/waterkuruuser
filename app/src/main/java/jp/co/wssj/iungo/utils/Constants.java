@@ -38,6 +38,12 @@ public final class Constants {
 
     public static final String SPLIT = "\\.";
 
+    public static final int TIME_OUT_DEFAULT = 5000;
+
+    public static final int TIME_OUT_CUSTOM = 60000;
+
+    public static final String URL_CONTACT = BASE_URL_AWS + "/api/client/users/save-user-contact";
+
     private Constants() {
     }
 

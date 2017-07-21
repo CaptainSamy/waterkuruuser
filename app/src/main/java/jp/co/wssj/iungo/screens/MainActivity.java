@@ -107,6 +107,10 @@ public class MainActivity extends AppCompatActivity
 
     boolean isRequestFirstNotification = true;
 
+    private ImageView mImageMenu;
+
+    private TextView mTextUserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +151,9 @@ public class MainActivity extends AppCompatActivity
     private void initView() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = mNavigationView.getHeaderView(0);
+        mImageMenu = (ImageView) header.findViewById(R.id.imageMenu);
+        mTextUserName = (TextView) header.findViewById(R.id.textUserName);
         mNavigationView.setItemIconTintList(null);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNavigationView.setItemIconTintList(null);
@@ -155,7 +162,6 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setNavigationIcon(R.drawable.ic_back);
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
-
         imageNotification = (ImageView) findViewById(R.id.iconTest);
     }
 
@@ -512,6 +518,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
+                bundle.putBoolean(PushNotificationDetailFragment.FLAG_CONVERT_TIME, true);
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             } else {
@@ -533,6 +540,7 @@ public class MainActivity extends AppCompatActivity
             mListNotification.clear();
         isRequestFirstNotification = true;
         mToolbar.setNumberNotificationUnRead(0);
+        mTextUserName.setText(Constants.EMPTY_STRING);
     }
 
     @Override
@@ -540,6 +548,9 @@ public class MainActivity extends AppCompatActivity
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
 
+            if (mTextUserName != null && TextUtils.isEmpty(mTextUserName.getText().toString())) {
+                mTextUserName.setText(mPresenter.getUserName());
+            }
             if (fragment instanceof HomeFragment && isRequestFirstNotification) {
                 isRequestFirstNotification = false;
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);

@@ -295,8 +295,13 @@ public final class Utils {
         return prettyTime.format(calendar.getTime());
     }
 
-    public static String convertLongToTime(long time) {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    public static String convertLongToTime(long time, boolean isConvertGMT) {
+        Calendar calendar;
+        if (isConvertGMT) {
+            calendar = Calendar.getInstance();
+        } else {
+            calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        }
         calendar.setTimeInMillis(time);
 
         return String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.HOUR_OF_DAY))

@@ -2,6 +2,7 @@ package jp.co.wssj.iungo.screens.termofservice.fragment;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import jp.co.wssj.iungo.R;
@@ -76,9 +77,10 @@ public class TermOfServiceFragment extends BaseFragment<ITermOfServicesView, Ter
     @Override
     public void onGetTermOfServiceSuccess(String html) {
         if (!TextUtils.isEmpty(html)) {
-            mContentTermOfService.getSettings().setJavaScriptEnabled(true);
-            mContentTermOfService.getSettings().setBuiltInZoomControls(true);
-            mContentTermOfService.getSettings().setDisplayZoomControls(false);
+            WebSettings webSettings = mContentTermOfService.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setBuiltInZoomControls(true);
+            webSettings.setDisplayZoomControls(false);
             mContentTermOfService.loadDataWithBaseURL("", html, "text/html", "UTF-8", "");
         }
     }

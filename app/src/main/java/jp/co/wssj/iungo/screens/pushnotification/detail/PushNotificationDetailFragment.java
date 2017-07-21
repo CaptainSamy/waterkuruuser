@@ -27,6 +27,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     public static final String NOTIFICATION_SHOW_RATING = "show_rating";
 
+    public static final String FLAG_CONVERT_TIME = "convert_time";
+
     private TextView mTitle, mBody, mTime;
 
     private TextView mButtonRating;
@@ -99,6 +101,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         Bundle bundle = getArguments();
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
+
+            boolean isConvert = bundle.getBoolean(FLAG_CONVERT_TIME, false);
             boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
                 getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
@@ -106,7 +110,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 mBody.setText(mNotificationMessage.getMessage().trim());//Html.fromHtml(
                 mBody.setMovementMethod(new ScrollingMovementMethod());
                 mBody.setMovementMethod(LinkMovementMethod.getInstance());
-                String time = Utils.convertLongToTime(mNotificationMessage.getPushTime());
+                String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isConvert);
                 mTime.setText(time);
                 Logger.d("TAG", mNotificationMessage.getAction());
                 switch (mNotificationMessage.getAction()) {

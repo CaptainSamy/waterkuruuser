@@ -75,4 +75,8 @@ class MainPresenter extends BasePresenter<IMainView> {
             });
         }
     }
+
+    public String getUserName() {
+        return getModel(SharedPreferencesModel.class).getUserName();
+    }
 }
