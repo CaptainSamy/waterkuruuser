@@ -32,6 +32,8 @@ final class APICreator {
 
     private static final String CHANGE_PASSWORD_URL = Constants.BASE_URL_AWS + "/api/client/users/change-password";
 
+    private static final String REMOVE_DEVICE_TOKEN = Constants.BASE_URL_AWS + "/api/client/users/remove-device-token";
+
     public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userName, final String password, final String name, final String email, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -210,6 +212,30 @@ final class APICreator {
                 Map<String, Object> params = new HashMap<>();
                 params.put("old_password", currentPassword);
                 params.put("new_password", newPassword);
+                return params;
+            }
+
+
+        };
+    }
+
+    static GsonRequest<ResponseData> removeDeviceToken(String token, final String deviceId, final Response.Listener<ResponseData> responseListener,
+                                                       final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        ResponseListener<ResponseData> listener = new ResponseListener<>(TAG, "removeDeviceToken", responseListener, errorListener);
+        return new GsonJsonRequest<ResponseData>(Request.Method.POST,
+                REMOVE_DEVICE_TOKEN,
+                ResponseData.class,
+                headers,
+                listener,
+                listener) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> params = new HashMap<>();
+                params.put("device_id", deviceId);
                 return params;
             }
 

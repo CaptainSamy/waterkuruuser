@@ -592,7 +592,7 @@ public class MainActivity extends AppCompatActivity
 
     private void replaceFragment(BaseFragment fragment, boolean hasAnimation, boolean addToBackStack) {
         if (fragment != null && !isFinishing()) {
-            if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId()) {
+            if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId() || fragment instanceof PushNotificationDetailFragment) {
                 mFragmentBackStackManager.replaceFragment(fragment, hasAnimation, addToBackStack);
             }
         }

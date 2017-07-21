@@ -330,9 +330,11 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        if (mGoogleApiClient != null) {
             mGoogleApiClient.stopAutoManage(getActivity());
-            mGoogleApiClient.disconnect();
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.disconnect();
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.model.auth;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -66,6 +67,13 @@ public class AuthModel extends BaseModel {
 
         void onChangePasswordFailure(String message);
 
+    }
+
+    public interface IOnRemoveDeviceTokenCallback {
+
+        void onRemoveDeviceTokenSuccess();
+
+        void onRemoveDeviceTokenFailure();
     }
 
     private static final String TAG = "AuthModel";
@@ -343,6 +351,32 @@ public class AuthModel extends BaseModel {
         } else {
             callback.onValidateFailure(isValid);
         }
+    }
+
+    public void removeDeviceToken(String token) {
+        String androidId = Settings.Secure.getString(getContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+        Request removeDeviceToken = APICreator.removeDeviceToken(token, androidId,
+                new Response.Listener<ResponseData>() {
+
+                    @Override
+                    public void onResponse(ResponseData response) {
+                        if (response.isSuccess()) {
+                            Logger.d(TAG, "#removeDeviceToken => success");
+                        } else {
+                            Logger.d(TAG, "#removeDeviceToken => failure");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#removeDeviceToken => onErrorResponse");
+                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                    }
+                });
+        VolleySequence.getInstance().addRequest(removeDeviceToken);
     }
 
     private boolean isEmailValid(CharSequence email) {

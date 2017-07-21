@@ -307,7 +307,7 @@ public final class Utils {
     }
 
     public static void fillImage(Context context, String imgPath, final ImageView imageView) {
-        if (TextUtils.isEmpty(imgPath)) return;
+        if (TextUtils.isEmpty(imgPath) || imageView == null) return;
         Glide.with(context)
                 .load(imgPath)
                 .skipMemoryCache(false)

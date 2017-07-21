@@ -30,10 +30,12 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
     void onHomeNavigationButtonClicked() {
         String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
+            getView().showProgress();
             getModel(CheckInModel.class).getCheckInStatus(token, new CheckInModel.IGetCheckInStatusCallback() {
 
                 @Override
                 public void onCheckInStatusSuccess(CheckInStatusResponse.CheckInStatusData data) {
+                    getView().hideProgress();
                     if (data != null) {
                         Bundle bundle = new Bundle();
                         getModel(SharedPreferencesModel.class).putServiceId(data.getServiceId());
@@ -56,12 +58,14 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                                 break;
                         }
                     } else {
+                        getView().hideProgress();
                         displayScannerCode();
                     }
                 }
 
                 @Override
                 public void onCheckInStatusFailure(ErrorMessage errorMessage) {
+                    getView().hideProgress();
                     displayScannerCode();
                 }
             });

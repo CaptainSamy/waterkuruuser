@@ -27,7 +27,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     }
 
     public void refreshData(List<CardData> cards) {
-        if (cards != null) {
+        if (cards != null && mCards != null) {
             mCards.clear();
             mCards.addAll(cards);
             notifyDataSetChanged();

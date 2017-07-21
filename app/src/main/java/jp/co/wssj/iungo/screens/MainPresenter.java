@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import java.util.List;
 
+import jp.co.wssj.iungo.model.auth.AuthModel;
 import jp.co.wssj.iungo.model.checkin.CheckInModel;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
@@ -22,6 +23,7 @@ class MainPresenter extends BasePresenter<IMainView> {
         registerModel(new UtilsModel(view.getViewContext()));
         registerModel(new CheckInModel(view.getViewContext()));
         registerModel(new PushNotificationModel(view.getViewContext()));
+        registerModel(new AuthModel(view.getViewContext()));
     }
 
     void onCreate() {
@@ -33,8 +35,11 @@ class MainPresenter extends BasePresenter<IMainView> {
     }
 
     void onLogout() {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getModel(AuthModel.class).removeDeviceToken(token);
         getModel(SharedPreferencesModel.class).clearAll();
         getView().onLogout();
+
     }
 
     void onOpenDrawableLayout() {
