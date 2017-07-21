@@ -13,6 +13,14 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
+    signingConfigs {
+        product {
+            storeFile file('keystore/waterkuru.jks')
+            storePassword 'VN201501'
+            keyAlias 'waterkuru'
+            keyPassword 'VN201501'
+        }
+    }
     productFlavors {
         development {
             applicationId "jp.co.wssj.iungo"
@@ -22,6 +30,7 @@ android {
             versionCode 5
             versionName "1.0.4.dev"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            signingConfig signingConfigs.product
         }
         product {
             applicationId "jp.co.wssj.iungo"
@@ -31,6 +40,7 @@ android {
             versionCode 5
             versionName "1.0.4"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+            signingConfig signingConfigs.product
         }
     }
     buildTypes {
