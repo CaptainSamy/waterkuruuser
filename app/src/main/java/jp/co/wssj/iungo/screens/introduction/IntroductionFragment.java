@@ -9,9 +9,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -187,8 +189,8 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     * */
     private void onLoginFacebook() {
 //        Check login facebook
-//        Profile profile = Profile.getCurrentProfile();
-//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        Profile profile = Profile.getCurrentProfile();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
 
 
         mCallbackManager = CallbackManager.Factory.create();
@@ -236,7 +238,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
     public void onLoginGoogle() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
+                .requestEmail().requestIdToken(getString(R.string.server_client_id))
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(getActivityContext())
                 .enableAutoManage(getActivity(), this)

@@ -3,6 +3,7 @@
 
     <string name="facebook_app_id">1604900466188470</string>
     <string name="fabook_login_protocol_scheme">fb1604900466188470</string>
+    <string name="server_client_id">610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com</string>
 
     <string name="success">成功</string>
     <string name="failure">エラーが発生しました</string>

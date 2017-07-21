@@ -2,6 +2,7 @@ package jp.co.wssj.iungo.utils;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -90,7 +91,12 @@ public final class VolleySequence {
     }
 
     public void addRequest(Request<?> request) {
-        request.setRetryPolicy(new DefaultRetryPolicy(5000, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        String url = request.getUrl();
+        int timeOut = Constants.TIME_OUT_DEFAULT;
+        if (TextUtils.equals(url, Constants.URL_CONTACT)) {
+            timeOut = Constants.TIME_OUT_CUSTOM;
+        }
+        request.setRetryPolicy(new DefaultRetryPolicy(timeOut, 1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         addRequest(request, 0);
     }
 

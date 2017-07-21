@@ -50,7 +50,6 @@ public class DialogRating extends BaseDialog<IDialogRatingView, DialogRatingPres
         setOwnerActivity((MainActivity) context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_rating);
-        setCanceledOnTouchOutside(false);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
         getWindow().setLayout((6 * width) / 7, LinearLayout.LayoutParams.WRAP_CONTENT);

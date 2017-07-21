@@ -109,9 +109,12 @@ public class ListStoreCheckedInAdapter extends BaseAdapter {
                 mNumberUsedStore.setText(mContext.getString(R.string.content_number_user_store, String.valueOf(store.getNumberCheckedIn())));
 
                 long timeLastUser = store.getTimeLastCheckedIn();
-                timeLastUser = timeLastUser < 0 ? 0 : timeLastUser;
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GTM"));
-                calendar.setTimeInMillis(timeLastUser);
+                if (timeLastUser == 0) {
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                } else {
+                    calendar.setTimeInMillis(timeLastUser);
+                }
                 String year = String.valueOf(calendar.get(Calendar.YEAR));
                 String month = Utils.get2NumbericString(calendar.get(Calendar.MONTH) + 1);
                 String day = Utils.get2NumbericString(calendar.get(Calendar.DAY_OF_MONTH));
