@@ -3,31 +3,33 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
 }
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
+        multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
     productFlavors {
         development {
-            applicationId "jp.co.wssj.waterkuru"
+            applicationId "jp.co.wssj.iungo"
             buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 3
-            versionName "1.0.2.dev"
+            versionCode 5
+            versionName "1.0.4.dev"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
         product {
-            applicationId "jp.co.wssj.waterkuru"
+            applicationId "jp.co.wssj.iungo"
             buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 3
-            versionName "1.0.2"
+            versionCode 5
+            versionName "1.0.4"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         }
     }
@@ -56,6 +58,7 @@ dependencies {
     compile "com.google.android.gms:play-services-location:10.2.6"
     compile 'com.github.esafirm.android-image-picker:imagepicker:1.7.2@aar'
     compile 'com.google.android.gms:play-services-vision:10.2.6'
+    compile 'com.google.android.gms:play-services-auth:10.2.6'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     testCompile 'junit:junit:4.12'
@@ -65,6 +68,10 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-core:2.4.4'
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
+    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.twitter.sdk.android:twitter:3.0.0'
+    compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
+    compile 'com.android.support:multidex:1.0.1'
     compile project(path: ':easydialog')
 }
 apply plugin: 'com.google.gms.google-services'

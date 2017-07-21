@@ -6,7 +6,7 @@
                 android:gravity="center"
                 android:padding="16dp">
 
-    <wssj.co.jp.point.widget.ImageRoundCorners
+    <jp.co.wssj.iungo.widget.ImageRoundCorners
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

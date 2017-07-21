@@ -21,7 +21,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <wssj.co.jp.point.widget.ImageRoundCorners
+            <jp.co.wssj.iungo.widget.ImageRoundCorners
                 android:id="@+id/ivLogoCompany"
                 android:layout_width="70dp"
                 android:layout_height="70dp"

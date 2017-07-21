@@ -1,6 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">イウンゴ </string>
 
+    <string name="facebook_app_id">1604900466188470</string>
+    <string name="fabook_login_protocol_scheme">fb1604900466188470</string>
+
     <string name="success">成功</string>
     <string name="failure">エラーが発生しました</string>
     <string name="permission_denied">アクセス拒否</string>
@@ -14,7 +17,7 @@
     <string name="ucrop_label_edit_photo" tools:override="true">エリア選択</string>
     <!--Splash fragment-->
     <string name="introduction_app">アプリの紹介</string>
-    <string name="how_to_used_1">スマホでかんたんツナグアプリ</string>
+    <string name="how_to_used_1">スマホでかんたん<font color='red'>ツナグ</font>アプリ</string>
     <string name="how_to_used_2">ウォーターメルは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
 
     <!--Login fragment-->
@@ -22,7 +25,7 @@
     <string name="login_password">パスワード</string>
     <string name="button_login">ログイン</string>
     <string name="cancel">キャンセル</string>
-    <string name="reset_password">パスワードが忘れた方</string>
+    <string name="reset_password"><u>パスワードが忘れた方</u></string>
     <string name="register_account">新規登録</string>
     <string name="user_login_not_null">ログインIDを入力してください。</string>
     <string name="password_login_not_null">パスワードを入力してください。</string>

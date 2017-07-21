@@ -9,6 +9,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/border_top_easy_dialog"
         android:gravity="center"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"

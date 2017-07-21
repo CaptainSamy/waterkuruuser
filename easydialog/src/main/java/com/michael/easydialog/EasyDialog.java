@@ -346,13 +346,6 @@ public class EasyDialog {
      */
     public EasyDialog setBackgroundColor(int color) {
         backgroundColor = color;
-        LayerDrawable drawableTriangle = (LayerDrawable) ivTriangle.getBackground();
-        GradientDrawable shapeTriangle = (GradientDrawable) (((RotateDrawable) drawableTriangle.findDrawableByLayerId(R.id.shape_id)).getDrawable());
-        if (shapeTriangle != null) {
-            shapeTriangle.setColor(color);
-        } else {
-            Toast.makeText(context, "shape is null", Toast.LENGTH_SHORT).show();
-        }
         GradientDrawable drawableRound = (GradientDrawable) llContent.getBackground();
         if (drawableRound != null) {
             drawableRound.setColor(color);
@@ -360,9 +353,21 @@ public class EasyDialog {
         return this;
     }
 
+    public EasyDialog setBackgroundTriangle(int color) {
+        LayerDrawable drawableTriangle = (LayerDrawable) ivTriangle.getBackground();
+        GradientDrawable shapeTriangle = (GradientDrawable) (((RotateDrawable) drawableTriangle.findDrawableByLayerId(R.id.shape_id)).getDrawable());
+        if (shapeTriangle != null) {
+            shapeTriangle.setColor(color);
+        } else {
+            Toast.makeText(context, "shape is null", Toast.LENGTH_SHORT).show();
+        }
+        return this;
+    }
+
     /**
      * 显示提示框
      */
+
     public EasyDialog show() {
         if (dialog != null) {
             if (contentView == null) {
