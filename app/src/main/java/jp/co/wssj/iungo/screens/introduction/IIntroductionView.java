@@ -11,4 +11,6 @@ interface IIntroductionView extends IFragmentView {
     void displayLoginScreen();
 
     void displayRegisterScreen();
+
+    void displayHomeScreen();
 }

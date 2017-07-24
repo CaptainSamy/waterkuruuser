@@ -157,7 +157,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
                 String password = mInputPassword.getText().toString().trim();
                 String confirmPassword = mInputConfirmPassword.getText().toString().trim();
                 String email = mInputEmail.getText().toString().trim();
-                getPresenter().onRegisterButtonClicked(userName, userId, password, confirmPassword, email);
+                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email);
                 break;
         }
     }

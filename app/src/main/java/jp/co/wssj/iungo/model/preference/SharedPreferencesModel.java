@@ -31,6 +31,8 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_LAST_SERVICE_ID = "last_service_company_id";
 
+    private static final String TYPE_LOGIN = "type_login";
+
     private final SharedPreferencesHelper mSharedPreference;
 
     public SharedPreferencesModel(Context context) {
@@ -125,6 +127,14 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getString(KEY_PASSWORD);
     }
 
+    public void putTypeLogin(int typeLogin) {
+        mSharedPreference.put(TYPE_LOGIN, typeLogin);
+    }
+
+    public int getTypeLogin() {
+        return mSharedPreference.getInt(TYPE_LOGIN);
+    }
+
     public void clearSession() {
         mSharedPreference.remove(KEY_SESSION);
         mSharedPreference.remove(KEY_SERVICE_ID);
@@ -132,6 +142,9 @@ public class SharedPreferencesModel extends BaseModel {
         mSharedPreference.remove(KEY_USER_NAME);
         mSharedPreference.remove(KEY_EMAIL);
         mSharedPreference.remove(KEY_LAST_SERVICE_ID);
+        mSharedPreference.remove(KEY_USER_ID);
+        mSharedPreference.remove(KEY_PASSWORD);
+        mSharedPreference.remove(TYPE_LOGIN);
 
     }
 

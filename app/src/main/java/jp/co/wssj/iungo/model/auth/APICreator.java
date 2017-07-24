@@ -34,7 +34,7 @@ final class APICreator {
 
     private static final String REMOVE_DEVICE_TOKEN = Constants.BASE_URL_AWS + "/api/client/users/remove-device-token";
 
-    public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userName, final String password, final String name, final String email, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
+    public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userId, final String password, final String name, final String email, final int typeLogin, final String token, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
@@ -63,10 +63,12 @@ final class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> param = new HashMap<>();
-                param.put("username", userName);
+                param.put("username", userId);
                 param.put("password", password);
                 param.put("name", name);
                 param.put("email", email);
+                param.put("type_login", typeLogin);
+                param.put("token", token);
                 return param;
             }
 

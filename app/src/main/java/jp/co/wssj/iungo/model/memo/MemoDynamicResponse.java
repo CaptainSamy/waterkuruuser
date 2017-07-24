@@ -152,7 +152,7 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
             public UserMemoValue(String id, int type, int numbImage) {
                 this.id = id;
                 this.type = type;
-                this.value = new Value();
+                this.value = new Value(numbImage);
             }
 
             public static class Value {

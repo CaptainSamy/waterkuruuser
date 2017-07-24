@@ -53,6 +53,13 @@ public final class Constants {
 
         public static final String TWITTER_SECRET = "";
 
+        public static final int TYPE_DEFAULT = 0;
+
+        public static final int TYPE_GOOGLE = 1;
+
+        public static final int TYPE_FACEBOOK = 2;
+
+        public static final int TYPE_TWITTER = 3;
     }
 
     public static final class CheckInStatus {

@@ -31,11 +31,15 @@ public class AuthModel extends BaseModel {
         void validateFailure(ErrorMessage errorMessage);
     }
 
-    public interface IRegisterCallback {
+    public interface IValidateRegisterCallback {
 
         void validateSuccess(String userName, String password, String name, String email);
 
         void validateFailure(ErrorMessage errorMessage, int code);
+
+    }
+
+    public interface IRegisterCallback {
 
         void onRegisterSuccess(RegisterData data, String message);
 
@@ -98,7 +102,7 @@ public class AuthModel extends BaseModel {
         }
     }
 
-    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, IRegisterCallback callback) {
+    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, IValidateRegisterCallback callback) {
         ErrorMessage errorMessage = null;
         int code = 0;
         if (TextUtils.isEmpty(userName)) {
@@ -166,8 +170,8 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequest(loginRequest);
     }
 
-    public void registerAWS(String userName, String password, String name, String email, final IRegisterCallback callback) {
-        Request registerRequest = APICreator.getRegisterAWSRequest(userName, password, name, email, new Response.Listener<RegisterResponse>() {
+    public void registerAccount(String userId, String password, String name, String email, int typeLogin, String token, final IRegisterCallback callback) {
+        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, typeLogin, token, new Response.Listener<RegisterResponse>() {
 
             @Override
             public void onResponse(RegisterResponse response) {
