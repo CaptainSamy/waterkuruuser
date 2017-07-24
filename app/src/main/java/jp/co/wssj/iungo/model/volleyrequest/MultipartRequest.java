@@ -16,6 +16,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.UUID;
 
+import jp.co.wssj.iungo.model.volleylistener.ReAuthenticationErrorListener;
+
 public class MultipartRequest extends Request<NetworkResponse> {
 
     private static final String TWO_HYPHENS = "--";
@@ -26,7 +28,7 @@ public class MultipartRequest extends Request<NetworkResponse> {
 
     private Response.Listener<NetworkResponse> mListener;
 
-    private Response.ErrorListener mErrorListener;
+    private ReAuthenticationErrorListener mErrorListener;
 
     private Map<String, String> mHeaders;
 
@@ -43,7 +45,7 @@ public class MultipartRequest extends Request<NetworkResponse> {
                             Response.ErrorListener errorListener) {
         super(Method.POST, url, errorListener);
         mListener = listener;
-        mErrorListener = errorListener;
+        mErrorListener = new ReAuthenticationErrorListener(this, errorListener);
         mHeaders = headers;
     }
 
@@ -60,7 +62,7 @@ public class MultipartRequest extends Request<NetworkResponse> {
                             Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         mListener = listener;
-        mErrorListener = errorListener;
+        mErrorListener = new ReAuthenticationErrorListener(this, errorListener);
     }
 
     @Override

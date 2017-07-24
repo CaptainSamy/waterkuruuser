@@ -344,4 +344,10 @@ public final class Utils {
                     }
                 });
     }
+
+    public static <T> void requireNonNull(T object, String message) {
+        if (object == null) {
+            throw new IllegalArgumentException(String.valueOf(message));
+        }
+    }
 }

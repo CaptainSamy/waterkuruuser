@@ -19,6 +19,8 @@ public class TermOfServiceFragment extends BaseFragment<ITermOfServicesView, Ter
 
     private static final String TAG = "TermOfServiceFragment";
 
+    private WebView mContentTermOfService;
+
     @Override
     protected String getLogTag() {
         return TAG;
@@ -59,8 +61,6 @@ public class TermOfServiceFragment extends BaseFragment<ITermOfServicesView, Ter
         super.initViews(rootView);
         mContentTermOfService = (WebView) rootView.findViewById(R.id.termOfService);
     }
-
-    private WebView mContentTermOfService;
 
     @Override
     protected void initAction() {

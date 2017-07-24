@@ -21,6 +21,10 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_SERVICE_COMPANY_ID = "service_company_id";
 
+    private static final String KEY_USER_ID = "user_id";
+
+    private static final String KEY_PASSWORD = "password";
+
     private static final String KEY_USER_NAME = "user_name";
 
     private static final String KEY_EMAIL = "email";
@@ -98,6 +102,27 @@ public class SharedPreferencesModel extends BaseModel {
 
     public int getLastServiceId() {
         return mSharedPreference.getInt(KEY_LAST_SERVICE_ID);
+    }
+
+    public void putUserId(String userId) {
+        if (!TextUtils.isEmpty(userId)) {
+            mSharedPreference.put(KEY_USER_ID, userId);
+        }
+    }
+
+    public String getUserId() {
+        return mSharedPreference.getString(KEY_USER_ID);
+
+    }
+
+    public void putPassword(String password) {
+        if (!TextUtils.isEmpty(password)) {
+            mSharedPreference.put(KEY_PASSWORD, password);
+        }
+    }
+
+    public String getPassword() {
+        return mSharedPreference.getString(KEY_PASSWORD);
     }
 
     public void clearSession() {

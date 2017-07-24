@@ -19,7 +19,7 @@
     <!--Splash fragment-->
     <string name="introduction_app">アプリの紹介</string>
     <string name="how_to_used_1">スマホでかんたん<font color='red'>ツナグ</font>アプリ</string>
-    <string name="how_to_used_2">ウォーターメルは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
+    <string name="how_to_used_2">イウンゴは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
 
     <!--Login fragment-->
     <string name="login_email">ログインID</string>
