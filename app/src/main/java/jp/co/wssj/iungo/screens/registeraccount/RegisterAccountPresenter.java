@@ -42,7 +42,7 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> i
     }
 
     @Override
-    public void onRegisterSuccess(final RegisterData data) {
+    public void onRegisterSuccess(final RegisterData data, final String message) {
         getModel(SharedPreferencesModel.class).putToken(data.getToken());
         getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
         getModel(SharedPreferencesModel.class).putUserName(data.getUserName());
@@ -54,7 +54,7 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> i
 
             @Override
             public void run() {
-                getView().onRegisterSuccess(data);
+                getView().onRegisterSuccess(data, message);
             }
         }, 1000);
 

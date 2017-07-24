@@ -24,7 +24,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="カメラ"/>
+            android:text="@string/choose_camera"/>
 
         <View
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
-            android:text="ライブラリ"/>
+            android:text="@string/choose_library"/>
     </LinearLayout>
 
     <TextView
@@ -51,7 +51,7 @@
         android:gravity="center"
         android:paddingBottom="15dp"
         android:paddingTop="15dp"
-        android:text="キャンセル"
+        android:text="@string/choose_cancel"
         android:textColor="@color/black"
         android:textStyle="bold"/>
 

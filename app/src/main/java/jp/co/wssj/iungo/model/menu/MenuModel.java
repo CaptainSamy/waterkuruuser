@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.model.menu;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -93,7 +94,11 @@ public class MenuModel extends BaseModel {
             @Override
             public void onResponse(ResponseData response) {
                 if (response.isSuccess()) {
-                    callback.onFeedBackSuccess(getStringResource(R.string.feedback_success));
+                    if (TextUtils.isEmpty(response.getMessage())) {
+                        callback.onFeedBackSuccess(getStringResource(R.string.feedback_success));
+                    } else {
+                        callback.onFeedBackSuccess(response.getMessage());
+                    }
                 } else {
                     callback.onFeedBackFailure(response.getMessage());
                 }

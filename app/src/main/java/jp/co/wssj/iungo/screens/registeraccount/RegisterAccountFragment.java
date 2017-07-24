@@ -200,8 +200,12 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     }
 
     @Override
-    public void onRegisterSuccess(RegisterData data) {
-        showToast(getString(R.string.register_success));
+    public void onRegisterSuccess(RegisterData data, String message) {
+        if (TextUtils.isEmpty(message)) {
+            message = getString(R.string.register_success);
+        }
+        showToast(message);
+
         getActivityCallback().clearBackStack();
         getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, true, false);
     }

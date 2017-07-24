@@ -188,4 +188,9 @@
     <string name="hint_feedback">"評価内容を入力してください。</string>
     <string name="content_feedback_not_empty"> 内容を入力してください。</string>
 
+    <!--Dialog Choose-->
+    <string name="choose_camera">カメラ</string>
+    <string name="choose_library">ライブラリ</string>
+    <string name="choose_cancel">キャンセル</string>
+
 </resources>
