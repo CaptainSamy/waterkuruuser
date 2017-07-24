@@ -95,6 +95,7 @@
             android:background="@color/facebook"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
+            android:layout_marginRight="8dp"
             android:src="@drawable/facebook"/>
 
         <ImageView
@@ -107,7 +108,8 @@
             android:background="@color/twitter"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:src="@drawable/twitter"/>
+            android:src="@drawable/twitter"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/imageSignInGoogle"

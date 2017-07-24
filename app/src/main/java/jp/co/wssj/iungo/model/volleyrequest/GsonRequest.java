@@ -16,10 +16,13 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
+import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.model.volleylistener.ReAuthenticationErrorListener;
 import jp.co.wssj.iungo.utils.Constants;
 
 public class GsonRequest<T> extends Request<T> {
+
+    public static final String TOKEN_EXPIRED = "セクションが切りました。再ログインしてください";
 
     private final Gson mGson = new Gson();
 
@@ -89,7 +92,12 @@ public class GsonRequest<T> extends Request<T> {
 
     @Override
     protected void deliverResponse(T response) {
-        mListener.onResponse(response);
+        if (response instanceof ResponseData && ((ResponseData) response).getMessage().equals(TOKEN_EXPIRED)) {
+            mErrorListener.onErrorResponse(null);
+        } else {
+            mListener.onResponse(response);
+        }
+
     }
 
     @Override

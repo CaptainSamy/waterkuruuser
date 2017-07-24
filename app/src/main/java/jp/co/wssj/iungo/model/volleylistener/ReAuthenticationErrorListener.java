@@ -58,6 +58,9 @@ public class ReAuthenticationErrorListener implements Response.ErrorListener {
                     return;
                 }
             }
+        } else {
+            reAuthenticate();
+            return;
         }
         if (mExternalErrorListener != null) {
             mExternalErrorListener.onErrorResponse(mOriginError);
