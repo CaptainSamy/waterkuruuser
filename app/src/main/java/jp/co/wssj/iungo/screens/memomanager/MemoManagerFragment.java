@@ -168,6 +168,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             syncListMemo(memoConfig, memoValue);
         }
         if (memoConfig != null && memoValue != null && memoConfig.size() == memoValue.size()) {
+            mSpinnerServices.setEnabled(false);
             onCreateMemoDynamic(memoConfig, memoValue, 0);
         }
     }
@@ -470,34 +471,43 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     /* Handle create memo dynamic*/
 
     public void onCreateMemoDynamic(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, int position) {
+
         if (position < listMemoConfig.size()) {
             MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
             switch (memoConfig.getType()) {
                 case Constants.MemoConfig.TYPE_SHORT_TEXT:
+                    Logger.d("onCreateMemoDynamic", "TYPE_SHORT_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LONG_TEXT:
+                    Logger.d("onCreateMemoDynamic", "TYPE_LONG_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_IMAGE:
+                    Logger.d("onCreateMemoDynamic", "TYPE_IMAGE");
                     handleCreateImage(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_COMBO_BOX:
                     //check box in android
+                    Logger.d("onCreateMemoDynamic", "TYPE_COMBO_BOX");
                     handleCreateComboBox(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_SWITCH:
+                    Logger.d("onCreateMemoDynamic", "TYPE_SWITCH");
                     handleCreateSwitch(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
+                    Logger.d("onCreateMemoDynamic", "TYPE_LEVEL");
 //                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
                 default:
+                    Logger.d("onCreateMemoDynamic", "default");
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
             }
         } else {
+            mSpinnerServices.setEnabled(true);
             View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
             TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
             mParentViewMemoConfig.addView(view);

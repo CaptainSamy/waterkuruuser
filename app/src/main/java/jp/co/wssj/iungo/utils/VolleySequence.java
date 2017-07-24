@@ -9,8 +9,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import jp.co.wssj.iungo.App;
@@ -143,6 +145,18 @@ public final class VolleySequence {
                 }
             }
         }
+    }
+
+    public List<Request> getRequests() {
+        List<Request> requests = new ArrayList<>();
+        synchronized (this) {
+            for (DelayedRequest delayedRequest : mDelayedQueue) {
+                if (delayedRequest != null) {
+                    requests.add(delayedRequest.mRequest);
+                }
+            }
+        }
+        return requests;
     }
 
     public void stop() {

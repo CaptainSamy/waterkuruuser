@@ -107,7 +107,9 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             if (mNotificationMessage != null) {
                 getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
                 mTitle.setText(mNotificationMessage.getTitle().trim());
-                mBody.setText(mNotificationMessage.getMessage().trim());//Html.fromHtml(
+
+                Utils.formatHtml(mBody, mNotificationMessage.getMessage().trim());
+//                mBody.setText(mNotificationMessage.getMessage().trim());//Html.fromHtml(
                 mBody.setMovementMethod(new ScrollingMovementMethod());
                 mBody.setMovementMethod(LinkMovementMethod.getInstance());
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isConvert);

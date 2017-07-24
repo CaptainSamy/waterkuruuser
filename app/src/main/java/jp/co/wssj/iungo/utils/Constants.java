@@ -44,6 +44,10 @@ public final class Constants {
 
     public static final String URL_CONTACT = BASE_URL_AWS + "/api/client/users/save-user-contact";
 
+    public static final String HASH_MD5 = "MD5";
+
+    public static final String SALT = "b50b1ffe2e7320b0d97062a9663d47a7adf1379392c58c66fd978171a2be7d65";
+
     private Constants() {
     }
 

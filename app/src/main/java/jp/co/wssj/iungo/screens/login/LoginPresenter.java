@@ -7,6 +7,7 @@ import jp.co.wssj.iungo.model.checkin.CheckInModel;
 import jp.co.wssj.iungo.model.firebase.FirebaseModel;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
@@ -37,12 +38,13 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
     @Override
     public void validateSuccess(final String userId, final String password) {
         getView().showProgress();
-        getAuthModel().loginAWS(userId, password, new AuthModel.ILoginCallback() {
+        final String encryptPassword = Utils.toMD5(password);
+        getAuthModel().loginAWS(userId, encryptPassword, new AuthModel.ILoginCallback() {
 
             @Override
             public void onLoginSuccess(LoginResponse.LoginData data) {
                 getModel(SharedPreferencesModel.class).putUserId(userId);
-                getModel(SharedPreferencesModel.class).putPassword(password);
+                getModel(SharedPreferencesModel.class).putPassword(encryptPassword);
                 getModel(SharedPreferencesModel.class).putToken(data.getToken());
                 getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
                 getModel(SharedPreferencesModel.class).putUserName(data.getUserName());

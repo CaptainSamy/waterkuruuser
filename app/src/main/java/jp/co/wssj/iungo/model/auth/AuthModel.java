@@ -167,7 +167,7 @@ public class AuthModel extends BaseModel {
                         }
                     }
                 });
-        VolleySequence.getInstance().addRequest(loginRequest);
+        VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
     }
 
     public void registerAccount(String userId, String password, String name, String email, int typeLogin, String token, final IRegisterCallback callback) {

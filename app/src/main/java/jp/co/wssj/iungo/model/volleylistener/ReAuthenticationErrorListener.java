@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.net.HttpURLConnection;
-import java.util.Map;
+import java.util.List;
 
 import jp.co.wssj.iungo.App;
 import jp.co.wssj.iungo.model.ErrorMessage;
@@ -85,11 +84,12 @@ public class ReAuthenticationErrorListener implements Response.ErrorListener {
                 sharedPreferencesModel.putUserName(data.getUserName());
                 sharedPreferencesModel.putEmail(data.getEmail());
                 firebaseModel.uploadDeviceToken(data.getToken(), null);
-                try {
-                    Map<String, String> headers = mReplayRequest.getHeaders();
-                    headers.put("Authorization", data.getToken());
-                } catch (AuthFailureError authFailureError) {
-                    Logger.e(TAG, "AuthFailureError: " + authFailureError);
+                Utils.overrideRequestHeader(mReplayRequest, "Authorization", data.getToken());
+                List<Request> requests = VolleySequence.getInstance().getRequests();
+                for (Request<?> request : requests) {
+                    if (request != null) {
+                        Utils.overrideRequestHeader(request, "Authorization", data.getToken());
+                    }
                 }
                 VolleySequence.getInstance().addRequestToFrontQueue(mReplayRequest);
             }
