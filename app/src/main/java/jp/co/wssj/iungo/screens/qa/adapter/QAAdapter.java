@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.screens.qa.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +112,7 @@ public class QAAdapter extends BaseExpandableListAdapter {
             convertView = mInflate.inflate(R.layout.item_answer, null);
         }
         mTextAnswer = (TextView) convertView.findViewById(R.id.itemAnswer);
-        mTextAnswer.setText(getChild(groupPosition, childPosition));
+        mTextAnswer.setText(Html.fromHtml(getChild(groupPosition, childPosition)));
         return convertView;
     }
 
@@ -119,7 +120,6 @@ public class QAAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
-
 
     public interface IEndOfListView {
 

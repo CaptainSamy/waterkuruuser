@@ -13,7 +13,7 @@ interface IListCardView extends IFragmentView {
 
     void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList);
 
-    void hideListUnusedCard();
+    void hideListUnusedCard(int numberStampInCard);
 
     void showListCanUseCard(List<ListCardResponse.ListCardData.CardData> cardDataList);
 
