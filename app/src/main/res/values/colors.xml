@@ -18,7 +18,7 @@
 
 
     <color name="colorMain">#D9594C</color>
-    <color name="colorMainPress">#9b4037</color>
+    <color name="colorMainPress">#f7301b</color>
     <color name="colorButtonRegister">#A6C36F</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorBackground_Actionbar">#F5F5F5</color>
@@ -31,8 +31,9 @@
     <color name="colorText">#2d2d2d</color>
     <color name="blumine">#59c1ec</color>
     <color name="store_name_in_list_store_checked_in">#317886</color>
-    <color name="store_name_in_list_store_checked_in_press">#27606b</color>
-    <color name="whitePress">#ececec</color>
+    <color name="store_name_in_list_store_checked_in_press">#269cb3</color>
+    <color name="pressHighLightRed">#f7301b</color>
+    <color name="pressHighLightBLue">#45a5b7</color>
 
     <color name="outside_color_trans">#4b252525</color>
     <color name="holo_blue">#33b5e5</color>
@@ -44,6 +45,7 @@
 
     <color name="twitter">#55acef</color>
     <color name="facebook">#3f51b5</color>
+    <color name="facebook_press">#475bce</color>
 
 
 </resources>

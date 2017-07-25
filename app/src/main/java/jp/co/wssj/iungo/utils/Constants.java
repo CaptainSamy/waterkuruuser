@@ -28,6 +28,8 @@ public final class Constants {
 
     public static final int DURATION_DIALOG_NOTIFICATION = 350;
 
+    public static final int DELAY_TIME_TRANSFER_FRAGMENT = 200;
+
     public static final int MARGIN_LEFT = 110;
 
     public static final int MARGIN_BOTTOM = 130;

@@ -31,7 +31,7 @@ public class ListStoreCheckedResponse extends ResponseData<ListStoreCheckedRespo
         @SerializedName("address")
         private String mStoreAddress;
 
-        @SerializedName("expire_time")
+        @SerializedName("waiting_time")
         private long mExpireTime;
 
         @SerializedName("number_of_waiting_people")

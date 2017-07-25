@@ -91,11 +91,11 @@
             android:id="@+id/imageLoginFacebook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:background="@color/facebook"
+            android:background="@drawable/bg_facebook_button"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
-            android:layout_marginRight="8dp"
             android:src="@drawable/facebook"/>
 
         <ImageView
@@ -116,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/colorMain"
+            android:background="@drawable/bg_red_button"
             android:paddingBottom="4dp"
             android:paddingTop="4dp"
             android:src="@drawable/google"/>

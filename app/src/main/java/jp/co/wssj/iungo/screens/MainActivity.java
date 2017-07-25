@@ -497,14 +497,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void displayScreen(int screenId, boolean hasAnimation, boolean addToBackStack) {
-        displayScreen(screenId, hasAnimation, addToBackStack, null);
+    public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack) {
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                displayScreen(screenId, hasAnimation, addToBackStack, null);
+            }
+        }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
+
     }
 
     @Override
-    public void displayScreen(int screenId, boolean hasAnimation,
-                              boolean addToBackStack, Bundle bundle) {
-        switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+    public void displayScreen(final int screenId, final boolean hasAnimation,
+                              final boolean addToBackStack, final Bundle bundle) {
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+            }
+        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
+
     }
 
     @Override
