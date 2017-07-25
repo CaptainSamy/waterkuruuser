@@ -51,7 +51,7 @@
     <string name="confirm_new_password_by_code_not_null">パスワード（確認）を入力してください。</string>
     <string name="confirm_different_new_password_by_code">パスワード（確認）はパスワードに誤りがあります。</string>
     <string name="change_password_success">パスワードを更新しました。</string>
-    <string name="email_not_format">メーリアドレスを正しく入力してください。</string>
+    <string name="email_not_format">メールアドレスを正しく入力してください。</string>
     <string name="title_password_old">パスワード変更</string>
     <string name="text_hint_password_old">現在のパスワード</string>
 
