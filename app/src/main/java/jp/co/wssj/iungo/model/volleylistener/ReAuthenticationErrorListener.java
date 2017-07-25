@@ -52,7 +52,7 @@ public class ReAuthenticationErrorListener implements Response.ErrorListener {
             NetworkResponse networkResponse = error.networkResponse;
             if (networkResponse != null) {
                 int statusCode = networkResponse.statusCode;
-                if (statusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                if (statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     reAuthenticate();
                     return;
                 }

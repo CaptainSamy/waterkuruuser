@@ -4,8 +4,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -72,10 +70,11 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setVibrate(pattern);
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     builder.setSound(alarmSound);
+                    builder.setAutoCancel(true);
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         builder.setColor(getResources().getColor(R.color.colorMain));
-                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
-                        builder.setLargeIcon(largeIcon);
+//                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
+//                        builder.setLargeIcon(largeIcon);
                         builder.setSmallIcon(R.drawable.image_notification);
                     } else {
                         builder.setSmallIcon(R.mipmap.logo_app);
