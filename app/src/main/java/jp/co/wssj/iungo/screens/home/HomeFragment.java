@@ -87,7 +87,8 @@ public class HomeFragment extends BaseFragment<IHomeView, HomePresenter> impleme
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE) {
+        boolean isSuccess = permissions.length > 0 && grantResults != null && grantResults.length > 0;
+        if (requestCode == REQUEST_CODE && permissions != null && isSuccess) {
             if (Manifest.permission.CAMERA.equals(permissions[0]) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 switchScreen(IMainView.FRAGMENT_SCANNER, true, false, null);
             } else {
