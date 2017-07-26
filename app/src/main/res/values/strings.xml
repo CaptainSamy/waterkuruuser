@@ -19,7 +19,7 @@
     <!--Splash fragment-->
     <string name="introduction_app">アプリの紹介</string>
     <string name="how_to_used_1">スマホでかんたん<font color='red'>ツナグ</font>アプリ</string>
-    <string name="how_to_used_2">ウォーターメルは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
+    <string name="how_to_used_2">イウンゴは始めたその瞬間から店舗と顧客をつなげるアプリ</string>
 
     <!--Login fragment-->
     <string name="login_email">ログインID</string>
@@ -51,7 +51,7 @@
     <string name="confirm_new_password_by_code_not_null">パスワード（確認）を入力してください。</string>
     <string name="confirm_different_new_password_by_code">パスワード（確認）はパスワードに誤りがあります。</string>
     <string name="change_password_success">パスワードを更新しました。</string>
-    <string name="email_not_format">メーリアドレスを正しく入力してください。</string>
+    <string name="email_not_format">メールアドレスを正しく入力してください。</string>
     <string name="title_password_old">パスワード変更</string>
     <string name="text_hint_password_old">現在のパスワード</string>
 
@@ -187,5 +187,10 @@
     <string name="feedback_success">お問い合わせを送信しました。</string>
     <string name="hint_feedback">"評価内容を入力してください。</string>
     <string name="content_feedback_not_empty"> 内容を入力してください。</string>
+
+    <!--Dialog Choose-->
+    <string name="choose_camera">カメラ</string>
+    <string name="choose_library">ライブラリ</string>
+    <string name="choose_cancel">キャンセル</string>
 
 </resources>

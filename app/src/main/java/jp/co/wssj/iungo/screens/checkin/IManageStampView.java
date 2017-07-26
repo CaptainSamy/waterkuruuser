@@ -13,7 +13,7 @@ interface IManageStampView extends IFragmentView {
 
     void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList);
 
-    void showListUnusedCardEmpty();
+    void showListUnusedCardEmpty( int numberStampInCard);
 
     void showListCanUseCard(List<ListCardResponse.ListCardData.CardData> cardDataList,int page,int totalPage);
 

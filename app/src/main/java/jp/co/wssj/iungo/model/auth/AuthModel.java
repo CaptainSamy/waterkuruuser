@@ -31,13 +31,17 @@ public class AuthModel extends BaseModel {
         void validateFailure(ErrorMessage errorMessage);
     }
 
-    public interface IRegisterCallback {
+    public interface IValidateRegisterCallback {
 
         void validateSuccess(String userName, String password, String name, String email);
 
         void validateFailure(ErrorMessage errorMessage, int code);
 
-        void onRegisterSuccess(RegisterData data);
+    }
+
+    public interface IRegisterCallback {
+
+        void onRegisterSuccess(RegisterData data, String message);
 
         void onRegisterFailure(ErrorMessage errorMessage);
     }
@@ -98,7 +102,7 @@ public class AuthModel extends BaseModel {
         }
     }
 
-    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, IRegisterCallback callback) {
+    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, IValidateRegisterCallback callback) {
         ErrorMessage errorMessage = null;
         int code = 0;
         if (TextUtils.isEmpty(userName)) {
@@ -163,17 +167,17 @@ public class AuthModel extends BaseModel {
                         }
                     }
                 });
-        VolleySequence.getInstance().addRequest(loginRequest);
+        VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
     }
 
-    public void registerAWS(String userName, String password, String name, String email, final IRegisterCallback callback) {
-        Request registerRequest = APICreator.getRegisterAWSRequest(userName, password, name, email, new Response.Listener<RegisterResponse>() {
+    public void registerAccount(String userId, String password, String name, String email, int typeLogin, String token, final IRegisterCallback callback) {
+        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, typeLogin, token, new Response.Listener<RegisterResponse>() {
 
             @Override
             public void onResponse(RegisterResponse response) {
                 Logger.d(TAG, "#register onResponse ");
                 if (response.isSuccess()) {
-                    callback.onRegisterSuccess(response.getData());
+                    callback.onRegisterSuccess(response.getData(), response.getMessage());
                 } else {
                     ErrorMessage errorMessage = new ErrorMessage(response.getMessage());
                     callback.onRegisterFailure(errorMessage);
@@ -222,8 +226,12 @@ public class AuthModel extends BaseModel {
                     public void onResponse(ResponseData response) {
                         Logger.d(TAG, "#login => onResponse");
                         if (response.isSuccess()) {
-                            String message = getStringResource(R.string.reset_success);
-                            callback.onResetSuccess(message);
+                            if (TextUtils.isEmpty(response.getMessage())) {
+                                String message = getStringResource(R.string.reset_success);
+                                callback.onResetSuccess(message);
+                            } else {
+                                callback.onResetSuccess(response.getMessage());
+                            }
                         } else {
                             callback.onResetFailure(response.getMessage());
                         }
@@ -327,8 +335,12 @@ public class AuthModel extends BaseModel {
                         public void onResponse(RegisterResponse response) {
                             Logger.d(TAG, "#changePassword => onResponse");
                             if (response.isSuccess()) {
-                                String message = getStringResource(R.string.change_password_success);
-                                callback.onChangePasswordSuccess(response.getData(), message);
+                                if (TextUtils.isEmpty(response.getMessage())) {
+                                    String message = getStringResource(R.string.change_password_success);
+                                    callback.onChangePasswordSuccess(response.getData(), message);
+                                } else {
+                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
+                                }
                             } else {
                                 callback.onChangePasswordFailure(response.getMessage());
                             }

@@ -30,9 +30,12 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import java.util.Arrays;
+
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
@@ -184,22 +187,27 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
         Log.d(TAG, "onConnectionFailed:" + connectionResult);
     }
 
+    @Override
+    public void displayHomeScreen() {
+        getActivityCallback().clearBackStack();
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, false, false);
+    }
+
     /*
-    * Handle Login Facebook
-    * */
+        * Handle Login Facebook
+        * */
     private void onLoginFacebook() {
 //        Check login facebook
         Profile profile = Profile.getCurrentProfile();
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-
-
         mCallbackManager = CallbackManager.Factory.create();
-        mButtonLoginFacebook.setReadPermissions("email", "public_profile");
+        mButtonLoginFacebook.setReadPermissions(Arrays.asList("email", "public_profile"));
         mButtonLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Logger.d("onLoginFacebook", "onSuccess");
+                getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_FACEBOOK, loginResult.getAccessToken().getToken());
             }
 
             @Override
@@ -210,6 +218,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
             @Override
             public void onError(FacebookException error) {
                 Logger.d("onLoginFacebook", "onError");
+                showToast(error.getMessage());
             }
         });
     }
@@ -295,7 +304,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            showToast("Login by " + acct.getDisplayName());
+            getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_GOOGLE, result.getSignInAccount().getIdToken());
         } else {
             //TODO sign out
         }

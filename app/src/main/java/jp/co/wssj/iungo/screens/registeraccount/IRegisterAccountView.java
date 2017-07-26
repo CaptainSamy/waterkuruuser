@@ -12,7 +12,7 @@ interface IRegisterAccountView extends IFragmentView {
 
     void onValidateFailure(ErrorMessage errorMessage, int code);
 
-    void onRegisterSuccess(RegisterData data);
+    void onRegisterSuccess(RegisterData data, String message);
 
     void onRegisterFailure(ErrorMessage errorMessage);
 

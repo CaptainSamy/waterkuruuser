@@ -62,17 +62,17 @@ class ManageStampPresenter extends FragmentPresenter<IManageStampView> {
         getModel(StampModel.class).getListCardByServiceCompany(token, serviceCompanyId, page, limit, new StampModel.IGetListCardResponse() {
 
             @Override
-            public void onSuccess(List<ListCardResponse.ListCardData.CardData> cards,int page,int totalPage) {
+            public void onSuccess(List<ListCardResponse.ListCardData.CardData> cards, int page, int totalPage, int numberStampInCard) {
                 getView().hideProgress();
                 List<ListCardResponse.ListCardData.CardData> unusedList = Utils.getListCardByType(cards, Constants.CardTypes.CARD_TYPE_UNUSED);
                 if (!unusedList.isEmpty()) {
                     getView().showListUnusedCard(unusedList);
                 } else {
-                    getView().showListUnusedCardEmpty();
+                    getView().showListUnusedCardEmpty(numberStampInCard);
                 }
                 List<ListCardResponse.ListCardData.CardData> canUseList = Utils.getListCardByType(cards, Constants.CardTypes.CARD_TYPE_CAN_USE);
                 if (!canUseList.isEmpty()) {
-                    getView().showListCanUseCard(canUseList,page,totalPage);
+                    getView().showListCanUseCard(canUseList, page, totalPage);
                 } else {
                     getView().hideListCanUseCard();
                 }
@@ -81,7 +81,7 @@ class ManageStampPresenter extends FragmentPresenter<IManageStampView> {
             @Override
             public void onFailure(ErrorMessage errorMessage) {
                 getView().hideProgress();
-                getView().showListUnusedCardEmpty();
+                getView().showListUnusedCardEmpty(0);
                 getView().hideListCanUseCard();
             }
         });

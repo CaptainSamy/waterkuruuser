@@ -177,7 +177,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
     }
 
     @Override
-    public void showListUnusedCardEmpty() {
+    public void showListUnusedCardEmpty(int numberStampInCard) {
         mUnusedContainer.setVisibility(View.VISIBLE);
         if (!TextUtils.isEmpty(mStoreName)) {
             mTextStoreName.setText(mStoreName);
@@ -192,6 +192,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
                 mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
             }
         }
+        mUnusedCardAdapter.setNumberStampInCard(numberStampInCard);
     }
 
     private List<ListCardResponse.ListCardData.CardData> mListCardCanUse;

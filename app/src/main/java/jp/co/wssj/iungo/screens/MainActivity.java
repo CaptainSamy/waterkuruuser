@@ -27,13 +27,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.michael.easydialog.EasyDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
+import jp.co.wssj.iungo.BuildConfig;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.firebase.FirebaseMsgService;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
@@ -73,6 +73,8 @@ import jp.co.wssj.iungo.widget.CenterTitleToolbar;
 public class MainActivity extends AppCompatActivity
         implements IMainView, IActivityCallback, BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
+    public static final String ACTION_LOGOUT = BuildConfig.APPLICATION_ID + ".LOGOUT";
+
     private static final String TAG = "MainActivity";
 
     private BottomNavigationView mBottomNavigationView;
@@ -111,6 +113,8 @@ public class MainActivity extends AppCompatActivity
 
     private TextView mTextUserName;
 
+    private LogoutReceiver mLogoutReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,13 +128,12 @@ public class MainActivity extends AppCompatActivity
         setupFragmentBackStackManager();
         initView();
         initAction();
-
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
         LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_SERVICE_ACTIVITY));
 
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Logger.d(TAG, "#onTokenRefresh " + refreshedToken);
+        mLogoutReceiver = new LogoutReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -494,14 +497,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void displayScreen(int screenId, boolean hasAnimation, boolean addToBackStack) {
-        displayScreen(screenId, hasAnimation, addToBackStack, null);
+    public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack) {
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                displayScreen(screenId, hasAnimation, addToBackStack, null);
+            }
+        }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
+
     }
 
     @Override
-    public void displayScreen(int screenId, boolean hasAnimation,
-                              boolean addToBackStack, Bundle bundle) {
-        switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+    public void displayScreen(final int screenId, final boolean hasAnimation,
+                              final boolean addToBackStack, final Bundle bundle) {
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+            }
+        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
+
     }
 
     @Override
@@ -613,5 +631,21 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mLogoutReceiver);
+
     }
+
+    private class LogoutReceiver extends BroadcastReceiver {
+
+        private static final String TAG = "LogoutReceiver";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Logger.d(TAG, "#onReceive");
+            if (ACTION_LOGOUT.equals(intent.getAction())) {
+                onLogout();
+            }
+        }
+    }
+
 }

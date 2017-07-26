@@ -27,6 +27,9 @@ public class ListCardResponse extends ResponseData<ListCardResponse.ListCardData
         @SerializedName("total_number_of_cards")
         private int mNumberOfCard;
 
+        @SerializedName("number_of_stamps_in_card")
+        private int mNumberStampInCard;
+
         @SerializedName("number_of_cards_in_page")
         private int mNumberOfCardInPage;
 
@@ -47,6 +50,10 @@ public class ListCardResponse extends ResponseData<ListCardResponse.ListCardData
 
         public int getTotalPage() {
             return mTotalPage;
+        }
+
+        public int getNumberStampInCard() {
+            return mNumberStampInCard;
         }
 
         public int getLimit() {

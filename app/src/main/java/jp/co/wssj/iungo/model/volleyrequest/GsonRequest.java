@@ -6,6 +6,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -15,9 +16,13 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 
+import jp.co.wssj.iungo.model.ResponseData;
+import jp.co.wssj.iungo.model.volleylistener.ReAuthenticationErrorListener;
 import jp.co.wssj.iungo.utils.Constants;
 
 public class GsonRequest<T> extends Request<T> {
+
+    public static final String TOKEN_EXPIRED = "セクションが切りました。再ログインしてください";
 
     private final Gson mGson = new Gson();
 
@@ -26,6 +31,8 @@ public class GsonRequest<T> extends Request<T> {
     private final Map<String, String> mHeaders;
 
     private final Response.Listener<T> mListener;
+
+    private ReAuthenticationErrorListener mErrorListener;
 
     /**
      * Make a GET request and return a parsed object from JSON.
@@ -45,6 +52,7 @@ public class GsonRequest<T> extends Request<T> {
         mClazz = clazz;
         mHeaders = headers;
         mListener = listener;
+        mErrorListener = new ReAuthenticationErrorListener(this, errorListener);
         setRetryPolicy(new DefaultRetryPolicy(timeOutMs, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 
@@ -84,7 +92,17 @@ public class GsonRequest<T> extends Request<T> {
 
     @Override
     protected void deliverResponse(T response) {
-        mListener.onResponse(response);
+        if (response instanceof ResponseData && ((ResponseData) response).getMessage().equals(TOKEN_EXPIRED)) {
+            mErrorListener.onErrorResponse(null);
+        } else {
+            mListener.onResponse(response);
+        }
+
+    }
+
+    @Override
+    public void deliverError(VolleyError error) {
+        mErrorListener.onErrorResponse(error);
     }
 
     @Override

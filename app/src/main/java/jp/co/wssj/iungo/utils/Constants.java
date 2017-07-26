@@ -28,6 +28,8 @@ public final class Constants {
 
     public static final int DURATION_DIALOG_NOTIFICATION = 350;
 
+    public static final int DELAY_TIME_TRANSFER_FRAGMENT = 200;
+
     public static final int MARGIN_LEFT = 110;
 
     public static final int MARGIN_BOTTOM = 130;
@@ -44,6 +46,10 @@ public final class Constants {
 
     public static final String URL_CONTACT = BASE_URL_AWS + "/api/client/users/save-user-contact";
 
+    public static final String HASH_MD5 = "MD5";
+
+    public static final String SALT = "b50b1ffe2e7320b0d97062a9663d47a7adf1379392c58c66fd978171a2be7d65";
+
     private Constants() {
     }
 
@@ -53,6 +59,13 @@ public final class Constants {
 
         public static final String TWITTER_SECRET = "";
 
+        public static final int TYPE_DEFAULT = 0;
+
+        public static final int TYPE_GOOGLE = 1;
+
+        public static final int TYPE_FACEBOOK = 2;
+
+        public static final int TYPE_TWITTER = 3;
     }
 
     public static final class CheckInStatus {

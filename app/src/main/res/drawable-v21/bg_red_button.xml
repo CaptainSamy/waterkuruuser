@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/pressHighLightRed">
+
+    <item
+        android:id="@android:id/mask"
+        android:drawable="@drawable/border_button_login">
+        <color android:color="@color/colorMain"/>
+    </item>
+    <item>
+        <selector>
+            <item android:drawable="@drawable/border_button_login"/>
+        </selector>
+    </item>
+</ripple>

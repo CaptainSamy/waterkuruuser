@@ -188,7 +188,7 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
     }
 
     @Override
-    public void hideListUnusedCard() {
+    public void hideListUnusedCard(int numberStampInCard) {
         mUnusedContainer.setVisibility(View.VISIBLE);
         mLayoutButton.setVisibility(View.VISIBLE);
         if (mUnusedCardAdapter == null) {
@@ -199,6 +199,7 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
                 mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
             }
         }
+        mUnusedCardAdapter.setNumberStampInCard(numberStampInCard);
     }
 
     @Override

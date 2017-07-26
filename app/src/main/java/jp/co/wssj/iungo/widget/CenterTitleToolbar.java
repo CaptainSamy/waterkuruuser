@@ -106,8 +106,9 @@ public class CenterTitleToolbar extends Toolbar {
             String text = String.valueOf(number);
             if (number > 99) {
                 number = 99;
-                text = number + "<sup>+</sup>";
+                text = number + "<sup><font size=6>+</font></sup>";
             }
+            mCountNotification.setTextSize(8f);
             mCountNotification.setText(Html.fromHtml(text));
         } else {
             mCountNotification.setVisibility(GONE);

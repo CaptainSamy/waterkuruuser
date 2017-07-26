@@ -168,6 +168,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             syncListMemo(memoConfig, memoValue);
         }
         if (memoConfig != null && memoValue != null && memoConfig.size() == memoValue.size()) {
+            mSpinnerServices.setEnabled(false);
             onCreateMemoDynamic(memoConfig, memoValue, 0);
         }
     }
@@ -470,49 +471,68 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     /* Handle create memo dynamic*/
 
     public void onCreateMemoDynamic(List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, int position) {
+
         if (position < listMemoConfig.size()) {
             MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
             switch (memoConfig.getType()) {
                 case Constants.MemoConfig.TYPE_SHORT_TEXT:
+                    Logger.d("onCreateMemoDynamic", "TYPE_SHORT_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LONG_TEXT:
+                    Logger.d("onCreateMemoDynamic", "TYPE_LONG_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_IMAGE:
+                    Logger.d("onCreateMemoDynamic", "TYPE_IMAGE");
                     handleCreateImage(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_COMBO_BOX:
                     //check box in android
+                    Logger.d("onCreateMemoDynamic", "TYPE_COMBO_BOX");
                     handleCreateComboBox(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_SWITCH:
+                    Logger.d("onCreateMemoDynamic", "TYPE_SWITCH");
                     handleCreateSwitch(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
+                    Logger.d("onCreateMemoDynamic", "TYPE_LEVEL");
 //                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
                 default:
+                    Logger.d("onCreateMemoDynamic", "default");
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
             }
         } else {
-            View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
-            TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
-            mParentViewMemoConfig.addView(view);
-            mButtonSave.setOnClickListener(new View.OnClickListener() {
+            new Handler().postDelayed(new Runnable() {
 
                 @Override
-                public void onClick(View v) {
-                    getPresenter().updateUserMemo(mServiceId, listValuesConfig);
+                public void run() {
+                    mSpinnerServices.setEnabled(true);
+                    View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
+                    TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
+                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in);
+                    view.startAnimation(animation);
+                    mParentViewMemoConfig.addView(view);
+                    mButtonSave.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getPresenter().updateUserMemo(mServiceId, listValuesConfig);
+                        }
+                    });
                 }
-            });
+            }, Constants.MemoConfig.TIME_DELAY_SHOW_VIEW);
+
+
         }
     }
 
     public void loopCreateMemoDynamic(View viewChild, final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
-        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.slide_bottom_top);
+        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_out);
         viewChild.startAnimation(animation);
         mParentViewMemoConfig.addView(viewChild);
         new Handler().postDelayed(new Runnable() {

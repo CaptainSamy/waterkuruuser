@@ -37,7 +37,7 @@ public class StampModel extends BaseModel {
 
     public interface IGetListCardResponse {
 
-        void onSuccess(List<ListCardResponse.ListCardData.CardData> cards,int page,int totalPage);
+        void onSuccess(List<ListCardResponse.ListCardData.CardData> cards, int page, int totalPage, int numberStampInCard);
 
         void onFailure(ErrorMessage errorMessage);
     }
@@ -105,7 +105,8 @@ public class StampModel extends BaseModel {
                         if (response.isSuccess()) {
                             List<ListCardResponse.ListCardData.CardData> cardDataList = response.getData().getCards();
                             if (cardDataList != null) {
-                                callback.onSuccess(cardDataList,response.getData().getPage(),response.getData().getTotalPage());
+                                int numberStampInCard = response.getData().getNumberStampInCard();
+                                callback.onSuccess(cardDataList, response.getData().getPage(), response.getData().getTotalPage(), numberStampInCard);
                                 return;
                             }
                         }

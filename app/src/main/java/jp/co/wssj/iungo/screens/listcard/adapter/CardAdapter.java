@@ -22,6 +22,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private IEndOfRecycleView mOnEndOfRecycleView;
 
+    private int numberStampInCard;
+
     public CardAdapter(List<CardData> cards) {
         mCards = cards;
     }
@@ -44,7 +46,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bindData(mCards != null ? mCards.get(position) : null);
+        if (mCards == null) {
+            holder.bindData(numberStampInCard);
+        } else {
+            holder.bindData(mCards.get(position));
+        }
+
         if (position == (getItemCount() - 1)) {
             if (mOnEndOfRecycleView != null) {
                 mOnEndOfRecycleView.onEndOfRecycleView();
@@ -73,9 +80,11 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         void bindData(CardData data) {
             if (data != null) {
                 mGridView.setAdapter(new StampAdapter(mContext, data.getStamps(), data.getMaxNumberOfStamp()));
-            } else {
-                mGridView.setAdapter(new StampAdapter(mContext, 15));
             }
+        }
+
+        void bindData(int numberStampInCard) {
+            mGridView.setAdapter(new StampAdapter(mContext, numberStampInCard));
         }
     }
 
@@ -86,5 +95,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     public void setOnEndOfRecycleView(IEndOfRecycleView mOnEndOfRecycleView) {
         this.mOnEndOfRecycleView = mOnEndOfRecycleView;
+    }
+
+    public void setNumberStampInCard(int numberStampInCard) {
+        this.numberStampInCard = numberStampInCard;
     }
 }

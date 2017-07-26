@@ -4,14 +4,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
 import android.text.TextUtils;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -63,7 +62,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 @Override
                 public void onSuccess(NotificationMessage notificationMessage) {
                     Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this).setContentText(notificationMessage.getMessage());
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this).setContentText(Html.fromHtml(notificationMessage.getMessage()));
                     if (!TextUtils.isEmpty(notificationMessage.getTitle())) {
                         builder.setContentTitle(notificationMessage.getTitle());
                     }
@@ -72,10 +71,11 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setVibrate(pattern);
                     Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                     builder.setSound(alarmSound);
+                    builder.setAutoCancel(true);
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         builder.setColor(getResources().getColor(R.color.colorMain));
-                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
-                        builder.setLargeIcon(largeIcon);
+//                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
+//                        builder.setLargeIcon(largeIcon);
                         builder.setSmallIcon(R.drawable.image_notification);
                     } else {
                         builder.setSmallIcon(R.mipmap.logo_app);

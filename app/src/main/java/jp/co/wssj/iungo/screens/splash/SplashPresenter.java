@@ -1,10 +1,18 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
+import jp.co.wssj.iungo.App;
+import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.auth.AuthModel;
+import jp.co.wssj.iungo.model.auth.LoginResponse;
+import jp.co.wssj.iungo.model.firebase.FirebaseModel;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.IMainView;
+import jp.co.wssj.iungo.screens.MainActivity;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
 import jp.co.wssj.iungo.utils.Constants;
 
@@ -17,17 +25,46 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
     protected SplashPresenter(ISplashView view) {
         super(view);
         registerModel(new SharedPreferencesModel(view.getViewContext()));
+        registerModel(new AuthModel(view.getViewContext()));
+        registerModel(new FirebaseModel(view.getViewContext()));
+    }
+
+    private SharedPreferencesModel getShareModel() {
+        return getModel(SharedPreferencesModel.class);
     }
 
     public void onCreate() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
 
-            @Override
-            public void run() {
-                switchScreen();
-            }
-        }, Constants.TIME_WAITING_SPLASH);
+        long expireDate = getModel(SharedPreferencesModel.class).getExpireDate();
+        if (expireDate <= System.currentTimeMillis()) {
+            String userId = getModel(SharedPreferencesModel.class).getUserId();
+            String password = getModel(SharedPreferencesModel.class).getPassword();
+            getModel(AuthModel.class).loginAWS(userId, password, new AuthModel.ILoginCallback() {
+
+                @Override
+                public void onLoginSuccess(LoginResponse.LoginData data) {
+                    getShareModel().putToken(data.getToken());
+                    getShareModel().putExpireDate(data.getExpireDate());
+                    getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
+                    switchScreen();
+                }
+
+                @Override
+                public void onLoginFailure(ErrorMessage errorMessage) {
+                    Intent intent = new Intent(MainActivity.ACTION_LOGOUT);
+                    LocalBroadcastManager.getInstance(App.getInstance()).sendBroadcast(intent);
+                }
+            });
+        } else {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    switchScreen();
+                }
+            }, Constants.TIME_WAITING_SPLASH);
+        }
     }
 
     public void switchScreen() {

@@ -21,11 +21,17 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_SERVICE_COMPANY_ID = "service_company_id";
 
+    private static final String KEY_USER_ID = "user_id";
+
+    private static final String KEY_PASSWORD = "password";
+
     private static final String KEY_USER_NAME = "user_name";
 
     private static final String KEY_EMAIL = "email";
 
     private static final String KEY_LAST_SERVICE_ID = "last_service_company_id";
+
+    private static final String TYPE_LOGIN = "type_login";
 
     private final SharedPreferencesHelper mSharedPreference;
 
@@ -100,6 +106,35 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getInt(KEY_LAST_SERVICE_ID);
     }
 
+    public void putUserId(String userId) {
+        if (!TextUtils.isEmpty(userId)) {
+            mSharedPreference.put(KEY_USER_ID, userId);
+        }
+    }
+
+    public String getUserId() {
+        return mSharedPreference.getString(KEY_USER_ID);
+
+    }
+
+    public void putPassword(String password) {
+        if (!TextUtils.isEmpty(password)) {
+            mSharedPreference.put(KEY_PASSWORD, password);
+        }
+    }
+
+    public String getPassword() {
+        return mSharedPreference.getString(KEY_PASSWORD);
+    }
+
+    public void putTypeLogin(int typeLogin) {
+        mSharedPreference.put(TYPE_LOGIN, typeLogin);
+    }
+
+    public int getTypeLogin() {
+        return mSharedPreference.getInt(TYPE_LOGIN);
+    }
+
     public void clearSession() {
         mSharedPreference.remove(KEY_SESSION);
         mSharedPreference.remove(KEY_SERVICE_ID);
@@ -107,6 +142,9 @@ public class SharedPreferencesModel extends BaseModel {
         mSharedPreference.remove(KEY_USER_NAME);
         mSharedPreference.remove(KEY_EMAIL);
         mSharedPreference.remove(KEY_LAST_SERVICE_ID);
+        mSharedPreference.remove(KEY_USER_ID);
+        mSharedPreference.remove(KEY_PASSWORD);
+        mSharedPreference.remove(TYPE_LOGIN);
 
     }
 

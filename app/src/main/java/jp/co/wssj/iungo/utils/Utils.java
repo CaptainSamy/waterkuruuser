@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -16,8 +18,11 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,12 +39,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -343,5 +351,109 @@ public final class Utils {
                         imageView.setTag(R.id.shared_drawable, resource);
                     }
                 });
+    }
+
+    public static <T> void requireNonNull(T object, String message) {
+        if (object == null) {
+            throw new IllegalArgumentException(String.valueOf(message));
+        }
+    }
+
+    public static void addRequestHeader(Request<?> request, Map<String, String> headers) {
+        if (request != null) {
+            try {
+                Map<String, String> baseHeaders = request.getHeaders();
+                if (baseHeaders != null && headers != null) {
+                    baseHeaders.putAll(headers);
+                }
+            } catch (AuthFailureError authFailureError) {
+                Logger.e(TAG, "AuthFailureError: " + authFailureError.getMessage());
+            }
+        }
+    }
+
+    public static void addRequestHeader(Request<?> request, String key, String value) {
+        if (request != null) {
+            try {
+                Map<String, String> baseHeaders = request.getHeaders();
+                if (baseHeaders != null && !TextUtils.isEmpty(key)) {
+                    baseHeaders.put(key, value);
+                }
+            } catch (AuthFailureError authFailureError) {
+                Logger.e(TAG, "AuthFailureError: " + authFailureError.getMessage());
+            }
+        }
+    }
+
+    public static void overrideRequestHeader(Request<?> request, String key, String value) {
+        if (request != null) {
+            try {
+                Map<String, String> baseHeaders = request.getHeaders();
+                if (baseHeaders != null && !TextUtils.isEmpty(key) && baseHeaders.containsKey(key)) {
+                    baseHeaders.put(key, value);
+                }
+            } catch (AuthFailureError authFailureError) {
+                Logger.e(TAG, "AuthFailureError: " + authFailureError.getMessage());
+            }
+        }
+    }
+
+    public static final String toMD5(String message) {
+        try {
+            // Create MD5 Hash
+            message = Constants.SALT + message;
+            MessageDigest digest = MessageDigest.getInstance(Constants.HASH_MD5);
+            digest.update(message.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return Constants.EMPTY_STRING;
+    }
+
+    public static void formatHtml(final TextView textView, final String html) {
+        formatHtml(textView, html, null);
+    }
+
+    private static void formatHtml(final TextView textView, final String html, final Drawable result) {
+        final Context context = textView.getContext();
+        Spanned spanned = Html.fromHtml(html, new Html.ImageGetter() {
+
+            @Override
+            public Drawable getDrawable(String source) {
+                if (result != null) {
+                    result.setBounds(0, 0, result.getIntrinsicWidth(), result.getIntrinsicHeight());
+                } else {
+                    Glide.with(context)
+                            .load(source)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(new SimpleTarget<GlideDrawable>() {
+
+                                @Override
+                                public void onResourceReady(final GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                    textView.post(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            formatHtml(textView, html, resource);
+                                        }
+                                    });
+                                }
+                            });
+                }
+                return result;
+            }
+        }, null);
+        textView.setText(spanned);
     }
 }

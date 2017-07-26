@@ -84,7 +84,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     protected void initAction() {
         mButtonLogin.setOnClickListener(this);
         mTextResetPassword.setOnClickListener(this);
-        
+
     }
 
     @Override

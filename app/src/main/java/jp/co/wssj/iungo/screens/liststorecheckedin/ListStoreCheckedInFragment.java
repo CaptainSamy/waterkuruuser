@@ -152,7 +152,6 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
                     break;
                 }
             }
-
             if (isGranted) {
                 initGoogleAPI();
             } else {
@@ -190,9 +189,6 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
                 currentLatitude = location.getLatitude();
                 currentLongitude = location.getLongitude();
             }
-//            else {
-//                mGoogleApiClient.reconnect();
-//            }
             getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
         }
     }
@@ -204,19 +200,20 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Logger.d(TAG, "#onConnectionFailed");
         if (connectionResult.hasResolution()) {
             try {
                 connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
             }
-        } else {
         }
+        getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Logger.d(TAG, "#onLocationChanged location = " + location.getLatitude() + "/" + location.getLongitude());
+        Logger.d(TAG, "#onLocationChanged");
         currentLatitude = location.getLatitude();
         currentLongitude = location.getLongitude();
     }

@@ -452,21 +452,32 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
                     break;
             }
         } else {
-            View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
-            TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
-            mParentViewMemoConfig.addView(view);
-            mButtonSave.setOnClickListener(new View.OnClickListener() {
+
+            new Handler().postDelayed(new Runnable() {
 
                 @Override
-                public void onClick(View v) {
-                    getPresenter().updateUserMemo(mServiceId, listValuesConfig);
+                public void run() {
+                    View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
+                    TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
+                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in);
+                    view.startAnimation(animation);
+                    mParentViewMemoConfig.addView(view);
+                    mButtonSave.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            getPresenter().updateUserMemo(mServiceId, listValuesConfig);
+                        }
+                    });
                 }
-            });
+            }, Constants.MemoConfig.TIME_DELAY_SHOW_VIEW);
+
+
         }
     }
 
     public void loopCreateMemoDynamic(View viewChild, final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
-        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.slide_bottom_top);
+        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_out);
         viewChild.startAnimation(animation);
         mParentViewMemoConfig.addView(viewChild);
 
