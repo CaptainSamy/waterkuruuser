@@ -388,7 +388,9 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         String imagePath = imageUri.getPath();
         if (!TextUtils.isEmpty(imagePath) && mListImage != null) {
             fillImage(imagePath, mCurrentImageClicked, true);
-            mListImage.get(mPositionImageClicked).setUrlImage(imagePath);
+            if (mPositionImageClicked < mListImage.size()) {
+                mListImage.get(mPositionImageClicked).setUrlImage(imagePath);
+            }
         }
     }
 
@@ -607,7 +609,11 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     public void handleCreateImage(final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
         MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
         MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(position);
-
+        mListImage = memoValue.getValue().getListImage();
+        if (mListImage != null && mListImage.size() == 0) {
+            MemoDynamicResponse.UserMemoData.UserMemoValue.Value value = new MemoDynamicResponse.UserMemoData.UserMemoValue.Value(memoConfig.getConfig().getNumberImages());
+            memoValue.getValue().getListImage().addAll(value.getListImage());
+        }
         TextView title;
         final ExpandableHeightGridView gridView;
         if (mListGridView == null) {
@@ -631,7 +637,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                 getPresenter().onImageViewClicked((Drawable) view.getTag(R.id.shared_drawable), REQUEST_CODE_PICKER_PHOTO_1, REQUEST_CODE_CAMERA_PHOTO_1);
             }
         });
-        mListImage = memoValue.getValue().getListImage();
+//        mListImage = memoValue.getValue().getListImage();
         loopCreateMemoDynamic(viewGrid, listMemoConfig, listValuesConfig, position);
     }
 
