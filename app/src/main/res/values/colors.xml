@@ -32,8 +32,8 @@
     <color name="blumine">#59c1ec</color>
     <color name="store_name_in_list_store_checked_in">#317886</color>
     <color name="store_name_in_list_store_checked_in_press">#269cb3</color>
-    <color name="pressHighLightRed">#f7301b</color>
-    <color name="pressHighLightBLue">#45a5b7</color>
+    <color name="pressHighLightRed">#ffaeae</color>
+    <color name="pressHighLightBLue">#a0f0ff</color>
 
     <color name="outside_color_trans">#4b252525</color>
     <color name="holo_blue">#33b5e5</color>

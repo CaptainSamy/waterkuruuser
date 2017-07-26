@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
 import android.text.TextUtils;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -61,7 +62,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 @Override
                 public void onSuccess(NotificationMessage notificationMessage) {
                     Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this).setContentText(notificationMessage.getMessage());
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this).setContentText(Html.fromHtml(notificationMessage.getMessage()));
                     if (!TextUtils.isEmpty(notificationMessage.getTitle())) {
                         builder.setContentTitle(notificationMessage.getTitle());
                     }
