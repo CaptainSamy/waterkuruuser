@@ -9,6 +9,7 @@ import jp.co.wssj.iungo.model.firebase.FirebaseModel;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
@@ -32,7 +33,8 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> {
 
             @Override
             public void validateSuccess(String userName, String password, String name, String email) {
-                onRegisterAccount(userName, password, name, email);
+                String md5Password = Utils.toMD5(password);
+                onRegisterAccount(userName, md5Password, name, email);
 
             }
 

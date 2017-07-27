@@ -10,11 +10,13 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -24,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -89,6 +92,10 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private DialogChoose mDialogChoose;
 
+    private LinearLayout mLayoutListService;
+
+    private NestedScrollView mScrollViewMemo;
+
     private List<ListServiceResponse.Service> mListService;
 
     private int mServiceId;
@@ -146,11 +153,47 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         mSpinnerServices = (Spinner) rootView.findViewById(R.id.spServices);
         mPhotoDialog = new PhotoDialog(getActivityContext(), this);
         mDialogChoose = new DialogChoose(getActivityContext());
+        mLayoutListService = (LinearLayout) rootView.findViewById(R.id.layoutListService);
+        mScrollViewMemo = (NestedScrollView) rootView.findViewById(R.id.scrollViewMemo);
     }
 
     @Override
     protected void initAction() {
         mSpinnerServices.setOnItemSelectedListener(this);
+        mScrollViewMemo.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                Logger.d(TAG, ".user scroll down int " + top + "/" + right + "/" + "/" + bottom + "/" + oldLeft + "/" + oldTop + "/" + oldRight + "/" + oldBottom);
+            }
+        });
+        mScrollViewMemo.setOnTouchListener(new View.OnTouchListener() {
+
+            private float mTouchPosition;
+
+            private float mReleasePosition;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    mTouchPosition = event.getY();
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    mReleasePosition = event.getY();
+                }
+                float result = mTouchPosition - mReleasePosition;
+                if (mTouchPosition - mReleasePosition > 0) {
+                    // user scroll down
+                    Logger.d(TAG, "user scroll down " + result);
+                } else {
+                    //user scroll up
+                    Logger.d(TAG, "scroll up " + result);
+                }
+
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -478,33 +521,26 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
             switch (memoConfig.getType()) {
                 case Constants.MemoConfig.TYPE_SHORT_TEXT:
-                    Logger.d("onCreateMemoDynamic", "TYPE_SHORT_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LONG_TEXT:
-                    Logger.d("onCreateMemoDynamic", "TYPE_LONG_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_IMAGE:
-                    Logger.d("onCreateMemoDynamic", "TYPE_IMAGE");
                     handleCreateImage(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_COMBO_BOX:
                     //check box in android
-                    Logger.d("onCreateMemoDynamic", "TYPE_COMBO_BOX");
                     handleCreateComboBox(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_SWITCH:
-                    Logger.d("onCreateMemoDynamic", "TYPE_SWITCH");
                     handleCreateSwitch(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
-                    Logger.d("onCreateMemoDynamic", "TYPE_LEVEL");
 //                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
                 default:
-                    Logger.d("onCreateMemoDynamic", "default");
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
             }
