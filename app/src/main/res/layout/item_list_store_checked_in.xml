@@ -18,9 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
         android:gravity="center"
-        android:textStyle="bold"
         android:textColor="@color/store_name_in_list_store_checked_in"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/tvAddress"
@@ -29,6 +29,7 @@
         android:layout_marginBottom="18dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
+        android:textColor="@color/colorText"
         />
 
     <View
@@ -54,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingLeft="10dp"
+                android:textColor="@color/colorText"
                 />
         </TableRow>
 
@@ -74,8 +76,9 @@
                 android:id="@+id/tvPeopleWaiting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
                 android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:textColor="@color/colorText"
                 />
         </TableRow>
 
@@ -96,8 +99,9 @@
                 android:id="@+id/tvNumberUsedService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
                 android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:textColor="@color/colorText"
                 />
         </TableRow>
 
@@ -118,8 +122,9 @@
                 android:id="@+id/tvTimeLastUsedService"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
                 android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:textColor="@color/colorText"
                 />
         </TableRow>
 

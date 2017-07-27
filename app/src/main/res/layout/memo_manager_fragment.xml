@@ -16,7 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="@string/title_service_name"/>
+            android:text="@string/title_service_name"
+            android:textColor="@color/colorText"/>
 
         <Spinner
             android:id="@+id/spServices"
@@ -29,6 +30,7 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layoutListService"
