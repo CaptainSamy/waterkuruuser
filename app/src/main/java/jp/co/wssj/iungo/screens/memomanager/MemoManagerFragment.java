@@ -10,13 +10,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -94,8 +92,6 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private LinearLayout mLayoutListService;
 
-    private NestedScrollView mScrollViewMemo;
-
     private List<ListServiceResponse.Service> mListService;
 
     private int mServiceId;
@@ -154,45 +150,11 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         mPhotoDialog = new PhotoDialog(getActivityContext(), this);
         mDialogChoose = new DialogChoose(getActivityContext());
         mLayoutListService = (LinearLayout) rootView.findViewById(R.id.layoutListService);
-        mScrollViewMemo = (NestedScrollView) rootView.findViewById(R.id.scrollViewMemo);
     }
 
     @Override
     protected void initAction() {
         mSpinnerServices.setOnItemSelectedListener(this);
-        mScrollViewMemo.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                Logger.d(TAG, ".user scroll down int " + top + "/" + right + "/" + "/" + bottom + "/" + oldLeft + "/" + oldTop + "/" + oldRight + "/" + oldBottom);
-            }
-        });
-        mScrollViewMemo.setOnTouchListener(new View.OnTouchListener() {
-
-            private float mTouchPosition;
-
-            private float mReleasePosition;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mTouchPosition = event.getY();
-                }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    mReleasePosition = event.getY();
-                }
-                float result = mTouchPosition - mReleasePosition;
-                if (mTouchPosition - mReleasePosition > 0) {
-                    // user scroll down
-                    Logger.d(TAG, "user scroll down " + result);
-                } else {
-                    //user scroll up
-                    Logger.d(TAG, "scroll up " + result);
-                }
-
-                return true;
-            }
-        });
 
     }
 

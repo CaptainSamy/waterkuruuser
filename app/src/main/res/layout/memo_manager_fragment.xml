@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:fillViewport="true"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp"
+    android:paddingTop="12dp">
 
-    <LinearLayout
-        android:id="@+id/layoutListService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="@string/title_service_name"
-            android:textColor="@color/colorText"/>
-
-        <Spinner
-            android:id="@+id/spServices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/spinner_app"
-            android:gravity="center"
-            android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
-    </LinearLayout>
-
-    <android.support.v4.widget.NestedScrollView
+    <RelativeLayout
         android:id="@+id/scrollViewMemo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layoutListService"
-        android:fillViewport="true">
+        android:layout_below="@+id/layoutListService">
+
+        <LinearLayout
+            android:id="@+id/layoutListService"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/title_service_name"
+                android:textColor="@color/colorText"/>
+
+            <Spinner
+                android:id="@+id/spServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/spinner_app"
+                android:gravity="center"
+                android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/parentViewMemoConfig"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:paddingTop="12dp">
+            android:layout_below="@+id/layoutListService"
+            android:orientation="vertical">
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </RelativeLayout>
 
-</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

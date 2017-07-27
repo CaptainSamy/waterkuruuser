@@ -31,6 +31,9 @@ public class CheckInStatusResponse extends ResponseData<CheckInStatusResponse.Ch
         @SerializedName("session_id")
         private int mSessionId;
 
+        @SerializedName("service_name")
+        private String mServiceName;
+
         @SerializedName("service_company_id")
         private int mServiceCompanyId;
 
@@ -67,6 +70,10 @@ public class CheckInStatusResponse extends ResponseData<CheckInStatusResponse.Ch
 
         public int getServiceId() {
             return mServiceId;
+        }
+
+        public String getServiceName() {
+            return mServiceName;
         }
     }
 }
