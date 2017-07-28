@@ -135,6 +135,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
             Bundle bundle = new Bundle();
             bundle.putString(WaitStoreConfirmFragment.KEY_STATUS_CHECK_IN, data.getStatus());
             bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, mStoreName);
+            bundle.putString(WaitStoreConfirmFragment.KEY_SERVICE_NAME, data.getServiceName());
             bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
             bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());
             bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_SESSION, data.getNumberSession());

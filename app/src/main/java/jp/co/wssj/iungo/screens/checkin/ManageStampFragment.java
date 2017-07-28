@@ -41,7 +41,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
 
     private int mCountOnResume = 0;
 
-    private String mStoreName;
+    private String mStoreName, mServiceName;
 
     public static ManageStampFragment newInstance(Bundle args) {
 
@@ -138,6 +138,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
         Bundle bundle = getArguments();
         if (bundle != null) {
             mStoreName = bundle.getString(WaitStoreConfirmFragment.KEY_STORE_NAME);
+            mServiceName = bundle.getString(WaitStoreConfirmFragment.KEY_SERVICE_NAME);
         }
         getPresenter().getListCardByServiceCompany(Constants.INIT_PAGE, Constants.LIMIT);
     }
@@ -229,7 +230,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
         bundle.putInt(UserMemoFragment.KEY_SERVICE_ID, serviceId);
         String serviceName = mTextStoreName.getText().toString();
         if (!TextUtils.isEmpty(serviceName)) {
-            bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, mStoreName);
+            bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, mServiceName);
         }
         getActivityCallback().displayScreen(IMainView.FRAGMENT_USER_MEMO, true, true, bundle);
     }

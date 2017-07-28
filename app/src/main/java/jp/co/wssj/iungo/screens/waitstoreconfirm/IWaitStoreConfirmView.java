@@ -11,7 +11,7 @@ interface IWaitStoreConfirmView extends IFragmentView {
 
     void recheckStatus(int delayTimeMs, CheckInStatusResponse.CheckInStatusData data);
 
-    void displayScreenManageStamp(int serviceId);
+    void displayScreenManageStamp(String serviceName);
 
     void displayScreenScanCode();
 

@@ -28,7 +28,6 @@ class WaitStoreConfirmPresenter extends FragmentPresenter<IWaitStoreConfirmView>
 
     void getCheckInStatus() {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        final int serviceId = getModel(SharedPreferencesModel.class).getServiceId();
         getModel(CheckInModel.class).getCheckInStatus(token,
                 new CheckInModel.IGetCheckInStatusCallback() {
 
@@ -37,7 +36,7 @@ class WaitStoreConfirmPresenter extends FragmentPresenter<IWaitStoreConfirmView>
                         if (isViewAttached() && data != null) {
                             switch (data.getStatus()) {
                                 case Constants.CheckInStatus.STATUS_CHECKED_IN:
-                                    getView().displayScreenManageStamp(serviceId);
+                                    getView().displayScreenManageStamp(data.getServiceName());
                                     break;
                                 case Constants.CheckInStatus.STATUS_WAIT_CONFIRM:
                                     getView().recheckStatus(Constants.TIME_DELAYS, data);
@@ -49,7 +48,7 @@ class WaitStoreConfirmPresenter extends FragmentPresenter<IWaitStoreConfirmView>
                         } else {
                             Logger.d("onCheckInStatusSuccess", "data null");
                             if (isViewAttached()) {
-                                getView().displayScreenManageStamp(serviceId);
+                                getView().displayScreenManageStamp(Constants.EMPTY_STRING);
                             }
                         }
                     }

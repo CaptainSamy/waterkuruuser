@@ -94,7 +94,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="@string/can_use_card_title"/>
+                android:text="@string/can_use_card_title"
+                android:textColor="@color/colorTextMain"
+                android:textStyle="bold"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/can_use_card_recycler_view"
@@ -113,7 +115,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="@string/used_card_title"/>
+                android:text="@string/used_card_title"
+                android:textColor="@color/colorTextMain"
+                android:textStyle="bold"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/used_card_recycler_view"

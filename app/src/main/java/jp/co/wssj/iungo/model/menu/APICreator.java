@@ -75,7 +75,7 @@ final class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
-                params.put("ơ", feedback);
+                params.put("info", feedback);
                 return params;
             }
         };

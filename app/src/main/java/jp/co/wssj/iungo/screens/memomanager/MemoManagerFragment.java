@@ -67,19 +67,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private static final int REQUEST_CODE_PICKER_PHOTO_1 = 100;
 
-    private static final int REQUEST_CODE_PICKER_PHOTO_2 = 101;
-
-    private static final int REQUEST_CODE_PICKER_PHOTO_3 = 102;
-
-    private static final int REQUEST_CODE_PICKER_PHOTO_4 = 103;
-
     private static final int REQUEST_CODE_CAMERA_PHOTO_1 = 200;
-
-    private static final int REQUEST_CODE_CAMERA_PHOTO_2 = 201;
-
-    private static final int REQUEST_CODE_CAMERA_PHOTO_3 = 203;
-
-    private static final int REQUEST_CODE_CAMERA_PHOTO_4 = 204;
 
     private ViewGroup mParentViewMemoConfig;
 
@@ -285,14 +273,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Logger.d(TAG, "#onRequestPermissionsResult");
-        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_2
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_3
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_4;
-        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_2
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_3
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_4;
+        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1;
+        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1;
         if (isRequestPicker && Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[0]) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pickImageFromPicker(requestCode);
         } else if (isRequestCamera && permissions.length > 0) {
@@ -358,14 +340,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_2
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_3
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_4;
-        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_2
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_3
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_4;
+        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1;
+        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1;
         if ((isRequestPicker || isRequestCamera) && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri imageUri = UCrop.getOutput(data);
@@ -388,7 +364,9 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         String imagePath = imageUri.getPath();
         if (!TextUtils.isEmpty(imagePath) && mListImage != null) {
             fillImage(imagePath, mCurrentImageClicked, true);
-            mListImage.get(mPositionImageClicked).setUrlImage(imagePath);
+            if (mPositionImageClicked < mListImage.size()) {
+                mListImage.get(mPositionImageClicked).setUrlImage(imagePath);
+            }
         }
     }
 
@@ -476,33 +454,26 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
             MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
             switch (memoConfig.getType()) {
                 case Constants.MemoConfig.TYPE_SHORT_TEXT:
-                    Logger.d("onCreateMemoDynamic", "TYPE_SHORT_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LONG_TEXT:
-                    Logger.d("onCreateMemoDynamic", "TYPE_LONG_TEXT");
                     handleCreateEditText(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_IMAGE:
-                    Logger.d("onCreateMemoDynamic", "TYPE_IMAGE");
                     handleCreateImage(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_COMBO_BOX:
                     //check box in android
-                    Logger.d("onCreateMemoDynamic", "TYPE_COMBO_BOX");
                     handleCreateComboBox(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_SWITCH:
-                    Logger.d("onCreateMemoDynamic", "TYPE_SWITCH");
                     handleCreateSwitch(listMemoConfig, listValuesConfig, position);
                     break;
                 case Constants.MemoConfig.TYPE_LEVEL:
-                    Logger.d("onCreateMemoDynamic", "TYPE_LEVEL");
 //                    handleCreateLevel(listMemoConfig, listValuesConfig, position);
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
                 default:
-                    Logger.d("onCreateMemoDynamic", "default");
                     onCreateMemoDynamic(listMemoConfig, listValuesConfig, position + 1);
                     break;
             }
@@ -514,7 +485,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                     mSpinnerServices.setEnabled(true);
                     View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
                     TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
-                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in);
+                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in_memo_end);
                     view.startAnimation(animation);
                     mParentViewMemoConfig.addView(view);
                     mButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -532,7 +503,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     public void loopCreateMemoDynamic(View viewChild, final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
-        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_out);
+        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in_memo);
         viewChild.startAnimation(animation);
         mParentViewMemoConfig.addView(viewChild);
         new Handler().postDelayed(new Runnable() {
@@ -607,7 +578,11 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     public void handleCreateImage(final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
         MemoDynamicResponse.UserMemoData.UserMemoConfig memoConfig = listMemoConfig.get(position);
         MemoDynamicResponse.UserMemoData.UserMemoValue memoValue = listValuesConfig.get(position);
-
+        mListImage = memoValue.getValue().getListImage();
+        if (mListImage != null && mListImage.size() == 0) {
+            MemoDynamicResponse.UserMemoData.UserMemoValue.Value value = new MemoDynamicResponse.UserMemoData.UserMemoValue.Value(memoConfig.getConfig().getNumberImages());
+            memoValue.getValue().getListImage().addAll(value.getListImage());
+        }
         TextView title;
         final ExpandableHeightGridView gridView;
         if (mListGridView == null) {
@@ -631,7 +606,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                 getPresenter().onImageViewClicked((Drawable) view.getTag(R.id.shared_drawable), REQUEST_CODE_PICKER_PHOTO_1, REQUEST_CODE_CAMERA_PHOTO_1);
             }
         });
-        mListImage = memoValue.getValue().getListImage();
+//        mListImage = memoValue.getValue().getListImage();
         loopCreateMemoDynamic(viewGrid, listMemoConfig, listValuesConfig, position);
     }
 

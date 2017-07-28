@@ -43,6 +43,7 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                         switch (data.getStatus()) {
                             case Constants.CheckInStatus.STATUS_CHECKED_IN:
                                 bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, data.getStoreName());
+                                bundle.putString(WaitStoreConfirmFragment.KEY_SERVICE_NAME, data.getServiceName());
                                 getView().switchScreen(IMainView.FRAGMENT_MANAGER_STAMP, true, false, bundle);
                                 break;
                             case Constants.CheckInStatus.STATUS_WAIT_CONFIRM:

@@ -8,9 +8,9 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
 import android.text.TextUtils;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -46,7 +46,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(final RemoteMessage remoteMessage) {
         Logger.d(TAG, "From: " + remoteMessage.getFrom());
 
         Intent sentToActivity = new Intent();
@@ -62,9 +62,10 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 @Override
                 public void onSuccess(NotificationMessage notificationMessage) {
                     Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this).setContentText(Html.fromHtml(notificationMessage.getMessage()));
-                    if (!TextUtils.isEmpty(notificationMessage.getTitle())) {
-                        builder.setContentTitle(notificationMessage.getTitle());
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this);
+                    builder.setContentTitle(notificationMessage.getTitle());
+                    if (!TextUtils.isEmpty(notificationMessage.getMessage())) {
+                        builder.setContentText(notificationMessage.getMessage());
                     }
                     builder.setLights(Color.BLUE, 500, 500);
                     long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
@@ -74,22 +75,19 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     builder.setAutoCancel(true);
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         builder.setColor(getResources().getColor(R.color.colorMain));
-//                        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
-//                        builder.setLargeIcon(largeIcon);
-                        builder.setSmallIcon(R.drawable.image_notification);
-                    } else {
-                        builder.setSmallIcon(R.mipmap.logo_app);
                     }
-//                    Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.logo_app);
-//                    builder.setSmallIcon(R.mipmap.logo_app).setLargeIcon(largeIcon);
-//                    builder.setLargeIcon(largeIcon);
+                    builder.setSmallIcon(R.mipmap.image_notification);
 
                     Intent intent = new Intent(FirebaseMsgService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                             Intent.FLAG_ACTIVITY_SINGLE_TOP |
                             Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(EXTRA_NOTIFICATION, notificationMessage);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    Bundle b = new Bundle();
+                    for (String key : remoteMessage.getData().keySet()) {
+                        b.putString(key, remoteMessage.getData().get(key));
+                    }
+                    intent.putExtras(b);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
                     builder.setContentIntent(pendingIntent);
                     mNotificationManager.notify((int) notificationMessage.getPushId(), builder.build());
                 }

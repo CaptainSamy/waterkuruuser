@@ -131,7 +131,7 @@ public class StampModel extends BaseModel {
 
     public void getListStoreCheckedIn(String token, int serviceCompanyId, final double latitude, final double longitude, final IGetListStoreCheckedResponse callback) {
 
-        final Request request = APICreator.getListStoreCheckedIn(token, serviceCompanyId,
+        final Request request = APICreator.getListStoreCheckedIn(token, serviceCompanyId, latitude, longitude,
                 new Response.Listener<ListStoreCheckedResponse>() {
 
                     @Override
@@ -139,9 +139,6 @@ public class StampModel extends BaseModel {
                         Logger.d(TAG, "#getListStoreCheckedIn => onResponse ");
                         if (response.isSuccess() && response.getData() != null) {
                             ListStoreCheckedResponse.ListStoreData data = response.getData();
-//                            List<ListStoreCheckedResponse.StoreCheckedIn> listStore = data.getListStore();
-//                            if (listStore != null && listStore.size() > 0) {
-//                                sortLocations(listStore, latitude, longitude);
                             callback.onSuccess(data);
                         } else {
                             callback.onFailure(new ErrorMessage(response.getMessage()));

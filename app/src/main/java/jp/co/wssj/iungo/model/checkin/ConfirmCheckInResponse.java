@@ -28,6 +28,9 @@ public class ConfirmCheckInResponse extends ResponseData<ConfirmCheckInResponse.
         @SerializedName("service_id")
         private int mServiceId;
 
+        @SerializedName("service_name")
+        private String mServiceName;
+
         @SerializedName("company_id")
         private int mCompanyId;
 
@@ -74,6 +77,10 @@ public class ConfirmCheckInResponse extends ResponseData<ConfirmCheckInResponse.
 
         public int getNumberSession() {
             return mNumberSession;
+        }
+
+        public String getServiceName() {
+            return mServiceName;
         }
     }
 }

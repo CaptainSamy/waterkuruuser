@@ -40,6 +40,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     public static final String KEY_NUMBER_SESSION = "KEY_NUMBER_SESSION";
 
+    public static final String KEY_SERVICE_NAME = "KEY_SERVICE_NAME";
+
     private CircularProgressBar mCircleProgress;
 
     private TextView mExpandWaitingText;
@@ -52,7 +54,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
 
     private final Handler mHandler = new Handler();
 
-    private String mStoreName;
+    private String mStoreName, mServiceName;
 
     private int mNumberCustomer;
 
@@ -191,6 +193,7 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
                             public void run() {
                                 Bundle bundle = new Bundle();
                                 bundle.putString(KEY_STORE_NAME, mStoreName);
+                                bundle.putSerializable(KEY_SERVICE_NAME, mServiceName);
                                 getActivityCallback().displayScreen(IMainView.FRAGMENT_MANAGER_STAMP, true, false, bundle);
                             }
                         }, 2500);
@@ -213,8 +216,8 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mNumberCustomer = bundle.getInt(KEY_NUMBER_PEOPLE);
             mPositionCustomer = bundle.getInt(KEY_NUMBER_SESSION);
             mTimeWaiting = bundle.getLong(KEY_TIME_WAITING);
-            Logger.d(TAG, "initData " + mTimeWaiting);
             mTextStoreName.setText(mStoreName == null ? Constants.EMPTY_STRING : mStoreName);
+            mServiceName = bundle.getString(KEY_SERVICE_NAME);
             mTextPositionCustomer.setText(String.valueOf(mPositionCustomer));
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
             String time = Utils.convertLongToDate(mTimeWaiting);
@@ -231,7 +234,6 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
             mNumberCustomer = data.getNumberPeople();
             mPositionCustomer = data.getNumberSession();
             mTimeWaiting = data.getTimeWaiting();
-            Logger.d(TAG, "recheckStatus " + mTimeWaiting);
             mTextPositionCustomer.setText(String.valueOf(mPositionCustomer));
             mTextNumberCustomer.setText(getString(R.string.number_customer_waiting, String.valueOf(mNumberCustomer)));
             String time = Utils.convertLongToDate(mTimeWaiting);
@@ -247,9 +249,12 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
     }
 
     @Override
-    public void displayScreenManageStamp(int serviceId) {
+    public void displayScreenManageStamp(String serviceName) {
         Logger.d(TAG, "#displayScreenManageStamp");
         isAllowCheckIn = true;
+        if (!TextUtils.isEmpty(serviceName)) {
+            mServiceName = serviceName;
+        }
         mCircleProgress.setRepeat(1);
     }
 

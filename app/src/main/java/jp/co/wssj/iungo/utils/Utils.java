@@ -398,12 +398,12 @@ public final class Utils {
         }
     }
 
-    public static final String toMD5(String message) {
+    public static final String toMD5(String password) {
         try {
             // Create MD5 Hash
-            message = Constants.SALT + message;
+            password = Constants.SALT + password;
             MessageDigest digest = MessageDigest.getInstance(Constants.HASH_MD5);
-            digest.update(message.getBytes());
+            digest.update(password.getBytes());
             byte messageDigest[] = digest.digest();
             // Create Hex String
             StringBuilder hexString = new StringBuilder();

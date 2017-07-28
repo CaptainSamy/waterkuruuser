@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.pushnotification.detail;
 
+import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
 import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 /**
@@ -7,4 +8,8 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
  */
 
 public interface IPushNotificationDetailView extends IFragmentView {
+
+    void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse);
+
+    void onGetContentPushFailure(String message);
 }

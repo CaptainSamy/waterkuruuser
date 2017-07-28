@@ -44,7 +44,7 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.fillDataToView(getContext(), getItem(position));
-        if (position == getCount() - 1) {
+        if (position == (getCount() - 1) && mCallback != null) {
             mCallback.onEndOfListView();
         }
         return convertView;

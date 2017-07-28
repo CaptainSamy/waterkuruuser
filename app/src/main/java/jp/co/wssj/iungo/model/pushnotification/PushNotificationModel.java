@@ -12,8 +12,10 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
+import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.utils.VolleySequence;
 
 /**
@@ -48,6 +50,13 @@ public class PushNotificationModel extends BaseModel {
         void onUpdateActionPushSuccess();
 
         void onUpdateActionPushFailure();
+    }
+
+    public interface IGetContentPushCallback {
+
+        void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse);
+
+        void onGetContentPushFailure(String message);
     }
 
     public PushNotificationModel(Context context) {
@@ -135,6 +144,33 @@ public class PushNotificationModel extends BaseModel {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callback.onUpdateActionPushFailure();
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
+
+    public void getContentPush(String token, long pushId, final IGetContentPushCallback callback) {
+        Request request = APICreator.getContentPush(token, pushId, new Response.Listener<ContentPushResponse>() {
+
+            @Override
+            public void onResponse(ContentPushResponse response) {
+                if (response.isSuccess()) {
+                    callback.onGetContentPushSuccess(response.getData());
+                } else {
+                    callback.onGetContentPushFailure(response.getMessage());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onGetContentPushFailure(errorResponse.getMessage());
+                } else {
+                    callback.onGetContentPushFailure(getStringResource(R.string.failure));
+                }
             }
         });
         VolleySequence.getInstance().addRequest(request);

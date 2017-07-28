@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.screens.pushnotification.detail;
 import android.text.TextUtils;
 
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
+import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
 import jp.co.wssj.iungo.utils.Logger;
@@ -55,5 +56,25 @@ public class PushNotificationDetailPresenter extends FragmentPresenter<IPushNoti
                 }
             });
         }
+    }
+
+    public void getContentPush(long pushId) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getView().showProgress();
+        getModel(PushNotificationModel.class).getContentPush(token, pushId, new PushNotificationModel.IGetContentPushCallback() {
+
+            @Override
+            public void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse) {
+                getView().hideProgress();
+                getView().onGetContentPushSuccess(contentPushResponse);
+            }
+
+            @Override
+            public void onGetContentPushFailure(String message) {
+                getView().hideProgress();
+                getView().onGetContentPushFailure(message);
+            }
+        });
+
     }
 }

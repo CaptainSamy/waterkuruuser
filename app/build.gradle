@@ -27,8 +27,8 @@ android {
             buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 9
-            versionName "1.0.8.dev"
+            versionCode 12
+            versionName "1.0.11.dev"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             signingConfig signingConfigs.product
         }
@@ -37,8 +37,8 @@ android {
             buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 9
-            versionName "1.0.8"
+            versionCode 12
+            versionName "1.0.11"
             testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
             signingConfig signingConfigs.product
         }

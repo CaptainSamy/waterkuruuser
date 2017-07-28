@@ -110,31 +110,35 @@ public class UserMemoModel extends BaseModel {
         final List<MemoDynamicResponse.UserMemoData.UserMemoValue.Value.Image> images = listImage;
         if (position < listImage.size()) {
             String path = listImage.get(position).getUrlImage();
-            final String fileName = Utils.getFileName(path);
-            File file = new File(path);
-            if (file != null && file.exists()) {
-                AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
+            if (!TextUtils.isEmpty(path)) {
+                final String fileName = Utils.getFileName(path);
+                File file = new File(path);
+                if (file.exists()) {
+                    AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
 
-                    @Override
-                    public void onStateChanged(int id, TransferState state) {
-                        if (state == TransferState.COMPLETED) {
-                            images.get(position).setUrlImage(AmazonS3Utils.BASE_IMAGE_URL + fileName);
+                        @Override
+                        public void onStateChanged(int id, TransferState state) {
+                            if (state == TransferState.COMPLETED) {
+                                images.get(position).setUrlImage(AmazonS3Utils.BASE_IMAGE_URL + fileName);
+                                uploadImageAWS(memoValues, position + 1, images, callback);
+                            }
+                        }
+
+                        @Override
+                        public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                            Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
+                        }
+
+                        @Override
+                        public void onError(int id, Exception ex) {
+                            Logger.d(TAG, "#onError " + ex);
+                            images.get(position).setUrlImage(Constants.EMPTY_STRING);
                             uploadImageAWS(memoValues, position + 1, images, callback);
                         }
-                    }
-
-                    @Override
-                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                        Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
-                    }
-
-                    @Override
-                    public void onError(int id, Exception ex) {
-                        Logger.d(TAG, "#onError " + ex);
-                        images.get(position).setUrlImage(Constants.EMPTY_STRING);
-                        uploadImageAWS(memoValues, position + 1, images, callback);
-                    }
-                });
+                    });
+                } else {
+                    uploadImageAWS(memoValues, position + 1, images, callback);
+                }
             } else {
                 uploadImageAWS(memoValues, position + 1, images, callback);
             }

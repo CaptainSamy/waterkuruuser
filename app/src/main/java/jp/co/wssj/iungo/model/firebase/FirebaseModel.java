@@ -14,7 +14,6 @@ import java.util.Map;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
-import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.VolleySequence;
 
 /**
@@ -73,21 +72,14 @@ public class FirebaseModel extends BaseModel {
         String title = data.get("title");
         String message = data.get("body");
         String pushIdText = data.get("push_id");
-        String actionPush = Constants.PushNotification.TYPE_NOTIFICATION;
+        String actionPush = data.get("type");
         int stampId = 0;
-        String[] splitAction = data.get("click_action").split(Constants.SPLIT);
-        if (splitAction != null) {
-            actionPush = splitAction[0];
-            if (splitAction.length == 2) {
-                stampId = Integer.parseInt(splitAction[1]);
-            }
-        }
 
         long pushId = 1;
         if (!TextUtils.isEmpty(pushIdText)) {
             pushId = Long.parseLong(pushIdText);
         }
-        if (TextUtils.isEmpty(message)) {
+        if (TextUtils.isEmpty(title)) {
             callback.onFailure(new ErrorMessage(getStringResource(R.string.msg_parse_message_failure)));
         } else {
             callback.onSuccess(new NotificationMessage(pushId, title, message, actionPush, stampId));
