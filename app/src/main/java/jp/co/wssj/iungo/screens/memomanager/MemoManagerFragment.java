@@ -24,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -68,19 +67,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     private static final int REQUEST_CODE_PICKER_PHOTO_1 = 100;
 
-    private static final int REQUEST_CODE_PICKER_PHOTO_2 = 101;
-
-    private static final int REQUEST_CODE_PICKER_PHOTO_3 = 102;
-
-    private static final int REQUEST_CODE_PICKER_PHOTO_4 = 103;
-
     private static final int REQUEST_CODE_CAMERA_PHOTO_1 = 200;
-
-    private static final int REQUEST_CODE_CAMERA_PHOTO_2 = 201;
-
-    private static final int REQUEST_CODE_CAMERA_PHOTO_3 = 203;
-
-    private static final int REQUEST_CODE_CAMERA_PHOTO_4 = 204;
 
     private ViewGroup mParentViewMemoConfig;
 
@@ -89,8 +76,6 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     private PhotoDialog mPhotoDialog;
 
     private DialogChoose mDialogChoose;
-
-    private LinearLayout mLayoutListService;
 
     private List<ListServiceResponse.Service> mListService;
 
@@ -149,13 +134,11 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
         mSpinnerServices = (Spinner) rootView.findViewById(R.id.spServices);
         mPhotoDialog = new PhotoDialog(getActivityContext(), this);
         mDialogChoose = new DialogChoose(getActivityContext());
-        mLayoutListService = (LinearLayout) rootView.findViewById(R.id.layoutListService);
     }
 
     @Override
     protected void initAction() {
         mSpinnerServices.setOnItemSelectedListener(this);
-
     }
 
     @Override
@@ -290,14 +273,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Logger.d(TAG, "#onRequestPermissionsResult");
-        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_2
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_3
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_4;
-        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_2
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_3
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_4;
+        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1;
+        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1;
         if (isRequestPicker && Manifest.permission.WRITE_EXTERNAL_STORAGE.equals(permissions[0]) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pickImageFromPicker(requestCode);
         } else if (isRequestCamera && permissions.length > 0) {
@@ -363,14 +340,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_2
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_3
-                || requestCode == REQUEST_CODE_PICKER_PHOTO_4;
-        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_2
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_3
-                || requestCode == REQUEST_CODE_CAMERA_PHOTO_4;
+        boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1;
+        boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1;
         if ((isRequestPicker || isRequestCamera) && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri imageUri = UCrop.getOutput(data);

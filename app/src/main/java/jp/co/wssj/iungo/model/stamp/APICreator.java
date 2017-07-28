@@ -67,19 +67,28 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<ListStoreCheckedResponse> getListStoreCheckedIn(String token, final int serviceCompanyId, Response.Listener<ListStoreCheckedResponse> responseListener, Response.ErrorListener errorListener) {
+    static GsonJsonRequest<ListStoreCheckedResponse> getListStoreCheckedIn(String token, final int serviceCompanyId, final double latitude, final double longitude, Response.Listener<ListStoreCheckedResponse> responseListener, Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
 
         String url = LIST_STORE_CHECK_IN + "?service_company_id=" + serviceCompanyId;
         ResponseListener<ListStoreCheckedResponse> listener = new ResponseListener<>(TAG, "getListStoreCheckedIn", responseListener, errorListener);
-        return new GsonRequest<>(Request.Method.GET,
+        return new GsonJsonRequest<ListStoreCheckedResponse>(Request.Method.POST,
                 url,
                 ListStoreCheckedResponse.class,
                 headers,
                 listener,
-                listener);
+                listener) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> param = new HashMap<>();
+                param.put("latitude", latitude);
+                param.put("longitude", longitude);
+                return param;
+            }
+        };
     }
 
     static GsonRequest<ResponseData> reviewServiceByStamp(String token, final int stampId, final float rating, final String note, Response.Listener<ResponseData> responseListener, Response.ErrorListener errorListener) {

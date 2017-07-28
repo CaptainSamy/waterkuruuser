@@ -48,7 +48,7 @@ class WaitStoreConfirmPresenter extends FragmentPresenter<IWaitStoreConfirmView>
                         } else {
                             Logger.d("onCheckInStatusSuccess", "data null");
                             if (isViewAttached()) {
-                                getView().displayScreenManageStamp(data.getServiceName());
+                                getView().displayScreenManageStamp(Constants.EMPTY_STRING);
                             }
                         }
                     }

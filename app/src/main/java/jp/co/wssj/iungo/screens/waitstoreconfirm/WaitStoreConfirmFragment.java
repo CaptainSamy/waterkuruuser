@@ -252,7 +252,9 @@ public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView
     public void displayScreenManageStamp(String serviceName) {
         Logger.d(TAG, "#displayScreenManageStamp");
         isAllowCheckIn = true;
-        mServiceName = serviceName;
+        if (!TextUtils.isEmpty(serviceName)) {
+            mServiceName = serviceName;
+        }
         mCircleProgress.setRepeat(1);
     }
 
