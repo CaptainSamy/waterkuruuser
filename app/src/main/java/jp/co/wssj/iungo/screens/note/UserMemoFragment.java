@@ -459,7 +459,7 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
                 public void run() {
                     View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
                     TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
-                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in);
+                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in_memo_end);
                     view.startAnimation(animation);
                     mParentViewMemoConfig.addView(view);
                     mButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -477,7 +477,7 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
     }
 
     public void loopCreateMemoDynamic(View viewChild, final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
-        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_out);
+        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in_memo);
         viewChild.startAnimation(animation);
         mParentViewMemoConfig.addView(viewChild);
 

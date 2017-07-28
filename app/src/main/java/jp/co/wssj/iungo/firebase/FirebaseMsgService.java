@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -45,7 +46,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(final RemoteMessage remoteMessage) {
         Logger.d(TAG, "From: " + remoteMessage.getFrom());
 
         Intent sentToActivity = new Intent();
@@ -62,9 +63,9 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 public void onSuccess(NotificationMessage notificationMessage) {
                     Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(FirebaseMsgService.this);
-                    builder.setContentTitle(getString(R.string.app_name));
-                    if (!TextUtils.isEmpty(notificationMessage.getTitle())) {
-                        builder.setContentText(notificationMessage.getTitle());
+                    builder.setContentTitle(notificationMessage.getTitle());
+                    if (!TextUtils.isEmpty(notificationMessage.getMessage())) {
+                        builder.setContentText(notificationMessage.getMessage());
                     }
                     builder.setLights(Color.BLUE, 500, 500);
                     long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
@@ -81,7 +82,11 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                             Intent.FLAG_ACTIVITY_SINGLE_TOP |
                             Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(EXTRA_NOTIFICATION, notificationMessage);
+                    Bundle b = new Bundle();
+                    for (String key : remoteMessage.getData().keySet()) {
+                        b.putString(key, remoteMessage.getData().get(key));
+                    }
+                    intent.putExtras(b);
                     PendingIntent pendingIntent = PendingIntent.getActivity(FirebaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
                     builder.setContentIntent(pendingIntent);
                     mNotificationManager.notify((int) notificationMessage.getPushId(), builder.build());

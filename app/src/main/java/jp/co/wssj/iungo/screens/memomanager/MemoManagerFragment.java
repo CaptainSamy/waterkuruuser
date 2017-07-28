@@ -485,7 +485,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
                     mSpinnerServices.setEnabled(true);
                     View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.layout_image_save, null);
                     TextView mButtonSave = (TextView) view.findViewById(R.id.tvSave);
-                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in);
+                    Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in_memo_end);
                     view.startAnimation(animation);
                     mParentViewMemoConfig.addView(view);
                     mButtonSave.setOnClickListener(new View.OnClickListener() {
@@ -503,7 +503,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     public void loopCreateMemoDynamic(View viewChild, final List<MemoDynamicResponse.UserMemoData.UserMemoConfig> listMemoConfig, final List<MemoDynamicResponse.UserMemoData.UserMemoValue> listValuesConfig, final int position) {
-        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_out);
+        Animation animation = AnimationUtils.loadAnimation(getActivityContext(), R.anim.anim_in_memo);
         viewChild.startAnimation(animation);
         mParentViewMemoConfig.addView(viewChild);
         new Handler().postDelayed(new Runnable() {
