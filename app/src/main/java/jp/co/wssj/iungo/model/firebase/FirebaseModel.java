@@ -79,7 +79,7 @@ public class FirebaseModel extends BaseModel {
         if (!TextUtils.isEmpty(pushIdText)) {
             pushId = Long.parseLong(pushIdText);
         }
-        if (TextUtils.isEmpty(message)) {
+        if (TextUtils.isEmpty(title)) {
             callback.onFailure(new ErrorMessage(getStringResource(R.string.msg_parse_message_failure)));
         } else {
             callback.onSuccess(new NotificationMessage(pushId, title, message, actionPush, stampId));

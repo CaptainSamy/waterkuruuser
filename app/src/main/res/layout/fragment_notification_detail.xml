@@ -42,21 +42,22 @@
             android:textSize="12sp"/>
     </LinearLayout>
 
+    <LinearLayout
 
-    <TextView
-        android:id="@+id/body_notification"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonRating"
         android:layout_below="@+id/layoutTime"
-        android:layout_centerVertical="true"
-        android:autoLink="web"
-        android:background="@drawable/border_text_view"
-        android:padding="8dp"
-        android:scrollbars="vertical"
-        android:text="XXXXXXXXXX　"
-        android:textColor="@color/colorTextMain"
-        android:textSize="14sp"/>
+        android:background="@drawable/border_edit_text"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <WebView
+            android:id="@+id/body_notification"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/buttonRating"
@@ -74,7 +75,6 @@
         android:text="@string/rating"
         android:textColor="@color/white"
         android:visibility="gone"/>
-
 
 </RelativeLayout>
 

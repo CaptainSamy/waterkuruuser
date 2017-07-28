@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "broadcastReceiver");
             mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
+            mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead++);
         }
     };
 
@@ -253,6 +254,7 @@ public class MainActivity extends AppCompatActivity
     public void showListPushNotificationUnRead(List<NotificationMessage> list, final int page, final int totalPage, final int totalNotificationUnRead) {
         mTotalNotificationUnRead = totalNotificationUnRead;
         mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead);
+        Logger.d(TAG, "showListPushNotificationUnRead " + totalNotificationUnRead);
         if (list != null) {
             if (mPushNotificationAdapter == null) {
                 mListNotification = new ArrayList<>();
@@ -535,11 +537,13 @@ public class MainActivity extends AppCompatActivity
                 String content = b.getString("body");
                 String action = b.getString("type");
                 int stampId = 0;
-                String[] splitAction = b.getString("type").split(Constants.SPLIT);
-                if (splitAction != null) {
-                    action = splitAction[0];
-                    if (splitAction.length == 2) {
-                        stampId = Integer.parseInt(splitAction[1]);
+                if (!TextUtils.isEmpty(action)) {
+                    String[] splitAction = action.split(Constants.SPLIT);
+                    if (splitAction != null) {
+                        action = splitAction[0];
+                        if (splitAction.length == 2) {
+                            stampId = Integer.parseInt(splitAction[1]);
+                        }
                     }
                 }
                 NotificationMessage notificationMessage = new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
@@ -548,7 +552,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
-                bundle.putBoolean(PushNotificationDetailFragment.FLAG_CONVERT_TIME, true);
+                bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             } else {

@@ -29,6 +29,8 @@ public class APICreator {
 
     private static final String API_UPDATE_ACTION_NOTIFICATION = Constants.BASE_URL_AWS + "/api/client/users/update-push-notification";
 
+    private static final String API_GET_CONTENT_PUSH = Constants.BASE_URL_AWS + "/api/client/users/get-push-notification-by-id";
+
     static GsonRequest<ListNotificationResponse> getUploadDeviceTokenRequest(final String token, int page, int limit,
                                                                              final Response.Listener<ListNotificationResponse> listener,
                                                                              final Response.ErrorListener errorListener) {
@@ -165,7 +167,43 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("push_id", String.valueOf(pushId));
+                map.put("push_id", pushId);
+                return map;
+            }
+        };
+    }
+
+    static GsonJsonRequest<ContentPushResponse> getContentPush(final String token, final long pushId,
+                                                               final Response.Listener<ContentPushResponse> listener,
+                                                               final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<ContentPushResponse>(Request.Method.POST,
+                API_GET_CONTENT_PUSH,
+                ContentPushResponse.class,
+                headers,
+                new Response.Listener<ContentPushResponse>() {
+
+                    @Override
+                    public void onResponse(ContentPushResponse response) {
+                        Logger.d(TAG, "#getContentPush -> onResponse ");
+                        listener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#getContentPush -> onErrorResponse");
+                        errorListener.onErrorResponse(error);
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("push_id", pushId);
                 return map;
             }
         };
