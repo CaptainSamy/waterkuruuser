@@ -30,7 +30,6 @@
     <string name="register_account">新規登録</string>
     <string name="user_login_not_null">ログインIDを入力してください。</string>
     <string name="password_login_not_null">パスワードを入力してください。</string>
-    <string name="confirm_password_not_null">パスワード（確認）を入力していませんでした。入力してください。</string>
 
     <!--Reset/change password fragment-->
     <string name="title_screen_reset_password">パスワード初期化</string>
@@ -64,9 +63,10 @@
     <string name="title_register">新規登録</string>
     <string name="register">登録</string>
     <string name="user_name_not_null">名前を入力してください。</string>
-    <string name="user_not_null">ログイン IDを入力していませんでした。入力してください。</string>
+    <string name="user_not_null">ログインIDを入力してください。</string>
     <string name="password_length">パスワードを8～14桁で入力してください。</string>
-    <string name="password_not_null">パスワードを入力していませんでした。入力してください。</string>
+    <string name="password_not_null">パスワードを入力してください。</string>
+    <string name="confirm_password_not_null">パスワード（確認）を入力してください。</string>
     <string name="different_password">パスワードとパスワード（確認）が異なります。正しく入力してください。</string>
     <string name="email_not_null">メールアドレスを入力していませんでした。入力してください。</string>
     <string name="email_container_chars">Email must container chars</string>
