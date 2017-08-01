@@ -68,6 +68,13 @@ public final class Constants {
         public static final int TYPE_TWITTER = 3;
     }
 
+    public static final class Register {
+
+        public static final int MIN_AGE = 10;
+
+        public static final int MAX_AGE = 70;
+    }
+
     public static final class CheckInStatus {
 
         public static final String STATUS_WAIT_CONFIRM = "wait_confirm";

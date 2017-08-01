@@ -53,12 +53,12 @@
     <string name="email_not_format">メールアドレスを正しく入力してください。</string>
     <string name="title_password_old">パスワード変更</string>
     <string name="text_hint_password_old">現在のパスワード</string>
-
-
     <string name="current_password_not_null">パスワードを入力してください。</string>
     <string name="new_password_not_null"> 新パスワードを入力してください。</string>
     <string name="confirm_new_password_not_null">新パスワード(確認)を入力してください。</string>
     <string name="confirm_different_new_password">新パスワード(確認)はパスワードに誤りがあります。</string>
+
+
     <!--Register account fragment-->
     <string name="title_register">新規登録</string>
     <string name="register">登録</string>
@@ -79,6 +79,11 @@
     <string name="input_email">メールアドレス</string>
     <string name="input_password">パスワード</string>
     <string name="input_confirm_password">パスワード(確認)</string>
+
+    <string name="title_age">年齢</string>
+    <string name="title_sex">性別</string>
+    <string name="male">男性</string>
+    <string name="fe_male">女性</string>
 
 
     <!--Home fragment-->

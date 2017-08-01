@@ -1,5 +1,8 @@
 package jp.co.wssj.iungo.screens.registeraccount;
 
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -7,22 +10,33 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.auth.RegisterData;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
  */
 
-public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, RegisterAccountPresenter> implements IRegisterAccountView, View.OnClickListener {
+public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, RegisterAccountPresenter> implements IRegisterAccountView, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "RegisterAccountFragment";
 
@@ -31,6 +45,14 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     private TextView mTextRegisterAccount, mTermOfService;
 
     private TextView mTextUserNameError, mTextUserIdError, mTextEmailError, mTextPasswordError, mTextConfirmPasswordError;
+
+    private Spinner mSpinnerAge;
+
+    private RadioGroup mRadioGroupSex;
+
+    private RadioButton mRadioMale, mRadioFemale;
+
+    private int mAgeChoose, mSex;
 
     @Override
     public int getFragmentId() {
@@ -97,17 +119,66 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
         mTextEmailError = (TextView) rootView.findViewById(R.id.tvEmailError);
         mTextPasswordError = (TextView) rootView.findViewById(R.id.tvPasswordError);
         mTextConfirmPasswordError = (TextView) rootView.findViewById(R.id.tvConfirmPasswordError);
+
+        mSpinnerAge = (Spinner) rootView.findViewById(R.id.spAge);
+        mRadioGroupSex = (RadioGroup) rootView.findViewById(R.id.radioGroupSex);
+        mRadioMale = (RadioButton) rootView.findViewById(R.id.radioMale);
+        mRadioFemale = (RadioButton) rootView.findViewById(R.id.radioFeMale);
     }
 
     @Override
     protected void initAction() {
         mTextRegisterAccount.setOnClickListener(this);
+        mSpinnerAge.setOnItemSelectedListener(this);
+        mRadioGroupSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if (checkedId == mRadioMale.getId()) {
+                    mSex = 1;
+                } else {
+                    mSex = 0;
+                }
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
         initTermOfService();
+        initAge();
+        mSex = 1;
+
+    }
+
+    public void initAge() {
+        List<Integer> list = new ArrayList<>();
+        for (int i = Constants.Register.MIN_AGE; i < Constants.Register.MAX_AGE; i++) {
+            list.add(i);
+        }
+        ArrayAdapter<Integer> mAdapterSpNumWord = new ArrayAdapter<Integer>(getActivityContext(), android.R.layout.simple_list_item_1, list) {
+
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+                if (v instanceof TextView) {
+                    ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                }
+                return v;
+            }
+        };
+        mSpinnerAge.setAdapter(mAdapterSpNumWord);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        mAgeChoose = (Integer) parent.getItemAtPosition(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 
@@ -157,7 +228,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
                 String password = mInputPassword.getText().toString().trim();
                 String confirmPassword = mInputConfirmPassword.getText().toString().trim();
                 String email = mInputEmail.getText().toString().trim();
-                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email);
+                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email, mAgeChoose, mSex);
                 break;
         }
     }

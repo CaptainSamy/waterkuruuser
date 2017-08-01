@@ -33,7 +33,7 @@ public class AuthModel extends BaseModel {
 
     public interface IValidateRegisterCallback {
 
-        void validateSuccess(String userName, String password, String name, String email);
+        void validateSuccess(String userName, String password, String name, String email, int age, int sex);
 
         void validateFailure(ErrorMessage errorMessage, int code);
 
@@ -102,7 +102,7 @@ public class AuthModel extends BaseModel {
         }
     }
 
-    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, IValidateRegisterCallback callback) {
+    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, int age, int sex, IValidateRegisterCallback callback) {
         ErrorMessage errorMessage = null;
         int code = 0;
         if (TextUtils.isEmpty(userName)) {
@@ -135,7 +135,7 @@ public class AuthModel extends BaseModel {
         if (errorMessage != null && !TextUtils.isEmpty(errorMessage.getMessage())) {
             callback.validateFailure(errorMessage, code);
         } else {
-            callback.validateSuccess(userId, password, userName, email);
+            callback.validateSuccess(userId, password, userName, email, age, sex);
         }
 
     }
@@ -170,8 +170,8 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
     }
 
-    public void registerAccount(String userId, String password, String name, String email, int typeLogin, String token, final IRegisterCallback callback) {
-        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, typeLogin, token, new Response.Listener<RegisterResponse>() {
+    public void registerAccount(String userId, String password, String name, String email, int age, int sex, int typeLogin, String token, final IRegisterCallback callback) {
+        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, age, sex, typeLogin, token, new Response.Listener<RegisterResponse>() {
 
             @Override
             public void onResponse(RegisterResponse response) {

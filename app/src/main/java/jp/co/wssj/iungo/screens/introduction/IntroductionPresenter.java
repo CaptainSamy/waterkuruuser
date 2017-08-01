@@ -31,7 +31,7 @@ class IntroductionPresenter extends FragmentPresenter<IIntroductionView> {
 
     void onLoginSocialNetwork(final int typeLogin, String token) {
         getView().showProgress();
-        getModel(AuthModel.class).registerAccount(Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING, typeLogin, token, new AuthModel.IRegisterCallback() {
+        getModel(AuthModel.class).registerAccount(Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.Register.MIN_AGE, 1, typeLogin, token, new AuthModel.IRegisterCallback() {
 
             @Override
             public void onRegisterSuccess(RegisterData data, String message) {
