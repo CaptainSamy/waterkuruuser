@@ -1,8 +1,8 @@
 package jp.co.wssj.iungo;
 
 import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,8 +22,6 @@ import jp.co.wssj.iungo.widget.EasyDialog;
 
 public class DialogNotification {
 
-    private View mRootViewNotification;
-
     private TextView mTextNoItem;
 
     private ListView mListViewNotification;
@@ -36,8 +34,6 @@ public class DialogNotification {
 
     private List<NotificationMessage> mListNotification;
 
-    private int mTotalNotificationUnRead;
-
     private IOnItemClick mCallback;
 
     public DialogNotification(Activity activity, List<NotificationMessage> listNotification, ImageView viewAttached) {
@@ -47,40 +43,22 @@ public class DialogNotification {
     }
 
     public void initDialog(ImageView viewAttached) {
-        if (mRootViewNotification == null) {
-            mRootViewNotification = LayoutInflater.from(mActivity).inflate(R.layout.custom_tooltip, null);
-            mTextNoItem = (TextView) mRootViewNotification.findViewById(R.id.textNoItem);
+        mEasyDialog = new EasyDialog(mActivity)
+                .setGravity(EasyDialog.GRAVITY_BOTTOM)
+                .setBackgroundColor(mActivity.getResources().getColor(android.R.color.white))
+                .setLocationByAttachedView(viewAttached)
+                .setAnimationTranslationShow(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, mActivity.getResources().getDisplayMetrics().widthPixels, 0)
+                .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, 0, -mActivity.getResources().getDisplayMetrics().widthPixels)
+                .setTouchOutsideDismiss(true)
+                .setMatchParent(false)
+                .setMargin(Utils.convertDpToPixel(mActivity, Constants.MARGIN_LEFT), 0, Utils.convertDpToPixel(mActivity, Constants.MARGIN_RIGHT), Utils.convertDpToPixel(mActivity, Constants.MARGIN_BOTTOM))
+                .setOutsideColor(mActivity.getResources().getColor(R.color.outside_color_trans));
 
-            mEasyDialog = new EasyDialog(mActivity)
-                    .setLayout(mRootViewNotification)
-                    .setGravity(EasyDialog.GRAVITY_BOTTOM)
-                    .setBackgroundColor(mActivity.getResources().getColor(android.R.color.white))
-                    .setLocationByAttachedView(viewAttached)
-                    .setAnimationTranslationShow(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, mActivity.getResources().getDisplayMetrics().widthPixels, 0)
-                    .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, 0, -mActivity.getResources().getDisplayMetrics().widthPixels)
-                    .setTouchOutsideDismiss(true)
-                    .setMatchParent(false)
-                    .setMargin(Utils.convertDpToPixel(mActivity, Constants.MARGIN_LEFT), 0, Utils.convertDpToPixel(mActivity, Constants.MARGIN_RIGHT), Utils.convertDpToPixel(mActivity, Constants.MARGIN_BOTTOM))
-                    .setOutsideColor(mActivity.getResources().getColor(R.color.outside_color_trans));
-
-        }
-
-//        mListViewNotification.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mEasyDialog.dismiss();
-//                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
-//                if (mCallback != null) {
-//                    mListNotification.remove(position);
-//                    mCallback.onItemClick(message);
-//                }
-//            }
-//        });
     }
 
     public void addListNotification(final int page, final int totalPage, List<NotificationMessage> list) {
         mListViewNotification = mEasyDialog.getListView();
+        mTextNoItem = mEasyDialog.getTextNoItem();
         if (mPushNotificationAdapter == null) {
             mListNotification = new ArrayList<>();
             mPushNotificationAdapter = new PushNotificationAdapter(mActivity, R.layout.item_push_notification, mListNotification);
@@ -93,13 +71,7 @@ public class DialogNotification {
             mListNotification.addAll(list);
         }
         mPushNotificationAdapter.notifyDataSetChanged();
-
-        if (mListNotification != null && mListNotification.size() > 0) {
-            mListViewNotification.setVisibility(View.VISIBLE);
-            mTextNoItem.setVisibility(View.GONE);
-        } else {
-            mTextNoItem.setVisibility(View.VISIBLE);
-        }
+        checkListEmpty();
         mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
 
             @Override
@@ -109,6 +81,30 @@ public class DialogNotification {
                 }
             }
         });
+
+        mListViewNotification.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mEasyDialog.dismiss();
+                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
+                if (mCallback != null) {
+                    mListNotification.remove(position);
+                    checkListEmpty();
+                    mCallback.onItemClick(message);
+                }
+            }
+        });
+    }
+
+    public void checkListEmpty() {
+        if (mListNotification != null && mListNotification.size() > 0) {
+            mListViewNotification.setVisibility(View.VISIBLE);
+            mTextNoItem.setVisibility(View.GONE);
+        } else {
+            mListViewNotification.setVisibility(View.INVISIBLE);
+            mTextNoItem.setVisibility(View.VISIBLE);
+        }
     }
 
     public void addNotification(NotificationMessage notificationMessage) {

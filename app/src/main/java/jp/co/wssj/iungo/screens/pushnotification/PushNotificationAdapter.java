@@ -16,7 +16,6 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
-import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -52,7 +51,7 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
 
     private static class ViewHolder {
 
-        TextView mTitle, mBody, mTime, mButtonRating;
+        TextView mTitle, mBody, mTime;
 
         ImageView mImageCompany;
 
@@ -60,7 +59,6 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
             mTitle = (TextView) root.findViewById(R.id.title_notification);
             mBody = (TextView) root.findViewById(R.id.body_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
-            mButtonRating = (TextView) root.findViewById(R.id.buttonRating);
             mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
         }
 
@@ -78,34 +76,6 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
             String time = Utils.distanceTimes(notificationMessage.getPushTime());
             if (!TextUtils.isEmpty(time)) {
                 mTime.setText(time);
-            }
-            switch (notificationMessage.getAction()) {
-                case Constants.PushNotification.TYPE_NOTIFICATION:
-                    mButtonRating.setVisibility(View.GONE);
-                    break;
-                case Constants.PushNotification.TYPE_REMIND:
-                    mButtonRating.setVisibility(View.GONE);
-                    break;
-                case Constants.PushNotification.TYPE_REQUEST_REVIEW:
-//                    mButtonRating.setVisibility(View.VISIBLE);
-//                    mButtonRating.setOnClickListener(new View.OnClickListener() {
-//
-//                        @Override
-//                        public void onClick(View v) {
-//                            DialogRating dialogRating = new DialogRating(context, new DialogRating.IOnClickListenerRating() {
-//
-//                                @Override
-//                                public void onButtonRating(float rating, String note, int currentPosition) {
-//
-//                                }
-//                            });
-//                            dialogRating.show(0, notificationMessage.getStampId());
-//                        }
-//                    });
-
-                    break;
-                default:
-                    break;
             }
         }
     }

@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -103,6 +104,8 @@ public class EasyDialog {
 
     private ListView mListView;
 
+    private TextView mTextNoItem;
+
     public EasyDialog(Context context) {
         initDialog(context);
     }
@@ -126,6 +129,7 @@ public class EasyDialog {
         ivTriangle = (ImageView) dialogView.findViewById(R.id.ivTriangle);
         llContent = (LinearLayout) dialogView.findViewById(R.id.llContent);
         mListView = (ListView) dialogView.findViewById(R.id.listView);
+        mTextNoItem = (TextView) dialogView.findViewById(R.id.textNoItem);
         dialog = new Dialog(context, isFullScreen() ? android.R.style.Theme_Translucent_NoTitleBar_Fullscreen : android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setContentView(dialogView);
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -157,6 +161,10 @@ public class EasyDialog {
 
     public ListView getListView() {
         return mListView;
+    }
+
+    public TextView getTextNoItem() {
+        return mTextNoItem;
     }
 
     final View.OnTouchListener outsideBackgroundListener = new View.OnTouchListener() {

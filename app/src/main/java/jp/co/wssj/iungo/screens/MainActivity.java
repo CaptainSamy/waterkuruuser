@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "broadcastReceiver");
             mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
-            mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead++);
         }
     };
 
