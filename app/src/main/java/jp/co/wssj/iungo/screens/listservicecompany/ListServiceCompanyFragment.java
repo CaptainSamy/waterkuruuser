@@ -94,14 +94,26 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
         return this;
     }
 
+    /*
+    *card_type:
+    * 1 - stamp
+    * 2 - point
+    * 3 - None
+    * */
     @Override
-    public void displayListCardScreen(int serviceCompanyId, int serviceId, String serviceName, String cardName) {
+    public void displayListCardScreen(int serviceCompanyId, int serviceId, String serviceName, String cardName, int cardType) {
+        int fragmentId;
         Bundle bundle = new Bundle();
         bundle.putInt(ListCardFragment.KEY_SERVICE_COMPANY_ID, serviceCompanyId);
-        bundle.putInt(ListCardFragment.KEY_SERVICE_ID, serviceId);
-        bundle.putString(ListCardFragment.KEY_CARD_NAME, cardName);
-        bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, serviceName);
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_CARD, true, true, bundle);
+        if (cardType < 3) {
+            bundle.putInt(ListCardFragment.KEY_SERVICE_ID, serviceId);
+            bundle.putString(ListCardFragment.KEY_CARD_NAME, cardName);
+            bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, serviceName);
+            fragmentId = IMainView.FRAGMENT_LIST_CARD;
+        } else {
+            fragmentId = IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
+        }
+        getActivityCallback().displayScreen(fragmentId, true, true, bundle);
     }
 
     @Override

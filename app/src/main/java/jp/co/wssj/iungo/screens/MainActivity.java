@@ -50,6 +50,8 @@ import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
+import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushnotificationforstore.detail.PushNotificationDetailServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
@@ -410,6 +412,12 @@ public class MainActivity extends AppCompatActivity
                 break;
             case IMainView.FRAGMENT_ABOUT:
                 replaceFragment(new AboutFragment(), hasAnimation, addToBackStack);
+                break;
+            case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
+                replaceFragment(PushNotificationForServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
+                break;
+            case IMainView.FRAGMENT_NOTIFICATION_DETAIL_FOR_SERVICE_COMPANY:
+                replaceFragment(PushNotificationDetailServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
         }
     }

@@ -14,7 +14,7 @@ import jp.co.wssj.iungo.utils.Logger;
 
 public class PushNotificationDetailPresenter extends FragmentPresenter<IPushNotificationDetailView> {
 
-    private static final String TAG = "PushNotificationDetailPresenter";
+    private static final String TAG = "PushNotificationDetailServiceCompanyPresenter";
 
     protected PushNotificationDetailPresenter(IPushNotificationDetailView view) {
         super(view);

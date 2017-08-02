@@ -23,7 +23,7 @@ import jp.co.wssj.iungo.utils.Utils;
 
 public class PushNotificationDetailFragment extends BaseFragment<IPushNotificationDetailView, PushNotificationDetailPresenter> implements IPushNotificationDetailView {
 
-    public static final String TAG = "PushNotificationDetailFragment";
+    public static final String TAG = "PushNotificationDetailServiceCompanyFragment";
 
     public static final String NOTIFICATION_ARG = "notification";
 
@@ -47,7 +47,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     @Override
     protected String getLogTag() {
-        return "PushNotificationDetailFragment";
+        return "PushNotificationDetailServiceCompanyFragment";
     }
 
     @Override
@@ -142,6 +142,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 } else {
                     if (spannableString != null) {
                         mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
+                    } else {
+                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
                     }
                 }
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);

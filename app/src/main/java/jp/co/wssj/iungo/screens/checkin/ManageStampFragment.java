@@ -179,21 +179,25 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
 
     @Override
     public void showListUnusedCardEmpty(int numberStampInCard) {
-        mUnusedContainer.setVisibility(View.VISIBLE);
-        if (!TextUtils.isEmpty(mStoreName)) {
-            mTextStoreName.setText(mStoreName);
-        } else {
-            mTextStoreName.setVisibility(View.GONE);
-        }
-        if (mUnusedCardAdapter == null) {
-            mUnusedCardAdapter = new CardAdapter(null);
-            mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
-        } else {
-            if (mUnusedCardRecycler.getAdapter() == null) {
-                mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
+        if (numberStampInCard != 0) {
+            mUnusedContainer.setVisibility(View.VISIBLE);
+            if (!TextUtils.isEmpty(mStoreName)) {
+                mTextStoreName.setText(mStoreName);
+            } else {
+                mTextStoreName.setVisibility(View.GONE);
             }
+            if (mUnusedCardAdapter == null) {
+                mUnusedCardAdapter = new CardAdapter(null);
+                mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
+            } else {
+                if (mUnusedCardRecycler.getAdapter() == null) {
+                    mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
+                }
+            }
+            mUnusedCardAdapter.setNumberStampInCard(numberStampInCard);
+        } else {
+            mUnusedContainer.setVisibility(View.GONE);
         }
-        mUnusedCardAdapter.setNumberStampInCard(numberStampInCard);
     }
 
     private List<ListCardResponse.ListCardData.CardData> mListCardCanUse;

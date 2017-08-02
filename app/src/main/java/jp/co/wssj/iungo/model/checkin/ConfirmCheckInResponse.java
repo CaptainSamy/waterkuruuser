@@ -43,6 +43,9 @@ public class ConfirmCheckInResponse extends ResponseData<ConfirmCheckInResponse.
         @SerializedName("numerical_session")
         private int mNumberSession;
 
+        @SerializedName("card_type")
+        private int mCardType;
+
         public int getSessionId() {
             return mSessionId;
         }
@@ -81,6 +84,10 @@ public class ConfirmCheckInResponse extends ResponseData<ConfirmCheckInResponse.
 
         public String getServiceName() {
             return mServiceName;
+        }
+
+        public int getCardType() {
+            return mCardType;
         }
     }
 }
