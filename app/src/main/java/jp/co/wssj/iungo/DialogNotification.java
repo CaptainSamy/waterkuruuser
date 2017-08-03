@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -89,12 +90,24 @@ public class DialogNotification {
                 mEasyDialog.dismiss();
                 NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
                 if (mCallback != null) {
-                    mListNotification.remove(position);
                     checkListEmpty();
                     mCallback.onItemClick(message);
+                    mListNotification.remove(position);
+                    mPushNotificationAdapter.notifyDataSetChanged();
                 }
             }
         });
+    }
+
+    public Dialog getDialog() {
+        if (mEasyDialog != null) {
+            return mEasyDialog.getDialog();
+        }
+        return null;
+    }
+
+    public boolean getDialogShowing() {
+        return getDialog() == null ? false : getDialog().isShowing();
     }
 
     public void checkListEmpty() {

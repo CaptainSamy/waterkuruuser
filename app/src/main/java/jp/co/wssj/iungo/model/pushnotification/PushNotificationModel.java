@@ -61,7 +61,7 @@ public class PushNotificationModel extends BaseModel {
 
     public interface IGetListPushForServiceCompanyCallback {
 
-        void onGetListPushNotificationSuccess(List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> list, int page, int totalPage);
+        void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage);
 
         void onGetListPushNotificationFailure(ErrorMessage errorMessage);
     }
@@ -122,8 +122,8 @@ public class PushNotificationModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void setListPushUnRead(String token, long pushId, final ISetListPushNotificationCallback callback) {
-        Request request = APICreator.setListNotificationUnRead(token, pushId, new Response.Listener<ResponseData>() {
+    public void setListPushUnRead(String token, List<Long> pushId, int type, final ISetListPushNotificationCallback callback) {
+        Request request = APICreator.setListNotificationUnRead(token, pushId, type, new Response.Listener<ResponseData>() {
 
             @Override
             public void onResponse(ResponseData response) {
@@ -184,16 +184,16 @@ public class PushNotificationModel extends BaseModel {
     }
 
     public void getListPushNotificationForServiceCompany(String token, int serviceCompanyId, int page, int limit, final IGetListPushForServiceCompanyCallback callback) {
-        Request request = APICreator.getListNotificationForServiceCompany(token, serviceCompanyId, page, limit, new Response.Listener<ListPushForServiceCompanyResponse>() {
+        Request request = APICreator.getListNotificationForServiceCompany(token, serviceCompanyId, page, limit, new Response.Listener<ListNotificationResponse>() {
 
             @Override
-            public void onResponse(ListPushForServiceCompanyResponse response) {
+            public void onResponse(ListNotificationResponse response) {
                 if (response.isSuccess()) {
                     if (response.getData() != null && response.getData().getListPushNotification() != null) {
-                        List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> listNotification = response.getData().getListPushNotification();
+                        List<NotificationMessage> listNotification = response.getData().getListPushNotification();
                         callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
                     } else {
-                        callback.onGetListPushNotificationSuccess(new ArrayList<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification>(), 0, 0);
+                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
                     }
                 } else {
                     callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));

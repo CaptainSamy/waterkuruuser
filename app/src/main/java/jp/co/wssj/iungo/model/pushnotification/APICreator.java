@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import jp.co.wssj.iungo.model.ResponseData;
@@ -68,21 +69,21 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ListPushForServiceCompanyResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final int page, int limit,
-                                                                                               final Response.Listener<ListPushForServiceCompanyResponse> listener,
+    static GsonRequest<ListNotificationResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final int page, int limit,
+                                                                                               final Response.Listener<ListNotificationResponse> listener,
                                                                                                final Response.ErrorListener errorListener) {
         String url = API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY + "?page=" + page + "&limit=" + limit;
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
-        return new GsonJsonRequest<ListPushForServiceCompanyResponse>(Request.Method.POST,
+        return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
                 url,
-                ListPushForServiceCompanyResponse.class,
+                ListNotificationResponse.class,
                 headers,
-                new Response.Listener<ListPushForServiceCompanyResponse>() {
+                new Response.Listener<ListNotificationResponse>() {
 
                     @Override
-                    public void onResponse(ListPushForServiceCompanyResponse response) {
+                    public void onResponse(ListNotificationResponse response) {
                         Logger.d(TAG, "#getListNotification -> onResponse ");
                         if (listener != null) {
                             listener.onResponse(response);
@@ -140,7 +141,7 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> setListNotificationUnRead(final String token, final long pushId,
+    static GsonRequest<ResponseData> setListNotificationUnRead(final String token, final List<Long> pushId, final int type,
                                                                final Response.Listener<ResponseData> listener,
                                                                final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -174,7 +175,16 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("push_id_list", String.valueOf(pushId));
+                map.put("type_read", type);
+                String listPush = Constants.EMPTY_STRING;
+                for (long push : pushId) {
+                    if (pushId.indexOf(push) == (pushId.size() - 1)) {
+                        listPush = listPush + push;
+                    } else {
+                        listPush = listPush + push + ",";
+                    }
+                }
+                map.put("push_id_list", listPush);
                 return map;
             }
         };

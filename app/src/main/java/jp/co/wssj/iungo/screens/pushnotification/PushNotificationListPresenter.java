@@ -1,5 +1,7 @@
 package jp.co.wssj.iungo.screens.pushnotification;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 import jp.co.wssj.iungo.model.ErrorMessage;
@@ -7,12 +9,15 @@ import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
  */
 
 public class PushNotificationListPresenter extends FragmentPresenter<IPushNotificationListView> {
+
+    private static final String TAG = "PushNotificationListPresenter";
 
     protected PushNotificationListPresenter(IPushNotificationListView view) {
         super(view);
@@ -36,4 +41,21 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
         });
     }
 
+    public void setListPushUnRead(List<Long> pushId, int type) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        if (!TextUtils.isEmpty(token)) {
+            getModel(PushNotificationModel.class).setListPushUnRead(token, pushId, type, new PushNotificationModel.ISetListPushNotificationCallback() {
+
+                @Override
+                public void onSetListPushNotificationSuccess() {
+                    Logger.d(TAG, "onSetListPushNotificationSuccess");
+                }
+
+                @Override
+                public void onSetListPushNotificationFailure() {
+                    Logger.d(TAG, "onSetListPushNotificationFailure");
+                }
+            });
+        }
+    }
 }

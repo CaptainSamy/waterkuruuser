@@ -13,10 +13,10 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
-import jp.co.wssj.iungo.model.pushnotification.ListPushForServiceCompanyResponse;
+import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.pushnotificationforstore.detail.PushNotificationDetailServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
 /**
@@ -33,7 +33,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     private ListView mListView;
 
-    private List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> mListNotification;
+    private List<NotificationMessage> mListNotification;
 
     private int mServiceCompanyId;
 
@@ -106,10 +106,10 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification message = (ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification) parent.getAdapter().getItem(position);
+                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(PushNotificationDetailServiceCompanyFragment.NOTIFICATION_ARG, message);
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_NOTIFICATION_DETAIL_FOR_SERVICE_COMPANY, true, true, bundle);
+                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
     }
@@ -126,7 +126,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
-    public void showListPushNotification(List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> list, final int page, final int totalPage) {
+    public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
         if (list != null) {
             if (page == Constants.INIT_PAGE) {

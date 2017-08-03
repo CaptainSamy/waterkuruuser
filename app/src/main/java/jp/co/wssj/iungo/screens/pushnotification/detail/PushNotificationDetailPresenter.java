@@ -2,6 +2,8 @@ package jp.co.wssj.iungo.screens.pushnotification.detail;
 
 import android.text.TextUtils;
 
+import java.util.List;
+
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
@@ -22,14 +24,15 @@ public class PushNotificationDetailPresenter extends FragmentPresenter<IPushNoti
         registerModel(new SharedPreferencesModel(view.getViewContext()));
     }
 
-    public void setListPushUnRead(long pushId) {
+    public void setListPushUnRead(List<Long> pushId, int type) {
         String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
-            getModel(PushNotificationModel.class).setListPushUnRead(token, pushId, new PushNotificationModel.ISetListPushNotificationCallback() {
+            getModel(PushNotificationModel.class).setListPushUnRead(token, pushId, type, new PushNotificationModel.ISetListPushNotificationCallback() {
 
                 @Override
                 public void onSetListPushNotificationSuccess() {
                     Logger.d(TAG, "onSetListPushNotificationSuccess");
+                    getView().onUpdateStatusPushSuccess();
                 }
 
                 @Override

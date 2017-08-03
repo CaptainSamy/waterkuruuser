@@ -12,6 +12,7 @@ import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.model.util.UtilsModel;
 import jp.co.wssj.iungo.screens.base.BasePresenter;
+import jp.co.wssj.iungo.utils.Logger;
 
 class MainPresenter extends BasePresenter<IMainView> {
 
@@ -71,6 +72,24 @@ class MainPresenter extends BasePresenter<IMainView> {
                 @Override
                 public void onGetListPushNotificationUnReadFailure(String message) {
                     getView().displayErrorMessage(message);
+                }
+            });
+        }
+    }
+
+    public void setListPushUnRead(List<Long> pushId, int type) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        if (!TextUtils.isEmpty(token)) {
+            getModel(PushNotificationModel.class).setListPushUnRead(token, pushId, type, new PushNotificationModel.ISetListPushNotificationCallback() {
+
+                @Override
+                public void onSetListPushNotificationSuccess() {
+                    Logger.d(TAG, "onSetListPushNotificationSuccess");
+                }
+
+                @Override
+                public void onSetListPushNotificationFailure() {
+                    Logger.d(TAG, "onSetListPushNotificationFailure");
                 }
             });
         }

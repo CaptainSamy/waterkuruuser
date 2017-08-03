@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
@@ -51,7 +52,6 @@ import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
-import jp.co.wssj.iungo.screens.pushnotificationforstore.detail.PushNotificationDetailServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         initAction();
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_SERVICE_ACTIVITY));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
 
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
@@ -215,6 +215,18 @@ public class MainActivity extends AppCompatActivity
             }
         });
         mDialogNotification.addListNotification(page, totalPage, list);
+        if (list != null && list.size() > 0 && mDialogNotification.getDialogShowing()) {
+            List<Long> listPushId = new ArrayList<>();
+            for (NotificationMessage notificationMessage : list) {
+                if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_VIEW) {
+                    listPushId.add(notificationMessage.getPushId());
+                }
+            }
+            if (listPushId != null && listPushId.size() > 0) {
+                mPresenter.setListPushUnRead(listPushId, Constants.STATUS_VIEW);
+            }
+        }
+
     }
 
     @Override
@@ -415,9 +427,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
                 replaceFragment(PushNotificationForServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case IMainView.FRAGMENT_NOTIFICATION_DETAIL_FOR_SERVICE_COMPANY:
-                replaceFragment(PushNotificationDetailServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
         }
     }

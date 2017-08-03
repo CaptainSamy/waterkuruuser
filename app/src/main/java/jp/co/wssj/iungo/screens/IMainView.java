@@ -61,8 +61,6 @@ public interface IMainView extends IView {
 
     int FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY = 26;
 
-    int FRAGMENT_NOTIFICATION_DETAIL_FOR_SERVICE_COMPANY = 27;
-
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
     void goBack();

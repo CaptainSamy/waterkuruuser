@@ -27,8 +27,8 @@ android {
             buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 14
-            versionName "1.0.13.dev"
+            versionCode 15
+            versionName "1.0.14.dev"
             signingConfig signingConfigs.product
         }
         product {
@@ -36,8 +36,8 @@ android {
             buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 14
-            versionName "1.0.13"
+            versionCode 15
+            versionName "1.0.14"
             signingConfig signingConfigs.product
         }
     }

@@ -3,7 +3,7 @@ package jp.co.wssj.iungo.screens.pushnotificationforstore;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.ErrorMessage;
-import jp.co.wssj.iungo.model.pushnotification.ListPushForServiceCompanyResponse;
+import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 /**
@@ -12,7 +12,7 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 public interface IPushNotificationForServiceCompany extends IFragmentView {
 
-    void showListPushNotification(List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> list, int page, int totalPage);
+    void showListPushNotification(List<NotificationMessage> list, int page, int totalPage);
 
     void displayErrorMessage(ErrorMessage errorMessage);
 }

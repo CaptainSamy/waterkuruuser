@@ -1,18 +1,23 @@
 package jp.co.wssj.iungo.screens.pushnotificationforstore;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
-import jp.co.wssj.iungo.model.pushnotification.ListPushForServiceCompanyResponse;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
  */
 
 public class PushNotificationForServiceCompanyPresenter extends FragmentPresenter<IPushNotificationForServiceCompany> {
+
+    private static final String TAG = "PushNotificationForServiceCompanyPresenter";
 
     protected PushNotificationForServiceCompanyPresenter(IPushNotificationForServiceCompany view) {
         super(view);
@@ -25,7 +30,7 @@ public class PushNotificationForServiceCompanyPresenter extends FragmentPresente
         getModel(PushNotificationModel.class).getListPushNotificationForServiceCompany(token, serviceCompanyId, page, limit, new PushNotificationModel.IGetListPushForServiceCompanyCallback() {
 
             @Override
-            public void onGetListPushNotificationSuccess(List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> list, int page, int totalPage) {
+            public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {
                 getView().showListPushNotification(list, page, totalPage);
             }
 
@@ -36,4 +41,21 @@ public class PushNotificationForServiceCompanyPresenter extends FragmentPresente
         });
     }
 
+    public void setListPushUnRead(List<Long> pushId, int type) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        if (!TextUtils.isEmpty(token)) {
+            getModel(PushNotificationModel.class).setListPushUnRead(token, pushId, type, new PushNotificationModel.ISetListPushNotificationCallback() {
+
+                @Override
+                public void onSetListPushNotificationSuccess() {
+                    Logger.d(TAG, "onSetListPushNotificationSuccess");
+                }
+
+                @Override
+                public void onSetListPushNotificationFailure() {
+                    Logger.d(TAG, "onSetListPushNotificationFailure");
+                }
+            });
+        }
+    }
 }

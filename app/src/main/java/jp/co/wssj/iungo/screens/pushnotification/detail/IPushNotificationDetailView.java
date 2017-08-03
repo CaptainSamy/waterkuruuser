@@ -12,4 +12,6 @@ public interface IPushNotificationDetailView extends IFragmentView {
     void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse);
 
     void onGetContentPushFailure(String message);
+
+    void onUpdateStatusPushSuccess();
 }

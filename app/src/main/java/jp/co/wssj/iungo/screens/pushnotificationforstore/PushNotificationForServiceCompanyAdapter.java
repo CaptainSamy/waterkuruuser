@@ -15,16 +15,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.model.pushnotification.ListPushForServiceCompanyResponse;
+import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationForServiceCompanyAdapter extends ArrayAdapter<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> {
+public class PushNotificationForServiceCompanyAdapter extends ArrayAdapter<NotificationMessage> {
 
-    public PushNotificationForServiceCompanyAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification> objects) {
+    public PushNotificationForServiceCompanyAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<NotificationMessage> objects) {
         super(context, resource, objects);
     }
 
@@ -62,9 +62,9 @@ public class PushNotificationForServiceCompanyAdapter extends ArrayAdapter<ListP
             mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
         }
 
-        void fillDataToView(final Context context, final ListPushForServiceCompanyResponse.ListPushForServiceCompany.PushNotification notificationMessage) {
+        void fillDataToView(final Context context, final NotificationMessage notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
-            String time = Utils.distanceTimes(notificationMessage.getSendTime());
+            String time = Utils.distanceTimes(notificationMessage.getPushTime());
             Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany);
             if (!TextUtils.isEmpty(time)) {
                 mTime.setText(time);

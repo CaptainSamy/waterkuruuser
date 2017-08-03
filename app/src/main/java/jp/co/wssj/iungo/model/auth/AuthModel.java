@@ -73,16 +73,7 @@ public class AuthModel extends BaseModel {
 
     }
 
-    public interface IOnRemoveDeviceTokenCallback {
-
-        void onRemoveDeviceTokenSuccess();
-
-        void onRemoveDeviceTokenFailure();
-    }
-
     private static final String TAG = "AuthModel";
-
-    private static final int MIN_EMAIL_LENGTH = 3;
 
     public AuthModel(Context context) {
         super(context);

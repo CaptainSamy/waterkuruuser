@@ -1,12 +1,17 @@
 package jp.co.wssj.iungo.screens.pushnotification.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
@@ -110,7 +115,11 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             boolean isFromActivity = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
             boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
-                getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
+                if (mNotificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                    List<Long> list = new ArrayList<>();
+                    list.add(mNotificationMessage.getPushId());
+                    getPresenter().setListPushUnRead(list, Constants.STATUS_READ);
+                }
                 mTitle.setText(mNotificationMessage.getTitle().trim());
                 mBody.getSettings().setJavaScriptEnabled(true);
                 mBody.getSettings().setBuiltInZoomControls(true);
@@ -178,5 +187,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     public void onGetContentPushFailure(String message) {
         showToast(message);
+    }
+
+    @Override
+    public void onUpdateStatusPushSuccess() {
+        Intent sentToActivity = new Intent();
+        sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
+        LocalBroadcastManager.getInstance(getActivityContext()).sendBroadcast(sentToActivity);
     }
 }
