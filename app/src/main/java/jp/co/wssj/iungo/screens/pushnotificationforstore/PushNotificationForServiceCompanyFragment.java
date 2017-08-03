@@ -16,7 +16,6 @@ import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.pushnotification.ListPushForServiceCompanyResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.listcard.ListCardFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.detail.PushNotificationDetailServiceCompanyFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
@@ -90,7 +89,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mServiceCompanyId = bundle.getInt(ListCardFragment.KEY_SERVICE_COMPANY_ID);
+            mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             mListNotification = new ArrayList<>();
             mAdapter = new PushNotificationForServiceCompanyAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
             mListView.setAdapter(mAdapter);

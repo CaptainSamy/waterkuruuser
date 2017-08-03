@@ -50,6 +50,8 @@ public final class Constants {
 
     public static final String SALT = "b50b1ffe2e7320b0d97062a9663d47a7adf1379392c58c66fd978171a2be7d65";
 
+    public static final String KEY_SERVICE_COMPANY_ID = "KEY_SERVICE_COMPANY_ID";
+
     private Constants() {
     }
 

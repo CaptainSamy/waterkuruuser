@@ -28,8 +28,6 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
 
     public static final String KEY_CARD_NAME = "KEY_CARD_NAME";
 
-    public static final String KEY_SERVICE_COMPANY_ID = "KEY_SERVICE_COMPANY_ID";
-
     public static final String KEY_SERVICE_ID = "KEY_SERVICE_ID";
 
     private static final String TAG = "ListCardFragment";
@@ -147,7 +145,7 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
                     getPresenter().onEditServiceMemoClicked(serviceId);
                 }
             });
-            mServiceCompanyId = bundle.getInt(KEY_SERVICE_COMPANY_ID);
+            mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             getPresenter().getListCardByServiceCompany(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
 
             mButtonListStore.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +153,7 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
                 @Override
                 public void onClick(View v) {
                     Bundle dataListStore = new Bundle();
-                    dataListStore.putInt(KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
+                    dataListStore.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
                     getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHECKED_IN, true, true, dataListStore);
                 }
             });

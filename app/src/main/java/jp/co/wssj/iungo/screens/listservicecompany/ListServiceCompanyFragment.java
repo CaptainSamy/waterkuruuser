@@ -15,6 +15,7 @@ import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragment;
 import jp.co.wssj.iungo.screens.listservicecompany.adapter.ServicesCompanyAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
@@ -104,7 +105,7 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
     public void displayListCardScreen(int serviceCompanyId, int serviceId, String serviceName, String cardName, int cardType) {
         int fragmentId;
         Bundle bundle = new Bundle();
-        bundle.putInt(ListCardFragment.KEY_SERVICE_COMPANY_ID, serviceCompanyId);
+        bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, serviceCompanyId);
         if (cardType < 3) {
             bundle.putInt(ListCardFragment.KEY_SERVICE_ID, serviceId);
             bundle.putString(ListCardFragment.KEY_CARD_NAME, cardName);
