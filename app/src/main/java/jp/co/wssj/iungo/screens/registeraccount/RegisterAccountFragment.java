@@ -40,6 +40,8 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     private static final String TAG = "RegisterAccountFragment";
 
+    private static final String AGE = "代";
+
     private EditText mInputUserName, mInputUserId, mInputPassword, mInputConfirmPassword, mInputEmail;
 
     private TextView mTextRegisterAccount, mTermOfService;
@@ -52,7 +54,9 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     private RadioButton mRadioMale, mRadioFemale;
 
-    private int mAgeChoose, mSex;
+    private int mSex;
+
+    private String mAgeChoose;
 
     @Override
     public int getFragmentId() {
@@ -153,11 +157,12 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     }
 
     public void initAge() {
-        List<Integer> list = new ArrayList<>();
-        for (int i = Constants.Register.MIN_AGE; i < Constants.Register.MAX_AGE; i++) {
-            list.add(i);
+        List<String> list = new ArrayList<>();
+        for (int i = Constants.Register.MIN_AGE; i <= Constants.Register.MAX_AGE; i = i + Constants.Register.MIN_AGE) {
+            String age = i + AGE;
+            list.add(age);
         }
-        ArrayAdapter<Integer> mAdapterSpNumWord = new ArrayAdapter<Integer>(getActivityContext(), android.R.layout.simple_list_item_1, list) {
+        ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getActivityContext(), android.R.layout.simple_list_item_1, list) {
 
             @NonNull
             @Override
@@ -174,7 +179,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mAgeChoose = (Integer) parent.getItemAtPosition(position);
+        mAgeChoose = (String) parent.getItemAtPosition(position);
     }
 
     @Override
@@ -228,7 +233,14 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
                 String password = mInputPassword.getText().toString().trim();
                 String confirmPassword = mInputConfirmPassword.getText().toString().trim();
                 String email = mInputEmail.getText().toString().trim();
-                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email, mAgeChoose, mSex);
+                int age = Constants.Register.MIN_AGE;
+                if (!TextUtils.isEmpty(mAgeChoose)) {
+                    String[] splitAge = mAgeChoose.split(AGE);
+                    if (splitAge.length > 0) {
+                        age = Integer.parseInt(splitAge[0]);
+                    }
+                }
+                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email, age, mSex);
                 break;
         }
     }
