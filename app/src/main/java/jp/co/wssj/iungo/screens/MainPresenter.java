@@ -98,4 +98,9 @@ class MainPresenter extends BasePresenter<IMainView> {
     public String getUserName() {
         return getModel(SharedPreferencesModel.class).getUserName();
     }
+
+    public String getPhotoUrl() {
+        return getModel(SharedPreferencesModel.class).getPhotoUrl();
+    }
+
 }

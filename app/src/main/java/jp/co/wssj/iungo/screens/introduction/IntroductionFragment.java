@@ -13,7 +13,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.Profile;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -29,6 +30,8 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -194,12 +197,12 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     }
 
     /*
-        * Handle Login Facebook
-        * */
+     * Handle Login Facebook
+     */
     private void onLoginFacebook() {
 //        Check login facebook
-        Profile profile = Profile.getCurrentProfile();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        Profile profile = Profile.getCurrentProfile();
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         mCallbackManager = CallbackManager.Factory.create();
         mButtonLoginFacebook.setReadPermissions(Arrays.asList("email", "public_profile"));
         mButtonLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -207,7 +210,18 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Logger.d("onLoginFacebook", "onSuccess");
-                getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_FACEBOOK, loginResult.getAccessToken().getToken());
+
+                AccessToken accessToken = loginResult.getAccessToken();
+                getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_FACEBOOK, accessToken.getToken());
+                GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+
+                    @Override
+                    public void onCompleted(JSONObject user, GraphResponse graphResponse) {
+
+                        String photoUrl = "http://graph.facebook.com/" + user.optString("id") + "/picture";
+                        getPresenter().savePhotoUrl(photoUrl);
+                    }
+                }).executeAsync();
             }
 
             @Override
@@ -304,7 +318,8 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_GOOGLE, result.getSignInAccount().getIdToken());
+            getPresenter().savePhotoUrl(acct.getPhotoUrl().toString());
+            getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_GOOGLE, acct.getIdToken());
         } else {
             //TODO sign out
         }

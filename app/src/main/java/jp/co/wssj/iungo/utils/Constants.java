@@ -78,7 +78,9 @@ public final class Constants {
 
         public static final int MIN_AGE = 10;
 
-        public static final int MAX_AGE = 60;
+        public static final int MALE = 1;
+
+        public static final int FE_MALE = 0;
     }
 
     public static final class CheckInStatus {

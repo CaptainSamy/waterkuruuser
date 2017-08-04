@@ -2,6 +2,7 @@ package jp.co.wssj.iungo;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -36,6 +37,8 @@ public class DialogNotification {
     private List<NotificationMessage> mListNotification;
 
     private IOnItemClick mCallback;
+
+    private long mLastClickTime = 0;
 
     public DialogNotification(Activity activity, List<NotificationMessage> listNotification, ImageView viewAttached) {
         mActivity = activity;
@@ -87,6 +90,10 @@ public class DialogNotification {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 mEasyDialog.dismiss();
                 NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
                 if (mCallback != null) {

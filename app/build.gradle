@@ -76,7 +76,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-core:2.4.4'
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
-    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.twitter.sdk.android:twitter:3.0.0'
     compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
     compile 'com.android.support:multidex:1.0.1'

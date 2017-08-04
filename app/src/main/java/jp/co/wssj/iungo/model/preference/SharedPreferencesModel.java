@@ -33,6 +33,8 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String TYPE_LOGIN = "type_login";
 
+    private static final String PHOTO_URL = "photo_user";
+
     private final SharedPreferencesHelper mSharedPreference;
 
     public SharedPreferencesModel(Context context) {
@@ -135,6 +137,14 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getInt(TYPE_LOGIN);
     }
 
+    public void putPhotoUrl(String photo) {
+        mSharedPreference.put(PHOTO_URL, photo);
+    }
+
+    public String getPhotoUrl() {
+        return mSharedPreference.getString(PHOTO_URL);
+    }
+
     public void clearSession() {
         mSharedPreference.remove(KEY_SESSION);
         mSharedPreference.remove(KEY_SERVICE_ID);
@@ -145,6 +155,7 @@ public class SharedPreferencesModel extends BaseModel {
         mSharedPreference.remove(KEY_USER_ID);
         mSharedPreference.remove(KEY_PASSWORD);
         mSharedPreference.remove(TYPE_LOGIN);
+        mSharedPreference.remove(PHOTO_URL);
 
     }
 

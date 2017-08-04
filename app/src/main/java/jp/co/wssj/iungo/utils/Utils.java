@@ -329,7 +329,6 @@ public final class Utils {
                     .error(R.drawable.logo_app)
                     .into(imageView);
         } else {
-
             imageView.setImageResource(R.drawable.logo_app);
         }
     }

@@ -22,7 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
@@ -40,7 +40,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     private static final String TAG = "RegisterAccountFragment";
 
-    private static final String AGE = "代";
+    private String[] mArrayAge = {"１０代", "２０代", "３０代", "４０代", "５０代", "６０代"};
 
     private EditText mInputUserName, mInputUserId, mInputPassword, mInputConfirmPassword, mInputEmail;
 
@@ -54,9 +54,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     private RadioButton mRadioMale, mRadioFemale;
 
-    private int mSex;
-
-    private String mAgeChoose;
+    private int mAgeChoose, mSex;
 
     @Override
     public int getFragmentId() {
@@ -139,9 +137,9 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 if (checkedId == mRadioMale.getId()) {
-                    mSex = 1;
+                    mSex = Constants.Register.MALE;
                 } else {
-                    mSex = 0;
+                    mSex = Constants.Register.FE_MALE;
                 }
             }
         });
@@ -157,11 +155,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     }
 
     public void initAge() {
-        List<String> list = new ArrayList<>();
-        for (int i = Constants.Register.MIN_AGE; i <= Constants.Register.MAX_AGE; i = i + Constants.Register.MIN_AGE) {
-            String age = i + AGE;
-            list.add(age);
-        }
+        List<String> list = Arrays.asList(mArrayAge);
         ArrayAdapter<String> mAdapterSpNumWord = new ArrayAdapter<String>(getActivityContext(), android.R.layout.simple_list_item_1, list) {
 
             @NonNull
@@ -179,7 +173,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mAgeChoose = (String) parent.getItemAtPosition(position);
+        mAgeChoose = position + 1;
     }
 
     @Override
@@ -233,14 +227,8 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
                 String password = mInputPassword.getText().toString().trim();
                 String confirmPassword = mInputConfirmPassword.getText().toString().trim();
                 String email = mInputEmail.getText().toString().trim();
-                int age = Constants.Register.MIN_AGE;
-                if (!TextUtils.isEmpty(mAgeChoose)) {
-                    String[] splitAge = mAgeChoose.split(AGE);
-                    if (splitAge.length > 0) {
-                        age = Integer.parseInt(splitAge[0]);
-                    }
-                }
-                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email, age, mSex);
+                mAgeChoose = mAgeChoose * Constants.Register.MIN_AGE;
+                getPresenter().onValidateInfoRegister(userName, userId, password, confirmPassword, email, mAgeChoose, mSex);
                 break;
         }
     }

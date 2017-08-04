@@ -51,4 +51,8 @@ class IntroductionPresenter extends FragmentPresenter<IIntroductionView> {
             }
         });
     }
+
+    public void savePhotoUrl(String photoUrl) {
+        getModel(SharedPreferencesModel.class).putPhotoUrl(photoUrl);
+    }
 }
