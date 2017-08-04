@@ -27,8 +27,8 @@ android {
             buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 15
-            versionName "1.0.14.dev"
+            versionCode 16
+            versionName "1.1.0.dev"
             signingConfig signingConfigs.product
         }
         product {
@@ -36,8 +36,8 @@ android {
             buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
-            versionCode 15
-            versionName "1.0.14"
+            versionCode 16
+            versionName "1.1.0"
             signingConfig signingConfigs.product
         }
     }
@@ -80,5 +80,6 @@ dependencies {
     compile 'com.twitter.sdk.android:twitter:3.0.0'
     compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
     compile 'com.android.support:multidex:1.0.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

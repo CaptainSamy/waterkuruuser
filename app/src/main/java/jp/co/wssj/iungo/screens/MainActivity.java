@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity
     public void showListPushNotificationUnRead(List<NotificationMessage> list, final int page, final int totalPage, final int totalNotificationUnRead) {
         mTotalNotificationUnRead = totalNotificationUnRead;
         mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead);
+        Logger.d(TAG, "showListPushNotificationUnRead " + totalNotificationUnRead);
         if (mDialogNotification == null) {
             mDialogNotification = new DialogNotification(MainActivity.this, list, imageNotification);
         }
@@ -208,7 +209,6 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onItemClick(NotificationMessage message) {
-                Logger.d(TAG, "onItemClick");
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
@@ -545,7 +545,6 @@ public class MainActivity extends AppCompatActivity
                 Glide.with(this)
                         .load(mPresenter.getPhotoUrl())
                         .asBitmap()
-                        .error(R.drawable.logo_animation_be)
                         .into(new SimpleTarget<Bitmap>(300, 300) {
 
                             @Override
@@ -558,7 +557,6 @@ public class MainActivity extends AppCompatActivity
                                 mImageUser.setImageResource(R.drawable.logo_animation_be);
                             }
                         });
-
             }
             disablePushUpView();
             mCurrentFragment = fragment;

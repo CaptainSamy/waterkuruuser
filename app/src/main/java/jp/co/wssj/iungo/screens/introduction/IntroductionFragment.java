@@ -2,8 +2,10 @@ package jp.co.wssj.iungo.screens.introduction;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +33,7 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -213,15 +216,18 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
                 AccessToken accessToken = loginResult.getAccessToken();
                 getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_FACEBOOK, accessToken.getToken());
-                GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
 
                     @Override
                     public void onCompleted(JSONObject user, GraphResponse graphResponse) {
-
-                        String photoUrl = "http://graph.facebook.com/" + user.optString("id") + "/picture";
-                        getPresenter().savePhotoUrl(photoUrl);
+                        getPhotoUrlFacebook(user);
                     }
-                }).executeAsync();
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,picture");
+                request.setParameters(parameters);
+                request.executeAsync();
             }
 
             @Override
@@ -236,6 +242,28 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
             }
         });
     }
+
+    private void getPhotoUrlFacebook(JSONObject user) {
+        try {
+            if (user != null && user.has("picture")) {
+                String objectPicture = user.getString("picture");
+                if (!TextUtils.isEmpty(objectPicture)) {
+                    JSONObject jsonPicture = new JSONObject(objectPicture);
+                    if (jsonPicture != null && jsonPicture.has("data")) {
+                        String data = jsonPicture.getString("data");
+                        JSONObject jsonData = new JSONObject(data);
+                        if (jsonData != null && jsonData.has("url")) {
+                            String url = jsonData.getString("url");
+                            getPresenter().savePhotoUrl(url);
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     /*
     * Handle Login Twitter
     * */

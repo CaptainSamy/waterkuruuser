@@ -70,7 +70,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_screen_stamp);
+        return getString(R.string.title_screen_list_store_checked_in);
     }
 
     @Override
