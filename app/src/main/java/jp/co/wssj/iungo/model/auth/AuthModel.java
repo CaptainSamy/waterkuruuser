@@ -11,10 +11,10 @@ import com.android.volley.VolleyError;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
-import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.utils.VolleySequence;
 
@@ -71,6 +71,13 @@ public class AuthModel extends BaseModel {
 
         void onChangePasswordFailure(String message);
 
+    }
+
+    public interface IOnCheckVersionAppCallback {
+
+        void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response);
+
+        void onCheckVersionAppFailure();
     }
 
     private static final String TAG = "AuthModel";
@@ -380,6 +387,30 @@ public class AuthModel extends BaseModel {
                     }
                 });
         VolleySequence.getInstance().addRequest(removeDeviceToken);
+    }
+
+    public void checkVersionApp(String token, String currentVersion, final IOnCheckVersionAppCallback callback) {
+        String deviceId = Settings.Secure.getString(getContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        Request requestCheckVersionApp = APICreator.checkVersionApp(token, currentVersion, deviceId, new Response.Listener<CheckVersionAppResponse>() {
+
+            @Override
+            public void onResponse(CheckVersionAppResponse response) {
+                if (response.isSuccess()) {
+                    callback.onCheckVersionAppSuccess(response.getData());
+                } else {
+                    callback.onCheckVersionAppFailure();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onCheckVersionAppFailure();
+            }
+        });
+        VolleySequence.getInstance().addRequest(requestCheckVersionApp);
     }
 
     private boolean isEmailValid(CharSequence email) {

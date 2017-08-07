@@ -51,6 +51,9 @@ public class ListCompanyResponse extends ResponseData<ListCompanyResponse.ListCo
             @SerializedName("card_type")
             private int mCardType;
 
+            @SerializedName("unread_push")
+            private int mUnreadPush;
+
             public int getServiceId() {
                 return mServiceId;
             }
@@ -85,6 +88,10 @@ public class ListCompanyResponse extends ResponseData<ListCompanyResponse.ListCo
 
             public int getCardType() {
                 return mCardType;
+            }
+
+            public int getUnreadPush() {
+                return mUnreadPush;
             }
         }
     }

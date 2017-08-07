@@ -3,7 +3,6 @@ package jp.co.wssj.iungo.screens.pushnotification.detail;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
@@ -149,11 +148,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 if (isFromActivity && !isRequesApi) {
                     getPresenter().getContentPush(mNotificationMessage.getPushId());
                 } else {
-                    if (spannableString != null) {
-                        mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
-                    } else {
-                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
-                    }
+//                    if (spannableString != null) {
+//                        mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
+//                    } else {
+//                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
+//                    }
+                    mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
                 }
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);
                 mTime.setText(time);

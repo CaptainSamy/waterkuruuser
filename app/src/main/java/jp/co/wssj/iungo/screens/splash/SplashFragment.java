@@ -1,5 +1,7 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 
@@ -9,8 +11,10 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
 
 import jp.co.wssj.iungo.R;
+import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.splash.dialog.DialogAskUpdate;
 import jp.co.wssj.iungo.utils.Constants;
 
 /**
@@ -78,8 +82,20 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 .debug(true)
                 .build();
         Twitter.initialize(config);
+        PackageInfo pInfo;
+        try {
+            pInfo = getActivityContext().getPackageManager().getPackageInfo(getActivityContext().getPackageName(), 0);
+            String versionName = pInfo.versionName;
+            getPresenter().onCreate(versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-        getPresenter().onCreate();
+    @Override
+    public void showDialog(CheckVersionAppResponse.CheckVersionAppData response) {
+        DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response.getVersionInfo().isRequired(), getActivityCallback());
+        dialogAskUpdate.showDialog();
     }
 
     @Override

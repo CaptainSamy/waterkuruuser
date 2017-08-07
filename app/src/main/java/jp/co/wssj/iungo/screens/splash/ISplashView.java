@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 /**
@@ -9,4 +10,6 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
 public interface ISplashView extends IFragmentView {
 
     void displayScreen(int fragmentId);
+
+    void showDialog(CheckVersionAppResponse.CheckVersionAppData response);
 }

@@ -122,7 +122,8 @@
     <string name="unused_card_title">店名称：</string>
     <string name="can_use_card_title">使用可能サンタプカード</string>
     <string name="used_card_title">使用済一覧</string>
-    <string name="card_amount">利用可能スタンプカード： %1$s枚</string>
+    <string name="card_amount">利用可能ポイント： %1$s枚</string>
+    <string name="number_push_unread">未読数：%1$s</string>
     <string name="list_store">店舗の状態確認</string>
     <string name="rating">評価する</string>
     <string name="no_item_service">サービススタンプカードがありません。</string>
@@ -141,7 +142,7 @@
 
     <!-- User memo -->
     <string name="title_screen_user_memo">要望</string>
-    <string name="save_button">保存</string>
+    <string name="save_button">保存する</string>
 
     <!--Manager Stamp-->
     <string name="title_screen_manager_stamp">チェックイン中</string>

@@ -33,8 +33,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
         return getModel(SharedPreferencesModel.class);
     }
 
-    public void onCreate() {
-
+    public void onCreate(final String versionCode) {
         long expireDate = getModel(SharedPreferencesModel.class).getExpireDate();
         if (expireDate <= System.currentTimeMillis()) {
             String userId = getModel(SharedPreferencesModel.class).getUserId();
@@ -46,7 +45,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
                     getShareModel().putToken(data.getToken());
                     getShareModel().putExpireDate(data.getExpireDate());
                     getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
-                    switchScreen();
+                    switchScreen(versionCode);
                 }
 
                 @Override
@@ -61,18 +60,35 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
 
                 @Override
                 public void run() {
-                    switchScreen();
+                    switchScreen(versionCode);
                 }
             }, Constants.TIME_WAITING_SPLASH);
         }
     }
 
-    public void switchScreen() {
-        String token = getModel(SharedPreferencesModel.class).getToken();
+    public void switchScreen(final String versionCode) {
+        final String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
+//            getModel(AuthModel.class).checkVersionApp(token, versionCode, new AuthModel.IOnCheckVersionAppCallback() {
+//
+//                @Override
+//                public void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response) {
+//                    if (response.isHasUpdate()) {
+//                        getView().showDialog(response);
+//                    } else {
+//                        getView().displayScreen(IMainView.FRAGMENT_HOME);
+//                    }
+//                }
+//
+//                @Override
+//                public void onCheckVersionAppFailure() {
+//                    getView().displayScreen(IMainView.FRAGMENT_HOME);
+//                }
+//            });
             getView().displayScreen(IMainView.FRAGMENT_HOME);
         } else {
             getView().displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN);
         }
+
     }
 }
