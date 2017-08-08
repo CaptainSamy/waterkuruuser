@@ -494,7 +494,12 @@ public class MainActivity extends AppCompatActivity
                     if (splitAction != null) {
                         action = splitAction[0];
                         if (splitAction.length == 2) {
-                            stampId = Integer.parseInt(splitAction[1]);
+                            try {
+                                stampId = Integer.parseInt(splitAction[1]);
+                            } catch (NumberFormatException e) {
+                                Logger.d(TAG, "NumberFormatException");
+                            }
+
                         }
                     }
                 }
