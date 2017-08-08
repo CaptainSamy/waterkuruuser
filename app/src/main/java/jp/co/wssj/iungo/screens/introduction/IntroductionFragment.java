@@ -289,7 +289,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
     public void onLoginGoogle() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().requestIdToken(getString(R.string.server_client_id))
+                .requestEmail().requestIdToken(getString(R.string.server_client_id_dev))
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(getActivityContext())
                 .enableAutoManage(getActivity(), this)

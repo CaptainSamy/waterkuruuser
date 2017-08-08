@@ -250,7 +250,7 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<CheckVersionAppResponse> checkVersionApp(String token, final String versionApp, final String deviceId, final Response.Listener<CheckVersionAppResponse> responseListener,
+    static GsonRequest<CheckVersionAppResponse> checkVersionApp(String token, final int versionApp, final String deviceId, final Response.Listener<CheckVersionAppResponse> responseListener,
                                                                 final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");

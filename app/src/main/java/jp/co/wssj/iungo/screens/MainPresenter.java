@@ -103,4 +103,12 @@ class MainPresenter extends BasePresenter<IMainView> {
         return getModel(SharedPreferencesModel.class).getPhotoUrl();
     }
 
+    public boolean isLogin() {
+        return getModel(SharedPreferencesModel.class).isLogin();
+    }
+
+    public void savePush(String objectPush) {
+        getModel(SharedPreferencesModel.class).putObjectPush(objectPush);
+    }
+
 }

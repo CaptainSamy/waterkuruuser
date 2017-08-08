@@ -41,6 +41,7 @@ class IntroductionPresenter extends FragmentPresenter<IIntroductionView> {
                 getModel(SharedPreferencesModel.class).putUserName(data.getUserName());
                 getModel(SharedPreferencesModel.class).putEmail(data.getEmail());
                 getModel(SharedPreferencesModel.class).putTypeLogin(typeLogin);
+                getModel(SharedPreferencesModel.class).putStatusLogin(true);
                 getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
                 getView().displayHomeScreen();
             }

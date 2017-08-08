@@ -77,11 +77,11 @@ public class QAFragment extends BaseFragment<IQAView, QAPresenter> implements IQ
         getPresenter().getListQA(Constants.INIT_PAGE, Constants.LIMIT);
     }
 
+    int previousItem = -1;
+
     @Override
     protected void initAction() {
         mListViewQA.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            int previousItem = -1;
 
             @Override
             public void onGroupExpand(int groupPosition) {

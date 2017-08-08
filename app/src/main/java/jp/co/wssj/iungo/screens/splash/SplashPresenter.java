@@ -33,7 +33,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
         return getModel(SharedPreferencesModel.class);
     }
 
-    public void onCreate(final String versionCode) {
+    public void onCreate(final int versionCode) {
         long expireDate = getModel(SharedPreferencesModel.class).getExpireDate();
         if (expireDate <= System.currentTimeMillis()) {
             String userId = getModel(SharedPreferencesModel.class).getUserId();
@@ -66,7 +66,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
         }
     }
 
-    public void switchScreen(final String versionCode) {
+    public void switchScreen(final int versionCode) {
         final String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
 //            getModel(AuthModel.class).checkVersionApp(token, versionCode, new AuthModel.IOnCheckVersionAppCallback() {

@@ -389,7 +389,7 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequest(removeDeviceToken);
     }
 
-    public void checkVersionApp(String token, String currentVersion, final IOnCheckVersionAppCallback callback) {
+    public void checkVersionApp(String token, int currentVersion, final IOnCheckVersionAppCallback callback) {
         String deviceId = Settings.Secure.getString(getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
 

@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.crashlytics.android.Crashlytics;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,7 @@ import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
@@ -124,11 +126,7 @@ public class MainActivity extends AppCompatActivity
 
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
-        checkIntent(getIntent());
     }
-
-
-
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
@@ -482,55 +480,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent) {
         checkStartNotification(intent);
-        checkIntent(intent);
-    }
-
-    private void checkIntent(final Intent intent) {
-        if (intent != null && intent.getScheme() != null && intent.getScheme().equals("iungo")) {
-            final String storeCode = intent.getData().getQueryParameter("store");
-            final String pushId = intent.getData().getQueryParameter("pushid");
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    Logger.d(TAG,"Open app from url scheme "+storeCode + " - "+pushId);
-
-                    NotificationMessage notificationMessage = new NotificationMessage(Long.parseLong(pushId), "", "", "", 0);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
-                    bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
-                    bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
-                    switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
-                }
-            },5000);
-
-        }
     }
 
     private void checkStartNotification(Intent intent) {
         if (intent != null) {
             Bundle b = intent.getExtras();
             if (b != null && !TextUtils.isEmpty(b.getString("push_id"))) {
-                String pushId = b.getString("push_id");
-                String title = b.getString("title");
-                String content = b.getString("body");
-                String action = b.getString("type");
-                int stampId = 0;
-                if (!TextUtils.isEmpty(action)) {
-                    String[] splitAction = action.split(Constants.SPLIT);
-                    if (splitAction != null) {
-                        action = splitAction[0];
-                        if (splitAction.length == 2) {
-                            try {
-                                stampId = Integer.parseInt(splitAction[1]);
-                            } catch (NumberFormatException e) {
-                                Logger.d(TAG, "NumberFormatException");
-                            }
-
-                        }
-                    }
-                }
-                NotificationMessage notificationMessage = new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
+                NotificationMessage notificationMessage = getItemPush(b);
                 if (mDialogNotification != null) {
                     mDialogNotification.addNotification(notificationMessage);
                 }
@@ -539,11 +495,45 @@ public class MainActivity extends AppCompatActivity
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+            } else if (intent.getScheme() != null && intent.getScheme().equals("iungo")) {
+                final String storeCode = intent.getData().getQueryParameter("code");
+                ObjectPush objectPush = new ObjectPush(storeCode);
+                Gson gson = new Gson();
+                String json = gson.toJson(objectPush);
+                mPresenter.savePush(json);
+                if (mPresenter.isLogin()) {
+                    switchScreen(IMainView.FRAGMENT_HOME, true, true, null);
+                } else {
+                    switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
+                }
             } else {
                 mPresenter.onCreate();
             }
 
         }
+    }
+
+    public NotificationMessage getItemPush(Bundle b) {
+        String pushId = b.getString("push_id");
+        String title = b.getString("title");
+        String content = b.getString("body");
+        String action = b.getString("type");
+        int stampId = 0;
+        if (!TextUtils.isEmpty(action)) {
+            String[] splitAction = action.split(Constants.SPLIT);
+            if (splitAction != null) {
+                action = splitAction[0];
+                if (splitAction.length == 2) {
+                    try {
+                        stampId = Integer.parseInt(splitAction[1]);
+                    } catch (NumberFormatException e) {
+                        Logger.d(TAG, "NumberFormatException");
+                    }
+
+                }
+            }
+        }
+        return new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
     }
 
     @Override

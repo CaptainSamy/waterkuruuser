@@ -107,7 +107,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     protected void initData() {
         Bundle bundle = getArguments();
-        boolean isRequesApi = false;
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
 
@@ -131,12 +130,10 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_REMIND:
                             mButtonRating.setVisibility(View.GONE);
-                            isRequesApi = true;
                             spannableString = new SpannableString(mNotificationMessage.getMessage());
                             break;
                         case Constants.PushNotification.TYPE_REQUEST_REVIEW:
                             mButtonRating.setVisibility(View.VISIBLE);
-                            isRequesApi = true;
                             showRating(isShowRating);
                             spannableString = new SpannableString(mNotificationMessage.getMessage());
                             break;
@@ -145,13 +142,13 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                     }
                 }
-                if (isFromActivity && !isRequesApi) {
+                if (isFromActivity) {
                     getPresenter().getContentPush(mNotificationMessage.getPushId());
                 } else {
 //                    if (spannableString != null) {
 //                        mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
 //                    } else {
-//                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
+//                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage().trim(), "text/html", "UTF-8", "");
 //                    }
                     mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
                 }

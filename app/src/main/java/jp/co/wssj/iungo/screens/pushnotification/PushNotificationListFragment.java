@@ -83,11 +83,14 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     @Override
     protected void initData() {
-        mListNotification = new ArrayList<>();
-        mAdapter = new PushNotificationAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
+
+        if (mListNotification == null) {
+            mListNotification = new ArrayList<>();
+            mAdapter = new PushNotificationAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
+            mRefreshLayout.setRefreshing(true);
+            getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+        }
         mListView.setAdapter(mAdapter);
-        mRefreshLayout.setRefreshing(true);
-        getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
 
     }
 
@@ -117,9 +120,13 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         }
     }
 
+    private int mPage, mTotalPage;
+
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
+        mPage = page;
+        mTotalPage = totalPage;
         if (list != null) {
             if (page == Constants.INIT_PAGE) {
                 mListNotification.clear();

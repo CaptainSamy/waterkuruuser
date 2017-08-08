@@ -82,10 +82,12 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 .debug(true)
                 .build();
         Twitter.initialize(config);
+
+
         PackageInfo pInfo;
         try {
             pInfo = getActivityContext().getPackageManager().getPackageInfo(getActivityContext().getPackageName(), 0);
-            String versionName = pInfo.versionName;
+            int versionName = pInfo.versionCode;
             getPresenter().onCreate(versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
