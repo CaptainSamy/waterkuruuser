@@ -180,6 +180,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     public void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse) {
         if (contentPushResponse != null) {
 //            Utils.formatHtml(mBody, contentPushResponse.getContent());
+            mTitle.setText(contentPushResponse.getTitle());
             mBody.loadDataWithBaseURL("", contentPushResponse.getContent(), "text/html", "UTF-8", "");
         }
     }
