@@ -124,7 +124,11 @@ public class MainActivity extends AppCompatActivity
 
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
+        checkIntent(getIntent());
     }
+
+
+
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
@@ -478,6 +482,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent) {
         checkStartNotification(intent);
+        checkIntent(intent);
+    }
+
+    private void checkIntent(final Intent intent) {
+        if (intent != null && intent.getScheme() != null && intent.getScheme().equals("iungo")) {
+            final String storeCode = intent.getData().getQueryParameter("store");
+            final String pushId = intent.getData().getQueryParameter("pushid");
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    Logger.d(TAG,"Open app from url scheme "+storeCode + " - "+pushId);
+
+                    NotificationMessage notificationMessage = new NotificationMessage(Long.parseLong(pushId), "", "", "", 0);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
+                    bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
+                    bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
+                    switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+                }
+            },5000);
+
+        }
     }
 
     private void checkStartNotification(Intent intent) {
