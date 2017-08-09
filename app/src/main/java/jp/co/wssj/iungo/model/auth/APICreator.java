@@ -34,7 +34,10 @@ final class APICreator {
 
     private static final String REMOVE_DEVICE_TOKEN = Constants.BASE_URL_AWS + "/api/client/users/remove-device-token";
 
-    public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userId, final String password, final String name, final String email, final int typeLogin, final String token, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
+    private static final String CHECK_VERSION_APP = Constants.BASE_URL_AWS + "/api/client/users/check-version-app-and-server-user";
+
+    public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userId, final String password, final String name, final String email, final int age, final int sex, final int typeLogin, final String token, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
+
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
@@ -67,6 +70,8 @@ final class APICreator {
                 param.put("password", password);
                 param.put("name", name);
                 param.put("email", email);
+                param.put("age_avg", age);
+                param.put("sex", sex);
                 param.put("type_login", typeLogin);
                 param.put("token", token);
                 return param;
@@ -238,6 +243,31 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
                 params.put("device_id", deviceId);
+                return params;
+            }
+
+
+        };
+    }
+
+    static GsonRequest<CheckVersionAppResponse> checkVersionApp(String token, final int versionApp, final String deviceId, final Response.Listener<CheckVersionAppResponse> responseListener,
+                                                                final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        ResponseListener<CheckVersionAppResponse> listener = new ResponseListener<>(TAG, "removeDeviceToken", responseListener, errorListener);
+        return new GsonJsonRequest<CheckVersionAppResponse>(Request.Method.POST,
+                CHECK_VERSION_APP,
+                CheckVersionAppResponse.class,
+                headers,
+                listener,
+                listener) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> params = new HashMap<>();
+                params.put("device_id", deviceId);
+                params.put("current_version", versionApp);
                 return params;
             }
 

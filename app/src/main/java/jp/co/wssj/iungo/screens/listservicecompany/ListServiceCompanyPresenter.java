@@ -45,7 +45,7 @@ class ListServiceCompanyPresenter extends FragmentPresenter<IListServiceCompanyV
 
     void onItemClicked(ListCompanyResponse.ListCompanyData.CompanyData companyData) {
         if (companyData != null) {
-            getView().displayListCardScreen(companyData.getServiceCompanyId(), companyData.getServiceId(), companyData.getServiceName(), companyData.getCardName());
+            getView().displayListCardScreen(companyData.getServiceCompanyId(), companyData.getServiceId(), companyData.getServiceName(), companyData.getCardName(), companyData.getCardType());
         }
     }
 }

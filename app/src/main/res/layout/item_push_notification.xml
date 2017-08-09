@@ -82,23 +82,6 @@
                     android:textColor="@color/colorTextMain"
                     android:textSize="14sp"
                     android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/buttonRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center_vertical"
-                    android:background="@drawable/border_rating_notification"
-                    android:gravity="center"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
-                    android:text="@string/rating"
-                    android:textColor="@color/white"
-                    android:textSize="12dp"
-                    android:visibility="gone"/>
             </RelativeLayout>
 
         </RelativeLayout>

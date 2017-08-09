@@ -11,7 +11,7 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 interface IListServiceCompanyView extends IFragmentView {
 
-    void displayListCardScreen(int serviceCompanyId, int serviceId, String serviceName, String cardName);
+    void displayListCardScreen(int serviceCompanyId, int serviceId, String serviceName, String cardName, int cardType);
 
     void showListCompany(List<ListCompanyResponse.ListCompanyData.CompanyData> cardList);
 

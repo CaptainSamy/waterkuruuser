@@ -25,6 +25,8 @@ import jp.co.wssj.iungo.utils.Constants;
 
 public class PushNotificationListFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter> implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = "PushNotificationListFragment";
+
     private SwipeRefreshLayout mRefreshLayout;
 
     private PushNotificationAdapter mAdapter;
@@ -35,7 +37,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     @Override
     protected String getLogTag() {
-        return "PushNotificationListFragment";
+        return TAG;
     }
 
     @Override
@@ -78,14 +80,17 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
     }
+
     @Override
     protected void initData() {
-        
-        mListNotification = new ArrayList<>();
-        mAdapter = new PushNotificationAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
+
+        if (mListNotification == null) {
+            mListNotification = new ArrayList<>();
+            mAdapter = new PushNotificationAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
+            mRefreshLayout.setRefreshing(true);
+            getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+        }
         mListView.setAdapter(mAdapter);
-        mRefreshLayout.setRefreshing(true);
-        getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
 
     }
 
@@ -115,10 +120,17 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         }
     }
 
+    private int mPage, mTotalPage;
+
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
+        mPage = page;
+        mTotalPage = totalPage;
         if (list != null) {
+            if (page == Constants.INIT_PAGE) {
+                mListNotification.clear();
+            }
             mListNotification.addAll(list);
             mAdapter.notifyDataSetChanged();
         }
@@ -133,6 +145,18 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             }
         });
 
+
+        if (list != null && list.size() > 0) {
+            List<Long> listPushId = new ArrayList<>();
+            for (NotificationMessage notificationMessage : list) {
+                if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                    listPushId.add(notificationMessage.getPushId());
+                }
+            }
+            if (listPushId != null && listPushId.size() > 0) {
+                getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
+            }
+        }
 
     }
 

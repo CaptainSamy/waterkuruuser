@@ -18,6 +18,7 @@ import jp.co.wssj.iungo.screens.IActivityCallback;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseDialog;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.widget.ImageRoundCorners;
 
@@ -133,13 +134,19 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
         hideProgress();
         if (mActivityCallback != null && data != null) {
             Bundle bundle = new Bundle();
-            bundle.putString(WaitStoreConfirmFragment.KEY_STATUS_CHECK_IN, data.getStatus());
-            bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, mStoreName);
-            bundle.putString(WaitStoreConfirmFragment.KEY_SERVICE_NAME, data.getServiceName());
-            bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
-            bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());
-            bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_SESSION, data.getNumberSession());
-            mActivityCallback.displayScreen(IMainView.FRAGMENT_WAIT_STORE_CONFIRM, true, false, bundle);
+            if (data.getCardType() == 3) {
+                bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, data.getServiceCompanyId());
+                mActivityCallback.displayScreen(IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY, true, false, bundle);
+            } else {
+                bundle.putString(WaitStoreConfirmFragment.KEY_STATUS_CHECK_IN, data.getStatus());
+                bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, mStoreName);
+                bundle.putString(WaitStoreConfirmFragment.KEY_SERVICE_NAME, data.getServiceName());
+                bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
+                bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());
+                bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_SESSION, data.getNumberSession());
+                mActivityCallback.displayScreen(IMainView.FRAGMENT_WAIT_STORE_CONFIRM, true, false, bundle);
+            }
+
         }
     }
 

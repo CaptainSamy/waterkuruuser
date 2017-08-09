@@ -3,7 +3,8 @@
 
     <string name="facebook_app_id">1604900466188470</string>
     <string name="fabook_login_protocol_scheme">fb1604900466188470</string>
-    <string name="server_client_id">610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com</string>
+    <string name="server_client_id_dev">610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com</string>
+    <string name="server_client_id_product">610695143021-dnvgmn753ppdcmensiveq4m1vsjcpko4.apps.googleusercontent.com</string>
 
     <string name="success">成功</string>
     <string name="failure">エラーが発生しました</string>
@@ -30,7 +31,6 @@
     <string name="register_account">新規登録</string>
     <string name="user_login_not_null">ログインIDを入力してください。</string>
     <string name="password_login_not_null">パスワードを入力してください。</string>
-    <string name="confirm_password_not_null">パスワード（確認）を入力していませんでした。入力してください。</string>
 
     <!--Reset/change password fragment-->
     <string name="title_screen_reset_password">パスワード初期化</string>
@@ -54,19 +54,20 @@
     <string name="email_not_format">メールアドレスを正しく入力してください。</string>
     <string name="title_password_old">パスワード変更</string>
     <string name="text_hint_password_old">現在のパスワード</string>
-
-
     <string name="current_password_not_null">パスワードを入力してください。</string>
     <string name="new_password_not_null"> 新パスワードを入力してください。</string>
     <string name="confirm_new_password_not_null">新パスワード(確認)を入力してください。</string>
     <string name="confirm_different_new_password">新パスワード(確認)はパスワードに誤りがあります。</string>
+
+
     <!--Register account fragment-->
     <string name="title_register">新規登録</string>
     <string name="register">登録</string>
     <string name="user_name_not_null">名前を入力してください。</string>
-    <string name="user_not_null">ログイン IDを入力していませんでした。入力してください。</string>
+    <string name="user_not_null">ログインIDを入力してください。</string>
     <string name="password_length">パスワードを8～14桁で入力してください。</string>
-    <string name="password_not_null">パスワードを入力していませんでした。入力してください。</string>
+    <string name="password_not_null">パスワードを入力してください。</string>
+    <string name="confirm_password_not_null">パスワード（確認）を入力してください。</string>
     <string name="different_password">パスワードとパスワード（確認）が異なります。正しく入力してください。</string>
     <string name="email_not_null">メールアドレスを入力していませんでした。入力してください。</string>
     <string name="email_container_chars">Email must container chars</string>
@@ -79,6 +80,11 @@
     <string name="input_email">メールアドレス</string>
     <string name="input_password">パスワード</string>
     <string name="input_confirm_password">パスワード(確認)</string>
+
+    <string name="title_age">年齢</string>
+    <string name="title_sex">性別</string>
+    <string name="male">男性</string>
+    <string name="fe_male">女性</string>
 
 
     <!--Home fragment-->
@@ -117,7 +123,8 @@
     <string name="unused_card_title">店名称：</string>
     <string name="can_use_card_title">使用可能サンタプカード</string>
     <string name="used_card_title">使用済一覧</string>
-    <string name="card_amount">利用可能スタンプカード： %1$s枚</string>
+    <string name="card_amount">利用可能ポイント： %1$s枚</string>
+    <string name="number_push_unread">未読数：%1$s</string>
     <string name="list_store">店舗の状態確認</string>
     <string name="rating">評価する</string>
     <string name="no_item_service">サービススタンプカードがありません。</string>
@@ -136,7 +143,7 @@
 
     <!-- User memo -->
     <string name="title_screen_user_memo">要望</string>
-    <string name="save_button">保存</string>
+    <string name="save_button">保存する</string>
 
     <!--Manager Stamp-->
     <string name="title_screen_manager_stamp">チェックイン中</string>
@@ -158,6 +165,7 @@
     <string name="title_push_detail">お知らせ一覧</string>
     <string name="text_no_item">未読の通知がありません。</string>
     <!--List store checked in-->
+    <string name="title_screen_list_store_checked_in">店舗状態確認</string>
     <string name="title_list_store_checked_in">最新ご利用のお店舗を表示</string>
     <string name="time_waiting">現在のお待ち時間</string>
     <string name="people_waiting">現在のお待ち人</string>

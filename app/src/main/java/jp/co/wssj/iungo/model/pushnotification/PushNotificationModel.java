@@ -59,12 +59,19 @@ public class PushNotificationModel extends BaseModel {
         void onGetContentPushFailure(String message);
     }
 
+    public interface IGetListPushForServiceCompanyCallback {
+
+        void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage);
+
+        void onGetListPushNotificationFailure(ErrorMessage errorMessage);
+    }
+
     public PushNotificationModel(Context context) {
         super(context);
     }
 
     public void getListPushNotification(String token, int page, int limit, final IGetListPushNotificationCallback callback) {
-        Request request = APICreator.getUploadDeviceTokenRequest(token, page, limit, new Response.Listener<ListNotificationResponse>() {
+        Request request = APICreator.getListNotification(token, page, limit, new Response.Listener<ListNotificationResponse>() {
 
             @Override
             public void onResponse(ListNotificationResponse response) {
@@ -115,8 +122,8 @@ public class PushNotificationModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void setListPushUnRead(String token, long pushId, final ISetListPushNotificationCallback callback) {
-        Request request = APICreator.setListNotificationUnRead(token, pushId, new Response.Listener<ResponseData>() {
+    public void setListPushUnRead(String token, List<Long> pushId, int type, final ISetListPushNotificationCallback callback) {
+        Request request = APICreator.setListNotificationUnRead(token, pushId, type, new Response.Listener<ResponseData>() {
 
             @Override
             public void onResponse(ResponseData response) {
@@ -171,6 +178,32 @@ public class PushNotificationModel extends BaseModel {
                 } else {
                     callback.onGetContentPushFailure(getStringResource(R.string.failure));
                 }
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
+
+    public void getListPushNotificationForServiceCompany(String token, int serviceCompanyId, int page, int limit, final IGetListPushForServiceCompanyCallback callback) {
+        Request request = APICreator.getListNotificationForServiceCompany(token, serviceCompanyId, page, limit, new Response.Listener<ListNotificationResponse>() {
+
+            @Override
+            public void onResponse(ListNotificationResponse response) {
+                if (response.isSuccess()) {
+                    if (response.getData() != null && response.getData().getListPushNotification() != null) {
+                        List<NotificationMessage> listNotification = response.getData().getListPushNotification();
+                        callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
+                    } else {
+                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
+                    }
+                } else {
+                    callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
             }
         });
         VolleySequence.getInstance().addRequest(request);

@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,25 +17,26 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.crashlytics.android.Crashlytics;
-import com.michael.easydialog.EasyDialog;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import jp.co.wssj.iungo.BuildConfig;
+import jp.co.wssj.iungo.DialogNotification;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.about.AboutFragment;
@@ -52,9 +55,10 @@ import jp.co.wssj.iungo.screens.login.LoginFragment;
 import jp.co.wssj.iungo.screens.memomanager.MemoManagerFragment;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
+import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
@@ -66,7 +70,6 @@ import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
 import jp.co.wssj.iungo.utils.Logger;
-import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.widget.CenterTitleToolbar;
 
 public class MainActivity extends AppCompatActivity
@@ -88,27 +91,17 @@ public class MainActivity extends AppCompatActivity
 
     private Window mWindow;
 
+    private ImageView imageNotification, mImageUser;
+
     private MainPresenter mPresenter;
 
     private FragmentBackStackManager mFragmentBackStackManager;
 
-    private PushNotificationAdapter mPushNotificationAdapter;
-
-    private List<NotificationMessage> mListNotification;
-
-    private EasyDialog mEasyDialog;
-
-    private ListView mListViewNotification;
-
-    private View mRootViewNotification;
-
-    private TextView mTextNoItem;
+    private DialogNotification mDialogNotification;
 
     private int mTotalNotificationUnRead;
 
     boolean isRequestFirstNotification = true;
-
-    private ImageView mImageMenu;
 
     private TextView mTextUserName;
 
@@ -129,7 +122,7 @@ public class MainActivity extends AppCompatActivity
         initAction();
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
-        LocalBroadcastManager.getInstance(MainActivity.this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_SERVICE_ACTIVITY));
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
 
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
@@ -141,7 +134,6 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "broadcastReceiver");
             mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
-            mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead++);
         }
     };
 
@@ -155,8 +147,8 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationView = (NavigationView) findViewById(R.id.nav_view);
         View header = mNavigationView.getHeaderView(0);
-        mImageMenu = (ImageView) header.findViewById(R.id.imageMenu);
         mTextUserName = (TextView) header.findViewById(R.id.textUserName);
+        mImageUser = (ImageView) header.findViewById(R.id.imageMenu);
         mNavigationView.setItemIconTintList(null);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNavigationView.setItemIconTintList(null);
@@ -166,6 +158,8 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
         imageNotification = (ImageView) findViewById(R.id.iconTest);
+
+
     }
 
     private void initAction() {
@@ -197,57 +191,12 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onClick(View v) {
-                showListNotification();
+                if (mDialogNotification != null) {
+                    mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
+                    mDialogNotification.show();
+                }
             }
         });
-    }
-
-    ImageView imageNotification;
-
-    public void showListNotification() {
-        mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
-        if (mPushNotificationAdapter == null) return;
-        if (mRootViewNotification == null) {
-            mRootViewNotification = LayoutInflater.from(MainActivity.this).inflate(R.layout.custom_tooltip, null);
-            mTextNoItem = (TextView) mRootViewNotification.findViewById(R.id.textNoItem);
-            mListViewNotification = (ListView) mRootViewNotification.findViewById(R.id.listView);
-            mListViewNotification.setVerticalScrollBarEnabled(false);
-            mListViewNotification.setAdapter(mPushNotificationAdapter);
-            mEasyDialog = new EasyDialog(MainActivity.this)
-                    .setLayout(mRootViewNotification)
-                    .setGravity(EasyDialog.GRAVITY_BOTTOM)
-                    .setBackgroundColor(MainActivity.this.getResources().getColor(android.R.color.white))
-                    .setLocationByAttachedView(imageNotification)
-                    .setAnimationTranslationShow(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, getResources().getDisplayMetrics().widthPixels, 0)
-                    .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, Constants.DURATION_DIALOG_NOTIFICATION, 0, -getResources().getDisplayMetrics().widthPixels)
-                    .setTouchOutsideDismiss(true)
-                    .setMatchParent(false)
-                    .setMargin(Utils.convertDpToPixel(MainActivity.this, Constants.MARGIN_LEFT), 0, Utils.convertDpToPixel(MainActivity.this, Constants.MARGIN_RIGHT), Utils.convertDpToPixel(MainActivity.this, Constants.MARGIN_BOTTOM))
-                    .setOutsideColor(getResources().getColor(R.color.outside_color_trans));
-
-        }
-        mEasyDialog.show();
-        mListViewNotification.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
-                mToolbar.setNumberNotificationUnRead(--mTotalNotificationUnRead);
-                mListNotification.remove(position);
-                List<NotificationMessage> messageList = new ArrayList<>();
-                messageList.add(message);
-                mEasyDialog.dismiss();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
-                displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
-            }
-        });
-        if (mListNotification != null && mListNotification.size() > 0) {
-            mListViewNotification.setVisibility(View.VISIBLE);
-            mTextNoItem.setVisibility(View.GONE);
-        } else {
-            mTextNoItem.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override
@@ -255,36 +204,37 @@ public class MainActivity extends AppCompatActivity
         mTotalNotificationUnRead = totalNotificationUnRead;
         mToolbar.setNumberNotificationUnRead(mTotalNotificationUnRead);
         Logger.d(TAG, "showListPushNotificationUnRead " + totalNotificationUnRead);
-        if (list != null) {
-            if (mPushNotificationAdapter == null) {
-                mListNotification = new ArrayList<>();
-                mPushNotificationAdapter = new PushNotificationAdapter(this, R.layout.item_push_notification, mListNotification);
-            }
-            if (page == 1) {
-                mListNotification.clear();
-                mListNotification.addAll(list);
-            } else {
-                mListNotification.addAll(list);
-            }
-            mPushNotificationAdapter.notifyDataSetChanged();
-            mPushNotificationAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+        if (mDialogNotification == null) {
+            mDialogNotification = new DialogNotification(MainActivity.this, list, imageNotification);
+        }
+        mDialogNotification.setmCallback(new DialogNotification.IOnItemClick() {
 
-                @Override
-                public void onEndOfListView() {
-                    if (page < totalPage) {
-                        mPresenter.getListPushNotificationUnRead(page + 1, Constants.LIMIT);
-                    }
+            @Override
+            public void onItemClick(NotificationMessage message) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
+                switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+                mToolbar.setNumberNotificationUnRead(--mTotalNotificationUnRead);
+            }
+
+            @Override
+            public void endOfListView(int page, int limit) {
+                mPresenter.getListPushNotificationUnRead(page, Constants.LIMIT);
+            }
+        });
+        mDialogNotification.addListNotification(page, totalPage, list);
+        if (list != null && list.size() > 0 && mDialogNotification.getDialogShowing()) {
+            List<Long> listPushId = new ArrayList<>();
+            for (NotificationMessage notificationMessage : list) {
+                if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_VIEW) {
+                    listPushId.add(notificationMessage.getPushId());
                 }
-            });
-        }
-        if (mListViewNotification != null && mTextNoItem != null) {
-            if (mListNotification != null && mListNotification.size() > 0) {
-                mListViewNotification.setVisibility(View.VISIBLE);
-                mTextNoItem.setVisibility(View.GONE);
-            } else {
-                mTextNoItem.setVisibility(View.VISIBLE);
+            }
+            if (listPushId != null && listPushId.size() > 0) {
+                mPresenter.setListPushUnRead(listPushId, Constants.STATUS_VIEW);
             }
         }
+
     }
 
     @Override
@@ -314,7 +264,6 @@ public class MainActivity extends AppCompatActivity
             if (!mFragmentBackStackManager.popBackStackImmediate()) {
                 finish();
             }
-
         }
     }
 
@@ -484,6 +433,9 @@ public class MainActivity extends AppCompatActivity
             case IMainView.FRAGMENT_ABOUT:
                 replaceFragment(new AboutFragment(), hasAnimation, addToBackStack);
                 break;
+            case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
+                replaceFragment(PushNotificationForServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
+                break;
         }
     }
 
@@ -507,6 +459,7 @@ public class MainActivity extends AppCompatActivity
             }
         }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
 
+
     }
 
     @Override
@@ -521,6 +474,7 @@ public class MainActivity extends AppCompatActivity
             }
         }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
 
+
     }
 
     @Override
@@ -532,34 +486,54 @@ public class MainActivity extends AppCompatActivity
         if (intent != null) {
             Bundle b = intent.getExtras();
             if (b != null && !TextUtils.isEmpty(b.getString("push_id"))) {
-                String pushId = b.getString("push_id");
-                String title = b.getString("title");
-                String content = b.getString("body");
-                String action = b.getString("type");
-                int stampId = 0;
-                if (!TextUtils.isEmpty(action)) {
-                    String[] splitAction = action.split(Constants.SPLIT);
-                    if (splitAction != null) {
-                        action = splitAction[0];
-                        if (splitAction.length == 2) {
-                            stampId = Integer.parseInt(splitAction[1]);
-                        }
-                    }
-                }
-                NotificationMessage notificationMessage = new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
-                if (mListNotification != null) {
-                    mListNotification.add(0, notificationMessage);
+                NotificationMessage notificationMessage = getItemPush(b);
+                if (mDialogNotification != null) {
+                    mDialogNotification.addNotification(notificationMessage);
                 }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+            } else if (intent.getScheme() != null && intent.getScheme().equals("iungo")) {
+                final String storeCode = intent.getData().getQueryParameter("code");
+                ObjectPush objectPush = new ObjectPush(storeCode);
+                Gson gson = new Gson();
+                String json = gson.toJson(objectPush);
+                mPresenter.savePush(json);
+                if (mPresenter.isLogin()) {
+                    switchScreen(IMainView.FRAGMENT_HOME, true, true, null);
+                } else {
+                    switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
+                }
             } else {
                 mPresenter.onCreate();
             }
 
         }
+    }
+
+    public NotificationMessage getItemPush(Bundle b) {
+        String pushId = b.getString("push_id");
+        String title = b.getString("title");
+        String content = b.getString("body");
+        String action = b.getString("type");
+        int stampId = 0;
+        if (!TextUtils.isEmpty(action)) {
+            String[] splitAction = action.split(Constants.SPLIT);
+            if (splitAction != null) {
+                action = splitAction[0];
+                if (splitAction.length == 2) {
+                    try {
+                        stampId = Integer.parseInt(splitAction[1]);
+                    } catch (NumberFormatException e) {
+                        Logger.d(TAG, "NumberFormatException");
+                    }
+
+                }
+            }
+        }
+        return new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
     }
 
     @Override
@@ -571,8 +545,9 @@ public class MainActivity extends AppCompatActivity
     public void onLogout() {
         clearBackStack();
         displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false);
-        if (mListNotification != null)
-            mListNotification.clear();
+        if (mDialogNotification != null) {
+            mDialogNotification.clearData();
+        }
         isRequestFirstNotification = true;
         mToolbar.setNumberNotificationUnRead(0);
         mTextUserName.setText(Constants.EMPTY_STRING);
@@ -589,6 +564,21 @@ public class MainActivity extends AppCompatActivity
             if (fragment instanceof HomeFragment && isRequestFirstNotification) {
                 isRequestFirstNotification = false;
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
+                Glide.with(this)
+                        .load(mPresenter.getPhotoUrl())
+                        .asBitmap()
+                        .into(new SimpleTarget<Bitmap>(300, 300) {
+
+                            @Override
+                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+                                mImageUser.setImageBitmap(resource);
+                            }
+
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                mImageUser.setImageResource(R.drawable.logo_animation_be);
+                            }
+                        });
             }
             disablePushUpView();
             mCurrentFragment = fragment;

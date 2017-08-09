@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import jp.co.wssj.iungo.model.ResponseData;
@@ -23,6 +24,8 @@ public class APICreator {
 
     private static final String API_GET_LIST_NOTIFICATION = Constants.BASE_URL_AWS + "/api/client/users/get-notification-list-user";
 
+    private static final String API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY = Constants.BASE_URL_AWS + "/api/client/users/get-list-push-notification-by-service-company-id";
+
     private static final String API_GET_LIST_PUSH_UN_READ = Constants.BASE_URL_AWS + "/api/client/users/get-notification-list-user-unread";
 
     private static final String API_SET_LIST_NOTIFICATION = Constants.BASE_URL_AWS + "/api/client/users/update-view-status-notification";
@@ -31,9 +34,9 @@ public class APICreator {
 
     private static final String API_GET_CONTENT_PUSH = Constants.BASE_URL_AWS + "/api/client/users/get-push-notification-by-id";
 
-    static GsonRequest<ListNotificationResponse> getUploadDeviceTokenRequest(final String token, int page, int limit,
-                                                                             final Response.Listener<ListNotificationResponse> listener,
-                                                                             final Response.ErrorListener errorListener) {
+    static GsonRequest<ListNotificationResponse> getListNotification(final String token, int page, int limit,
+                                                                     final Response.Listener<ListNotificationResponse> listener,
+                                                                     final Response.ErrorListener errorListener) {
         String url = API_GET_LIST_NOTIFICATION + "?page=" + page + "&limit=" + limit;
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -46,7 +49,7 @@ public class APICreator {
 
                     @Override
                     public void onResponse(ListNotificationResponse response) {
-                        Logger.d(TAG, "#getUploadDeviceTokenRequest -> onResponse ");
+                        Logger.d(TAG, "#getListNotification -> onResponse ");
                         if (listener != null) {
                             listener.onResponse(response);
                         }
@@ -56,13 +59,54 @@ public class APICreator {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getUploadDeviceTokenRequest -> onErrorResponse");
+                        Logger.d(TAG, "#getListNotification -> onErrorResponse");
                         if (errorListener != null) {
                             errorListener.onErrorResponse(error);
                         }
                     }
                 }) {
 
+        };
+    }
+
+    static GsonRequest<ListNotificationResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final int page, int limit,
+                                                                                               final Response.Listener<ListNotificationResponse> listener,
+                                                                                               final Response.ErrorListener errorListener) {
+        String url = API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY + "?page=" + page + "&limit=" + limit;
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
+                url,
+                ListNotificationResponse.class,
+                headers,
+                new Response.Listener<ListNotificationResponse>() {
+
+                    @Override
+                    public void onResponse(ListNotificationResponse response) {
+                        Logger.d(TAG, "#getListNotification -> onResponse ");
+                        if (listener != null) {
+                            listener.onResponse(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#getListNotification -> onErrorResponse");
+                        if (errorListener != null) {
+                            errorListener.onErrorResponse(error);
+                        }
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> params = new HashMap<>();
+                params.put("service_company_id", serviceCompanyId);
+                return params;
+            }
         };
     }
 
@@ -81,7 +125,7 @@ public class APICreator {
 
                     @Override
                     public void onResponse(ListNotificationResponse response) {
-                        Logger.d(TAG, "#getUploadDeviceTokenRequest -> onResponse ");
+                        Logger.d(TAG, "#getListNotification -> onResponse ");
                         listener.onResponse(response);
                     }
                 },
@@ -89,7 +133,7 @@ public class APICreator {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getUploadDeviceTokenRequest -> onErrorResponse");
+                        Logger.d(TAG, "#getListNotification -> onErrorResponse");
                         errorListener.onErrorResponse(error);
                     }
                 }) {
@@ -97,7 +141,7 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> setListNotificationUnRead(final String token, final long pushId,
+    static GsonRequest<ResponseData> setListNotificationUnRead(final String token, final List<Long> pushId, final int type,
                                                                final Response.Listener<ResponseData> listener,
                                                                final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -131,7 +175,16 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("push_id_list", String.valueOf(pushId));
+                map.put("type_read", type);
+                String listPush = Constants.EMPTY_STRING;
+                for (long push : pushId) {
+                    if (pushId.indexOf(push) == (pushId.size() - 1)) {
+                        listPush = listPush + push;
+                    } else {
+                        listPush = listPush + push + ",";
+                    }
+                }
+                map.put("push_id_list", listPush);
                 return map;
             }
         };

@@ -1,12 +1,16 @@
 package jp.co.wssj.iungo.screens.pushnotification.detail;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
@@ -23,7 +27,7 @@ import jp.co.wssj.iungo.utils.Utils;
 
 public class PushNotificationDetailFragment extends BaseFragment<IPushNotificationDetailView, PushNotificationDetailPresenter> implements IPushNotificationDetailView {
 
-    public static final String TAG = "PushNotificationDetailFragment";
+    public static final String TAG = "PushNotificationDetailServiceCompanyFragment";
 
     public static final String NOTIFICATION_ARG = "notification";
 
@@ -47,7 +51,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     @Override
     protected String getLogTag() {
-        return "PushNotificationDetailFragment";
+        return "PushNotificationDetailServiceCompanyFragment";
     }
 
     @Override
@@ -103,14 +107,17 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     protected void initData() {
         Bundle bundle = getArguments();
-        boolean isRequesApi = false;
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
 
             boolean isFromActivity = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
             boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
-                getPresenter().setListPushUnRead(mNotificationMessage.getPushId());
+                if (mNotificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                    List<Long> list = new ArrayList<>();
+                    list.add(mNotificationMessage.getPushId());
+                    getPresenter().setListPushUnRead(list, Constants.STATUS_READ);
+                }
                 mTitle.setText(mNotificationMessage.getTitle().trim());
                 mBody.getSettings().setJavaScriptEnabled(true);
                 mBody.getSettings().setBuiltInZoomControls(true);
@@ -123,12 +130,10 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_REMIND:
                             mButtonRating.setVisibility(View.GONE);
-                            isRequesApi = true;
                             spannableString = new SpannableString(mNotificationMessage.getMessage());
                             break;
                         case Constants.PushNotification.TYPE_REQUEST_REVIEW:
                             mButtonRating.setVisibility(View.VISIBLE);
-                            isRequesApi = true;
                             showRating(isShowRating);
                             spannableString = new SpannableString(mNotificationMessage.getMessage());
                             break;
@@ -137,12 +142,15 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                     }
                 }
-                if (isFromActivity && !isRequesApi) {
+                if (isFromActivity) {
                     getPresenter().getContentPush(mNotificationMessage.getPushId());
                 } else {
-                    if (spannableString != null) {
-                        mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
-                    }
+//                    if (spannableString != null) {
+//                        mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
+//                    } else {
+//                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage().trim(), "text/html", "UTF-8", "");
+//                    }
+                    mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
                 }
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);
                 mTime.setText(time);
@@ -169,6 +177,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     public void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse) {
         if (contentPushResponse != null) {
 //            Utils.formatHtml(mBody, contentPushResponse.getContent());
+            mTitle.setText(contentPushResponse.getTitle());
             mBody.loadDataWithBaseURL("", contentPushResponse.getContent(), "text/html", "UTF-8", "");
         }
     }
@@ -176,5 +185,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     public void onGetContentPushFailure(String message) {
         showToast(message);
+    }
+
+    @Override
+    public void onUpdateStatusPushSuccess() {
+        Intent sentToActivity = new Intent();
+        sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
+        LocalBroadcastManager.getInstance(getActivityContext()).sendBroadcast(sentToActivity);
     }
 }

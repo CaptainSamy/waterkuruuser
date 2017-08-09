@@ -11,10 +11,10 @@ import com.android.volley.VolleyError;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
-import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.utils.VolleySequence;
 
@@ -33,7 +33,7 @@ public class AuthModel extends BaseModel {
 
     public interface IValidateRegisterCallback {
 
-        void validateSuccess(String userName, String password, String name, String email);
+        void validateSuccess(String userName, String password, String name, String email, int age, int sex);
 
         void validateFailure(ErrorMessage errorMessage, int code);
 
@@ -73,16 +73,14 @@ public class AuthModel extends BaseModel {
 
     }
 
-    public interface IOnRemoveDeviceTokenCallback {
+    public interface IOnCheckVersionAppCallback {
 
-        void onRemoveDeviceTokenSuccess();
+        void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response);
 
-        void onRemoveDeviceTokenFailure();
+        void onCheckVersionAppFailure();
     }
 
     private static final String TAG = "AuthModel";
-
-    private static final int MIN_EMAIL_LENGTH = 3;
 
     public AuthModel(Context context) {
         super(context);
@@ -102,7 +100,7 @@ public class AuthModel extends BaseModel {
         }
     }
 
-    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, IValidateRegisterCallback callback) {
+    public void validateRegisterAccount(String userName, String userId, String password, String confirmPassword, String email, int age, int sex, IValidateRegisterCallback callback) {
         ErrorMessage errorMessage = null;
         int code = 0;
         if (TextUtils.isEmpty(userName)) {
@@ -135,7 +133,7 @@ public class AuthModel extends BaseModel {
         if (errorMessage != null && !TextUtils.isEmpty(errorMessage.getMessage())) {
             callback.validateFailure(errorMessage, code);
         } else {
-            callback.validateSuccess(userId, password, userName, email);
+            callback.validateSuccess(userId, password, userName, email, age, sex);
         }
 
     }
@@ -170,8 +168,8 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
     }
 
-    public void registerAccount(String userId, String password, String name, String email, int typeLogin, String token, final IRegisterCallback callback) {
-        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, typeLogin, token, new Response.Listener<RegisterResponse>() {
+    public void registerAccount(String userId, String password, String name, String email, int age, int sex, int typeLogin, String token, final IRegisterCallback callback) {
+        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, age, sex, typeLogin, token, new Response.Listener<RegisterResponse>() {
 
             @Override
             public void onResponse(RegisterResponse response) {
@@ -389,6 +387,30 @@ public class AuthModel extends BaseModel {
                     }
                 });
         VolleySequence.getInstance().addRequest(removeDeviceToken);
+    }
+
+    public void checkVersionApp(String token, int currentVersion, final IOnCheckVersionAppCallback callback) {
+        String deviceId = Settings.Secure.getString(getContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+
+        Request requestCheckVersionApp = APICreator.checkVersionApp(token, currentVersion, deviceId, new Response.Listener<CheckVersionAppResponse>() {
+
+            @Override
+            public void onResponse(CheckVersionAppResponse response) {
+                if (response.isSuccess()) {
+                    callback.onCheckVersionAppSuccess(response.getData());
+                } else {
+                    callback.onCheckVersionAppFailure();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onCheckVersionAppFailure();
+            }
+        });
+        VolleySequence.getInstance().addRequest(requestCheckVersionApp);
     }
 
     private boolean isEmailValid(CharSequence email) {

@@ -40,10 +40,6 @@ public final class AmazonS3Utils {
         return sInstance;
     }
 
-    public void upload(File file, String fileName) {
-        upload(file, fileName, null);
-    }
-
     public void upload(File file, String fileName, TransferListener transferListener) {
         if (file != null && file.exists()) {
             TransferObserver transferObserver = mTransferUtility.upload(BUCKET_NAME, fileName, file);

@@ -25,8 +25,8 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListStoreCheckedResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.listcard.ListCardFragment;
 import jp.co.wssj.iungo.screens.liststorecheckedin.adapter.ListStoreCheckedInAdapter;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
@@ -70,7 +70,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_screen_stamp);
+        return getString(R.string.title_screen_list_store_checked_in);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
         super.initData();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mServiceCompanyId = bundle.getInt(ListCardFragment.KEY_SERVICE_COMPANY_ID);
+            mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             getPresenter().checkAccessLocationPermission();
         }
     }

@@ -70,16 +70,22 @@ public class ServicesCompanyAdapter extends ArrayAdapter<ListCompanyResponse.Lis
         private TextView mCardAmountTextView;
 
         private void fillData(Context context, ListCompanyResponse.ListCompanyData.CompanyData data) {
-            if (!TextUtils.isEmpty(data.getLogo())) {
-                Glide.with(context)
-                        .load(data.getLogo())
-                        .fitCenter()
-                        .into(mCompanyLogoImageView);
-            } else {
-                mCompanyLogoImageView.setImageBitmap(null);
+            if (data != null) {
+                if (!TextUtils.isEmpty(data.getLogo())) {
+                    Glide.with(context)
+                            .load(data.getLogo())
+                            .fitCenter()
+                            .into(mCompanyLogoImageView);
+                } else {
+                    mCompanyLogoImageView.setImageBitmap(null);
+                }
+                mCompanyNameTextView.setText(data.getCardName());
+                if (data.getCardType() == 3) {
+                    mCardAmountTextView.setText(context.getString(R.string.number_push_unread, String.valueOf(data.getUnreadPush())));
+                } else {
+                    mCardAmountTextView.setText(context.getString(R.string.card_amount, String.valueOf(data.getCardNumber())));
+                }
             }
-            mCompanyNameTextView.setText(data.getCardName());
-            mCardAmountTextView.setText(context.getString(R.string.card_amount, String.valueOf(data.getCardNumber())));
         }
     }
 }

@@ -28,13 +28,13 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> {
         return getModel(AuthModel.class);
     }
 
-    void onValidateInfoRegister(String userName, String userId, String password, String confirmPassword, String email) {
-        getAuthModel().validateRegisterAccount(userName, userId, password, confirmPassword, email, new AuthModel.IValidateRegisterCallback() {
+    void onValidateInfoRegister(String userName, String userId, String password, String confirmPassword, String email, int age, int sex) {
+        getAuthModel().validateRegisterAccount(userName, userId, password, confirmPassword, email, age, sex, new AuthModel.IValidateRegisterCallback() {
 
             @Override
-            public void validateSuccess(String userName, String password, String name, String email) {
+            public void validateSuccess(String userName, String password, String name, String email, int age, int sex) {
                 String md5Password = Utils.toMD5(password);
-                onRegisterAccount(userName, md5Password, name, email);
+                onRegisterAccount(userName, md5Password, name, email, age, sex);
 
             }
 
@@ -45,9 +45,9 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> {
         });
     }
 
-    private void onRegisterAccount(String userName, String password, String name, String email) {
+    private void onRegisterAccount(String userName, String password, String name, String email, int age, int sex) {
         getView().showProgress();
-        getAuthModel().registerAccount(userName, password, name, email, Constants.Introduction.TYPE_DEFAULT, Constants.EMPTY_STRING, new AuthModel.IRegisterCallback() {
+        getAuthModel().registerAccount(userName, password, name, email, age, sex, Constants.Introduction.TYPE_DEFAULT, Constants.EMPTY_STRING, new AuthModel.IRegisterCallback() {
 
             @Override
             public void onRegisterSuccess(final RegisterData data, final String message) {
@@ -57,6 +57,7 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> {
                 getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
                 getModel(SharedPreferencesModel.class).putUserName(data.getUserName());
                 getModel(SharedPreferencesModel.class).putEmail(data.getEmail());
+                getModel(SharedPreferencesModel.class).putStatusLogin(true);
                 getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {

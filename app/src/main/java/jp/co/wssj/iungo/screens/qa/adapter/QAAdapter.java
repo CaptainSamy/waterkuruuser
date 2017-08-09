@@ -1,10 +1,11 @@
 package jp.co.wssj.iungo.screens.qa.adapter;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
@@ -83,7 +84,9 @@ public class QAAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
-    private TextView mTextQuestion, mTextAnswer, mImageDrop;
+    private TextView mTextQuestion, mImageDrop;
+
+    private WebView mTextAnswer;
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
@@ -111,8 +114,12 @@ public class QAAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = mInflate.inflate(R.layout.item_answer, null);
         }
-        mTextAnswer = (TextView) convertView.findViewById(R.id.itemAnswer);
-        mTextAnswer.setText(Html.fromHtml(getChild(groupPosition, childPosition)));
+        mTextAnswer = (WebView) convertView.findViewById(R.id.itemAnswer);
+        WebSettings webSettings = mTextAnswer.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
+        mTextAnswer.loadDataWithBaseURL("", getChild(groupPosition, childPosition), "text/html", "UTF-8", "");
         return convertView;
     }
 

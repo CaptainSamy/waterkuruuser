@@ -320,37 +320,17 @@ public final class Utils {
     }
 
     public static void fillImage(Context context, String imgPath, final ImageView imageView) {
-        if (TextUtils.isEmpty(imgPath) || imageView == null) return;
-        Glide.with(context)
-                .load(imgPath)
-                .skipMemoryCache(false)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.drawable.logo_app)
-                .into(new SimpleTarget<GlideDrawable>() {
-
-                    @Override
-                    public void onLoadStarted(Drawable placeholder) {
-                        Logger.d(TAG, "onLoadStarted");
-                        imageView.setEnabled(false);
-                        imageView.setImageDrawable(placeholder);
-                    }
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        Logger.d(TAG, "onLoadFailed");
-                        imageView.setEnabled(true);
-                        imageView.setImageDrawable(errorDrawable);
-                        imageView.setTag(R.id.shared_drawable, null);
-                    }
-
-                    @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        Logger.d(TAG, "onResourceReady");
-                        imageView.setEnabled(true);
-                        imageView.setImageDrawable(resource);
-                        imageView.setTag(R.id.shared_drawable, resource);
-                    }
-                });
+        Logger.d(TAG, "imgPath : " + imgPath);
+        if (!TextUtils.isEmpty(imgPath)) {
+            Glide.with(context)
+                    .load(imgPath)
+                    .skipMemoryCache(false)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .error(R.drawable.logo_app)
+                    .into(imageView);
+        } else {
+            imageView.setImageResource(R.drawable.logo_app);
+        }
     }
 
     public static <T> void requireNonNull(T object, String message) {

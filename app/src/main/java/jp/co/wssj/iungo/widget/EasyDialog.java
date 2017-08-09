@@ -1,4 +1,4 @@
-package com.michael.easydialog;
+package jp.co.wssj.iungo.widget;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -19,15 +19,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.co.wssj.iungo.R;
 
 /**
  * Created by michael on 15/4/15.
@@ -100,6 +102,10 @@ public class EasyDialog {
 
     private int defaultRightMargin;
 
+    private ListView mListView;
+
+    private TextView mTextNoItem;
+
     public EasyDialog(Context context) {
         initDialog(context);
     }
@@ -122,6 +128,8 @@ public class EasyDialog {
         setTouchOutsideDismiss(true);
         ivTriangle = (ImageView) dialogView.findViewById(R.id.ivTriangle);
         llContent = (LinearLayout) dialogView.findViewById(R.id.llContent);
+        mListView = (ListView) dialogView.findViewById(R.id.listView);
+        mTextNoItem = (TextView) dialogView.findViewById(R.id.textNoItem);
         dialog = new Dialog(context, isFullScreen() ? android.R.style.Theme_Translucent_NoTitleBar_Fullscreen : android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setContentView(dialogView);
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -149,6 +157,14 @@ public class EasyDialog {
         defaultLeftMargin = context.getResources().getDimensionPixelOffset(R.dimen.easy_dialog_default_left_margin);
         defaultRightMargin = context.getResources().getDimensionPixelOffset(R.dimen.easy_dialog_default_right_margin);
         ini();
+    }
+
+    public ListView getListView() {
+        return mListView;
+    }
+
+    public TextView getTextNoItem() {
+        return mTextNoItem;
     }
 
     final View.OnTouchListener outsideBackgroundListener = new View.OnTouchListener() {
@@ -187,7 +203,7 @@ public class EasyDialog {
      */
     public EasyDialog setLayout(View layout) {
         if (layout != null) {
-            this.contentView = layout;
+//            this.contentView = layout;
         }
         return this;
     }
@@ -370,13 +386,13 @@ public class EasyDialog {
 
     public EasyDialog show() {
         if (dialog != null) {
-            if (contentView == null) {
-                throw new RuntimeException("您是否未调用setLayout()或者setLayoutResourceId()方法来设置要显示的内容呢？");
-            }
-            if (llContent.getChildCount() > 0) {
-                llContent.removeAllViews();
-            }
-            llContent.addView(contentView);
+//            if (contentView == null) {
+//                throw new RuntimeException("您是否未调用setLayout()或者setLayoutResourceId()方法来设置要显示的内容呢？");
+//            }
+//            if (llContent.getChildCount() > 0) {
+//                llContent.removeAllViews();
+//            }
+//            llContent.addView(contentView);
             dialog.show();
             onDialogShowing();
         }

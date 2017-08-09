@@ -2,8 +2,10 @@ package jp.co.wssj.iungo.screens.introduction;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +15,8 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.Profile;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -29,6 +32,9 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
@@ -194,12 +200,12 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     }
 
     /*
-        * Handle Login Facebook
-        * */
+     * Handle Login Facebook
+     */
     private void onLoginFacebook() {
 //        Check login facebook
-        Profile profile = Profile.getCurrentProfile();
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        Profile profile = Profile.getCurrentProfile();
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
         mCallbackManager = CallbackManager.Factory.create();
         mButtonLoginFacebook.setReadPermissions(Arrays.asList("email", "public_profile"));
         mButtonLoginFacebook.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -207,7 +213,21 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Logger.d("onLoginFacebook", "onSuccess");
-                getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_FACEBOOK, loginResult.getAccessToken().getToken());
+
+                AccessToken accessToken = loginResult.getAccessToken();
+                getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_FACEBOOK, accessToken.getToken());
+                GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+
+                    @Override
+                    public void onCompleted(JSONObject user, GraphResponse graphResponse) {
+                        getPhotoUrlFacebook(user);
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,picture");
+                request.setParameters(parameters);
+                request.executeAsync();
             }
 
             @Override
@@ -222,6 +242,28 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
             }
         });
     }
+
+    private void getPhotoUrlFacebook(JSONObject user) {
+        try {
+            if (user != null && user.has("picture")) {
+                String objectPicture = user.getString("picture");
+                if (!TextUtils.isEmpty(objectPicture)) {
+                    JSONObject jsonPicture = new JSONObject(objectPicture);
+                    if (jsonPicture != null && jsonPicture.has("data")) {
+                        String data = jsonPicture.getString("data");
+                        JSONObject jsonData = new JSONObject(data);
+                        if (jsonData != null && jsonData.has("url")) {
+                            String url = jsonData.getString("url");
+                            getPresenter().savePhotoUrl(url);
+                        }
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     /*
     * Handle Login Twitter
     * */
@@ -247,7 +289,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
     public void onLoginGoogle() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().requestIdToken(getString(R.string.server_client_id))
+                .requestEmail().requestIdToken(getString(R.string.server_client_id_dev))
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(getActivityContext())
                 .enableAutoManage(getActivity(), this)
@@ -304,7 +346,8 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
-            getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_GOOGLE, result.getSignInAccount().getIdToken());
+            getPresenter().savePhotoUrl(acct.getPhotoUrl().toString());
+            getPresenter().onLoginSocialNetwork(Constants.Introduction.TYPE_GOOGLE, acct.getIdToken());
         } else {
             //TODO sign out
         }

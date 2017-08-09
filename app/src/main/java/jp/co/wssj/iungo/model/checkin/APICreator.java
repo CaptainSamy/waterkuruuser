@@ -9,6 +9,7 @@ import java.util.Map;
 
 import jp.co.wssj.iungo.model.volleyrequest.GsonJsonRequest;
 import jp.co.wssj.iungo.model.volleyrequest.GsonRequest;
+import jp.co.wssj.iungo.screens.pushobject.MappingUserStoreResponse;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -25,6 +26,8 @@ final class APICreator {
     private static final String FEEDBACK_QR_STORE_URL = Constants.BASE_URL_AWS + "/api/client/users/feedback-scan-qr-code-store";
 
     private static final String GET_CHECK_IN_STATUS_BY_USER = Constants.BASE_URL_AWS + "/api/client/users/get-check-in-status-by-user";
+
+    private static final String MAPPING_USER_WITH_STORE = Constants.BASE_URL_AWS + "/api/client/users/feedback-ignore-session";
 
     static GsonRequest<ConfirmCheckInResponse> getFeedbackQRStoreRequest(String token, final String code, final Response.Listener<ConfirmCheckInResponse> listener, final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -128,6 +131,44 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> param = new HashMap<>();
                 param.put("qr_code", code);
+                return param;
+            }
+        };
+    }
+
+    static GsonRequest<MappingUserStoreResponse> mappingUserWithStore(String token, final String code, final Response.Listener<MappingUserStoreResponse> responseListener, final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<MappingUserStoreResponse>(Request.Method.POST,
+                MAPPING_USER_WITH_STORE,
+                MappingUserStoreResponse.class,
+                headers,
+                new Response.Listener<MappingUserStoreResponse>() {
+
+                    @Override
+                    public void onResponse(MappingUserStoreResponse response) {
+                        Logger.d(TAG, "#getQRStringRequest -> onResponse");
+                        if (responseListener != null) {
+                            responseListener.onResponse(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#getQRStringRequest -> onErrorResponse");
+                        if (errorListener != null) {
+                            errorListener.onErrorResponse(error);
+                        }
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> param = new HashMap<>();
+                param.put("code", code);
                 return param;
             }
         };

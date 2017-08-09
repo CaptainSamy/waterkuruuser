@@ -10,6 +10,7 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.ErrorResponse;
+import jp.co.wssj.iungo.screens.pushobject.MappingUserStoreResponse;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
@@ -33,6 +34,13 @@ public class CheckInModel extends BaseModel {
         void onCheckInStatusSuccess(CheckInStatusResponse.CheckInStatusData data);
 
         void onCheckInStatusFailure(ErrorMessage errorMessage);
+    }
+
+    public interface IMappingUserStoreCallback {
+
+        void onMappingUserStoreSuccess(MappingUserStoreResponse.PushData data);
+
+        void onMappingUserStoreFailure(String message);
     }
 
     public interface IVerifyStoreQRCodeCallback {
@@ -127,6 +135,31 @@ public class CheckInModel extends BaseModel {
                     public void onErrorResponse(VolleyError error) {
                         Logger.i(TAG, "#getCheckInStatusByUser => onErrorResponse");
                         callback.onCheckInStatusFailure(new ErrorMessage(getStringResource(R.string.failure)));
+                    }
+                });
+        VolleySequence.getInstance().addRequest(requestCheckInStatus);
+    }
+
+    public void mappingUserWithStore(String token, String code, final IMappingUserStoreCallback callback) {
+        Request requestCheckInStatus = APICreator.mappingUserWithStore(token, code,
+                new Response.Listener<MappingUserStoreResponse>() {
+
+                    @Override
+                    public void onResponse(MappingUserStoreResponse response) {
+                        Logger.i(TAG, "#mappingUserWithStore => onResponse message");
+                        if (response != null && response.isSuccess()) {
+                            callback.onMappingUserStoreSuccess(response.getData());
+                        } else {
+                            callback.onMappingUserStoreFailure(getStringResource(R.string.failure));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.i(TAG, "#mappingUserWithStore => onErrorResponse");
+                        callback.onMappingUserStoreFailure(getStringResource(R.string.failure));
                     }
                 });
         VolleySequence.getInstance().addRequest(requestCheckInStatus);

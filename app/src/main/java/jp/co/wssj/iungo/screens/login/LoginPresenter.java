@@ -49,6 +49,7 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
                 getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
                 getModel(SharedPreferencesModel.class).putUserName(data.getUserName());
                 getModel(SharedPreferencesModel.class).putEmail(data.getEmail());
+                getModel(SharedPreferencesModel.class).putStatusLogin(true);
                 getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
                 if (data.isRequireResetPassword()) {
                     getView().displayChangePasswordScreen();

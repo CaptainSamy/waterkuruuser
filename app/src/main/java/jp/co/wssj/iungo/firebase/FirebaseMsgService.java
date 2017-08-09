@@ -50,7 +50,7 @@ public class FirebaseMsgService extends FirebaseMessagingService {
         Logger.d(TAG, "From: " + remoteMessage.getFrom());
 
         Intent sentToActivity = new Intent();
-        sentToActivity.setAction(Constants.ACTION_SERVICE_ACTIVITY);
+        sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(sentToActivity);
 
 
