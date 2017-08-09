@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
@@ -32,6 +33,8 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
     private ListView mCardListView;
 
     private ServicesCompanyAdapter mAdapter;
+
+    private List<ListCompanyResponse.ListCompanyData.CompanyData> mCardList;
 
     @Override
     public int getFragmentId() {
@@ -87,7 +90,13 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
 
     @Override
     protected void initData() {
-        getPresenter().getCompanyList();
+
+        if (mCardList == null) {
+            mCardList = new ArrayList<>();
+            mAdapter = new ServicesCompanyAdapter(getActivityContext(), mCardList);
+            getPresenter().getCompanyList();
+        }
+        mCardListView.setAdapter(mAdapter);
     }
 
     @Override
@@ -122,15 +131,8 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
         if (cardList != null && cardList.size() > 0) {
             hideTextNoItem(false, mCardListView);
             hideSwipeRefreshLayout();
-            if (mAdapter == null) {
-                mAdapter = new ServicesCompanyAdapter(getActivityContext(), cardList);
-                mCardListView.setAdapter(mAdapter);
-            } else {
-                if (mCardListView.getAdapter() == null) {
-                    mCardListView.setAdapter(mAdapter);
-                }
-                mAdapter.refreshData(cardList);
-            }
+            mCardList.addAll(cardList);
+            mAdapter.notifyDataSetChanged();
         } else {
             showTextNoItem(getString(R.string.no_item_service), mCardListView);
         }
@@ -149,6 +151,9 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
 
     @Override
     public void onRefresh() {
+        if (mCardList != null) {
+            mCardList.clear();
+        }
         getPresenter().getCompanyList();
     }
 

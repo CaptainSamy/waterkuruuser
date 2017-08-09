@@ -79,12 +79,14 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                         displayScannerCode();
                     }
                 });
+            } else {
+                getView().switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false, null);
             }
         } else {
             Gson gson = new Gson();
             ObjectPush objectPush = gson.fromJson(jsonPush, ObjectPush.class);
             if (objectPush != null) {
-                if (System.currentTimeMillis() < objectPush.getSaveTime()) {
+                if (System.currentTimeMillis() <= objectPush.getSaveTime()) {
                     getView().showProgress();
                     getModel(CheckInModel.class).mappingUserWithStore(token, objectPush.getCode(), new CheckInModel.IMappingUserStoreCallback() {
 
@@ -105,7 +107,13 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                             getView().hideProgress();
                         }
                     });
+                } else {
+                    getModel(SharedPreferencesModel.class).putObjectPush(Constants.EMPTY_STRING);
+                    displayScannerCode();
                 }
+            } else {
+                getModel(SharedPreferencesModel.class).putObjectPush(Constants.EMPTY_STRING);
+                displayScannerCode();
             }
         }
 
