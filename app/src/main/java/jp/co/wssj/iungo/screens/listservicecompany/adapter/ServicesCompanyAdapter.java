@@ -80,10 +80,12 @@ public class ServicesCompanyAdapter extends ArrayAdapter<ListCompanyResponse.Lis
                     mCompanyLogoImageView.setImageBitmap(null);
                 }
                 mCompanyNameTextView.setText(data.getCardName());
-                if (data.getCardType() == 3) {
-                    mCardAmountTextView.setText(context.getString(R.string.number_push_unread, String.valueOf(data.getUnreadPush())));
-                } else {
+                if (data.getCardType() == 1) {
                     mCardAmountTextView.setText(context.getString(R.string.card_amount, String.valueOf(data.getCardNumber())));
+                } else if (data.getCardType() == 2) {
+                    mCardAmountTextView.setText(context.getString(R.string.point_amount, String.valueOf(0)));
+                } else {
+                    mCardAmountTextView.setText(context.getString(R.string.number_push_unread, String.valueOf(data.getUnreadPush())));
                 }
             }
         }

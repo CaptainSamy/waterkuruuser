@@ -100,7 +100,6 @@ public class DialogNotification {
                     checkListEmpty();
                     mCallback.onItemClick(message);
                     mListNotification.remove(position);
-                    mPushNotificationAdapter.notifyDataSetChanged();
                 }
             }
         });
@@ -136,6 +135,7 @@ public class DialogNotification {
 
     public void show() {
         mEasyDialog.show();
+        mPushNotificationAdapter.notifyDataSetChanged();
     }
 
     public void dismiss() {

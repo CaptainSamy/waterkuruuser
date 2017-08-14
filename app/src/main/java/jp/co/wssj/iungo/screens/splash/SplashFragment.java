@@ -1,7 +1,5 @@
 package jp.co.wssj.iungo.screens.splash;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +8,7 @@ import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
 
+import jp.co.wssj.iungo.BuildConfig;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.screens.IMainView;
@@ -82,16 +81,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 .debug(true)
                 .build();
         Twitter.initialize(config);
-
-
-        PackageInfo pInfo;
-        try {
-            pInfo = getActivityContext().getPackageManager().getPackageInfo(getActivityContext().getPackageName(), 0);
-            int versionName = pInfo.versionCode;
-            getPresenter().onCreate(versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        getPresenter().onCreate(BuildConfig.VERSION_CODE);
     }
 
     @Override

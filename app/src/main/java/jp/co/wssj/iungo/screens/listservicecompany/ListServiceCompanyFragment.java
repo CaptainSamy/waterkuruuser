@@ -115,7 +115,7 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
         int fragmentId;
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, serviceCompanyId);
-        if (cardType < 3) {
+        if (cardType == 1) {
             bundle.putInt(ListCardFragment.KEY_SERVICE_ID, serviceId);
             bundle.putString(ListCardFragment.KEY_CARD_NAME, cardName);
             bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, serviceName);

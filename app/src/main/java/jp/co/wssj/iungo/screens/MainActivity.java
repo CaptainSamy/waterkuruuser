@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (mDialogNotification != null) {
-                    mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
+//                    mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
                     mDialogNotification.show();
                 }
             }

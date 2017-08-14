@@ -270,8 +270,6 @@ final class APICreator {
                 params.put("current_version", versionApp);
                 return params;
             }
-
-
         };
     }
 

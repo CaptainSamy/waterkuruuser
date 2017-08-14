@@ -25,7 +25,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:text="you have a new update"
+            android:text="@string/content_update"
             android:textColor="@color/colorText"
             android:textStyle="bold"/>
     </RelativeLayout>
@@ -60,7 +60,7 @@
                 android:maxLines="1"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="キャンセルします"
+                android:text="@string/cancel_update"
                 android:textSize="12dp"
                 />
 
@@ -82,7 +82,7 @@
                 android:maxLines="1"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="いますぐ更新します"
+                android:text="@string/update_now"
                 android:textColor="@color/colorMain"
                 android:textSize="12dp"/>
 
@@ -118,7 +118,7 @@
                 android:maxLines="1"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="後で更新します"
+                android:text="@string/update_later"
                 android:textSize="12dp"/>
         </RelativeLayout>
 

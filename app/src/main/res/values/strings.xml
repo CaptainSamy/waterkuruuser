@@ -124,6 +124,7 @@
     <string name="can_use_card_title">使用可能サンタプカード</string>
     <string name="used_card_title">使用済一覧</string>
     <string name="card_amount">利用可能スタンプカード： %1$s枚</string>
+    <string name="point_amount">利用可能ポイント： %1$s枚</string>
     <string name="number_push_unread">未読数：%1$s</string>
     <string name="list_store">店舗の状態確認</string>
     <string name="rating">評価する</string>
@@ -200,5 +201,11 @@
     <string name="choose_camera">カメラ</string>
     <string name="choose_library">ライブラリ</string>
     <string name="choose_cancel">キャンセル</string>
+
+    <!--Dialog Update-->
+    <string name="content_update">新しいバージョンが出ました。 \nアップデートをしてください。</string>
+    <string name="cancel_update">キャンセルします</string>
+    <string name="update_now">いますぐ更新します</string>
+    <string name="update_later">後で更新します</string>
 
 </resources>
