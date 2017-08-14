@@ -174,14 +174,18 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
     public void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList) {
         mUnusedContainer.setVisibility(View.VISIBLE);
         mLayoutButton.setVisibility(View.VISIBLE);
-        if (mUnusedCardAdapter == null) {
-            mUnusedCardAdapter = new CardAdapter(cardDataList);
-            mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
-        } else {
-            if (mUnusedCardRecycler.getAdapter() == null) {
+        if (cardDataList != null && cardDataList.size() > 0 && cardDataList.get(0).getMaxNumberOfStamp() != 0) {
+            if (mUnusedCardAdapter == null) {
+                mUnusedCardAdapter = new CardAdapter(cardDataList);
                 mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
+            } else {
+                if (mUnusedCardRecycler.getAdapter() == null) {
+                    mUnusedCardRecycler.setAdapter(mUnusedCardAdapter);
+                }
+                mUnusedCardAdapter.refreshData(cardDataList);
             }
-            mUnusedCardAdapter.refreshData(cardDataList);
+        } else {
+            mUnusedCardRecycler.setVisibility(View.GONE);
         }
     }
 

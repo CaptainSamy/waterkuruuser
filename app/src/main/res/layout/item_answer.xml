@@ -4,14 +4,23 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/colorText"
+        android:textStyle="bold"/>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layerType="software"
-        android:src="@drawable/dotted_line"
-        />
+        android:src="@drawable/dotted_line"/>
 
     <WebView
         android:id="@+id/itemAnswer"
@@ -22,11 +31,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
         android:textColor="@color/colorTextMain"
-        android:textSize="14dp"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/colorTextDisable"/>
+        android:textSize="14dp"/>
 </LinearLayout>
+
+

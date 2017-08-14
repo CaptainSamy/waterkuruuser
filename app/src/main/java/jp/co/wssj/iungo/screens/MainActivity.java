@@ -60,6 +60,7 @@ import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFr
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
+import jp.co.wssj.iungo.screens.qadetail.QADetailFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
 import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
@@ -435,6 +436,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
                 replaceFragment(PushNotificationForServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
+                break;
+            case IMainView.FRAGMENT_QA_DETAIL:
+                replaceFragment(QADetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
         }
     }
