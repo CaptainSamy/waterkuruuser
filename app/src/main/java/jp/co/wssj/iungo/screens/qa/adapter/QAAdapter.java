@@ -119,7 +119,7 @@ public class QAAdapter extends BaseExpandableListAdapter {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
-        mTextAnswer.loadDataWithBaseURL("", getChild(groupPosition, childPosition), "text/html", "UTF-8", "");
+        mTextAnswer.loadDataWithBaseURL(null, getChild(groupPosition, childPosition), "text/html", "UTF-8", null);
         return convertView;
     }
 

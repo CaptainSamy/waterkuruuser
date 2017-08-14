@@ -150,7 +150,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 //                    } else {
 //                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage().trim(), "text/html", "UTF-8", "");
 //                    }
-                    mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage(), "text/html", "UTF-8", "");
+                    mBody.loadDataWithBaseURL(null, mNotificationMessage.getMessage(), "text/html", "UTF-8", null);
                 }
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);
                 mTime.setText(time);
@@ -178,7 +178,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         if (contentPushResponse != null) {
 //            Utils.formatHtml(mBody, contentPushResponse.getContent());
             mTitle.setText(contentPushResponse.getTitle());
-            mBody.loadDataWithBaseURL("", contentPushResponse.getContent(), "text/html", "UTF-8", "");
+            mBody.loadDataWithBaseURL(null, contentPushResponse.getContent(), "text/html", "UTF-8", null);
         }
     }
 
