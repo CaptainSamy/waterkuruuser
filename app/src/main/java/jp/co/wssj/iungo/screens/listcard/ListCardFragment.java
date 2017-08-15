@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.screens.listcard;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,6 +40,8 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
     private TextView mEditMemoTextView, mTextCardName;
 
     private TextView mButtonListStore;
+
+    private TextView mTitleExplainStamp, mExplainStamp;
 
     private View mUnusedContainer, mCanUseContainer, mUsedContainer;
 
@@ -85,6 +88,9 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
         mEditMemoTextView = (TextView) rootView.findViewById(R.id.edit_memo_text_view);
         mButtonListStore = (TextView) rootView.findViewById(R.id.tvListStoresCheckedIn);
         mTextCardName = (TextView) rootView.findViewById(R.id.tvCardName);
+
+        mTitleExplainStamp = (TextView) rootView.findViewById(R.id.titleExplainStamp);
+        mExplainStamp = (TextView) rootView.findViewById(R.id.textExplainStamp);
         mUnusedContainer = rootView.findViewById(R.id.unused_card_container);
         mCanUseContainer = rootView.findViewById(R.id.can_use_card_container);
         mUsedContainer = rootView.findViewById(R.id.used_card_container);
@@ -171,7 +177,7 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
     }
 
     @Override
-    public void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList) {
+    public void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList, String explain) {
         mUnusedContainer.setVisibility(View.VISIBLE);
         mLayoutButton.setVisibility(View.VISIBLE);
         if (cardDataList != null && cardDataList.size() > 0 && cardDataList.get(0).getMaxNumberOfStamp() != 0) {
@@ -187,10 +193,11 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
         } else {
             mUnusedCardRecycler.setVisibility(View.GONE);
         }
+        showExplainStamp(explain);
     }
 
     @Override
-    public void hideListUnusedCard(int numberStampInCard) {
+    public void hideListUnusedCard(int numberStampInCard, String explain) {
         mUnusedContainer.setVisibility(View.VISIBLE);
         mLayoutButton.setVisibility(View.VISIBLE);
         if (mUnusedCardAdapter == null) {
@@ -202,6 +209,18 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
             }
         }
         mUnusedCardAdapter.setNumberStampInCard(numberStampInCard);
+        showExplainStamp(explain);
+    }
+
+    private void showExplainStamp(String explain) {
+        if (!TextUtils.isEmpty(explain)) {
+            mTitleExplainStamp.setVisibility(View.VISIBLE);
+            mExplainStamp.setVisibility(View.VISIBLE);
+            mExplainStamp.setText(Html.fromHtml(explain));
+        } else {
+            mTitleExplainStamp.setVisibility(View.GONE);
+            mExplainStamp.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -11,11 +11,11 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 interface IManageStampView extends IFragmentView {
 
-    void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList);
+    void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList, String explain);
 
-    void showListUnusedCardEmpty( int numberStampInCard);
+    void showListUnusedCardEmpty(int numberStampInCard, String explain);
 
-    void showListCanUseCard(List<ListCardResponse.ListCardData.CardData> cardDataList,int page,int totalPage);
+    void showListCanUseCard(List<ListCardResponse.ListCardData.CardData> cardDataList, int page, int totalPage);
 
     void hideListCanUseCard();
 

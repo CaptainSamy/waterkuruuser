@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.screens.checkin;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
     private CardAdapter mUnusedCardAdapter, mCanUseCardAdapter;
 
     private TextView mTextStoreName;
+
+    private TextView mTitleExplainStamp, mExplainStamp;
 
     private View mEditMemoView;
 
@@ -101,6 +104,10 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
         mUnusedContainer = rootView.findViewById(R.id.unused_card_container);
         mCanUseContainer = rootView.findViewById(R.id.can_use_card_container);
         mTextStoreName = (TextView) rootView.findViewById(R.id.tvCardName);
+
+        mTitleExplainStamp = (TextView) rootView.findViewById(R.id.titleExplainStamp);
+        mExplainStamp = (TextView) rootView.findViewById(R.id.textExplainStamp);
+
         mUnusedCardRecycler = (RecyclerView) rootView.findViewById(R.id.unused_card_recycler_view);
         mCanUseCardRecycler = (RecyclerView) rootView.findViewById(R.id.can_use_card_recycler_view);
 
@@ -151,7 +158,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
     }
 
     @Override
-    public void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList) {
+    public void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList, String explain) {
         mUnusedContainer.setVisibility(View.VISIBLE);
         if (cardDataList != null && cardDataList.size() > 0) {
             ListCardResponse.ListCardData.CardData data = cardDataList.get(0);
@@ -174,11 +181,11 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
             }
             mUnusedCardAdapter.refreshData(cardDataList);
         }
-
+        showExplainStamp(explain);
     }
 
     @Override
-    public void showListUnusedCardEmpty(int numberStampInCard) {
+    public void showListUnusedCardEmpty(int numberStampInCard, String explain) {
         if (numberStampInCard != 0) {
             mUnusedContainer.setVisibility(View.VISIBLE);
             if (!TextUtils.isEmpty(mStoreName)) {
@@ -197,6 +204,18 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
             mUnusedCardAdapter.setNumberStampInCard(numberStampInCard);
         } else {
             mUnusedContainer.setVisibility(View.GONE);
+        }
+        showExplainStamp(explain);
+    }
+
+    private void showExplainStamp(String explain) {
+        if (!TextUtils.isEmpty(explain)) {
+            mTitleExplainStamp.setVisibility(View.VISIBLE);
+            mExplainStamp.setVisibility(View.VISIBLE);
+            mExplainStamp.setText(Html.fromHtml(explain));
+        } else {
+            mTitleExplainStamp.setVisibility(View.GONE);
+            mExplainStamp.setVisibility(View.GONE);
         }
     }
 

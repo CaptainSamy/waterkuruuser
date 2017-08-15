@@ -105,6 +105,7 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                         @Override
                         public void onMappingUserStoreFailure(String message) {
                             getView().hideProgress();
+                            displayScannerCode();
                         }
                     });
                 } else {

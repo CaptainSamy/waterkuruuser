@@ -37,7 +37,7 @@ public class StampModel extends BaseModel {
 
     public interface IGetListCardResponse {
 
-        void onSuccess(List<ListCardResponse.ListCardData.CardData> cards, int page, int totalPage, int numberStampInCard);
+        void onSuccess(List<ListCardResponse.ListCardData.CardData> cards, int page, int totalPage, int numberStampInCard,String explain);
 
         void onFailure(ErrorMessage errorMessage);
     }
@@ -96,17 +96,19 @@ public class StampModel extends BaseModel {
     }
 
     public void getListCardByServiceCompany(String token, int serviceCompanyId, int page, int limit, final IGetListCardResponse callback) {
-        Request request = APICreator.createGetListCardByServiceCompanyRequest(token, serviceCompanyId, page, limit,
+        final Request request = APICreator.createGetListCardByServiceCompanyRequest(token, serviceCompanyId, page, limit,
                 new Response.Listener<ListCardResponse>() {
 
                     @Override
                     public void onResponse(ListCardResponse response) {
                         Logger.d(TAG, "#getListCardByServiceCompany => onResponse");
-                        if (response.isSuccess()) {
-                            List<ListCardResponse.ListCardData.CardData> cardDataList = response.getData().getCards();
+                        if (response.isSuccess() && response.getData() != null) {
+                            ListCardResponse.ListCardData cardData = response.getData();
+                            List<ListCardResponse.ListCardData.CardData> cardDataList = cardData.getCards();
+                            String explain = cardData.getExplaintionStamp();
                             if (cardDataList != null) {
-                                int numberStampInCard = response.getData().getNumberStampInCard();
-                                callback.onSuccess(cardDataList, response.getData().getPage(), response.getData().getTotalPage(), numberStampInCard);
+                                int numberStampInCard = cardData.getNumberStampInCard();
+                                callback.onSuccess(cardDataList, cardData.getPage(), cardData.getTotalPage(), numberStampInCard, explain);
                                 return;
                             }
                         }

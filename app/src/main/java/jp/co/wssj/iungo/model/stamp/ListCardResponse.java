@@ -33,6 +33,9 @@ public class ListCardResponse extends ResponseData<ListCardResponse.ListCardData
         @SerializedName("number_of_cards_in_page")
         private int mNumberOfCardInPage;
 
+        @SerializedName("explanation_stamp")
+        private String mExplaintionStamp;
+
         @SerializedName("cards")
         private List<CardData> mCards;
 
@@ -62,6 +65,10 @@ public class ListCardResponse extends ResponseData<ListCardResponse.ListCardData
 
         public int getNumberOfCardInPage() {
             return mNumberOfCardInPage;
+        }
+
+        public String getExplaintionStamp() {
+            return mExplaintionStamp;
         }
 
         public class CardData implements GsonSerializable {

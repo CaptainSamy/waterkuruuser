@@ -129,6 +129,7 @@
     <string name="list_store">店舗の状態確認</string>
     <string name="rating">評価する</string>
     <string name="no_item_service">サービススタンプカードがありません。</string>
+    <string name="explain_stamp">ステンプの説明</string>
 
     <!-- menu -->
     <string name="menu_logout">ログアウト</string>

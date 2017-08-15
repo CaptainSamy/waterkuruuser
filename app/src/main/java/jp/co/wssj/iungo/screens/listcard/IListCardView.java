@@ -11,9 +11,9 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 interface IListCardView extends IFragmentView {
 
-    void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList);
+    void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList, String explain);
 
-    void hideListUnusedCard(int numberStampInCard);
+    void hideListUnusedCard(int numberStampInCard, String explain);
 
     void showListCanUseCard(List<ListCardResponse.ListCardData.CardData> cardDataList);
 

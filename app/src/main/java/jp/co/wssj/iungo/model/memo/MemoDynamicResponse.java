@@ -1,5 +1,7 @@
 package jp.co.wssj.iungo.model.memo;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -85,10 +87,16 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 private int numberImages;
 
                 /*
-                * Level
-                * */
+               * Level
+               * */
                 @SerializedName("level")
                 private int level;
+
+             /*
+             * status switch
+             * */
+                @SerializedName("status")
+                private String mStatus;
 
                 public int getLength() {
                     return length;
@@ -108,6 +116,10 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
 
                 public int getLevel() {
                     return level;
+                }
+
+                public boolean getStatus() {
+                    return TextUtils.isEmpty(mStatus) ? false : mStatus.equals("on");
                 }
             }
 
@@ -143,10 +155,10 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 this.value = value;
             }
 
-            public UserMemoValue(String id, int type) {
+            public UserMemoValue(String id, int type, boolean status) {
                 this.id = id;
                 this.type = type;
-                this.value = new Value();
+                this.value = new Value(status);
             }
 
             public UserMemoValue(String id, int type, int numbImage) {
@@ -183,15 +195,15 @@ public class MemoDynamicResponse extends ResponseData<MemoDynamicResponse.UserMe
                 @SerializedName("images")
                 List<Image> listImage;
 
-                public Value() {
+                public Value(boolean stt) {
                     value = "";
-                    status = false;
+                    status = stt;
                     selectedItem = 0;
                     listImage = new ArrayList<>();
                 }
 
                 public Value(int numbImage) {
-                    this();
+                    this(false);
                     for (int i = 1; i <= numbImage; i++) {
                         listImage.add(new Image("photo_" + i));
                     }
