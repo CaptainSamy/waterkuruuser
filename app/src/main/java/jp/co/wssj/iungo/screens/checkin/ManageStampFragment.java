@@ -212,7 +212,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
         if (!TextUtils.isEmpty(explain)) {
             mTitleExplainStamp.setVisibility(View.VISIBLE);
             mExplainStamp.setVisibility(View.VISIBLE);
-            mExplainStamp.setText(Html.fromHtml(explain));
+            mExplainStamp.setText(Html.fromHtml(explain.trim()));
         } else {
             mTitleExplainStamp.setVisibility(View.GONE);
             mExplainStamp.setVisibility(View.GONE);

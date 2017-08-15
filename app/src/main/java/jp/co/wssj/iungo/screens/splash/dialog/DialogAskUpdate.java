@@ -55,7 +55,6 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
         mButtonCancel = (TextView) findViewById(R.id.tvCancel);
         mButtonUpdate = (TextView) findViewById(R.id.tvUpdate);
         mButtonLater = (TextView) findViewById(R.id.tvLater);
-
     }
 
     private void initAction() {
