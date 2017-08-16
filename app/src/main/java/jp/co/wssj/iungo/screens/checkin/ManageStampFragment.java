@@ -36,7 +36,7 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
 
     private TextView mTextStoreName;
 
-    private TextView mTitleExplainStamp, mExplainStamp;
+    private TextView mExplainStamp;
 
     private View mEditMemoView;
 
@@ -105,7 +105,6 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
         mCanUseContainer = rootView.findViewById(R.id.can_use_card_container);
         mTextStoreName = (TextView) rootView.findViewById(R.id.tvCardName);
 
-        mTitleExplainStamp = (TextView) rootView.findViewById(R.id.titleExplainStamp);
         mExplainStamp = (TextView) rootView.findViewById(R.id.textExplainStamp);
 
         mUnusedCardRecycler = (RecyclerView) rootView.findViewById(R.id.unused_card_recycler_view);
@@ -210,11 +209,9 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
 
     private void showExplainStamp(String explain) {
         if (!TextUtils.isEmpty(explain)) {
-            mTitleExplainStamp.setVisibility(View.VISIBLE);
             mExplainStamp.setVisibility(View.VISIBLE);
             mExplainStamp.setText(Html.fromHtml(explain.trim()));
         } else {
-            mTitleExplainStamp.setVisibility(View.GONE);
             mExplainStamp.setVisibility(View.GONE);
         }
     }

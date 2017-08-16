@@ -64,15 +64,10 @@
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:id="@+id/titleExplainStamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/explain_stamp"/>
-
-            <TextView
                 android:id="@+id/textExplainStamp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:textColor="@color/colorText"/>
         </LinearLayout>
 

@@ -41,7 +41,7 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
 
     private TextView mButtonListStore;
 
-    private TextView mTitleExplainStamp, mExplainStamp;
+    private TextView mExplainStamp;
 
     private View mUnusedContainer, mCanUseContainer, mUsedContainer;
 
@@ -89,7 +89,6 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
         mButtonListStore = (TextView) rootView.findViewById(R.id.tvListStoresCheckedIn);
         mTextCardName = (TextView) rootView.findViewById(R.id.tvCardName);
 
-        mTitleExplainStamp = (TextView) rootView.findViewById(R.id.titleExplainStamp);
         mExplainStamp = (TextView) rootView.findViewById(R.id.textExplainStamp);
         mUnusedContainer = rootView.findViewById(R.id.unused_card_container);
         mCanUseContainer = rootView.findViewById(R.id.can_use_card_container);
@@ -214,11 +213,9 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
 
     private void showExplainStamp(String explain) {
         if (!TextUtils.isEmpty(explain)) {
-            mTitleExplainStamp.setVisibility(View.VISIBLE);
             mExplainStamp.setVisibility(View.VISIBLE);
             mExplainStamp.setText(Html.fromHtml(explain.trim()));
         } else {
-            mTitleExplainStamp.setVisibility(View.GONE);
             mExplainStamp.setVisibility(View.GONE);
         }
     }
@@ -229,15 +226,6 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
 
         mListCardCanUse.addAll(cardDataList);
         mCanUseCardAdapter.notifyDataSetChanged();
-//        if (mCanUseCardAdapter == null) {
-//            mCanUseCardAdapter = new CardAdapter(cardDataList);
-//            mCanUseCardRecycler.setAdapter(mCanUseCardAdapter);
-//        } else {
-//            if (mCanUseCardRecycler.getAdapter() == null) {
-//                mCanUseCardRecycler.setAdapter(mCanUseCardAdapter);
-//            }
-//            mCanUseCardAdapter.refreshData(cardDataList);
-//        }
     }
 
     @Override
@@ -262,15 +250,6 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
                 }
             });
         }
-//        if (mUsedCardAdapter == null) {
-//            mUsedCardAdapter = new CardAdapter(cardDataList);
-//            mUsedCardRecycler.setAdapter(mUsedCardAdapter);
-//        } else {
-//            if (mUsedCardRecycler.getAdapter() == null) {
-//                mUsedCardRecycler.setAdapter(mUsedCardAdapter);
-//            }
-//            mUsedCardAdapter.refreshData(cardDataList);
-//        }
     }
 
     @Override
