@@ -166,6 +166,7 @@
     <string name="notification_date">%1$s</string>
     <string name="title_push_detail">お知らせ一覧</string>
     <string name="text_no_item">未読の通知がありません。</string>
+    <string name="text_no_item_push_all">プッシュ通知がありません。</string>
     <!--List store checked in-->
     <string name="title_screen_list_store_checked_in">店舗状態確認</string>
     <string name="title_list_store_checked_in">最新ご利用のお店舗を表示</string>

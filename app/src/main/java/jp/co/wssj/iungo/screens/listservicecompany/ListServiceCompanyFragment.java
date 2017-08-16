@@ -95,6 +95,10 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
             mCardList = new ArrayList<>();
             mAdapter = new ServicesCompanyAdapter(getActivityContext(), mCardList);
             getPresenter().getCompanyList();
+        } else {
+            if (mCardList != null && mCardList.size() == 0) {
+                showTextNoItem(getString(R.string.no_item_service), mCardListView);
+            }
         }
         mCardListView.setAdapter(mAdapter);
     }
