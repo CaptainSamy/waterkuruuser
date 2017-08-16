@@ -34,6 +34,7 @@
     <color name="store_name_in_list_store_checked_in_press">#269cb3</color>
     <color name="pressHighLightRed">#bf0000</color>
     <color name="pressHighLightBLue">#003d4b</color>
+    <color name="pressHighLightGray">#7c7c7c</color>
 
     <color name="outside_color_trans">#4b252525</color>
     <color name="holo_blue">#33b5e5</color>
@@ -48,6 +49,9 @@
     <color name="facebook_press">#475bce</color>
 
     <color name="background_color_black">#bb000000</color>
+
+    <color name="color_gray">#e9e9e9</color>
+    <color name="color_gray_press">#bebebe</color>
 
 
 </resources>

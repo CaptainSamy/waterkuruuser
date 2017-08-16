@@ -6,10 +6,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import jp.co.wssj.iungo.BuildConfig;
 import jp.co.wssj.iungo.R;
+import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.screens.IActivityCallback;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.MainActivity;
@@ -21,24 +23,35 @@ import jp.co.wssj.iungo.screens.base.BaseDialog;
 
 public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdatePresenter> implements IDialogUpdateView, View.OnClickListener {
 
-    private TextView mButtonCancel, mButtonUpdate, mButtonLater;
+    public static final String STATUS_RUNNING = "running";
+
+    public static final String STATUS_PREPARE = "prepare";
+
+    public static final String STATUS_MAINTAIN = "maintain";
+
+    private TextView mButtonUpdate, mButtonLater, mButtonMaintain;
+
+    private TextView mTextContentUpdate;
+
+    private LinearLayout mLayoutButtonUpdate;
 
     private IActivityCallback mActivityCallback;
 
     private Context mContext;
 
-    private boolean mIsRequired;
+    private CheckVersionAppResponse.CheckVersionAppData mInfoUpdate;
 
-    public DialogAskUpdate(@NonNull Context context, boolean isRequired, final IActivityCallback activityCallback) {
+    public DialogAskUpdate(@NonNull Context context, CheckVersionAppResponse.CheckVersionAppData response, final IActivityCallback activityCallback) {
         super(context);
         mContext = context;
-        mIsRequired = isRequired;
+        mInfoUpdate = response;
         mActivityCallback = activityCallback;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
         setContentView(R.layout.layout_dialog_ask_update);
         initView();
         initAction();
+        initData();
     }
 
     @Override
@@ -52,16 +65,54 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
     }
 
     private void initView() {
-        mButtonCancel = (TextView) findViewById(R.id.tvCancel);
+        mTextContentUpdate = (TextView) findViewById(R.id.tvContentUpdate);
         mButtonUpdate = (TextView) findViewById(R.id.tvUpdate);
         mButtonLater = (TextView) findViewById(R.id.tvLater);
+        mButtonMaintain = (TextView) findViewById(R.id.tvMaintain);
+        mLayoutButtonUpdate = (LinearLayout) findViewById(R.id.layoutButtonUpdate);
     }
 
     private void initAction() {
-        mButtonCancel.setOnClickListener(this);
         mButtonUpdate.setOnClickListener(this);
         mButtonLater.setOnClickListener(this);
+        mButtonMaintain.setOnClickListener(this);
 
+    }
+
+    private String mStatus;
+
+    private void initData() {
+        if (mInfoUpdate != null) {
+            if (mInfoUpdate.getServerInfo() != null) {
+                mStatus = mInfoUpdate.getServerInfo().getStatus();
+                switch (mStatus) {
+                    case STATUS_RUNNING:
+                        statusUpdate(mInfoUpdate.isHasUpdate());
+                        break;
+                    case STATUS_PREPARE:
+                        mTextContentUpdate.setText(mInfoUpdate.getServerInfo().getMessage());
+                        statusUpdate(mInfoUpdate.isHasUpdate());
+                        break;
+                    case STATUS_MAINTAIN:
+                        mTextContentUpdate.setText(mInfoUpdate.getServerInfo().getMessage());
+                        statusUpdate(false);
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        }
+    }
+
+    private void statusUpdate(boolean haUpdate) {
+        if (haUpdate) {
+            mButtonMaintain.setVisibility(View.GONE);
+            mLayoutButtonUpdate.setVisibility(View.VISIBLE);
+        } else {
+            mButtonMaintain.setVisibility(View.VISIBLE);
+            mLayoutButtonUpdate.setVisibility(View.GONE);
+        }
     }
 
     public void showDialog() {
@@ -71,12 +122,6 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tvCancel:
-                if (mContext != null && mContext instanceof MainActivity) {
-                    ((MainActivity) mContext).finish();
-                }
-                dismiss();
-                break;
             case R.id.tvUpdate:
                 final String appPackageName = BuildConfig.APPLICATION_ID; // getPackageName() from Context or Activity object
                 try {
@@ -91,11 +136,20 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
                 break;
             case R.id.tvLater:
                 dismiss();
-                if (mIsRequired) {
+                if (mInfoUpdate.getVersionInfo().isRequired()) {
                     if (mContext != null && mContext instanceof MainActivity) {
                         ((MainActivity) mContext).finish();
                     }
                 } else {
+                    mActivityCallback.displayScreen(IMainView.FRAGMENT_HOME, false, false, null);
+                }
+                break;
+            case R.id.tvMaintain:
+                if (mStatus.equals(STATUS_MAINTAIN)) {
+                    if (mContext != null && mContext instanceof MainActivity) {
+                        ((MainActivity) mContext).finish();
+                    }
+                } else if (mStatus.equals(STATUS_PREPARE)) {
                     mActivityCallback.displayScreen(IMainView.FRAGMENT_HOME, false, false, null);
                 }
                 break;

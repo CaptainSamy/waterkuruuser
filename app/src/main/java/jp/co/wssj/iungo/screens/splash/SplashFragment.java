@@ -86,8 +86,16 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     @Override
     public void showDialog(CheckVersionAppResponse.CheckVersionAppData response) {
-        DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response.getVersionInfo().isRequired(), getActivityCallback());
-        dialogAskUpdate.showDialog();
+        if (response != null && response.getServerInfo() != null) {
+            String status = response.getServerInfo().getStatus();
+            boolean isShowDialog = status.equals(DialogAskUpdate.STATUS_RUNNING) && !response.isHasUpdate();
+            if (!isShowDialog) {
+                DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
+                dialogAskUpdate.showDialog();
+            } else {
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, false, false, null);
+            }
+        }
     }
 
     @Override
@@ -95,4 +103,5 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
         getActivityCallback().displayScreen(fragmentId, false, false, null);
         getActivityCallback().clearBackStack();
     }
+
 }

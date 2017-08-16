@@ -204,9 +204,9 @@
     <string name="choose_cancel">キャンセル</string>
 
     <!--Dialog Update-->
-    <string name="content_update">新しいバージョンが出ました。 \nアップデートをしてください。</string>
-    <string name="cancel_update">キャンセルします</string>
-    <string name="update_now">いますぐ更新します</string>
-    <string name="update_later">後で更新します</string>
+    <string name="content_update">アプリケーションのバージョンアップがあります。アップデートしますか？</string>
+    <string name="title_dialog_update">ご確認</string>
+    <string name="dialog_button_ok">はい</string>
+    <string name="dialog_button_late">あとでアップデートする</string>
 
 </resources>
