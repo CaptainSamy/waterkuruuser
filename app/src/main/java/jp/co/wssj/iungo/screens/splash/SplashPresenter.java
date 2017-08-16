@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.screens.splash;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
@@ -15,7 +14,6 @@ import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.MainActivity;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
-import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 5/6/2017.
@@ -56,14 +54,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
                 }
             });
         } else {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    switchScreen(versionCode);
-                }
-            }, Constants.TIME_WAITING_SPLASH);
+            switchScreen(versionCode);
         }
 
     }

@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -93,15 +94,22 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
                 dialogAskUpdate.showDialog();
             } else {
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, false, false, null);
+                displayScreen(IMainView.FRAGMENT_HOME);
             }
         }
     }
 
     @Override
-    public void displayScreen(int fragmentId) {
-        getActivityCallback().displayScreen(fragmentId, false, false, null);
-        getActivityCallback().clearBackStack();
+    public void displayScreen(final int fragmentId) {
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                getActivityCallback().displayScreen(fragmentId, true, false, null);
+                getActivityCallback().clearBackStack();
+            }
+        }, Constants.TIME_WAITING_SPLASH);
+
     }
 
 }

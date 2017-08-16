@@ -123,13 +123,13 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvUpdate:
+                dismiss();
                 final String appPackageName = BuildConfig.APPLICATION_ID; // getPackageName() from Context or Activity object
                 try {
                     getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
                 } catch (android.content.ActivityNotFoundException ex) {
                     getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                 }
-                dismiss();
                 if (mContext != null && mContext instanceof MainActivity) {
                     ((MainActivity) mContext).finish();
                 }
@@ -145,6 +145,7 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
                 }
                 break;
             case R.id.tvMaintain:
+                dismiss();
                 if (mStatus.equals(STATUS_MAINTAIN)) {
                     if (mContext != null && mContext instanceof MainActivity) {
                         ((MainActivity) mContext).finish();
