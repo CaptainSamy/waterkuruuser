@@ -86,6 +86,12 @@ public class ListCompanyResponse extends ResponseData<ListCompanyResponse.ListCo
                 return mCardNumber;
             }
 
+            /*
+*card_type:
+* 1 - stamp
+* 2 - point
+* 3 - None
+* */
             public int getCardType() {
                 return mCardType;
             }

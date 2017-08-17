@@ -1,20 +1,19 @@
 package jp.co.wssj.iungo.screens.splash;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import jp.co.wssj.iungo.App;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.auth.AuthModel;
+import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.model.auth.LoginResponse;
 import jp.co.wssj.iungo.model.firebase.FirebaseModel;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.MainActivity;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
-import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 5/6/2017.
@@ -55,37 +54,27 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
                 }
             });
         } else {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    switchScreen(versionCode);
-                }
-            }, Constants.TIME_WAITING_SPLASH);
+            switchScreen(versionCode);
         }
+
     }
 
     public void switchScreen(final int versionCode) {
         final String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
-//            getModel(AuthModel.class).checkVersionApp(token, versionCode, new AuthModel.IOnCheckVersionAppCallback() {
-//
-//                @Override
-//                public void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response) {
-//                    if (response.isHasUpdate()) {
-//                        getView().showDialog(response);
-//                    } else {
-//                        getView().displayScreen(IMainView.FRAGMENT_HOME);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCheckVersionAppFailure() {
-//                    getView().displayScreen(IMainView.FRAGMENT_HOME);
-//                }
-//            });
-            getView().displayScreen(IMainView.FRAGMENT_HOME);
+            getModel(AuthModel.class).checkVersionApp(token, versionCode, new AuthModel.IOnCheckVersionAppCallback() {
+
+                @Override
+                public void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response) {
+                    getView().showDialog(response);
+                }
+
+                @Override
+                public void onCheckVersionAppFailure() {
+                    getView().displayScreen(IMainView.FRAGMENT_HOME);
+                }
+            });
+//            getView().displayScreen(IMainView.FRAGMENT_HOME);
         } else {
             getView().displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN);
         }

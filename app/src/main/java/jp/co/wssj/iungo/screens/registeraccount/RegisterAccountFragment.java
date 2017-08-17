@@ -239,8 +239,6 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
         mTextEmailError.setVisibility(View.GONE);
         mTextPasswordError.setVisibility(View.GONE);
         mTextConfirmPasswordError.setVisibility(View.GONE);
-
-
     }
 
     public void showTextViewError(TextView textView, String message) {

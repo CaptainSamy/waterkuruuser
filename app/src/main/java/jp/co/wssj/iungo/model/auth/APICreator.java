@@ -250,6 +250,12 @@ final class APICreator {
         };
     }
 
+    /*
+    *
+    * app_type: 1 (user app)
+                2 (store app)
+       os_type: 1 (android)
+    * */
     static GsonRequest<CheckVersionAppResponse> checkVersionApp(String token, final int versionApp, final String deviceId, final Response.Listener<CheckVersionAppResponse> responseListener,
                                                                 final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -268,10 +274,10 @@ final class APICreator {
                 Map<String, Object> params = new HashMap<>();
                 params.put("device_id", deviceId);
                 params.put("current_version", versionApp);
+                params.put("app_type", 1);
+                params.put("os_type", 1);
                 return params;
             }
-
-
         };
     }
 

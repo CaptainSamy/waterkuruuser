@@ -124,10 +124,12 @@
     <string name="can_use_card_title">使用可能サンタプカード</string>
     <string name="used_card_title">使用済一覧</string>
     <string name="card_amount">利用可能スタンプカード： %1$s枚</string>
+    <string name="point_amount">利用可能ポイント： %1$s枚</string>
     <string name="number_push_unread">未読数：%1$s</string>
     <string name="list_store">店舗の状態確認</string>
     <string name="rating">評価する</string>
     <string name="no_item_service">サービススタンプカードがありません。</string>
+    <string name="explain_stamp">ステンプの説明</string>
 
     <!-- menu -->
     <string name="menu_logout">ログアウト</string>
@@ -164,6 +166,7 @@
     <string name="notification_date">%1$s</string>
     <string name="title_push_detail">お知らせ一覧</string>
     <string name="text_no_item">未読の通知がありません。</string>
+    <string name="text_no_item_push_all">プッシュ通知がありません。</string>
     <!--List store checked in-->
     <string name="title_screen_list_store_checked_in">店舗状態確認</string>
     <string name="title_list_store_checked_in">最新ご利用のお店舗を表示</string>
@@ -200,5 +203,11 @@
     <string name="choose_camera">カメラ</string>
     <string name="choose_library">ライブラリ</string>
     <string name="choose_cancel">キャンセル</string>
+
+    <!--Dialog Update-->
+    <string name="content_update">アプリケーションのバージョンアップがあります。アップデートしますか？</string>
+    <string name="title_dialog_update">ご確認</string>
+    <string name="dialog_button_ok">はい</string>
+    <string name="dialog_button_late">あとでアップデートする</string>
 
 </resources>

@@ -1,15 +1,19 @@
 package jp.co.wssj.iungo.screens.qa;
 
+import android.os.Bundle;
 import android.view.View;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.menu.QAResponse;
+import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.qa.adapter.QAAdapter;
+import jp.co.wssj.iungo.screens.qadetail.QADetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
 /**
@@ -20,11 +24,13 @@ public class QAFragment extends BaseFragment<IQAView, QAPresenter> implements IQ
 
     private static String TAG = "QAFragment";
 
-    private ExpandableListView mListViewQA;
+    private ListView mListViewQA;
 
     private QAAdapter mAdapter;
 
     private List<QAResponse.ListQAData.QAData> mListQA;
+
+    private int mCurrentPage, mTotalPage;
 
     @Override
     protected String getLogTag() {
@@ -68,46 +74,44 @@ public class QAFragment extends BaseFragment<IQAView, QAPresenter> implements IQ
 
     @Override
     protected void initViews(View rootView) {
-        mListViewQA = (ExpandableListView) rootView.findViewById(R.id.listViewQA);
-
+        mListViewQA = (ListView) rootView.findViewById(R.id.listViewQA);
     }
 
     @Override
     protected void initData() {
-        getPresenter().getListQA(Constants.INIT_PAGE, Constants.LIMIT);
-    }
+        if (mListQA == null) {
+            mListQA = new ArrayList<>();
+            mAdapter = new QAAdapter(getActivityContext(), mListQA, new QAAdapter.IEndOfListView() {
 
-    int previousItem = -1;
+                @Override
+                public void onEndOfListView() {
+                    if (mCurrentPage < mTotalPage) {
+                        getPresenter().getListQA(mCurrentPage + 1, Constants.LIMIT);
+                    }
+                }
+            });
+            getPresenter().getListQA(Constants.INIT_PAGE, Constants.LIMIT);
+        }
+        mListViewQA.setAdapter(mAdapter);
+    }
 
     @Override
     protected void initAction() {
-        mListViewQA.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+        mListViewQA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onGroupExpand(int groupPosition) {
-                if (groupPosition != previousItem) {
-                    mListViewQA.collapseGroup(previousItem);
-                }
-                previousItem = groupPosition;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(QADetailFragment.KEY_QA, mListQA.get(position));
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_QA_DETAIL, true, true, bundle);
             }
         });
     }
 
     @Override
     public void onGetListQASuccess(final int currentPage, final int totalPage, List<QAResponse.ListQAData.QAData> data) {
-        if (mAdapter == null) {
-            mListQA = new ArrayList<>();
-            mAdapter = new QAAdapter(getActivityContext(), mListQA, new QAAdapter.IEndOfListView() {
-
-                @Override
-                public void onEndOfListView() {
-                    if (currentPage < totalPage) {
-                        getPresenter().getListQA(currentPage + 1, Constants.LIMIT);
-                    }
-                }
-            });
-            mListViewQA.setAdapter(mAdapter);
-        }
+        mCurrentPage = currentPage;
+        mTotalPage = totalPage;
         mListQA.addAll(data);
         mAdapter.notifyDataSetChanged();
     }

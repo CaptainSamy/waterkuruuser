@@ -191,7 +191,7 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
                 if (memoConfig.getType() == Constants.MemoConfig.TYPE_IMAGE) {
                     memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType(), memoConfig.getConfig().getNumberImages()));
                 } else {
-                    memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType()));
+                    memoValueTemp.add(new MemoDynamicResponse.UserMemoData.UserMemoValue(memoConfig.getId(), memoConfig.getType(), memoConfig.getConfig().getStatus()));
                 }
 
             }

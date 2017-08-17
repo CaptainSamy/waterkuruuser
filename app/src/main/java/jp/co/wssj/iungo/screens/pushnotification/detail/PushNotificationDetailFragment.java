@@ -3,7 +3,6 @@ package jp.co.wssj.iungo.screens.pushnotification.detail;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
@@ -122,7 +121,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 mBody.getSettings().setJavaScriptEnabled(true);
                 mBody.getSettings().setBuiltInZoomControls(true);
                 mBody.getSettings().setDisplayZoomControls(false);
-                SpannableString spannableString = null;
                 if (!TextUtils.isEmpty(mNotificationMessage.getAction())) {
                     switch (mNotificationMessage.getAction()) {
                         case Constants.PushNotification.TYPE_NOTIFICATION:
@@ -130,12 +128,10 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_REMIND:
                             mButtonRating.setVisibility(View.GONE);
-                            spannableString = new SpannableString(mNotificationMessage.getMessage());
                             break;
                         case Constants.PushNotification.TYPE_REQUEST_REVIEW:
                             mButtonRating.setVisibility(View.VISIBLE);
                             showRating(isShowRating);
-                            spannableString = new SpannableString(mNotificationMessage.getMessage());
                             break;
                         default:
                             mButtonRating.setVisibility(View.GONE);
@@ -145,11 +141,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 if (isFromActivity) {
                     getPresenter().getContentPush(mNotificationMessage.getPushId());
                 } else {
-//                    if (spannableString != null) {
-//                        mBody.loadDataWithBaseURL("", Html.toHtml(spannableString), "text/html", "UTF-8", "");
-//                    } else {
-//                        mBody.loadDataWithBaseURL("", mNotificationMessage.getMessage().trim(), "text/html", "UTF-8", "");
-//                    }
                     mBody.loadDataWithBaseURL(null, mNotificationMessage.getMessage(), "text/html", "UTF-8", null);
                 }
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);
@@ -176,7 +167,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     public void onGetContentPushSuccess(ContentPushResponse.ContentPushData contentPushResponse) {
         if (contentPushResponse != null) {
-//            Utils.formatHtml(mBody, contentPushResponse.getContent());
             mTitle.setText(contentPushResponse.getTitle());
             mBody.loadDataWithBaseURL(null, contentPushResponse.getContent(), "text/html", "UTF-8", null);
         }

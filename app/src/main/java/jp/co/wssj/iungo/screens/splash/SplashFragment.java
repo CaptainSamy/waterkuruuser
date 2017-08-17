@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.screens.splash;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +9,7 @@ import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
 
+import jp.co.wssj.iungo.BuildConfig;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.screens.IMainView;
@@ -82,27 +82,34 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 .debug(true)
                 .build();
         Twitter.initialize(config);
-
-
-        PackageInfo pInfo;
-        try {
-            pInfo = getActivityContext().getPackageManager().getPackageInfo(getActivityContext().getPackageName(), 0);
-            int versionName = pInfo.versionCode;
-            getPresenter().onCreate(versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        getPresenter().onCreate(BuildConfig.VERSION_CODE);
     }
 
     @Override
     public void showDialog(CheckVersionAppResponse.CheckVersionAppData response) {
-        DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response.getVersionInfo().isRequired(), getActivityCallback());
-        dialogAskUpdate.showDialog();
+        if (response != null && response.getServerInfo() != null) {
+            String status = response.getServerInfo().getStatus();
+            boolean isShowDialog = status.equals(DialogAskUpdate.STATUS_RUNNING) && !response.isHasUpdate();
+            if (!isShowDialog) {
+                DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
+                dialogAskUpdate.showDialog();
+            } else {
+                displayScreen(IMainView.FRAGMENT_HOME);
+            }
+        }
     }
 
     @Override
-    public void displayScreen(int fragmentId) {
-        getActivityCallback().displayScreen(fragmentId, false, false, null);
-        getActivityCallback().clearBackStack();
+    public void displayScreen(final int fragmentId) {
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                getActivityCallback().displayScreen(fragmentId, true, false, null);
+                getActivityCallback().clearBackStack();
+            }
+        }, Constants.TIME_WAITING_SPLASH);
+
     }
+
 }

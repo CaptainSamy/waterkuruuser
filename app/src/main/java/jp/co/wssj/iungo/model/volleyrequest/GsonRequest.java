@@ -21,8 +21,6 @@ import jp.co.wssj.iungo.utils.Constants;
 
 public class GsonRequest<T> extends Request<T> {
 
-    public static final String TOKEN_EXPIRED = "セクションが切りました。再ログインしてください";
-
     private final Gson mGson = new Gson();
 
     private final Class<T> mClazz;

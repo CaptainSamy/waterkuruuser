@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     private static final String TAG = "PushNotificationListFragment";
 
     private SwipeRefreshLayout mRefreshLayout;
+
+    private TextView mTextNoItem;
 
     private PushNotificationAdapter mAdapter;
 
@@ -79,6 +82,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     protected void initViews(View rootView) {
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
+        mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
     }
 
     @Override
@@ -125,38 +129,46 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
-        mPage = page;
-        mTotalPage = totalPage;
-        if (list != null) {
-            if (page == Constants.INIT_PAGE) {
-                mListNotification.clear();
-            }
-            mListNotification.addAll(list);
-            mAdapter.notifyDataSetChanged();
-        }
-        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-
-            @Override
-            public void onEndOfListView() {
-                if (page < totalPage) {
-                    mRefreshLayout.setRefreshing(true);
-                    getPresenter().getListPushNotification(page + 1, Constants.LIMIT);
-                }
-            }
-        });
-
-
         if (list != null && list.size() > 0) {
-            List<Long> listPushId = new ArrayList<>();
-            for (NotificationMessage notificationMessage : list) {
-                if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
-                    listPushId.add(notificationMessage.getPushId());
+            mListView.setVisibility(View.VISIBLE);
+            mTextNoItem.setVisibility(View.GONE);
+            mPage = page;
+            mTotalPage = totalPage;
+            if (list != null) {
+                if (page == Constants.INIT_PAGE) {
+                    mListNotification.clear();
+                }
+                mListNotification.addAll(list);
+                mAdapter.notifyDataSetChanged();
+            }
+            mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+                @Override
+                public void onEndOfListView() {
+                    if (page < totalPage) {
+                        mRefreshLayout.setRefreshing(true);
+                        getPresenter().getListPushNotification(page + 1, Constants.LIMIT);
+                    }
+                }
+            });
+
+
+            if (list != null && list.size() > 0) {
+                List<Long> listPushId = new ArrayList<>();
+                for (NotificationMessage notificationMessage : list) {
+                    if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                        listPushId.add(notificationMessage.getPushId());
+                    }
+                }
+                if (listPushId != null && listPushId.size() > 0) {
+                    getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
                 }
             }
-            if (listPushId != null && listPushId.size() > 0) {
-                getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
-            }
+        } else {
+            mListView.setVisibility(View.GONE);
+            mTextNoItem.setVisibility(View.VISIBLE);
         }
+
 
     }
 

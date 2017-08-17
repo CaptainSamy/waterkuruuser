@@ -32,7 +32,7 @@ public class ListStoreCheckedResponse extends ResponseData<ListStoreCheckedRespo
         private String mStoreAddress;
 
         @SerializedName("waiting_time")
-        private long mExpireTime;
+        private long mWaitingTime;
 
         @SerializedName("number_of_waiting_people")
         private int mPeopleWaiting;
@@ -60,8 +60,8 @@ public class ListStoreCheckedResponse extends ResponseData<ListStoreCheckedRespo
             return mStoreAddress;
         }
 
-        public long getExpireTime() {
-            return mExpireTime;
+        public long getWaitingTime() {
+            return mWaitingTime;
         }
 
         public int getPeopleWaiting() {

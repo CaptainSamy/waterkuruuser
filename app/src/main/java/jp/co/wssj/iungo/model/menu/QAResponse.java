@@ -2,6 +2,7 @@ package jp.co.wssj.iungo.model.menu;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.GsonSerializable;
@@ -11,7 +12,7 @@ import jp.co.wssj.iungo.model.ResponseData;
  * Created by Nguyen Huu Ta on 6/7/2017.
  */
 
-public class QAResponse extends ResponseData<QAResponse.ListQAData> {
+public class QAResponse extends ResponseData<QAResponse.ListQAData> implements Serializable {
 
     public class ListQAData implements GsonSerializable {
 
@@ -33,7 +34,7 @@ public class QAResponse extends ResponseData<QAResponse.ListQAData> {
         @SerializedName("list_titles")
         private List<QAData> mListQA;
 
-        public class QAData {
+        public class QAData implements Serializable {
 
             @SerializedName("title")
             private String mQuestion;

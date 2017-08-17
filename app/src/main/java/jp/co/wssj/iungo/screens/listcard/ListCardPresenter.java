@@ -28,12 +28,12 @@ class ListCardPresenter extends FragmentPresenter<IListCardView> {
         getModel(StampModel.class).getListCardByServiceCompany(token, serviceCompanyId, page, limit, new StampModel.IGetListCardResponse() {
 
             @Override
-            public void onSuccess(List<CardData> cards, int page, int totalPage, int numberStampInCard) {
+            public void onSuccess(List<CardData> cards, int page, int totalPage, int numberStampInCard,String explain) {
                 List<CardData> unusedList = Utils.getListCardByType(cards, Constants.CardTypes.CARD_TYPE_UNUSED);
                 if (!unusedList.isEmpty()) {
-                    getView().showListUnusedCard(unusedList);
+                    getView().showListUnusedCard(unusedList,explain);
                 } else {
-                    getView().hideListUnusedCard(numberStampInCard);
+                    getView().hideListUnusedCard(numberStampInCard,explain);
                 }
                 List<CardData> canUseList = Utils.getListCardByType(cards, Constants.CardTypes.CARD_TYPE_CAN_USE);
 
@@ -54,7 +54,7 @@ class ListCardPresenter extends FragmentPresenter<IListCardView> {
             @Override
             public void onFailure(ErrorMessage errorMessage) {
                 getView().hideProgress();
-                getView().hideListUnusedCard(0);
+                getView().hideListUnusedCard(0,Constants.EMPTY_STRING);
                 getView().hideListCanUseCard();
                 getView().hideListUsedCard();
             }
