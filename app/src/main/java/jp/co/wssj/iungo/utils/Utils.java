@@ -265,9 +265,10 @@ public final class Utils {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getContext().getSystemService(
                         Activity.INPUT_METHOD_SERVICE);
-        if (activity.getCurrentFocus() != null)
+        if (activity.getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(
                     activity.getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public static void hideSoftKeyboard(Activity activity) {
