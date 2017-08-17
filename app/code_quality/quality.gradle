@@ -1,0 +1,30 @@
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+
+task checkstyle(type: Checkstyle) {
+    description 'Check code standard'
+    group 'verification'
+
+    configFile file('./code_quality/checkstyle.xml')
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    classpath = files()
+    ignoreFailures = false
+}
+task findbugs(type: FindBugs) {
+    description 'Run findbugs'
+    group 'verification'
+    classes = files("$project.buildDir/intermediates/classes")
+    source 'src'
+    classpath = files()
+    effort 'max'
+    reportLevel = "medium"
+    excludeFilter file('./code_quality/findbugs-android-exclude.xml')
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+    ignoreFailures = false
+}

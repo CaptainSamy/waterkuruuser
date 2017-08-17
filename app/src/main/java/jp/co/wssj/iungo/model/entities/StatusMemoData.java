@@ -24,8 +24,8 @@ public class StatusMemoData {
         this.mStatus = FLAG_NOT_MODIFY;
     }
 
-    public void setPathNewImage(String mPathNewImage) {
-        this.mPathNewImage = mPathNewImage;
+    public void setPathNewImage(String pathNewImage) {
+        mPathNewImage = pathNewImage;
     }
 
     public void setStatus(int mStatus) {
