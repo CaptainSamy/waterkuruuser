@@ -98,7 +98,7 @@ public class ListStoreCheckedInAdapter extends BaseAdapter {
             if (store != null) {
                 mStoreName.setText(store.getStoreName());
                 mAddressStore.setText(store.getStoreAddress());
-                long timeWaiting = store.getExpireTime();
+                long timeWaiting = store.getWaitingTime();
 
                 String hour = String.valueOf(TimeUnit.MILLISECONDS.toHours(timeWaiting));
                 String minute = String.valueOf(TimeUnit.MILLISECONDS.toMinutes(timeWaiting) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(timeWaiting)));
