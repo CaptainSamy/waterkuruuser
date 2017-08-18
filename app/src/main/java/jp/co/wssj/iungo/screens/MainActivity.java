@@ -559,9 +559,9 @@ public class MainActivity extends AppCompatActivity
 //            if (mTextUserName != null && TextUtils.isEmpty(mTextUserName.getText().toString())) {
 //                mTextUserName.setText(mPresenter.getUserName());
 //            }
-//            if (fragment instanceof HomeFragment && isRequestFirstNotification) {
-//                isRequestFirstNotification = false;
-//                mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
+            if (fragment instanceof HomeFragment && isRequestFirstNotification) {
+                isRequestFirstNotification = false;
+                mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
 //                Glide.with(this)
 //                        .load(mPresenter.getPhotoUrl())
 //                        .asBitmap()
@@ -577,7 +577,7 @@ public class MainActivity extends AppCompatActivity
 //                                mImageUser.setImageResource(R.drawable.logo_animation_be);
 //                            }
 //                        });
-//            }
+            }
             disablePushUpView();
             if (fragment.isEnableDrawableLayout()) {
                 mPresenter.onEnableDrawableLayout();
