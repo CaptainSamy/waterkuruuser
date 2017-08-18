@@ -15,7 +15,8 @@
         android:adjustViewBounds="true"
         android:background="@drawable/border_image"
         android:scaleType="fitXY"
-        android:src="@drawable/test"/>
+        android:src="@drawable/test"
+       />
 
 
 </RelativeLayout>

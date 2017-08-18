@@ -57,6 +57,11 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     }
 
     @Override
+    public boolean isEnableDrawableLayout() {
+        return false;
+    }
+
+    @Override
     protected String getLogTag() {
         return TAG;
     }

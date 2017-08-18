@@ -54,6 +54,11 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     }
 
     @Override
+    public boolean isEnableDrawableLayout() {
+        return false;
+    }
+
+    @Override
     protected SplashPresenter onCreatePresenter(ISplashView view) {
         return new SplashPresenter(view);
     }

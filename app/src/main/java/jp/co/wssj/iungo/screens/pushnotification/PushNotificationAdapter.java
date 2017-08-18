@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.utils.Utils;
+import jp.co.wssj.iungo.widget.CircleImageView;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -51,26 +51,18 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
 
     private static class ViewHolder {
 
-        TextView mTitle, mBody, mTime;
+        TextView mTitle, mTime;
 
-        ImageView mImageCompany;
+        CircleImageView mImageCompany;
 
         ViewHolder(View root) {
             mTitle = (TextView) root.findViewById(R.id.title_notification);
-            mBody = (TextView) root.findViewById(R.id.body_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
-            mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
+            mImageCompany = (CircleImageView) root.findViewById(R.id.iconNotification);
         }
 
         void fillDataToView(final Context context, final NotificationMessage notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
-
-            if (notificationMessage.getMessage().length() > 100) {
-                String text = notificationMessage.getMessage().substring(0, 100).trim() + "...";
-                mBody.setText(text);
-            } else {
-                mBody.setText(notificationMessage.getMessage());
-            }
             Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany);
 
             String time = Utils.distanceTimes(notificationMessage.getPushTime());

@@ -235,6 +235,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return 0;
     }
 
+    public boolean isEnableDrawableLayout() {
+        return true;
+    }
+
     protected Context getActivityContext() {
         return mActivity;
     }

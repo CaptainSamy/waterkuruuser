@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -325,10 +326,19 @@ public final class Utils {
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
-                    .skipMemoryCache(false)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .error(R.drawable.logo_app)
-                    .into(imageView);
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
+
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            imageView.setImageBitmap(resource);
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            imageView.setImageResource(R.drawable.logo_app);
+                        }
+                    });
         } else {
             imageView.setImageResource(R.drawable.logo_app);
         }

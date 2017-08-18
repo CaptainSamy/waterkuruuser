@@ -56,6 +56,11 @@ public class ResetPasswordFragment extends BaseFragment<IResetPasswordView, Rese
     }
 
     @Override
+    public boolean isEnableDrawableLayout() {
+        return false;
+    }
+
+    @Override
     protected ResetPasswordPresenter onCreatePresenter(IResetPasswordView view) {
         return new ResetPasswordPresenter(view);
     }

@@ -92,6 +92,11 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     }
 
     @Override
+    public boolean isEnableDrawableLayout() {
+        return false;
+    }
+
+    @Override
     public boolean isDisplayIconNotification() {
         return false;
     }

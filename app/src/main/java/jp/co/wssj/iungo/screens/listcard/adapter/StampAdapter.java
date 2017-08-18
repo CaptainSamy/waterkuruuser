@@ -157,13 +157,13 @@ public class StampAdapter extends ArrayAdapter<StampData> {
                         String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH))
                 ));
                 mLayoutRating.setVisibility(View.VISIBLE);
-                if (!TextUtils.isEmpty(data.getContentRating()) || data.getRating() > 0) {
+                if (TextUtils.isEmpty(data.getContentRating()) && data.getRating() == -1) {
+                    mRating.setVisibility(View.INVISIBLE);
+                    mButtonRating.setVisibility(View.VISIBLE);
+                } else {
                     mRating.setVisibility(View.VISIBLE);
                     mRating.setRating(data.getRating());
                     mButtonRating.setVisibility(View.INVISIBLE);
-                } else {
-                    mRating.setVisibility(View.GONE);
-                    mButtonRating.setVisibility(View.VISIBLE);
                 }
 
             } else {

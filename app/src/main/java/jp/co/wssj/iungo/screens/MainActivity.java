@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity
         if (list != null && list.size() > 0 && mDialogNotification.getDialogShowing()) {
             List<Long> listPushId = new ArrayList<>();
             for (NotificationMessage notificationMessage : list) {
-                if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_VIEW) {
+                if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
                     listPushId.add(notificationMessage.getPushId());
                 }
             }
@@ -561,7 +561,6 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-
             if (mTextUserName != null && TextUtils.isEmpty(mTextUserName.getText().toString())) {
                 mTextUserName.setText(mPresenter.getUserName());
             }
@@ -585,6 +584,11 @@ public class MainActivity extends AppCompatActivity
                         });
             }
             disablePushUpView();
+            if (fragment.isEnableDrawableLayout()) {
+                mPresenter.onEnableDrawableLayout();
+            } else {
+                mPresenter.onDisableDrawableLayout();
+            }
             mCurrentFragment = fragment;
             mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
             int navigationBottomId = fragment.getNavigationBottomId();

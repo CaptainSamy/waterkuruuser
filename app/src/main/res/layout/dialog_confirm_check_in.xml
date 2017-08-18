@@ -21,7 +21,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <jp.co.wssj.iungo.widget.ImageRoundCorners
+            <jp.co.wssj.iungo.widget.CircleImageView
                 android:id="@+id/ivLogoCompany"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
@@ -75,6 +75,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignRight="@+id/mid_line"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"
@@ -98,6 +99,7 @@
             android:layout_alignLeft="@+id/mid_line"
             android:layout_alignParentRight="true"
             android:layout_weight="1"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center"
             android:paddingBottom="15dp"
             android:paddingTop="15dp"

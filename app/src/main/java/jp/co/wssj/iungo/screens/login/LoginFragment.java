@@ -63,6 +63,11 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     }
 
     @Override
+    public boolean isEnableDrawableLayout() {
+        return false;
+    }
+
+    @Override
     public boolean isDisplayIconNotification() {
         return false;
     }

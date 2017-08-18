@@ -56,6 +56,11 @@ public class TermOfServiceNoMenuBottom extends BaseFragment<ITermOfServicesView,
     }
 
     @Override
+    public boolean isEnableDrawableLayout() {
+        return false;
+    }
+
+    @Override
     public boolean isDisplayIconNotification() {
         return false;
     }
