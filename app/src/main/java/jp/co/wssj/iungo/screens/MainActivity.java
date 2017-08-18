@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,9 +23,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
@@ -561,28 +556,28 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-            if (mTextUserName != null && TextUtils.isEmpty(mTextUserName.getText().toString())) {
-                mTextUserName.setText(mPresenter.getUserName());
-            }
-            if (fragment instanceof HomeFragment && isRequestFirstNotification) {
-                isRequestFirstNotification = false;
-                mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
-                Glide.with(this)
-                        .load(mPresenter.getPhotoUrl())
-                        .asBitmap()
-                        .into(new SimpleTarget<Bitmap>(300, 300) {
-
-                            @Override
-                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-                                mImageUser.setImageBitmap(resource);
-                            }
-
-                            @Override
-                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                                mImageUser.setImageResource(R.drawable.logo_animation_be);
-                            }
-                        });
-            }
+//            if (mTextUserName != null && TextUtils.isEmpty(mTextUserName.getText().toString())) {
+//                mTextUserName.setText(mPresenter.getUserName());
+//            }
+//            if (fragment instanceof HomeFragment && isRequestFirstNotification) {
+//                isRequestFirstNotification = false;
+//                mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
+//                Glide.with(this)
+//                        .load(mPresenter.getPhotoUrl())
+//                        .asBitmap()
+//                        .into(new SimpleTarget<Bitmap>(300, 300) {
+//
+//                            @Override
+//                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
+//                                mImageUser.setImageBitmap(resource);
+//                            }
+//
+//                            @Override
+//                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                                mImageUser.setImageResource(R.drawable.logo_animation_be);
+//                            }
+//                        });
+//            }
             disablePushUpView();
             if (fragment.isEnableDrawableLayout()) {
                 mPresenter.onEnableDrawableLayout();

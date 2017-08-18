@@ -62,12 +62,12 @@
         <jp.co.wssj.iungo.widget.ImageRoundCorners
             android:id="@+id/ivPhoto"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/layoutControl"
             android:layout_marginTop="16dp"
             android:adjustViewBounds="true"
             android:background="@drawable/border_image"
             android:scaleType="fitCenter"
-            android:src="@drawable/image_choose"/>
+            android:src="@drawable/test"/>
     </RelativeLayout>
 </RelativeLayout>
