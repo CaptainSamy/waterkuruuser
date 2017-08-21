@@ -48,6 +48,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    applicationVariants.all { variant ->
+        renameAPK(variant)
+    }
+}
+
+static def renameAPK(variant) {
+    def buildType = variant.variantData.variantConfiguration.buildType.name
+    if (buildType == "release") {
+        variant.outputs.each { output ->
+            def flavor = variant.productFlavors[0].name == "product" ? "Product" : "Dev"
+            def versionName = variant.versionName
+            def formattedDate = new Date().format('yyyyMMdd_HHmm')
+            def file = output.packageApplication.outputFile
+            def fileName = "IungoUser" + "." + versionName + "." + flavor + "_" + formattedDate + ".apk"
+            output.packageApplication.outputFile = new File(file.parent, fileName)
+        }
+    }
 }
 
 dependencies {

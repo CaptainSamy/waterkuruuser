@@ -51,13 +51,12 @@ public class PushNotificationForServiceCompanyAdapter extends ArrayAdapter<Notif
 
     private static class ViewHolder {
 
-        TextView mTitle, mBody, mTime;
+        TextView mTitle, mTime;
 
         ImageView mImageCompany;
 
         ViewHolder(View root) {
             mTitle = (TextView) root.findViewById(R.id.title_notification);
-            mBody = (TextView) root.findViewById(R.id.body_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
             mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
         }
