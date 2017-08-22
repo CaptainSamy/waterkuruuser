@@ -99,7 +99,6 @@ public class DialogNotification {
                 if (mCallback != null) {
                     checkListEmpty();
                     mCallback.onItemClick(message);
-                    mListNotification.remove(position);
                 }
             }
         });
