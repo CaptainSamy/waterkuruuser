@@ -23,11 +23,11 @@
 
     <TextView
         android:id="@+id/tvStampChecked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignBottom="@+id/tvIndex"
-        android:layout_alignLeft="@+id/tvIndex"
-        android:layout_alignRight="@+id/tvIndex"
+        android:layout_alignEnd="@+id/tvIndex"
+        android:layout_alignStart="@+id/tvIndex"
         android:layout_alignTop="@+id/tvIndex"
         android:layout_centerInParent="true"
         android:layout_margin="2dp"
