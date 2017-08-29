@@ -5,6 +5,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
@@ -29,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -321,27 +327,44 @@ public final class Utils {
                 + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public static void fillImage(Context context, String imgPath, final ImageView imageView) {
+    public static void fillImage(final Context context, String imgPath, final ImageView imageView) {
         Logger.d(TAG, "imgPath : " + imgPath);
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
                     .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
+                    .into(new BitmapImageViewTarget(imageView) {
 
                         @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            imageView.setImageBitmap(resource);
-                        }
-
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            imageView.setImageResource(R.drawable.logo_app);
+                        protected void setResource(Bitmap resource) {
+                            if (resource != null) {
+                                imageView.setImageBitmap(cropImage(resource));
+                            } else {
+                                imageView.setImageResource(R.drawable.logo_app);
+                            }
                         }
                     });
         } else {
             imageView.setImageResource(R.drawable.logo_app);
         }
+    }
+
+    public static Bitmap cropImage(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+        return output;
     }
 
     public static <T> void requireNonNull(T object, String message) {

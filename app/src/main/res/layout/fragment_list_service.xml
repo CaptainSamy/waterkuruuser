@@ -21,7 +21,6 @@
             android:id="@+id/card_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorBackground_Actionbar"
             android:divider="@null"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

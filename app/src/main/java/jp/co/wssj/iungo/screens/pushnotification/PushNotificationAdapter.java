@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.utils.Utils;
-import jp.co.wssj.iungo.widget.CircleImageView;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -53,12 +53,12 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
 
         TextView mTitle, mTime;
 
-        CircleImageView mImageCompany;
+        ImageView mImageCompany;
 
         ViewHolder(View root) {
             mTitle = (TextView) root.findViewById(R.id.title_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
-            mImageCompany = (CircleImageView) root.findViewById(R.id.iconNotification);
+            mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
         }
 
         void fillDataToView(final Context context, final NotificationMessage notificationMessage) {

@@ -5,15 +5,13 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal">
 
-    <jp.co.wssj.iungo.widget.CircleImageView
+    <ImageView
         android:id="@+id/iconNotification"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignBottom="@+id/layoutInfoNotification"
-        android:layout_alignTop="@+id/layoutInfoNotification"
         android:layout_margin="8dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"/>
+        />
 
     <RelativeLayout
         android:id="@+id/layoutInfoNotification"
