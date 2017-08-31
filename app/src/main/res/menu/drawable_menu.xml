@@ -1,49 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
-        android:id="@+id/navigation_menu"
+        android:id="@+id/navigation_menu1"
         android:checkableBehavior="single">
         <item
             android:id="@id/menu_push_notification"
             android:icon="@drawable/notification"
             android:title="@string/menu_push_notification"/>
-
+    </group>
+    <group
+        android:id="@+id/navigation_menu2"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_change_password"
             android:icon="@drawable/change_password"
             android:title="@string/change_password"/>
+    </group>
+
+    <group
+        android:id="@+id/navigation_menu3"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_how_to_use"
             android:icon="@drawable/how_to_use"
             android:title="@string/how_to_use"/>
+    </group>
+
+
+    <group
+        android:id="@+id/navigation_menu4"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_question_answer"
             android:icon="@drawable/qa"
             android:title="@string/question_answer"/>
+    </group>
+    <group
+        android:id="@+id/navigation_menu5"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_contact_us"
             android:icon="@drawable/contact"
             android:title="@string/contact_us"/>
+    </group>
+    <group
+        android:id="@+id/navigation_menu6"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_term_of_service"
             android:icon="@drawable/term_of_service"
             android:title="@string/term_of_service_menu"/>
-
+    </group>
+    <group
+        android:id="@+id/navigation_menu7"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_privacy_policy"
             android:icon="@drawable/privacy_policy"
             android:title="@string/privacy_policy"/>
+    </group>
+    <group
+        android:id="@+id/navigation_menu8"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_version"
             android:icon="@drawable/version"
             android:title="@string/menu_version"/>
-
+    </group>
+    <group
+        android:id="@+id/navigation_menu9"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_logout"
             android:icon="@drawable/logout"
             android:title="@string/menu_logout"
             android:visible="false"/>
-
+    </group>
+    <group
+        android:id="@+id/navigation_menu10"
+        android:checkableBehavior="single">
         <item
             android:id="@id/menu_visible"
             android:visible="false"/>
