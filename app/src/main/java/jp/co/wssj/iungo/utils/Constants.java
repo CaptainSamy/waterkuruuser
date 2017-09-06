@@ -116,6 +116,8 @@ public final class Constants {
         public static final String TYPE_REMIND = "action_remind";
 
         public static final String TYPE_REQUEST_REVIEW = "action_request_review";
+
+        public static final String TYPE_QUESTION_NAIRE = "action_question_naire";
     }
 
     public static final class MemoConfig {

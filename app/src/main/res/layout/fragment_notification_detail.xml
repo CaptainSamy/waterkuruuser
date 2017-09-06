@@ -43,10 +43,9 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/buttonRating"
+        android:layout_above="@+id/layoutButton"
         android:layout_below="@+id/layoutTime"
         android:background="@drawable/border_edit_text"
         android:orientation="vertical"
@@ -58,23 +57,46 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/buttonRating"
+    <RelativeLayout
+        android:id="@+id/layoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/border_button_login"
-        android:gravity="center"
-        android:paddingBottom="15dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="15dp"
-        android:text="@string/rating"
-        android:textColor="@color/white"
-        android:visibility="gone"/>
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/buttonRating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_red_button"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="15dp"
+            android:text="@string/rating"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/buttonQuestionNaire"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_red_button"
+            android:gravity="center"
+            android:paddingBottom="15dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="15dp"
+            android:text="Question Naire"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>
 

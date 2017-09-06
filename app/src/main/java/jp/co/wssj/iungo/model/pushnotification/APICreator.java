@@ -34,6 +34,8 @@ public class APICreator {
 
     private static final String API_GET_CONTENT_PUSH = Constants.BASE_URL_AWS + "/api/client/users/get-push-notification-by-id";
 
+    private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL_AWS + "/api/client/users/get-code-to-survey";
+
     static GsonRequest<ListNotificationResponse> getListNotification(final String token, int page, int limit,
                                                                      final Response.Listener<ListNotificationResponse> listener,
                                                                      final Response.ErrorListener errorListener) {
@@ -70,8 +72,8 @@ public class APICreator {
     }
 
     static GsonRequest<ListNotificationResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final int page, int limit,
-                                                                                               final Response.Listener<ListNotificationResponse> listener,
-                                                                                               final Response.ErrorListener errorListener) {
+                                                                                      final Response.Listener<ListNotificationResponse> listener,
+                                                                                      final Response.ErrorListener errorListener) {
         String url = API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY + "?page=" + page + "&limit=" + limit;
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -240,6 +242,42 @@ public class APICreator {
 
                     @Override
                     public void onResponse(ContentPushResponse response) {
+                        Logger.d(TAG, "#getContentPush -> onResponse ");
+                        listener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#getContentPush -> onErrorResponse");
+                        errorListener.onErrorResponse(error);
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("push_id", pushId);
+                return map;
+            }
+        };
+    }
+
+    static GsonJsonRequest<QuestionNaireResponse> getQuestionNaire(final String token, final long pushId,
+                                                                   final Response.Listener<QuestionNaireResponse> listener,
+                                                                   final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<QuestionNaireResponse>(Request.Method.POST,
+                API_GET_QUESTION_NAIRE,
+                QuestionNaireResponse.class,
+                headers,
+                new Response.Listener<QuestionNaireResponse>() {
+
+                    @Override
+                    public void onResponse(QuestionNaireResponse response) {
                         Logger.d(TAG, "#getContentPush -> onResponse ");
                         listener.onResponse(response);
                     }

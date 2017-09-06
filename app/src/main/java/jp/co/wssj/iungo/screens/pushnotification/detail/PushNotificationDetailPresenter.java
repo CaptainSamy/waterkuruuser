@@ -7,6 +7,7 @@ import java.util.List;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
+import jp.co.wssj.iungo.model.pushnotification.QuestionNaireResponse;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -78,6 +79,24 @@ public class PushNotificationDetailPresenter extends FragmentPresenter<IPushNoti
                 getView().onGetContentPushFailure(message);
             }
         });
+    }
 
+    public void getQuestionNaire(long pushId) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getView().showProgress();
+        getModel(PushNotificationModel.class).getQuestionNaire(token, pushId, new PushNotificationModel.IGetQuestionNaireCallback() {
+
+            @Override
+            public void onGetQuestionNaireSuccess(QuestionNaireResponse response) {
+                getView().hideProgress();
+                getView().onGetQuestionNaireSuccess(response);
+            }
+
+            @Override
+            public void onGetQuestionNaireFailure(String message) {
+                getView().hideProgress();
+                getView().onGetQuestionNaireFailure();
+            }
+        });
     }
 }

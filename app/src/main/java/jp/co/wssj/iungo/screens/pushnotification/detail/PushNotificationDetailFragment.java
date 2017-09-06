@@ -14,7 +14,9 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
+import jp.co.wssj.iungo.model.pushnotification.QuestionNaireResponse;
 import jp.co.wssj.iungo.screens.IMainView;
+import jp.co.wssj.iungo.screens.QuestionNaireActivity;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.dialograting.DialogRating;
 import jp.co.wssj.iungo.utils.Constants;
@@ -38,7 +40,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     private WebView mBody;
 
-    private TextView mButtonRating;
+    private TextView mButtonRating, mButtonQuestionNaire;
 
     private NotificationMessage mNotificationMessage;
 
@@ -89,6 +91,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mBody = (WebView) rootView.findViewById(R.id.body_notification);
         mTime = (TextView) rootView.findViewById(R.id.time_notification);
         mButtonRating = (TextView) rootView.findViewById(R.id.buttonRating);
+        mButtonQuestionNaire = (TextView) rootView.findViewById(R.id.buttonQuestionNaire);
     }
 
     @Override
@@ -99,6 +102,16 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             @Override
             public void onClick(View v) {
                 showRating(true);
+            }
+        });
+
+        mButtonQuestionNaire.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivityContext(), QuestionNaireActivity.class);
+                intent.putExtra(QuestionNaireActivity.KEY_QUESTION_NAIRE, mCode);
+                startActivity(intent);
             }
         });
     }
@@ -131,6 +144,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_REQUEST_REVIEW:
                             mButtonRating.setVisibility(View.VISIBLE);
+                            showRating(isShowRating);
+                            break;
+                        case Constants.PushNotification.TYPE_QUESTION_NAIRE:
+                            mButtonRating.setVisibility(View.GONE);
+                            mButtonQuestionNaire.setVisibility(View.VISIBLE);
+                            getPresenter().getQuestionNaire(mNotificationMessage.getPushId());
                             showRating(isShowRating);
                             break;
                         default:
@@ -182,5 +201,20 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         Intent sentToActivity = new Intent();
         sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
         LocalBroadcastManager.getInstance(getActivityContext()).sendBroadcast(sentToActivity);
+    }
+
+    private String mCode;
+
+    @Override
+    public void onGetQuestionNaireSuccess(QuestionNaireResponse response) {
+        mCode = response.getData().getCode();
+        if (TextUtils.isEmpty(mCode)) {
+            mButtonQuestionNaire.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onGetQuestionNaireFailure() {
+        mButtonQuestionNaire.setVisibility(View.GONE);
     }
 }

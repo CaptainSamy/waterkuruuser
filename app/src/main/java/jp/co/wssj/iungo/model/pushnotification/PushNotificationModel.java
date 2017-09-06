@@ -15,6 +15,7 @@ import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.utils.VolleySequence;
 
@@ -64,6 +65,13 @@ public class PushNotificationModel extends BaseModel {
         void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage);
 
         void onGetListPushNotificationFailure(ErrorMessage errorMessage);
+    }
+
+    public interface IGetQuestionNaireCallback {
+
+        void onGetQuestionNaireSuccess(QuestionNaireResponse response);
+
+        void onGetQuestionNaireFailure(String message);
     }
 
     public PushNotificationModel(Context context) {
@@ -204,6 +212,27 @@ public class PushNotificationModel extends BaseModel {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
+
+    public void getQuestionNaire(String token, long pushId, final IGetQuestionNaireCallback callback) {
+        Request request = APICreator.getQuestionNaire(token, pushId, new Response.Listener<QuestionNaireResponse>() {
+
+            @Override
+            public void onResponse(QuestionNaireResponse response) {
+                if (response.isSuccess()) {
+                    callback.onGetQuestionNaireSuccess(response);
+                } else {
+                    callback.onGetQuestionNaireFailure(Constants.EMPTY_STRING);
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onGetQuestionNaireFailure(Constants.EMPTY_STRING);
             }
         });
         VolleySequence.getInstance().addRequest(request);

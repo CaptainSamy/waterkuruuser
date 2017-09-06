@@ -47,6 +47,9 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("stamp_id")
     private int mStampId;
 
+    @SerializedName("action_question_naire")
+    private int mActionQuestionNaire;
+
     public NotificationMessage(long pushId, String title, String message, String action, int stampId) {
         this.mTitle = title;
         this.mMessage = message;
@@ -91,5 +94,9 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     public String getLogo() {
         return mLogo;
+    }
+
+    public int getActionQuestionNaire() {
+        return mActionQuestionNaire;
     }
 }
