@@ -136,27 +136,6 @@ public final class Utils {
         return null;
     }
 
-    public static void loadImage(Context context, String url, final ImageView imageView) {
-        Glide.with(context)
-                .load(url)
-                .fitCenter()
-                .placeholder(R.drawable.image_logo)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(new SimpleTarget<GlideDrawable>() {
-
-                    @Override
-                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                        Logger.d(TAG, "onLoadFailed");
-                    }
-
-                    @Override
-                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                        Logger.d(TAG, "onResourceReady");
-                        imageView.setImageDrawable(resource);
-                    }
-                });
-    }
-
     public static String convertLongToDate(long millis) {
 
         return String.format("%02d:%02d",

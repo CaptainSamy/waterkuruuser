@@ -77,7 +77,6 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                         builder.setColor(getResources().getColor(R.color.colorMain));
                     }
                     builder.setSmallIcon(R.mipmap.image_notification);
-
                     Intent intent = new Intent(FirebaseMsgService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                             Intent.FLAG_ACTIVITY_SINGLE_TOP |
@@ -98,8 +97,6 @@ public class FirebaseMsgService extends FirebaseMessagingService {
                 }
             });
         }
-
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Logger.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
