@@ -38,6 +38,7 @@ import jp.co.wssj.iungo.screens.about.AboutFragment;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordByCodeFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
+import jp.co.wssj.iungo.screens.chat.ChatFragment;
 import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
 import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
 import jp.co.wssj.iungo.screens.home.HomeFragment;
@@ -280,8 +281,11 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 case R.id.navigation_another:
                     if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_MY_REQUEST) {
-                        replaceFragment(new MemoManagerFragment(), true, true);
+                        replaceFragment(new ChatFragment(), true, true);
                     }
+                    return true;
+                case R.id.menu_memo:
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
                     return true;
                 case R.id.menu_push_notification:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST, true, true, null, menuId);
@@ -383,56 +387,59 @@ public class MainActivity extends AppCompatActivity
             case FRAGMENT_WAIT_STORE_CONFIRM:
                 replaceFragment(WaitStoreConfirmFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_MANAGER_STAMP:
+            case FRAGMENT_MANAGER_STAMP:
                 replaceFragment(ManageStampFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_USER_MEMO:
+            case FRAGMENT_USER_MEMO:
                 replaceFragment(UserMemoFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_LIST_CARD:
+            case FRAGMENT_LIST_CARD:
                 replaceFragment(ListCardFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_TERM_OF_SERVICE:
+            case FRAGMENT_TERM_OF_SERVICE:
                 replaceFragment(new TermOfServiceFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM:
+            case FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM:
                 replaceFragment(new TermOfServiceNoMenuBottom(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST:
+            case FRAGMENT_PUSH_NOTIFICATION_LIST:
                 replaceFragment(new PushNotificationListFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL:
+            case FRAGMENT_PUSH_NOTIFICATION_DETAIL:
                 replaceFragment(PushNotificationDetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_HOME:
+            case FRAGMENT_HOME:
                 replaceFragment(new HomeFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_LIST_STORE_CHECKED_IN:
+            case FRAGMENT_LIST_STORE_CHECKED_IN:
                 replaceFragment(ListStoreCheckedInFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_HOW_TO_USE:
+            case FRAGMENT_HOW_TO_USE:
                 replaceFragment(new HowToUserFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_QA:
+            case FRAGMENT_QA:
                 replaceFragment(new QAFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_CONTACT_US:
+            case FRAGMENT_CONTACT_US:
                 replaceFragment(new ContactUsFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_CHANGE_PASSWORD:
+            case FRAGMENT_CHANGE_PASSWORD:
                 replaceFragment(new ChangePasswordFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_POLICY:
+            case FRAGMENT_POLICY:
                 replaceFragment(new PolicyFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_ABOUT:
+            case FRAGMENT_ABOUT:
                 replaceFragment(new AboutFragment(), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
+            case FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
                 replaceFragment(PushNotificationForServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case IMainView.FRAGMENT_QA_DETAIL:
+            case FRAGMENT_QA_DETAIL:
                 replaceFragment(QADetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
+                break;
+            case FRAGMENT_CHAT:
+                replaceFragment(new ChatFragment(), hasAnimation, addToBackStack);
                 break;
         }
     }
@@ -555,27 +562,9 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-//            if (mTextUserName != null && TextUtils.isEmpty(mTextUserName.getText().toString())) {
-//                mTextUserName.setText(mPresenter.getUserName());
-//            }
             if (fragment instanceof HomeFragment && isRequestFirstNotification) {
                 isRequestFirstNotification = false;
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
-//                Glide.with(this)
-//                        .load(mPresenter.getPhotoUrl())
-//                        .asBitmap()
-//                        .into(new SimpleTarget<Bitmap>(300, 300) {
-//
-//                            @Override
-//                            public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
-//                                mImageUser.setImageBitmap(resource);
-//                            }
-//
-//                            @Override
-//                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
-//                                mImageUser.setImageResource(R.drawable.logo_animation_be);
-//                            }
-//                        });
             }
             disablePushUpView();
             if (fragment.isEnableDrawableLayout()) {

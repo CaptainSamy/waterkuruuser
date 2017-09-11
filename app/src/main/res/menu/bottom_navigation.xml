@@ -12,6 +12,6 @@
         <item
             android:id="@+id/navigation_another"
             android:icon="@drawable/item_another"
-            android:title="@string/title_bottom_another"/>
+            android:title="@string/title_screen_chat"/>
     </group>
 </menu>

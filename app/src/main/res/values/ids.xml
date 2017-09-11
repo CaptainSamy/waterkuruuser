@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="menu_logout" type="id"/>
+    <item name="menu_memo" type="id"/>
     <item name="menu_push_notification" type="id"/>
     <item name="shared_drawable" type="id"/>
     <item name="menu_change_password" type="id"/>

@@ -119,8 +119,8 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     @Override
-    public int getMenuBottomID() {
-        return MENU_MY_REQUEST;
+    public int getNavigationMenuID() {
+        return R.id.menu_memo;
     }
 
     @Override

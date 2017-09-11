@@ -210,4 +210,7 @@
     <string name="dialog_button_ok">はい</string>
     <string name="dialog_button_late">あとでアップデートする</string>
 
+    <!--Chat Fragment-->
+    <string name="title_screen_chat">Chat</string>
+
 </resources>
