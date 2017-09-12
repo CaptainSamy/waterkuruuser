@@ -94,11 +94,6 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_another;
-    }
-
-    @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_another);
     }

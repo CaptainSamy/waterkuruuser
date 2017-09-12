@@ -65,7 +65,9 @@ public interface IMainView extends IView {
 
     int FRAGMENT_CHAT = 28;
 
-    int FRAGMENT_TIME_LINE = 29;
+    int FRAGMENT_CHAT_DETAIL = 29;
+
+    int FRAGMENT_TIME_LINE = 30;
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 

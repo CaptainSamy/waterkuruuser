@@ -212,5 +212,6 @@
 
     <!--Chat Fragment-->
     <string name="title_screen_chat">Chat</string>
+    <string name="title_screen_chat_detail">Chat detail</string>
 
 </resources>
