@@ -214,4 +214,10 @@
     <string name="title_screen_chat">Chat</string>
     <string name="title_screen_chat_detail">Chat detail</string>
 
+    <!--Timeline Fragment-->
+    <string name="title_screen_timeline">Timeline</string>
+    <string name="number_comment">%1$s comment</string>
+    <string name="write_comment">Viết bình luận</string>
+    <string name="send_comment">Gửi</string>
+
 </resources>

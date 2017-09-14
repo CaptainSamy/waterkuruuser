@@ -290,6 +290,14 @@ public final class Utils {
         return prettyTime.format(calendar.getTime());
     }
 
+    public static String distanceTimesViet(long time) {
+        Calendar calendar = Calendar.getInstance();
+//        String string = Locale.getDefault().getDisplayLanguage();
+
+        PrettyTime prettyTime = new PrettyTime(new Locale("VN"));//if only setting Japan language, change string =JA
+        return prettyTime.format(calendar.getTime());
+    }
+
     public static String convertLongToTime(long time, boolean isConvertGMT) {
         Calendar calendar;
         if (isConvertGMT) {

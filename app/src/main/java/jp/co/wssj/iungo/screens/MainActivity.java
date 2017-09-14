@@ -64,6 +64,7 @@ import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
 import jp.co.wssj.iungo.screens.splash.SplashFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
+import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
@@ -444,6 +445,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case FRAGMENT_CHAT_DETAIL:
                 replaceFragment(new ChatDetailFragment(), hasAnimation, addToBackStack);
+                break;
+            case FRAGMENT_TIME_LINE:
+                replaceFragment(new TimeLineFragment(), hasAnimation, addToBackStack);
                 break;
         }
     }

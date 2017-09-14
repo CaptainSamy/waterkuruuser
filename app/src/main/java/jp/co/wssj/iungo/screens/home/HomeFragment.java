@@ -64,7 +64,8 @@ public class HomeFragment extends BaseFragment<IHomeView, HomePresenter> impleme
     @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
-        getPresenter().onHomeNavigationButtonClicked();
+//        getPresenter().onHomeNavigationButtonClicked();
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_TIME_LINE, true, true);
     }
 
     @Override

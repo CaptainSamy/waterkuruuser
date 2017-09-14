@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import jp.co.wssj.iungo.App;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.auth.AuthModel;
-import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
 import jp.co.wssj.iungo.model.auth.LoginResponse;
 import jp.co.wssj.iungo.model.firebase.FirebaseModel;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
@@ -62,19 +61,19 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
     public void switchScreen(final int versionCode) {
         final String token = getModel(SharedPreferencesModel.class).getToken();
         if (!TextUtils.isEmpty(token)) {
-            getModel(AuthModel.class).checkVersionApp(token, versionCode, new AuthModel.IOnCheckVersionAppCallback() {
-
-                @Override
-                public void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response) {
-                    getView().showDialog(response);
-                }
-
-                @Override
-                public void onCheckVersionAppFailure() {
-                    getView().displayScreen(IMainView.FRAGMENT_HOME);
-                }
-            });
-//            getView().displayScreen(IMainView.FRAGMENT_HOME);
+//            getModel(AuthModel.class).checkVersionApp(token, versionCode, new AuthModel.IOnCheckVersionAppCallback() {
+//
+//                @Override
+//                public void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response) {
+//                    getView().showDialog(response);
+//                }
+//
+//                @Override
+//                public void onCheckVersionAppFailure() {
+//                    getView().displayScreen(IMainView.FRAGMENT_HOME);
+//                }
+//            });
+            getView().displayScreen(IMainView.FRAGMENT_HOME);
         } else {
             getView().displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN);
         }
