@@ -13,18 +13,18 @@ import android.widget.TextView;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
+import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 13/9/2017.
  */
 
-public class CommentAdapter extends ArrayAdapter<TimeLineResponse.Comment> {
+public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.ListComment> {
 
     private LayoutInflater mInflate;
 
-    public CommentAdapter(@NonNull Context context, @NonNull List<TimeLineResponse.Comment> objects) {
+    public CommentAdapter(@NonNull Context context, @NonNull List<CommentResponse.CommentData.ListComment> objects) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
     }
@@ -49,16 +49,19 @@ public class CommentAdapter extends ArrayAdapter<TimeLineResponse.Comment> {
         private TextView mContentComment, mTime;
 
         public CommentHolder(View view) {
-
             mContentComment = (TextView) view.findViewById(R.id.tvContentComment);
             mTime = (TextView) view.findViewById(R.id.tvTime);
         }
 
-        public void bind(TimeLineResponse.Comment comment) {
-
-            String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + comment.getUserName() + "</font></strong></body></html>" + " " + comment.getComment();
-            mContentComment.setText(Html.fromHtml(content));
-            mTime.setText(Utils.distanceTimesViet(comment.getTimeComment()));
+        public void bind(CommentResponse.CommentData.ListComment listComment) {
+            if (listComment != null) {
+                CommentResponse.CommentData.ListComment.Comment comment = listComment.getComment();
+                if (comment != null) {
+                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + comment.getUserName() + "</font></strong></body></html>" + " " + comment.getContent();
+                    mContentComment.setText(Html.fromHtml(content));
+                    mTime.setText(Utils.distanceTimes(comment.getCreated()));
+                }
+            }
         }
     }
 }

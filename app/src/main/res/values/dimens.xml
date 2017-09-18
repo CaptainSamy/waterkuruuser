@@ -13,4 +13,7 @@
 
     <dimen name="easy_dialog_default_left_margin">0dp</dimen>
     <dimen name="easy_dialog_default_right_margin">0dp</dimen>
+
+    <dimen name="width_title">60dp</dimen>
+    <dimen name="height_title">25dp</dimen>
 </resources>

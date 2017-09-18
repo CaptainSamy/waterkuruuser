@@ -12,7 +12,7 @@ public final class Constants {
 
     public static final String UTF8_ENCODING = "UTF-8";
 
-    public static final String BASE_URL_AWS = BuildConfig.HOST;
+    public static final String BASE_URL = BuildConfig.HOST;
 
     public static final String PREFIX_QR_STORE = "store";
 
@@ -44,7 +44,7 @@ public final class Constants {
 
     public static final int TIME_OUT_CUSTOM = 60000;
 
-    public static final String URL_CONTACT = BASE_URL_AWS + "/api/client/users/save-user-contact";
+    public static final String URL_CONTACT = BASE_URL + "/api/client/users/save-user-contact";
 
     public static final String HASH_MD5 = "MD5";
 
@@ -137,5 +137,21 @@ public final class Constants {
         public static final int TYPE_SWITCH = 5;
 
         public static final int TYPE_LEVEL = 6;
+    }
+
+    public static final class Like {
+
+        public static final String LIKE = "like";
+
+        public static final String LOVE = "Love";
+
+        public static final String HAHA = "Haha";
+
+        public static final String WOW = "Wow";
+
+        public static final String CRY = "Cry";
+
+        public static final String ANGRY = "Angry";
+
     }
 }

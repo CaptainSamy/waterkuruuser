@@ -22,19 +22,19 @@ public class APICreator {
 
     private static final String TAG = "Notification.ApiCreator";
 
-    private static final String API_GET_LIST_NOTIFICATION = Constants.BASE_URL_AWS + "/api/client/users/get-notification-list-user";
+    private static final String API_GET_LIST_NOTIFICATION = Constants.BASE_URL + "/api/client/users/get-notification-list-user";
 
-    private static final String API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY = Constants.BASE_URL_AWS + "/api/client/users/get-list-push-notification-by-service-company-id";
+    private static final String API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY = Constants.BASE_URL + "/api/client/users/get-list-push-notification-by-service-company-id";
 
-    private static final String API_GET_LIST_PUSH_UN_READ = Constants.BASE_URL_AWS + "/api/client/users/get-notification-list-user-unread";
+    private static final String API_GET_LIST_PUSH_UN_READ = Constants.BASE_URL + "/api/client/users/get-notification-list-user-unread";
 
-    private static final String API_SET_LIST_NOTIFICATION = Constants.BASE_URL_AWS + "/api/client/users/update-view-status-notification";
+    private static final String API_SET_LIST_NOTIFICATION = Constants.BASE_URL + "/api/client/users/update-view-status-notification";
 
-    private static final String API_UPDATE_ACTION_NOTIFICATION = Constants.BASE_URL_AWS + "/api/client/users/update-push-notification";
+    private static final String API_UPDATE_ACTION_NOTIFICATION = Constants.BASE_URL + "/api/client/users/update-push-notification";
 
-    private static final String API_GET_CONTENT_PUSH = Constants.BASE_URL_AWS + "/api/client/users/get-push-notification-by-id";
+    private static final String API_GET_CONTENT_PUSH = Constants.BASE_URL + "/api/client/users/get-push-notification-by-id";
 
-    private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL_AWS + "/api/client/users/get-code-to-survey";
+    private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-code-to-survey";
 
     static GsonRequest<ListNotificationResponse> getListNotification(final String token, int page, int limit,
                                                                      final Response.Listener<ListNotificationResponse> listener,

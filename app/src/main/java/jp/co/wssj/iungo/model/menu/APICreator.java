@@ -20,15 +20,15 @@ final class APICreator {
 
     private static final String TAG = "Menu.APICreator";
 
-    private static final String GET_LIST_QA_URL = Constants.BASE_URL_AWS + "/api/client/users/get-list-question";
+    private static final String GET_LIST_QA_URL = Constants.BASE_URL + "/api/client/users/get-list-question";
 
-    private static final String FEED_BACK_URL = Constants.BASE_URL_AWS + "/api/client/users/save-user-contact";
+    private static final String FEED_BACK_URL = Constants.BASE_URL + "/api/client/users/save-user-contact";
 
-    private static final String HOW_USE_APP_URL = Constants.BASE_URL_AWS + "/api/client/users/how-use-app";
+    private static final String HOW_USE_APP_URL = Constants.BASE_URL + "/api/client/users/how-use-app";
 
-    private static final String TERM_OF_SERVICE_URL = Constants.BASE_URL_AWS + "/api/client/users/get-term-of-service";
+    private static final String TERM_OF_SERVICE_URL = Constants.BASE_URL + "/api/client/users/get-term-of-service";
 
-    private static final String POLICY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-policy";
+    private static final String POLICY_URL = Constants.BASE_URL + "/api/client/users/get-policy";
 
     static GsonRequest<QAResponse> getListQA(String token, final int page, int limit, final Response.Listener<QAResponse> responseListener,
                                              final Response.ErrorListener errorListener) {

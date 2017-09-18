@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.timeline;
 
+import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.base.IFragmentView;
 
 /**
@@ -7,5 +8,9 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
  */
 
 public interface ITimeLineView extends IFragmentView {
+
+    void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData);
+
+    void onGetTimelineFailure(String message);
 
 }

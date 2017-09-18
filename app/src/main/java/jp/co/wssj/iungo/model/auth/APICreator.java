@@ -22,19 +22,19 @@ final class APICreator {
 
     private static final String TAG = "AuthModel.APICreator";
 
-    private static final String REGISTER_URL_AWS = Constants.BASE_URL_AWS + "/api/client/users/register";
+    private static final String REGISTER_URL_AWS = Constants.BASE_URL + "/api/client/users/register";
 
-    private static final String LOGIN_URL_AWS = Constants.BASE_URL_AWS + "/api/client/users/login";
+    private static final String LOGIN_URL_AWS = Constants.BASE_URL + "/api/client/users/login";
 
-    private static final String RESET_PASSWORD_URL = Constants.BASE_URL_AWS + "/api/client/users/send-email-contain-reset-password-code";
+    private static final String RESET_PASSWORD_URL = Constants.BASE_URL + "/api/client/users/send-email-contain-reset-password-code";
 
-    private static final String CHANGE_PASSWORD_BY_CODE_URL = Constants.BASE_URL_AWS + "/api/client/users/change-password-by-code";
+    private static final String CHANGE_PASSWORD_BY_CODE_URL = Constants.BASE_URL + "/api/client/users/change-password-by-code";
 
-    private static final String CHANGE_PASSWORD_URL = Constants.BASE_URL_AWS + "/api/client/users/change-password";
+    private static final String CHANGE_PASSWORD_URL = Constants.BASE_URL + "/api/client/users/change-password";
 
-    private static final String REMOVE_DEVICE_TOKEN = Constants.BASE_URL_AWS + "/api/client/users/remove-device-token";
+    private static final String REMOVE_DEVICE_TOKEN = Constants.BASE_URL + "/api/client/users/remove-device-token";
 
-    private static final String CHECK_VERSION_APP = Constants.BASE_URL_AWS + "/api/client/users/check-version-app-and-server-user";
+    private static final String CHECK_VERSION_APP = Constants.BASE_URL + "/api/client/users/check-version-app-and-server-user";
 
     public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userId, final String password, final String name, final String email, final int age, final int sex, final int typeLogin, final String token, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
 

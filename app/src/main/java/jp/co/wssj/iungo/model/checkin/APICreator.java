@@ -21,13 +21,13 @@ final class APICreator {
 
     public static final String TAG = "CheckIn.APICreator";
 
-    private static final String INFO_STORE_URL = Constants.BASE_URL_AWS + "/api/storeclient/management-users/get-store-information-by-code";
+    private static final String INFO_STORE_URL = Constants.BASE_URL + "/api/storeclient/management-users/get-store-information-by-code";
 
-    private static final String FEEDBACK_QR_STORE_URL = Constants.BASE_URL_AWS + "/api/client/users/feedback-scan-qr-code-store";
+    private static final String FEEDBACK_QR_STORE_URL = Constants.BASE_URL + "/api/client/users/feedback-scan-qr-code-store";
 
-    private static final String GET_CHECK_IN_STATUS_BY_USER = Constants.BASE_URL_AWS + "/api/client/users/get-check-in-status-by-user";
+    private static final String GET_CHECK_IN_STATUS_BY_USER = Constants.BASE_URL + "/api/client/users/get-check-in-status-by-user";
 
-    private static final String MAPPING_USER_WITH_STORE = Constants.BASE_URL_AWS + "/api/client/users/feedback-ignore-session";
+    private static final String MAPPING_USER_WITH_STORE = Constants.BASE_URL + "/api/client/users/feedback-ignore-session";
 
     static GsonRequest<ConfirmCheckInResponse> getFeedbackQRStoreRequest(String token, final String code, final Response.Listener<ConfirmCheckInResponse> listener, final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();

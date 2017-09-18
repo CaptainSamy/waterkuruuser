@@ -5,41 +5,139 @@
               android:orientation="vertical"
               android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/ivTimeLine"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/image_time_line"/>
+        android:layout_height="wrap_content">
 
-    <LinearLayout
+        <LinearLayout
+            android:id="@+id/layoutInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivStore"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/image_time_line"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="4dp">
+
+                <TextView
+                    android:id="@+id/tvStoreName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Store Name"
+                    android:textColor="@color/end_color_chat_user"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    android:text="5 giờ"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <jp.co.wssj.iungo.widget.ExpandableTextView
+            android:id="@+id/tvContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutInfo"
+            android:paddingTop="10dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/ivTimeLine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvContent"
+            android:layout_marginTop="10dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/image_time_line"
+            android:visibility="visible"/>
+
+        <jp.co.wssj.iungo.widget.likefacebook.ReactionView
+            android:id="@+id/reactionFacebook"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_above="@+id/layoutButton"
+            android:layout_alignBottom="@+id/ivTimeLine"
+            android:layout_marginLeft="20dp"
+            android:background="@android:color/transparent"
+            android:visibility="invisible"/>
+
+        <LinearLayout
+            android:id="@+id/layoutButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivTimeLine"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:id="@+id/ivSmile"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/haha"/>
+
+            <TextView
+                android:id="@+id/tvLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="4dp"
+                android:text="Thích"/>
+
+            <LinearLayout
+                android:id="@+id/buttomComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/icon_comment"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="4dp"
+                    android:text="Bình luận"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="Ban va 199k nguoi khac"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvNumberComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:paddingBottom="4dp"
-        android:paddingTop="4dp">
-
-        <ImageView
-            android:id="@+id/ivSmile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_smile"/>
-
-        <ImageView
-            android:id="@+id/ivComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/icon_comment"/>
-    </LinearLayout>
-
-    <jp.co.wssj.iungo.widget.ExpandableTextView
-        android:id="@+id/tvContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thay nút này bằng biểu tượng timeline và hiển htij mành ình timeline"
-        android:textColor="@color/black"/>
+        android:paddingTop="4dp"
+        android:text="1 comment"/>
 
     <RelativeLayout
         android:id="@+id/layoutComment"
@@ -48,20 +146,11 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tvNumberComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
-            android:text="1 comment"
-            android:visibility="invisible"/>
 
         <LinearLayout
             android:id="@+id/layoutInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvNumberComment"
             android:background="@drawable/border_edit_text_comment"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
@@ -71,18 +160,33 @@
                 android:id="@+id/etComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:background="@null"
                 android:hint="Viết bình luận..."
                 android:paddingLeft="14dp"/>
 
-            <TextView
-                android:id="@+id/tvSendComment"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="16dp"
-                android:text="Send"
-                android:textColor="@color/black"/>
+                android:layout_marginRight="16dp">
+
+                <TextView
+                    android:id="@+id/tvSendComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Send"
+                    android:textColor="@color/black"/>
+
+                <ProgressBar
+                    android:id="@+id/progressSend"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
         </LinearLayout>
 
         <jp.co.wssj.iungo.widget.ExpandableListView
@@ -93,9 +197,10 @@
             android:minHeight="100dp"/>
 
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBarListView"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_below="@+id/layoutInput"
             android:layout_centerInParent="true"
             android:visibility="gone"/>
     </RelativeLayout>

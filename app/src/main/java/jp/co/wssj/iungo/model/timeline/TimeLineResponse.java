@@ -1,81 +1,248 @@
 package jp.co.wssj.iungo.model.timeline;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
+
+import jp.co.wssj.iungo.model.GsonSerializable;
+import jp.co.wssj.iungo.model.ResponseData;
 
 /**
  * Created by Nguyen Huu Ta on 13/9/2017.
  */
 
-public class TimeLineResponse {
+public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData> {
 
-    public TimeLineResponse(String content) {
-        mContent = content;
-    }
+    public class TimeLineData implements GsonSerializable {
 
-    private int mId;
+        @SerializedName("number_of_timeline_in_page")
+        @Expose
+        private int numberOfTimelineInPage;
 
-    private List<String> mListImage;
+        @SerializedName("page")
+        @Expose
+        private int page;
 
-    private String mContent;
+        @SerializedName("total_number_of_timeline")
+        @Expose
+        private int totalNumberOfTimeline;
 
-    private int mNumberLine;
+        @SerializedName("total_page")
+        @Expose
+        private int totalPage;
 
-    private long mTime;
+        @SerializedName("limit")
+        @Expose
+        private String limit;
 
-    List<Comment> mListComment;
+        @SerializedName("list_timeline")
+        @Expose
+        private List<ListTimeline> listTimeline = null;
 
-    public static class Comment {
+        public class ListTimeline {
 
-        public Comment(String userName, String comment, long time) {
-            mUserName = userName;
-            mComment = comment;
-            mTimeComment = time;
+            @SerializedName("likes")
+            @Expose
+            private List<Like> likes;
+
+            @SerializedName("timeline")
+            @Expose
+            private Timeline timeline;
+
+            public class Timeline {
+
+                @SerializedName("comment_number")
+                @Expose
+                private int commentNumber;
+
+                @SerializedName("created")
+                @Expose
+                private long created;
+
+                @SerializedName("id")
+                @Expose
+                private int id;
+
+                @SerializedName("images")
+                @Expose
+                private String images;
+
+                @SerializedName("is_deleted")
+                @Expose
+                private String isDeleted;
+
+                @SerializedName("key_gen")
+                @Expose
+                private String keyGen;
+
+                @SerializedName("management_user_id")
+                @Expose
+                private String managementUserId;
+
+                @SerializedName("messages")
+                @Expose
+                private String messages;
+
+                @SerializedName("modified")
+                @Expose
+                private long modified;
+
+                @SerializedName("number_like")
+                @Expose
+                private int numberLike;
+
+                @SerializedName("self_like_id")
+                @Expose
+                private int statusLikeId;
+
+                public int getCommentNumber() {
+                    return commentNumber;
+                }
+
+                public void setCommentNumber(int number) {
+                    commentNumber = number;
+                }
+
+                public long getCreated() {
+                    return created;
+                }
+
+                public int getId() {
+                    return id;
+                }
+
+                public String getImages() {
+                    return images;
+                }
+
+                public String getIsDeleted() {
+                    return isDeleted;
+                }
+
+                public String getKeyGen() {
+                    return keyGen;
+                }
+
+                public String getManagementUserId() {
+                    return managementUserId;
+                }
+
+                public String getMessages() {
+                    return messages;
+                }
+
+                public long getModified() {
+                    return modified;
+                }
+
+                public int getNumberLike() {
+                    return numberLike;
+                }
+
+                public int getStatusLikeId() {
+                    return statusLikeId;
+                }
+            }
+
+            public class Like {
+
+                @SerializedName("count_like")
+                @Expose
+                private String countLike;
+
+                @SerializedName("created")
+                @Expose
+                private String created;
+
+                @SerializedName("id")
+                @Expose
+                private String id;
+
+                @SerializedName("key_gen")
+                @Expose
+                private String keyGen;
+
+                @SerializedName("like_id")
+                @Expose
+                private String likeId;
+
+                @SerializedName("list_user_like")
+                @Expose
+                private List<String> listUserLike = null;
+
+                @SerializedName("modified")
+                @Expose
+                private String modified;
+
+                @SerializedName("timeline_id")
+                @Expose
+                private String timelineId;
+
+                public String getCountLike() {
+                    return countLike;
+                }
+
+                public String getCreated() {
+                    return created;
+                }
+
+                public String getId() {
+                    return id;
+                }
+
+                public String getKeyGen() {
+                    return keyGen;
+                }
+
+                public String getLikeId() {
+                    return likeId;
+                }
+
+                public List<String> getListUserLike() {
+                    return listUserLike;
+                }
+
+                public String getModified() {
+                    return modified;
+                }
+
+                public String getTimelineId() {
+                    return timelineId;
+                }
+            }
+
+            public List<Like> getLikes() {
+                return likes;
+            }
+
+            public Timeline getTimeline() {
+                return timeline;
+            }
         }
 
-        private String mUserName;
-
-        private String mComment;
-
-        private long mTimeComment;
-
-        public String getUserName() {
-            return mUserName;
+        public int getNumberOfTimelineInPage() {
+            return numberOfTimelineInPage;
         }
 
-        public String getComment() {
-            return mComment;
+        public int getPage() {
+            return page;
         }
 
-        public long getTimeComment() {
-            return mTimeComment;
+        public int getTotalNumberOfTimeline() {
+            return totalNumberOfTimeline;
         }
-    }
 
-    public int getId() {
-        return mId;
-    }
+        public int getTotalPage() {
+            return totalPage;
+        }
 
-    public List<String> getListImage() {
-        return mListImage;
-    }
+        public String getLimit() {
+            return limit;
+        }
 
-    public String getContent() {
-        return mContent;
-    }
-
-    public int getNumberLine() {
-        return mNumberLine;
-    }
-
-    public long getTime() {
-        return mTime;
-    }
-
-    public List<Comment> getListComment() {
-        return mListComment;
-    }
-
-    public void setListComment(List<Comment> listComment) {
-        this.mListComment = listComment;
+        public List<ListTimeline> getListTimeline() {
+            return listTimeline;
+        }
     }
 }

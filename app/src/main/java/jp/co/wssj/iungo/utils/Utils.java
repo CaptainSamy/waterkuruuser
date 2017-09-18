@@ -70,6 +70,10 @@ public final class Utils {
 
     private static final String TAG = "Utils";
 
+    public static int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
     @NonNull
     public static List<ListCardResponse.ListCardData.CardData> getListCardByType(List<ListCardResponse.ListCardData.CardData> cards, String cardType) {
         List<ListCardResponse.ListCardData.CardData> list = new ArrayList<>();
@@ -333,6 +337,28 @@ public final class Utils {
                     });
         } else {
             imageView.setImageResource(R.drawable.logo_app);
+        }
+    }
+
+    public static void fillImageTimeline(final Context context, String imgPath, final ImageView imageView) {
+        Logger.d(TAG, "imgPath : " + imgPath);
+        if (!TextUtils.isEmpty(imgPath)) {
+            Glide.with(context)
+                    .load(imgPath)
+                    .asBitmap()
+                    .into(new BitmapImageViewTarget(imageView) {
+
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            if (resource != null) {
+                                imageView.setImageBitmap(cropImage(resource));
+                            } else {
+                                imageView.setImageResource(R.drawable.icon_user);
+                            }
+                        }
+                    });
+        } else {
+            imageView.setImageResource(R.drawable.icon_user);
         }
     }
 

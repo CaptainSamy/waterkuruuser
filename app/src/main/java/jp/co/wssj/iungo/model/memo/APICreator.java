@@ -26,11 +26,11 @@ final class APICreator {
 
     private static final String TAG = "Note.APICreator";
 
-    private static final String GET_LIST_SERVICES_URL = Constants.BASE_URL_AWS + "/api/client/users/get-service-list";
+    private static final String GET_LIST_SERVICES_URL = Constants.BASE_URL + "/api/client/users/get-service-list";
 
-    private static final String GET_USER_MEMO_URL = Constants.BASE_URL_AWS + "/api/client/users/get-memo-user";
+    private static final String GET_USER_MEMO_URL = Constants.BASE_URL + "/api/client/users/get-memo-user";
 
-    private static final String UPDATE_USER_MEMO_URL = Constants.BASE_URL_AWS + "/api/client/users/set-memo-user";
+    private static final String UPDATE_USER_MEMO_URL = Constants.BASE_URL + "/api/client/users/set-memo-user";
 
     static GsonRequest<MemoDynamicResponse> getUserMemoConfigRequest(String token, final int servicesId, final Response.Listener<MemoDynamicResponse> responseListener, final Response.ErrorListener errorListener) {
         Map<String, String> header = new HashMap<>();

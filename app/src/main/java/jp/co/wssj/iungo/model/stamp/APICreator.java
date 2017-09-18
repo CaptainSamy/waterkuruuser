@@ -20,13 +20,13 @@ final class APICreator {
 
     private static final String TAG = "stamp.APICreator";
 
-    private static final String LIST_COMPANY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-list-company";
+    private static final String LIST_COMPANY_URL = Constants.BASE_URL + "/api/client/users/get-list-company";
 
-    private static final String LIST_CARD_BY_SERVICE_COMPANY_URL = Constants.BASE_URL_AWS + "/api/client/users/get-list-card-by-service-company-id";
+    private static final String LIST_CARD_BY_SERVICE_COMPANY_URL = Constants.BASE_URL + "/api/client/users/get-list-card-by-service-company-id";
 
-    private static final String LIST_STORE_CHECK_IN = Constants.BASE_URL_AWS + "/api/client/users/get-store-list-of-company-which-user-has-used";
+    private static final String LIST_STORE_CHECK_IN = Constants.BASE_URL + "/api/client/users/get-store-list-of-company-which-user-has-used";
 
-    private static final String REVIEW_SERVICE_BY_STAMP = Constants.BASE_URL_AWS + "/api/client/users/review-service-by-stamp";
+    private static final String REVIEW_SERVICE_BY_STAMP = Constants.BASE_URL + "/api/client/users/review-service-by-stamp";
 
     static GsonRequest<ListCompanyResponse> createGetListCompanyRequest(String token, Response.Listener<ListCompanyResponse> responseListener, Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();

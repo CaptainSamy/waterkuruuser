@@ -20,7 +20,7 @@ public class APICreator {
 
     private static final String TAG = "Firebase.ApiCreator";
 
-    private static final String API_UPLOAD_DEVICE_TOKEN = Constants.BASE_URL_AWS + "/api/client/users/save-device-token";
+    private static final String API_UPLOAD_DEVICE_TOKEN = Constants.BASE_URL + "/api/client/users/save-device-token";
 
     static GsonRequest<UploadTokenReponse> getUploadDeviceTokenRequest(final String token,
                                                                        final String deviceToken, final String deviceId, final Response.Listener<UploadTokenReponse> listener,
