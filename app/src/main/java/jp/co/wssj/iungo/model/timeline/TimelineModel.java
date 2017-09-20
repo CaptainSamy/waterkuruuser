@@ -106,8 +106,8 @@ public class TimelineModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void likeTimeline(String token, int timelineId, int likeId, int typeLike, final OnLikeCallback callback) {
-        final Request request = APICreator.likeTimeline(token, timelineId, likeId, typeLike, new Response.Listener<ResponseData>() {
+    public void likeTimeline(String token, int timelineId, int newLikeId, int oldLikeId, int typeLike, final OnLikeCallback callback) {
+        final Request request = APICreator.likeTimeline(token, timelineId, newLikeId, oldLikeId, typeLike, new Response.Listener<ResponseData>() {
 
             @Override
             public void onResponse(ResponseData response) {

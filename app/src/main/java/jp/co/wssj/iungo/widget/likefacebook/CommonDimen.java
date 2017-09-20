@@ -7,9 +7,10 @@ import jp.co.wssj.iungo.utils.Utils;
  */
 
 public class CommonDimen {
+
     public static int DIVIDE = Utils.dpToPx(5);
 
-    public static int HEIGHT_VIEW_REACTION = Utils.dpToPx(250);
+    public static int HEIGHT_VIEW_REACTION = Utils.dpToPx(200);
 
     public static int WIDHT_VIEW_REACTION = Utils.dpToPx(300);
 

@@ -22,7 +22,7 @@ public class Board {
 
     public static final float BOARD_X = 10;
 
-    public static final float BOARD_BOTTOM = CommonDimen.HEIGHT_VIEW_REACTION - 200;
+    public static final float BOARD_BOTTOM = CommonDimen.HEIGHT_VIEW_REACTION - 50;
 
     public static final float BOARD_Y = BOARD_BOTTOM - BOARD_HEIGHT_NORMAL;
 

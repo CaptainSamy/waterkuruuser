@@ -103,7 +103,7 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<ResponseData> likeTimeline(final String token, final int timelineId, final int likeId, final int typeLike, final Response.Listener<ResponseData> listener, final Response.ErrorListener errorListener) {
+    static GsonRequest<ResponseData> likeTimeline(final String token, final int timelineId, final int newLikeId, final int oldLikeId, final int typeLike, final Response.Listener<ResponseData> listener, final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
@@ -132,7 +132,8 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
                 map.put("timeline_id", timelineId);
-                map.put("like_id", likeId);
+                map.put("like_id", newLikeId);
+                map.put("old_like_id", oldLikeId);
                 map.put("type_like", typeLike);
                 return map;
             }

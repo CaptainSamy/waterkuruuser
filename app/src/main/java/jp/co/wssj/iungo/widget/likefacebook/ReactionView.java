@@ -131,13 +131,13 @@ public class ReactionView extends View {
         board.endHeight = Board.BOARD_HEIGHT_NORMAL;
 
         board.beginY = Board.BOARD_BOTTOM;
-        board.endY = Board.BOARD_BOTTOM + 100;
+        board.endY = Board.BOARD_BOTTOM + 250;
 
         easeOutBack = EaseOutBack.newInstance(DURATION_BEGINNING_EACH_ITEM, Math.abs(board.beginY - board.endY), 0);
 
         for (int i = 0; i < emotions.length; i++) {
-            emotions[i].endY = Board.BASE_LINE + Emotion.NORMAL_SIZE;
-            emotions[i].beginY = Board.BOARD_BOTTOM + 100;
+            emotions[i].beginY = Board.BOARD_BOTTOM;//Board.BOARD_BOTTOM + 250;
+            emotions[i].endY = Board.BASE_LINE + 250;//Board.BASE_LINE + 250;
             emotions[i].currentX = i == 0 ? Board.BOARD_X + DIVIDE : emotions[i - 1].currentX + emotions[i - 1].currentSize + DIVIDE;
         }
     }

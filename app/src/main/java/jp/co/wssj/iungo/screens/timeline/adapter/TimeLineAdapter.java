@@ -120,7 +120,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private RelativeLayout mLayoutComment;
 
-        private LinearLayout mButtonComment;
+        private LinearLayout mButtonComment, mLayoutLike;
 
         private TextView mNumberComment, mButtonSendComment, mTime;
 
@@ -146,6 +146,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mContent = (ExpandableTextView) itemView.findViewById(R.id.tvContent);
             mImageSmile = (ImageView) itemView.findViewById(R.id.ivSmile);
             mButtonComment = (LinearLayout) itemView.findViewById(R.id.buttonComment);
+            mLayoutLike = (LinearLayout) itemView.findViewById(R.id.layoutLike);
             mListViewComment = (ExpandableListView) itemView.findViewById(R.id.lvComment);
             mLayoutComment = (RelativeLayout) itemView.findViewById(R.id.layoutComment);
             mButtonSendComment = (TextView) itemView.findViewById(R.id.tvSendComment);
@@ -219,13 +220,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mNumberComment.setText(numberComment);
             mButtonComment.setOnClickListener(this);
             mButtonSendComment.setOnClickListener(this);
-            mImageSmile.setOnClickListener(this);
+            mLayoutLike.setOnClickListener(this);
+
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
                 @Override
                 public void onItemClick(int likeId) {
                     Logger.d("onItemClick", "likeId " + likeId);
-                    likeTimeline(mTimeLine.getId(), likeId, 1);
+                    likeTimeline(mTimeLine.getId(), likeId, mTimeLine.getStatusLikeId(), 1);
                 }
             });
 
@@ -257,7 +259,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.ivSmile:
+                case R.id.layoutLike:
                     if (mReactionFacebook.getVisibility() == View.VISIBLE) {
                         mReactionFacebook.dismiss();
                     } else {
@@ -312,14 +314,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             }
         }
 
-        private void likeTimeline(int timelineId, final int likeId, int typeLike) {
-            mPresenter.likeTimeline(timelineId, likeId, typeLike, new TimeLinePresenter.IOnLikeCallback() {
+        private void likeTimeline(int timelineId, final int newLikeId, int newLineId, int typeLike) {
+            mPresenter.likeTimeline(timelineId, newLikeId, newLineId, typeLike, new TimeLinePresenter.IOnLikeCallback() {
 
                 @Override
                 public void onLikeSuccess(String message) {
                     Logger.d("likeTimeline", "onCommentSuccess ");
-                    mTextLike.setText(getStringLike(likeId));
-                    mImageSmile.setImageDrawable(getIconLike(likeId));
+                    mTextLike.setText(getStringLike(newLikeId));
+                    mImageSmile.setImageDrawable(getIconLike(newLikeId));
                     if (mRefreshTimeline != null) {
                         mRefreshTimeline.onRefreshTimeline();
                     }

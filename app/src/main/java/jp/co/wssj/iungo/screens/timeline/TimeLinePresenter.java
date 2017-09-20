@@ -95,9 +95,9 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
         void onLikeFailure(String message);
     }
 
-    public void likeTimeline(int timelineId, int likeId, int typeLike, final IOnLikeCallback callback) {
+    public void likeTimeline(int timelineId, int newLikeId, int oldLikeId, int typeLike, final IOnLikeCallback callback) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel().likeTimeline(token, timelineId, likeId, typeLike, new TimelineModel.OnLikeCallback() {
+        getModel().likeTimeline(token, timelineId, newLikeId, oldLikeId, typeLike, new TimelineModel.OnLikeCallback() {
 
             @Override
             public void onLikeSuccess() {

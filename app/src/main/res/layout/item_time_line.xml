@@ -3,6 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_margin="8dp"
+              android:background="@drawable/border_item_timeline"
               android:orientation="vertical"
               android:padding="8dp">
 
@@ -77,7 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_above="@+id/layoutButton"
-            android:layout_marginBottom="-30dp"
             android:layout_marginLeft="20dp"
             android:background="@android:color/transparent"
             android:visibility="invisible"/>
@@ -91,6 +91,7 @@
             android:paddingTop="12dp">
 
             <LinearLayout
+                android:id="@+id/layoutLike"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
