@@ -96,6 +96,10 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 @Expose
                 private int statusLikeId;
 
+                @SerializedName("manager_name")
+                @Expose
+                private String managerName;
+
                 public int getCommentNumber() {
                     return commentNumber;
                 }
@@ -143,6 +147,10 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 public int getStatusLikeId() {
                     return statusLikeId;
                 }
+
+                public String getManagerName() {
+                    return managerName;
+                }
             }
 
             public class Like {
@@ -165,7 +173,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
 
                 @SerializedName("like_id")
                 @Expose
-                private String likeId;
+                private int likeId;
 
                 @SerializedName("list_user_like")
                 @Expose
@@ -195,7 +203,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                     return keyGen;
                 }
 
-                public String getLikeId() {
+                public int getLikeId() {
                     return likeId;
                 }
 
@@ -210,6 +218,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 public String getTimelineId() {
                     return timelineId;
                 }
+
             }
 
             public List<Like> getLikes() {
@@ -219,6 +228,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
             public Timeline getTimeline() {
                 return timeline;
             }
+
         }
 
         public int getNumberOfTimelineInPage() {
@@ -244,5 +254,6 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
         public List<ListTimeline> getListTimeline() {
             return listTimeline;
         }
+
     }
 }

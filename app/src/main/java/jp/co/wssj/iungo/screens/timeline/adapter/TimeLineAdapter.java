@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
@@ -48,6 +49,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private List<TimeLineResponse.TimeLineData.ListTimeline> mListTimeLine;
 
     private TimeLinePresenter mPresenter;
+
+    private IRefreshTimeline mRefreshTimeline;
 
     public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter) {
         mListTimeLine = listTimeline;
@@ -99,7 +102,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         return mListTimeLine.size();
     }
 
-    public class TimeLineHolder extends RecyclerView.ViewHolder {
+    public class TimeLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Context mContext;
 
@@ -107,7 +110,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private ImageView mImageStore, mImageTimeline, mImageSmile;
 
-        private TextView mTextLike;
+        private TextView mTextLike, mStoreName, mNumberLike;
+
+        private ImageView mImage1, mImage2, mImage3;
 
         private ReactionView mReactionFacebook;
 
@@ -127,6 +132,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private List<CommentResponse.CommentData.ListComment> mListComment;
 
+        private TimeLineResponse.TimeLineData.ListTimeline.Timeline mTimeLine;
+
+        private List<TimeLineResponse.TimeLineData.ListTimeline.Like> mListLike;
+
         public TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
@@ -136,7 +145,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mNumberComment = (TextView) itemView.findViewById(R.id.tvNumberComment);
             mContent = (ExpandableTextView) itemView.findViewById(R.id.tvContent);
             mImageSmile = (ImageView) itemView.findViewById(R.id.ivSmile);
-            mButtonComment = (LinearLayout) itemView.findViewById(R.id.buttomComment);
+            mButtonComment = (LinearLayout) itemView.findViewById(R.id.buttonComment);
             mListViewComment = (ExpandableListView) itemView.findViewById(R.id.lvComment);
             mLayoutComment = (RelativeLayout) itemView.findViewById(R.id.layoutComment);
             mButtonSendComment = (TextView) itemView.findViewById(R.id.tvSendComment);
@@ -145,24 +154,44 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mProgressSend = (ProgressBar) itemView.findViewById(R.id.progressSend);
             mTime = (TextView) itemView.findViewById(R.id.tvTime);
             mReactionFacebook = (ReactionView) itemView.findViewById(R.id.reactionFacebook);
+            mStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
+            mNumberLike = (TextView) itemView.findViewById(R.id.tvNumberLike);
+            mImage1 = (ImageView) itemView.findViewById(R.id.image1);
+            mImage2 = (ImageView) itemView.findViewById(R.id.image2);
+            mImage3 = (ImageView) itemView.findViewById(R.id.image3);
         }
 
         public void bind(final TimeLineResponse.TimeLineData.ListTimeline listTimeline, final int position) {
-            final TimeLineResponse.TimeLineData.ListTimeline.Timeline timeline = listTimeline.getTimeline();
-            final List<TimeLineResponse.TimeLineData.ListTimeline.Like> likes = listTimeline.getLikes();
+            mTimeLine = listTimeline.getTimeline();
+            mListLike = listTimeline.getLikes();
 
-            mTextLike.setText(getStringLike(timeline.getStatusLikeId()));
-            mImageSmile.setImageDrawable(getIconLike(timeline.getStatusLikeId()));
+            mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
+            mStoreName.setText(mTimeLine.getManagerName());
+            if (mListLike != null && mListLike.size() > 0) {
+                if (mListLike.size() == 1) {
+                    TimeLineResponse.TimeLineData.ListTimeline.Like like = mListLike.get(0);
+                    mImage3.setImageDrawable(getIconLike(like.getLikeId()));
+                } else if (mListLike.size() == 2) {
+                    mImage2.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
+                    mImage3.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
 
+                } else {
+                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
+                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
+                    mImage3.setImageDrawable(getIconLike(mListLike.get(2).getLikeId()));
+                }
+
+                mNumberLike.setText(String.valueOf(mTimeLine.getNumberLike()));
+            }
             if (mAdapterComment == null) {
                 mListComment = new ArrayList<>();
-                mAdapterComment = new CommentAdapter(mContext, mListComment);
+                mAdapterComment = new CommentAdapter(mContext, mListComment, mPresenter);
                 mListViewComment.setAdapter(mAdapterComment);
             }
-            String urlImage = timeline.getImages();
+            String urlImage = mTimeLine.getImages();
             if (getItemViewType() == SHOW_IMAGE) {
                 try {
-                    JSONArray jsonArray = new JSONArray(timeline.getImages());
+                    JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
                     if (jsonArray != null && jsonArray.length() > 0) {
                         urlImage = jsonArray.getString(0);
                         Glide.with(mContext)
@@ -184,26 +213,58 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mImageTimeline.setVisibility(View.GONE);
             }
             Utils.fillImageTimeline(mContext, urlImage, mImageStore);
-            mTime.setText(Utils.distanceTimes(timeline.getCreated()));
-            mContent.setText(timeline.getMessages());
-            final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(timeline.getCommentNumber()));
+            mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
+            mContent.setText(mTimeLine.getMessages());
+            final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
             mNumberComment.setText(numberComment);
-            mButtonComment.setOnClickListener(new View.OnClickListener() {
+            mButtonComment.setOnClickListener(this);
+            mButtonSendComment.setOnClickListener(this);
+            mImageSmile.setOnClickListener(this);
+            mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
                 @Override
-                public void onClick(View v) {
-                    if (mLayoutComment.getVisibility() == View.GONE) {
-                        mLayoutComment.setVisibility(View.VISIBLE);
-                        getListComment(timeline);
+                public void onItemClick(int likeId) {
+                    Logger.d("onItemClick", "likeId " + likeId);
+                    likeTimeline(mTimeLine.getId(), likeId, 1);
+                }
+            });
+
+            mInputComment.addTextChangedListener(new TextWatcher() {
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.length() == 0) {
+                        mButtonSendComment.setEnabled(false);
+                        mButtonSendComment.setBackground(mContext.getResources().getDrawable(R.drawable.icon_send));
                     } else {
-                        mLayoutComment.setVisibility(View.GONE);
+                        mButtonSendComment.setEnabled(true);
+                        mButtonSendComment.setBackground(mContext.getResources().getDrawable(R.drawable.icon_send_enable));
                     }
                 }
             });
-            mButtonSendComment.setOnClickListener(new View.OnClickListener() {
+        }
 
-                @Override
-                public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ivSmile:
+                    if (mReactionFacebook.getVisibility() == View.VISIBLE) {
+                        mReactionFacebook.dismiss();
+                    } else {
+                        mReactionFacebook.show();
+                    }
+                    break;
+                case R.id.tvSendComment:
                     final String commentString = mInputComment.getText().toString();
                     if (!TextUtils.isEmpty(commentString)) {
                         statusButtonSend(mButtonSendComment, mProgressSend);
@@ -211,17 +272,17 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                             @Override
                             public void run() {
-                                mPresenter.addComment(timeline.getId(), commentString, new TimeLinePresenter.IOnCommentCallback() {
+                                mPresenter.addComment(mTimeLine.getId(), commentString, new TimeLinePresenter.IOnCommentCallback() {
 
                                     @Override
                                     public void onCommentSuccess(String message) {
                                         statusButtonSend(mButtonSendComment, mProgressSend);
-                                        timeline.setCommentNumber(timeline.getCommentNumber() + 1);
-                                        final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(timeline.getCommentNumber()));
+                                        mTimeLine.setCommentNumber(mTimeLine.getCommentNumber() + 1);
+                                        final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
                                         mNumberComment.setText(numberComment);
                                         mInputComment.setText(Constants.EMPTY_STRING);
                                         mProgressSend.setVisibility(View.GONE);
-                                        getListComment(timeline);
+                                        requestGetListComment(mTimeLine);
                                     }
 
                                     @Override
@@ -234,48 +295,44 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                         }, 1000);
 
                     }
-                }
-            });
-
-            mImageSmile.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View view) {
-                    if (mReactionFacebook.getVisibility() == View.VISIBLE) {
-                        mReactionFacebook.dismiss();
-                    } else {
-                        mReactionFacebook.show();
+                    break;
+                case R.id.buttonComment:
+                    if (mAdapterComment == null) {
+                        mListComment = new ArrayList<>();
+                        mAdapterComment = new CommentAdapter(mContext, mListComment, mPresenter);
+                        mListViewComment.setAdapter(mAdapterComment);
                     }
-                }
-            });
-            mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
-
-                @Override
-                public void onItemClick(int likeId) {
-                    Logger.d("onItemClick", "likeId " + likeId);
-                    likeTimeline(timeline.getId(), likeId, 1);
-                }
-            });
+                    if (mLayoutComment.getVisibility() == View.GONE) {
+                        mLayoutComment.setVisibility(View.VISIBLE);
+                        requestGetListComment(mTimeLine);
+                    } else {
+                        mLayoutComment.setVisibility(View.GONE);
+                    }
+                    break;
+            }
         }
 
         private void likeTimeline(int timelineId, final int likeId, int typeLike) {
-            mPresenter.likeTimeline(timelineId, likeId, typeLike, new TimeLinePresenter.IOnLikeTimelineCallback() {
+            mPresenter.likeTimeline(timelineId, likeId, typeLike, new TimeLinePresenter.IOnLikeCallback() {
 
                 @Override
-                public void onCommentSuccess(String message) {
+                public void onLikeSuccess(String message) {
                     Logger.d("likeTimeline", "onCommentSuccess ");
                     mTextLike.setText(getStringLike(likeId));
                     mImageSmile.setImageDrawable(getIconLike(likeId));
+                    if (mRefreshTimeline != null) {
+                        mRefreshTimeline.onRefreshTimeline();
+                    }
                 }
 
                 @Override
-                public void onCommentFailure(String message) {
+                public void onLikeFailure(String message) {
                     Logger.d("likeTimeline", "onCommentFailure ");
                 }
             });
         }
 
-        private void getListComment(TimeLineResponse.TimeLineData.ListTimeline.Timeline response) {
+        private void requestGetListComment(TimeLineResponse.TimeLineData.ListTimeline.Timeline response) {
             mProgressListView.setVisibility(View.VISIBLE);
             mPresenter.getListComment(response.getId(), new TimeLinePresenter.IOnGetListCommentCallback() {
 
@@ -285,7 +342,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     if (commentData != null) {
                         mListComment.clear();
                         mListComment.addAll(commentData.getListComment());
-                        Collections.reverse(mListComment);
                         mAdapterComment.notifyDataSetChanged();
                     }
                 }
@@ -364,4 +420,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         }
     }
 
+    public interface IRefreshTimeline {
+
+        void onRefreshTimeline();
+    }
+
+    public void setRefreshTimeline(IRefreshTimeline refreshTimeline) {
+        this.mRefreshTimeline = refreshTimeline;
+    }
 }

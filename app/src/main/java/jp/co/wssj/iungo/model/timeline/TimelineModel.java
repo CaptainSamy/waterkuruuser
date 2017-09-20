@@ -34,11 +34,11 @@ public class TimelineModel extends BaseModel {
         void onGetListCommentFailure(String message);
     }
 
-    public interface OnLikeTimelineCallback {
+    public interface OnLikeCallback {
 
-        void onLikeTimelineSuccess();
+        void onLikeSuccess();
 
-        void onLikeTimelineFailure(String message);
+        void onLikeFailure(String message);
     }
 
     public interface OnAddCommentCallback {
@@ -106,15 +106,15 @@ public class TimelineModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void likeTimeline(String token, int timelineId, int likeId, int typeLike, final OnLikeTimelineCallback callback) {
+    public void likeTimeline(String token, int timelineId, int likeId, int typeLike, final OnLikeCallback callback) {
         final Request request = APICreator.likeTimeline(token, timelineId, likeId, typeLike, new Response.Listener<ResponseData>() {
 
             @Override
             public void onResponse(ResponseData response) {
                 if (response.isSuccess()) {
-                    callback.onLikeTimelineSuccess();
+                    callback.onLikeSuccess();
                 } else {
-                    callback.onLikeTimelineFailure(response.getMessage());
+                    callback.onLikeFailure(response.getMessage());
                 }
             }
         }, new Response.ErrorListener() {
@@ -123,9 +123,9 @@ public class TimelineModel extends BaseModel {
             public void onErrorResponse(VolleyError error) {
                 ErrorResponse errorResponse = Utils.parseErrorResponse(error);
                 if (errorResponse != null) {
-                    callback.onLikeTimelineFailure(errorResponse.getMessage());
+                    callback.onLikeFailure(errorResponse.getMessage());
                 } else {
-                    callback.onLikeTimelineFailure(getStringResource(R.string.network_error));
+                    callback.onLikeFailure(getStringResource(R.string.network_error));
                 }
             }
         });
@@ -152,6 +152,32 @@ public class TimelineModel extends BaseModel {
                     callback.onAddCommentFailure(errorResponse.getMessage());
                 } else {
                     callback.onAddCommentFailure(getStringResource(R.string.network_error));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
+
+    public void likeComment(String token, int commentId, int newLikeId, int oldLikeId, int typeLike, final OnLikeCallback callback) {
+        final Request request = APICreator.likeComment(token, commentId, newLikeId, oldLikeId, typeLike, new Response.Listener<ResponseData>() {
+
+            @Override
+            public void onResponse(ResponseData response) {
+                if (response.isSuccess()) {
+                    callback.onLikeSuccess();
+                } else {
+                    callback.onLikeFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onLikeFailure(errorResponse.getMessage());
+                } else {
+                    callback.onLikeFailure(getStringResource(R.string.network_error));
                 }
             }
         });

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:layout_margin="8dp"
               android:orientation="vertical"
               android:padding="8dp">
 
@@ -45,6 +46,7 @@
                     android:layout_gravity="bottom"
                     android:gravity="bottom"
                     android:text="5 giờ"
+                    android:textColor="@color/colorTextMain"
                     android:textSize="12sp"/>
             </LinearLayout>
 
@@ -57,7 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/layoutInfo"
             android:paddingTop="10dp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="20sp"/>
 
         <ImageView
             android:id="@+id/ivTimeLine"
@@ -74,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_above="@+id/layoutButton"
-            android:layout_alignBottom="@+id/ivTimeLine"
+            android:layout_marginBottom="-30dp"
             android:layout_marginLeft="20dp"
             android:background="@android:color/transparent"
             android:visibility="invisible"/>
@@ -85,32 +88,41 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ivTimeLine"
             android:orientation="horizontal"
-            android:paddingBottom="4dp"
-            android:paddingTop="10dp">
-
-            <ImageView
-                android:id="@+id/ivSmile"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/haha"/>
-
-            <TextView
-                android:id="@+id/tvLike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="4dp"
-                android:text="Thích"/>
+            android:paddingTop="12dp">
 
             <LinearLayout
-                android:id="@+id/buttomComment"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:id="@+id/ivSmile"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/haha"/>
+
+                <TextView
+                    android:id="@+id/tvLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="4dp"
+                    android:text="Thích"
+                    android:textColor="@color/colorTextMain"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/buttonComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:src="@drawable/icon_comment"/>
 
                 <TextView
@@ -118,18 +130,56 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="4dp"
-                    android:text="Bình luận"/>
+                    android:text="Bình luận"
+                    android:textColor="@color/colorTextMain"/>
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
+
+            <RelativeLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="Ban va 199k nguoi khac"/>
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_toStartOf="@+id/tvNumberLike"
+                    />
+
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="-5dp"
+                    android:layout_toStartOf="@+id/image3"
+                    />
+
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="-5dp"
+                    android:layout_toStartOf="@+id/image2"
+                    />
+
+
+                <TextView
+                    android:id="@+id/tvNumberLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/colorTextMain"
+                    />
+            </RelativeLayout>
+
 
         </LinearLayout>
 
     </RelativeLayout>
+
 
     <TextView
         android:id="@+id/tvNumberComment"
@@ -137,7 +187,8 @@
         android:layout_height="wrap_content"
         android:paddingBottom="4dp"
         android:paddingTop="4dp"
-        android:text="1 comment"/>
+        android:text="1 comment"
+        android:textColor="@color/colorTextMain"/>
 
     <RelativeLayout
         android:id="@+id/layoutComment"
@@ -173,10 +224,10 @@
 
                 <TextView
                     android:id="@+id/tvSendComment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:text="Send"
+                    android:background="@drawable/icon_send"
                     android:textColor="@color/black"/>
 
                 <ProgressBar

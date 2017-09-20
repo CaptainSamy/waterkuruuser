@@ -26,6 +26,10 @@ public class CommentResponse extends ResponseData<CommentResponse.CommentData> {
             @Expose
             public Comment comment;
 
+            @SerializedName("self_like_id")
+            @Expose
+            public int mStatusLike;
+
             public class Comment {
 
                 @SerializedName("content")
@@ -119,6 +123,14 @@ public class CommentResponse extends ResponseData<CommentResponse.CommentData> {
 
             public Comment getComment() {
                 return comment;
+            }
+
+            public int getStatusLike() {
+                return mStatusLike;
+            }
+
+            public void setStatusLike(int statusLike) {
+                this.mStatusLike = statusLike;
             }
         }
 

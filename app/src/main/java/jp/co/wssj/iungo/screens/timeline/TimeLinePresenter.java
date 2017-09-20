@@ -65,29 +65,6 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
         });
     }
 
-    public interface IOnLikeTimelineCallback {
-
-        void onCommentSuccess(String message);
-
-        void onCommentFailure(String message);
-    }
-
-    public void likeTimeline(int timelineId, int likeId, int typeLike, final IOnLikeTimelineCallback callback) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel().likeTimeline(token, timelineId, likeId, typeLike, new TimelineModel.OnLikeTimelineCallback() {
-
-            @Override
-            public void onLikeTimelineSuccess() {
-                callback.onCommentSuccess(Constants.EMPTY_STRING);
-            }
-
-            @Override
-            public void onLikeTimelineFailure(String message) {
-                callback.onCommentFailure(message);
-            }
-        });
-    }
-
     public interface IOnCommentCallback {
 
         void onCommentSuccess(String message);
@@ -107,6 +84,45 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
             @Override
             public void onAddCommentFailure(String message) {
                 callback.onCommentFailure(message);
+            }
+        });
+    }
+
+    public interface IOnLikeCallback {
+
+        void onLikeSuccess(String message);
+
+        void onLikeFailure(String message);
+    }
+
+    public void likeTimeline(int timelineId, int likeId, int typeLike, final IOnLikeCallback callback) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getModel().likeTimeline(token, timelineId, likeId, typeLike, new TimelineModel.OnLikeCallback() {
+
+            @Override
+            public void onLikeSuccess() {
+                callback.onLikeSuccess(Constants.EMPTY_STRING);
+            }
+
+            @Override
+            public void onLikeFailure(String message) {
+                callback.onLikeFailure(message);
+            }
+        });
+    }
+
+    public void likeComment(int commentId, int newLikeId, int oldLikeId, int typeLike, final IOnLikeCallback callback) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getModel().likeComment(token, commentId, newLikeId, oldLikeId, typeLike, new TimelineModel.OnLikeCallback() {
+
+            @Override
+            public void onLikeSuccess() {
+                callback.onLikeSuccess(Constants.EMPTY_STRING);
+            }
+
+            @Override
+            public void onLikeFailure(String message) {
+                callback.onLikeFailure(message);
             }
         });
     }

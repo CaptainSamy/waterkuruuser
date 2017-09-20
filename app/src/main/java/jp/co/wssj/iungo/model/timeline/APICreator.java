@@ -23,13 +23,13 @@ final class APICreator {
 
     private static final String API_GET_TIME_LINE = Constants.BASE_URL + "/api/client/users/get-list-timeline-by-user";
 
-    private static final String API_GET_LIST_COMMENT = Constants.BASE_URL + "/api/storeclient/management-users/get-list-comment-by-timeline-id";
+    private static final String API_GET_LIST_COMMENT = Constants.BASE_URL + "/api/client/users/user-get-list-comment-by-timeline-id";
 
     private static final String API_ADD_COMMENT = Constants.BASE_URL + "/api/client/users/user-add-comment";
 
     private static final String API_LIKE_TIMELINE = Constants.BASE_URL + "/api/client/users/user-like-timeline";
 
-    private static final String API_LIKE_COMMENT = Constants.BASE_URL + "/api/storeclient/management-users/store-like-comment";
+    private static final String API_LIKE_COMMENT = Constants.BASE_URL + "/api/client/users/user-like-comment";
 
     private APICreator() {
     }
@@ -169,6 +169,43 @@ final class APICreator {
                 Map<String, Object> map = new HashMap<>();
                 map.put("timeline_id", timelineId);
                 map.put("content", comment);
+                return map;
+            }
+        };
+    }
+
+    static GsonRequest<ResponseData> likeComment(final String token, final int commentId, final int newLikeId, final int oldLikeId, final int typeLike, final Response.Listener<ResponseData> listener, final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<ResponseData>(Request.Method.POST,
+                API_LIKE_COMMENT,
+                ResponseData.class,
+                headers,
+                new Response.Listener<ResponseData>() {
+
+                    @Override
+                    public void onResponse(ResponseData response) {
+                        Logger.i(TAG, "#likeTimeline => onResponse");
+                        listener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.i(TAG, "#likeTimeline => onErrorResponse");
+                        errorListener.onErrorResponse(error);
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("like_id", newLikeId);
+                map.put("old_like_id", oldLikeId);
+                map.put("comment_id", commentId);
+                map.put("type_like", typeLike);
                 return map;
             }
         };

@@ -1,18 +1,9 @@
 package jp.co.wssj.iungo.screens.timeline;
 
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +13,6 @@ import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
-import jp.co.wssj.iungo.utils.Constants;
-import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
 
@@ -96,6 +85,13 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     protected void initData() {
         mListTimeLine = new ArrayList<>();
         mAdapter = new TimeLineAdapter(mListTimeLine, mPresenter);
+        mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
+
+            @Override
+            public void onRefreshTimeline() {
+                mPresenter.getTimeline();
+            }
+        });
         mRecycleTimeLine.setAdapter(mAdapter);
         setFresh(true);
         mPresenter.getTimeline();

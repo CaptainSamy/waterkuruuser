@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:animateLayoutChanges="true"
               android:orientation="horizontal"
               android:paddingBottom="10dp"
               android:paddingTop="10dp">
@@ -21,13 +22,76 @@
             android:id="@+id/tvContentComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/colorText"
+            android:textSize="14sp"/>
 
-        <TextView
-            android:id="@+id/tvTime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"/>
+            android:animateLayoutChanges="true"
+            android:orientation="horizontal"
+            android:paddingTop="4dp">
+
+            <RelativeLayout
+                android:id="@+id/layoutLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tvLike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Thích"
+                    android:textSize="12sp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvUnlike"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Thích"
+                    android:textColor="@color/facebook"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="invisible"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutNumberLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_marginLeft="4dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/like"
+                    android:gravity="center_vertical"
+                    />
+
+                <TextView
+                    android:id="@+id/tvNumberLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+
     </LinearLayout>
 </LinearLayout>
