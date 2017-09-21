@@ -56,6 +56,8 @@ public final class Constants {
 
     public static final int STATUS_VIEW = 2;
 
+    public static final int TIME_DELAY_GET_LIST_CHAT = 5000;
+
     private Constants() {
     }
 

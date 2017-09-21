@@ -63,9 +63,9 @@ public interface IMainView extends IView {
 
     int FRAGMENT_QA_DETAIL = 27;
 
-    int FRAGMENT_CHAT = 28;
+    int FRAGMENT_STORE_FOLLOW = 28;
 
-    int FRAGMENT_CHAT_DETAIL = 29;
+    int FRAGMENT_CHAT = 29;
 
     int FRAGMENT_TIME_LINE = 30;
 

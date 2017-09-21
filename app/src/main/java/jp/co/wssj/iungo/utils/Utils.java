@@ -340,7 +340,7 @@ public final class Utils {
         }
     }
 
-    public static void fillImageTimeline(final Context context, String imgPath, final ImageView imageView) {
+    public static void fillImageRound(final Context context, String imgPath, final ImageView imageView) {
         Logger.d(TAG, "imgPath : " + imgPath);
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)

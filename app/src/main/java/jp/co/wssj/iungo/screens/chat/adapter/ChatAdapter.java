@@ -11,53 +11,86 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import io.github.rockerhieu.emojicon.EmojiconTextView;
 import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.model.chat.ChatResponse;
+import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 12/9/2017.
  */
 
-public class ChatAdapter extends ArrayAdapter<ChatResponse> {
+public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatData.ChatData> {
 
-    LayoutInflater mInflate;
+    private static final int TYPE_USER = 0;
 
-    public ChatAdapter(@NonNull Context context, @NonNull List<ChatResponse> objects) {
+    private static final int TYPE_STORE = 1;
+
+    private static final int TYPE_COUNT = TYPE_STORE + 1;
+
+    private LayoutInflater mInflate;
+
+    public ChatAdapter(@NonNull Context context, @NonNull List<HistoryChatResponse.HistoryChatData.ChatData> objects) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return TYPE_COUNT;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        HistoryChatResponse.HistoryChatData.ChatData chat = getItem(position);
+        if (chat != null) {
+            return chat.isUser() ? TYPE_USER : TYPE_STORE;
+        }
+        return TYPE_USER;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ChatHolder chatHolder;
-        if (convertView == null) {
-            convertView = mInflate.inflate(R.layout.item_chat, parent, false);
-            chatHolder = new ChatHolder(convertView);
-            convertView.setTag(chatHolder);
-        } else {
-            chatHolder = (ChatHolder) convertView.getTag();
+        HistoryChatResponse.HistoryChatData.ChatData chat = getItem(position);
+        ChatDetailHolderUser holderUser;
+        int layoutResource;
+        switch (getItemViewType(position)) {
+            case TYPE_USER:
+                layoutResource = R.layout.item_chat_user;
+                break;
+            case TYPE_STORE:
+                layoutResource = R.layout.item_chat_store;
+                break;
+            default:
+                layoutResource = R.layout.item_chat_user;
+                break;
         }
-        chatHolder.bindData(getItem(position));
+        if (convertView == null) {
+            convertView = mInflate.inflate(layoutResource, parent, false);
+            holderUser = new ChatDetailHolderUser(convertView);
+            convertView.setTag(holderUser);
+        } else {
+            holderUser = (ChatDetailHolderUser) convertView.getTag();
+        }
+        holderUser.bind(chat);
         return convertView;
     }
 
-    public class ChatHolder {
+    public class ChatDetailHolderUser {
 
-        private TextView mStoreName, mContent, mTime;
+        private TextView mTime;
 
-        public ChatHolder(View view) {
-            mStoreName = (TextView) view.findViewById(R.id.tvStoreName);
-            mContent = (TextView) view.findViewById(R.id.tvContent);
+        private EmojiconTextView mContent;
+
+        public ChatDetailHolderUser(View view) {
+            mContent = (EmojiconTextView) view.findViewById(R.id.tvContent);
             mTime = (TextView) view.findViewById(R.id.tvTime);
         }
 
-        public void bindData(ChatResponse response) {
-            mStoreName.setText(response.getStoreName());
-            mContent.setText(response.getListChat().get(0).getContent());
-            mTime.setText(Utils.formatDate(response.getTime(),"MM/dd"));
+        public void bind(HistoryChatResponse.HistoryChatData.ChatData chat) {
+            mContent.setText(chat.getContent());
+            mTime.setText(Utils.formatDate(chat.getTimeCreate(), "HH:mm"));
         }
     }
-
 }

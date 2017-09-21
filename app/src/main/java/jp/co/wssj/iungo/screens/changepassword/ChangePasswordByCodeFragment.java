@@ -33,7 +33,7 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_screen_change_password);
+        return getString(R.string.title_changer_password);
     }
 
     @Override

@@ -38,8 +38,8 @@ import jp.co.wssj.iungo.screens.about.AboutFragment;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordByCodeFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
-import jp.co.wssj.iungo.screens.chat.ChatFragment;
-import jp.co.wssj.iungo.screens.chat.chatdetail.ChatDetailFragment;
+import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
+import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
 import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
 import jp.co.wssj.iungo.screens.home.HomeFragment;
@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 case R.id.navigation_another:
                     if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_MY_REQUEST) {
-                        replaceFragment(new ChatFragment(), true, true);
+                        replaceFragment(new StoreFollowFragment(), true, true);
                     }
                     return true;
                 case R.id.menu_memo:
@@ -440,11 +440,11 @@ public class MainActivity extends AppCompatActivity
             case FRAGMENT_QA_DETAIL:
                 replaceFragment(QADetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case FRAGMENT_CHAT:
-                replaceFragment(new ChatFragment(), hasAnimation, addToBackStack);
+            case FRAGMENT_STORE_FOLLOW:
+                replaceFragment(new StoreFollowFragment(), hasAnimation, addToBackStack);
                 break;
-            case FRAGMENT_CHAT_DETAIL:
-                replaceFragment(new ChatDetailFragment(), hasAnimation, addToBackStack);
+            case FRAGMENT_CHAT:
+                replaceFragment(ChatFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_TIME_LINE:
                 replaceFragment(new TimeLineFragment(), hasAnimation, addToBackStack);

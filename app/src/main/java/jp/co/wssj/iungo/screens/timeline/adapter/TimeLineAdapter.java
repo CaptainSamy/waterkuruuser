@@ -167,6 +167,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mListLike = listTimeline.getLikes();
 
             mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
+            mTextLike.setText(getStringLike(mTimeLine.getStatusLikeId()));
             mStoreName.setText(mTimeLine.getManagerName());
             if (mListLike != null && mListLike.size() > 0) {
                 if (mListLike.size() == 1) {
@@ -213,7 +214,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             } else {
                 mImageTimeline.setVisibility(View.GONE);
             }
-            Utils.fillImageTimeline(mContext, urlImage, mImageStore);
+            Utils.fillImageRound(mContext, urlImage, mImageStore);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
             mContent.setText(mTimeLine.getMessages());
             final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
