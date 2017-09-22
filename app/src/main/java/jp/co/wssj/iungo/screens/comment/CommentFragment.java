@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -129,7 +131,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
                         @Override
                         public void run() {
-                            mPresenter.addComment(mTimelineId, commentString);
+                            mPresenter.addComment(mTimelineId, StringEscapeUtils.escapeJava(commentString));
                         }
                     }, 1000);
                 }

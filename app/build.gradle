@@ -69,6 +69,7 @@ static def renameAPK(variant) {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    file "libs/commons-lang-2.6.jar"
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

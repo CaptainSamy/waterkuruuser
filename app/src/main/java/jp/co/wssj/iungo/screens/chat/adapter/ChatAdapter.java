@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.List;
 
 import io.github.rockerhieu.emojicon.EmojiconTextView;
@@ -89,7 +91,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
         }
 
         public void bind(HistoryChatResponse.HistoryChatData.ChatData chat) {
-            mContent.setText(chat.getContent());
+            mContent.setText(StringEscapeUtils.unescapeJava(chat.getContent()));
             mTime.setText(Utils.formatDate(chat.getTimeCreate(), "HH:mm"));
         }
     }

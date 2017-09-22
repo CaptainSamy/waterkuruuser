@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
@@ -77,7 +79,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
             if (comments != null) {
                 CommentResponse.CommentData.ListComment.Comment comment = comments.getComment();
                 if (comment != null) {
-                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + comment.getUserName() + "</font></strong></body></html>" + " " + comment.getContent();
+                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + comment.getUserName() + "</font></strong></body></html>" + " " + StringEscapeUtils.unescapeJava(comment.getContent());
                     mContentComment.setText(Html.fromHtml(content));
                     mTime.setText(Utils.distanceTimes(comment.getCreated()));
                 }
