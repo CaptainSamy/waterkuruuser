@@ -211,13 +211,18 @@
     <string name="dialog_button_late">あとでアップデートする</string>
 
     <!--Chat Fragment-->
+    <string name="title_creen_store_follow">Cửa hàng</string>
     <string name="title_screen_chat">Chat</string>
-    <string name="title_screen_chat_detail">Chat detail</string>
+    <string name="input_content_chat">Nhập nội dung chát...</string>
+
+    <!--Comment fragment-->
+    <string name="title_screen_comment">Bình luận</string>
+    <string name="comment">Bình luận</string>
+    <string name="write_comment">Viết bình luận</string>
 
     <!--Timeline Fragment-->
     <string name="title_screen_timeline">Timeline</string>
-    <string name="number_comment">%1$s comment</string>
-    <string name="write_comment">Viết bình luận</string>
+    <string name="number_comment">%1$s Bình luận</string>
     <string name="send_comment">Gửi</string>
 
 </resources>

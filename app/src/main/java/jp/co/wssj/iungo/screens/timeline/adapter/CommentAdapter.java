@@ -16,6 +16,7 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.CommentResponse;
+import jp.co.wssj.iungo.screens.comment.CommentPresenter;
 import jp.co.wssj.iungo.screens.timeline.TimeLinePresenter;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
@@ -28,11 +29,11 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
     private LayoutInflater mInflate;
 
-    private TimeLinePresenter mTimelinePresenter;
+    private CommentPresenter mTimelinePresenter;
 
     private Context mContex;
 
-    public CommentAdapter(@NonNull Context context, @NonNull List<CommentResponse.CommentData.ListComment> objects, TimeLinePresenter presenter) {
+    public CommentAdapter(@NonNull Context context, @NonNull List<CommentResponse.CommentData.ListComment> objects, CommentPresenter presenter) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
         mTimelinePresenter = presenter;

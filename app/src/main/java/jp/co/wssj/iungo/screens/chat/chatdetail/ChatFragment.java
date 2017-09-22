@@ -83,7 +83,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_screen_chat_detail);
+        return getString(R.string.title_screen_chat);
     }
 
     @Override

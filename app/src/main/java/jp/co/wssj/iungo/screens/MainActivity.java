@@ -41,6 +41,7 @@ import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
 import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
+import jp.co.wssj.iungo.screens.comment.CommentFragment;
 import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
 import jp.co.wssj.iungo.screens.home.HomeFragment;
 import jp.co.wssj.iungo.screens.howtouse.HowToUserFragment;
@@ -448,6 +449,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case FRAGMENT_TIME_LINE:
                 replaceFragment(new TimeLineFragment(), hasAnimation, addToBackStack);
+                break;
+            case FRAGMENT_COMMENT:
+                replaceFragment(CommentFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
         }
     }

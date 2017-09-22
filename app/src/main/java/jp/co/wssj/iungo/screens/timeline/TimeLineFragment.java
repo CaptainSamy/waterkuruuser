@@ -82,18 +82,20 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     protected void initData() {
-        mListTimeLine = new ArrayList<>();
-        mAdapter = new TimeLineAdapter(mListTimeLine, mPresenter);
-        mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
+        if (mAdapter == null) {
+            mListTimeLine = new ArrayList<>();
+            mAdapter = new TimeLineAdapter(mListTimeLine, mPresenter, getActivityCallback());
+            mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
 
-            @Override
-            public void onRefreshTimeline() {
-                mPresenter.getTimeline();
-            }
-        });
+                @Override
+                public void onRefreshTimeline() {
+                    mPresenter.getTimeline();
+                }
+            });
+            setFresh(true);
+            mPresenter.getTimeline();
+        }
         mRecycleTimeLine.setAdapter(mAdapter);
-        setFresh(true);
-        mPresenter.getTimeline();
     }
 
     @Override
@@ -107,7 +109,6 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     public void onLoadMore(int pageNumber) {
-        //TODO param pager number in api
         mPresenter.getTimeline();
     }
 
