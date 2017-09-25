@@ -115,10 +115,10 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
             public void afterTextChanged(Editable s) {
                 if (s.length() == 0) {
                     mButtonSend.setEnabled(false);
-                    mButtonSend.setBackground(getResources().getDrawable(R.drawable.icon_send));
+                    mButtonSend.setImageDrawable(getResources().getDrawable(R.drawable.icon_send));
                 } else {
                     mButtonSend.setEnabled(true);
-                    mButtonSend.setBackground(getResources().getDrawable(R.drawable.icon_send_enable));
+                    mButtonSend.setImageDrawable(getResources().getDrawable(R.drawable.icon_send_enable));
                 }
             }
         });

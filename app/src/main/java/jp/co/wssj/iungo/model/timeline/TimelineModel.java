@@ -52,8 +52,8 @@ public class TimelineModel extends BaseModel {
         super(context);
     }
 
-    public void getTimeLine(String token, final OnGetTimelineCallback callback) {
-        final Request request = APICreator.getTimeline(token, new Response.Listener<TimeLineResponse>() {
+    public void getTimeLine(String token,int page, final OnGetTimelineCallback callback) {
+        final Request request = APICreator.getTimeline(token,page, new Response.Listener<TimeLineResponse>() {
 
             @Override
             public void onResponse(TimeLineResponse response) {

@@ -23,6 +23,12 @@ public class StoreFollowResponse extends ResponseData<StoreFollowResponse.StoreC
             @SerializedName("id")
             private int id;
 
+            @SerializedName("last_message")
+            private String lastMessage;
+
+            @SerializedName("last_message_time")
+            private long lastTimeMessage;
+
             @SerializedName("name")
             private String storeName;
 
@@ -34,6 +40,14 @@ public class StoreFollowResponse extends ResponseData<StoreFollowResponse.StoreC
 
             public int getId() {
                 return id;
+            }
+
+            public String getLastMessage() {
+                return lastMessage;
+            }
+
+            public long getLastTimeMessage() {
+                return lastTimeMessage;
             }
 
             public String getStoreName() {

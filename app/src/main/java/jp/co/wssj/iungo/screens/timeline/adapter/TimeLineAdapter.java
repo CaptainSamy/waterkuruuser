@@ -13,6 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,9 +40,19 @@ import jp.co.wssj.iungo.widget.likefacebook.ReactionView;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineHolder> {
 
-    private static final int SHOW_IMAGE = 0;
+    private static final int NOT_SHOW_IMAGE = 0;
 
-    private static final int NOT_SHOW_IMAGE = 1;
+    private static final int SHOW_IMAGE = 1;
+
+    private static final int ONE_IMAGE = 1;
+
+    private static final int TWO_IMAGES = 2;
+
+    private static final int THREE_IMAGES = 3;
+
+    private static final int FOUR_IMAGES = 4;
+
+    private static final int FIVE_IMAGES = 5;
 
     private List<TimeLineResponse.TimeLineData.ListTimeline> mListTimeLine;
 
@@ -55,9 +68,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         mActivityCallback = activityCallback;
     }
 
-    public void refreshList(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline) {
+    public void refreshList(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, int page) {
         if (listTimeline != null && mListTimeLine != null) {
-            mListTimeLine.clear();
+            if (page == Constants.INIT_PAGE) {
+                mListTimeLine.clear();
+            }
             mListTimeLine.addAll(listTimeline);
             notifyDataSetChanged();
         }
@@ -116,7 +131,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private LinearLayout mLayoutLike, mLayoutComment, mLayoutNumberLike;
 
+        private ViewGroup mLayoutContainerImages;
+
         private TextView mNumberComment, mTime;
+
+        private LayoutInflater mLayoutInflate;
 
         private TimeLineResponse.TimeLineData.ListTimeline.Timeline mTimeLine;
 
@@ -125,6 +144,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         public TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
+            mLayoutInflate = LayoutInflater.from(mContext);
             mImageStore = (ImageView) itemView.findViewById(R.id.ivStore);
             mTextLike = (TextView) itemView.findViewById(R.id.tvLike);
             mImageTimeline = (ImageView) itemView.findViewById(R.id.ivTimeLine);
@@ -134,6 +154,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mImageSmile = (ImageView) itemView.findViewById(R.id.ivSmile);
             mLayoutLike = (LinearLayout) itemView.findViewById(R.id.layoutLike);
             mLayoutComment = (LinearLayout) itemView.findViewById(R.id.layoutComment);
+            mLayoutContainerImages = (ViewGroup) itemView.findViewById(R.id.layoutContainerImages);
             mTime = (TextView) itemView.findViewById(R.id.tvTime);
             mReactionFacebook = (ReactionView) itemView.findViewById(R.id.reactionFacebook);
             mStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
@@ -155,57 +176,58 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (mTimeLine.getCommentNumber() > 0) {
                 final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
                 mNumberComment.setText(numberComment);
+                mNumberComment.setVisibility(View.VISIBLE);
+            } else {
+                mNumberComment.setVisibility(View.GONE);
             }
             mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
             mTextLike.setText(getStringLike(mTimeLine.getStatusLikeId()));
             mStoreName.setText(mTimeLine.getManagerName());
-            if (mListLike != null && mListLike.size() > 0) {
-                if (mListLike.size() == 1) {
-                    TimeLineResponse.TimeLineData.ListTimeline.Like like = mListLike.get(0);
-                    mImage1.setImageDrawable(getIconLike(like.getLikeId()));
-                    mImage1.setVisibility(View.VISIBLE);
-                } else if (mListLike.size() == 2) {
-                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
-                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
-                    mImage1.setVisibility(View.VISIBLE);
-                    mImage2.setVisibility(View.VISIBLE);
-
-                } else {
-                    mImage3.setImageDrawable(getIconLike(mListLike.get(2).getLikeId()));
-                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
-                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
-                    mImage3.setVisibility(View.VISIBLE);
-                    mImage2.setVisibility(View.VISIBLE);
-                    mImage1.setVisibility(View.VISIBLE);
-                }
-
-                mNumberLike.setText(String.valueOf(mTimeLine.getNumberLike()));
-            }
-            String urlImage = mTimeLine.getImages();
+            showIconLike();
             if (getItemViewType() == SHOW_IMAGE) {
+                mLayoutContainerImages.removeAllViews();
                 try {
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
-                    if (jsonArray != null && jsonArray.length() > 0) {
-                        urlImage = jsonArray.getString(0);
-                        Glide.with(mContext)
-                                .load(urlImage)
-                                .error(mContent.getResources().getDrawable(R.drawable.image_time_line))
-                                .skipMemoryCache(false)
-                                .into(mImageTimeline);
+                    switch (jsonArray.length()) {
+                        case ONE_IMAGE:
+                            mImageTimeline.setVisibility(View.GONE);
+                            ImageView viewOneImages = (ImageView) mLayoutInflate.inflate(R.layout.one_image, null);
+                            fillImage(jsonArray.getString(0), viewOneImages);
+                            mLayoutContainerImages.addView(viewOneImages);
+                            break;
+                        case TWO_IMAGES:
+                            mImageTimeline.setVisibility(View.GONE);
+                            View viewTwoImages = mLayoutInflate.inflate(R.layout.two_images, null);
+                            fillTwoImages(viewTwoImages, jsonArray.getString(0), jsonArray.getString(1));
+                            mLayoutContainerImages.addView(viewTwoImages);
+                            break;
+                        case THREE_IMAGES:
+                            mImageTimeline.setVisibility(View.GONE);
+                            View viewThreeImages = mLayoutInflate.inflate(R.layout.three_images, null);
+                            fillThreeImages(viewThreeImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2));
+                            mLayoutContainerImages.addView(viewThreeImages);
+                            break;
+                        case FOUR_IMAGES:
+                            mImageTimeline.setVisibility(View.GONE);
+                            View viewFourImages = mLayoutInflate.inflate(R.layout.four_images, null);
+                            fillFourImages(viewFourImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3));
+                            mLayoutContainerImages.addView(viewFourImages);
+                            break;
+                        case FIVE_IMAGES:
+                            mImageTimeline.setVisibility(View.GONE);
+                            View viewFiveImages = mLayoutInflate.inflate(R.layout.five_images, null);
+                            fillFiveImages(viewFiveImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3), jsonArray.getString(4));
+                            mLayoutContainerImages.addView(viewFiveImages);
+                            break;
                     }
+
                 } catch (JSONException e) {
-                    Glide.with(mContext)
-                            .load(urlImage)
-                            .error(mContent.getResources().getDrawable(R.drawable.image_time_line))
-                            .skipMemoryCache(false)
-                            .into(mImageTimeline);
                     e.printStackTrace();
                 }
-
             } else {
                 mImageTimeline.setVisibility(View.GONE);
             }
-            Utils.fillImageRound(mContext, urlImage, mImageStore);
+            Utils.fillImageRound(mContext, Constants.EMPTY_STRING, mImageStore);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
             mContent.setText(mTimeLine.getMessages());
             mLayoutLike.setOnClickListener(this);
@@ -315,15 +337,80 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             return like;
         }
 
-    }
+        private void showIconLike() {
+            if (mListLike != null && mListLike.size() > 0) {
+                if (mListLike.size() == 1) {
+                    TimeLineResponse.TimeLineData.ListTimeline.Like like = mListLike.get(0);
+                    mImage1.setImageDrawable(getIconLike(like.getLikeId()));
+                    mImage1.setVisibility(View.VISIBLE);
+                    mImage2.setVisibility(View.GONE);
+                    mImage3.setVisibility(View.GONE);
+                } else if (mListLike.size() == 2) {
+                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
+                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
+                    mImage1.setVisibility(View.VISIBLE);
+                    mImage2.setVisibility(View.VISIBLE);
+                    mImage3.setVisibility(View.GONE);
+                } else {
+                    mImage3.setImageDrawable(getIconLike(mListLike.get(2).getLikeId()));
+                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
+                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
+                    mImage3.setVisibility(View.VISIBLE);
+                    mImage2.setVisibility(View.VISIBLE);
+                    mImage1.setVisibility(View.VISIBLE);
+                }
+                mNumberLike.setText(String.valueOf(mTimeLine.getNumberLike()));
+            }
+        }
 
-    private void statusButtonSend(View buttonSend, View progress) {
-        if (buttonSend.getVisibility() == View.VISIBLE) {
-            buttonSend.setVisibility(View.GONE);
-            progress.setVisibility(View.VISIBLE);
-        } else {
-            buttonSend.setVisibility(View.VISIBLE);
-            progress.setVisibility(View.GONE);
+        private void fillImage(String url, final ImageView imageView) {
+            Glide.with(mContext)
+                    .load(url)
+                    .error(mContext.getResources().getDrawable(R.drawable.image_time_line))
+                    .placeholder(R.drawable.ic_add_image)
+                    .skipMemoryCache(false)
+                    .into(new SimpleTarget<GlideDrawable>() {
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            imageView.setImageDrawable(placeholder);
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            imageView.setImageDrawable(errorDrawable);
+                        }
+
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            imageView.setImageDrawable(resource);
+                        }
+                    });
+        }
+
+        private void fillTwoImages(View view, String urlImage1, String urlImage2) {
+            ImageView image1 = (ImageView) view.findViewById(R.id.image1);
+            fillImage(urlImage1, image1);
+            ImageView image2 = (ImageView) view.findViewById(R.id.image2);
+            fillImage(urlImage2, image2);
+        }
+
+        private void fillThreeImages(View view, String urlImage1, String urlImage2, String urlImage3) {
+            fillTwoImages(view, urlImage1, urlImage2);
+            ImageView image3 = (ImageView) view.findViewById(R.id.image3);
+            fillImage(urlImage3, image3);
+        }
+
+        private void fillFourImages(View view, String urlImage1, String urlImage2, String urlImage3, String urlImage4) {
+            fillThreeImages(view, urlImage1, urlImage2, urlImage3);
+            ImageView image4 = (ImageView) view.findViewById(R.id.image4);
+            fillImage(urlImage4, image4);
+        }
+
+        private void fillFiveImages(View view, String urlImage1, String urlImage2, String urlImage3, String urlImage4, String urlImage5) {
+            fillFourImages(view, urlImage1, urlImage2, urlImage3, urlImage4);
+            ImageView image5 = (ImageView) view.findViewById(R.id.image5);
+            fillImage(urlImage5, image5);
         }
     }
 

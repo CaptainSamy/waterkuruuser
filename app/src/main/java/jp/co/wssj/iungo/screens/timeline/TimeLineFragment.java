@@ -12,6 +12,8 @@ import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
+import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
 
@@ -89,11 +91,11 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
                 @Override
                 public void onRefreshTimeline() {
-                    mPresenter.getTimeline();
+                    mPresenter.getTimeline(Constants.INIT_PAGE);
                 }
             });
             setFresh(true);
-            mPresenter.getTimeline();
+            mPresenter.getTimeline(Constants.INIT_PAGE);
         }
         mRecycleTimeLine.setAdapter(mAdapter);
     }
@@ -104,21 +106,25 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     public void onRefresh() {
-        mPresenter.getTimeline();
+        mPresenter.getTimeline(Constants.INIT_PAGE);
     }
 
     @Override
     public void onLoadMore(int pageNumber) {
-        mPresenter.getTimeline();
+        Logger.d(TAG, "onLoadMore " + pageNumber);
+        mPresenter.getTimeline(pageNumber);
     }
 
     @Override
     public void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData) {
         setFresh(false);
-        mRecycleTimeLine.setTotalPage(timeLineData.getTotalPage());
-        mRecycleTimeLine.setCurrentPage(timeLineData.getPage());
-        List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
-        mAdapter.refreshList(listTimeline);
+        if (timeLineData != null) {
+            int page = timeLineData.getPage();
+            mRecycleTimeLine.setTotalPage(timeLineData.getTotalPage());
+            mRecycleTimeLine.setCurrentPage(page);
+            List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
+            mAdapter.refreshList(listTimeline, page);
+        }
     }
 
     @Override

@@ -151,6 +151,7 @@ public final class Utils {
 
     public static String formatDate(long time, String format) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GTM"));
         return simpleDateFormat.format(new Date(time));
     }
 

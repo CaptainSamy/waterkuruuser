@@ -10,11 +10,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.List;
 
+import io.github.rockerhieu.emojicon.EmojiconTextView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.StoreFollowResponse;
-import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -49,20 +51,22 @@ public class StoreFollowAdapter extends ArrayAdapter<StoreFollowResponse.StoreCh
 
         private ImageView mImageStore;
 
-        private TextView mStoreName, mContent, mTime;
+        private TextView mStoreName, mTime;
+
+        private EmojiconTextView mLastMessage;
 
         public ChatHolder(View view) {
             mImageStore = (ImageView) view.findViewById(R.id.ivStore);
             mStoreName = (TextView) view.findViewById(R.id.tvStoreName);
-            mContent = (TextView) view.findViewById(R.id.tvContent);
+            mLastMessage = (EmojiconTextView) view.findViewById(R.id.tvLastMessage);
             mTime = (TextView) view.findViewById(R.id.tvTime);
         }
 
-        public void bindData(Context context, StoreFollowResponse.StoreChatData.StoreFollow response) {
-            Utils.fillImageRound(context, response.getImageStore(), mImageStore);
-            mStoreName.setText(response.getStoreName());
-            mContent.setText(Constants.EMPTY_STRING);
-            mTime.setText(Utils.formatDate(System.currentTimeMillis(), "MM/dd"));
+        public void bindData(Context context, StoreFollowResponse.StoreChatData.StoreFollow storeFollow) {
+            Utils.fillImageRound(context, storeFollow.getImageStore(), mImageStore);
+            mStoreName.setText(storeFollow.getStoreName());
+            mLastMessage.setText(StringEscapeUtils.unescapeJava(storeFollow.getLastMessage()));
+            mTime.setText(Utils.formatDate(storeFollow.getLastTimeMessage(), "MM/dd"));
 
         }
     }

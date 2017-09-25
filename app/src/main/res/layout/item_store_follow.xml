@@ -15,7 +15,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center"
         android:orientation="vertical"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="10dp">
 
@@ -23,7 +26,8 @@
             android:id="@+id/tvStoreName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorText"/>
+            android:textColor="@color/colorText"
+            android:textSize="18sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,13 +35,13 @@
             android:layout_below="@+id/tvStoreName"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvContent"
+            <io.github.rockerhieu.emojicon.EmojiconTextView
+                android:id="@+id/tvLastMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingRight="4dp"
                 android:singleLine="true"
-                android:textColor="@color/colorTextMain"
                 android:textSize="14sp"/>
 
             <TextView
@@ -45,7 +49,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="end"
-                android:text="12/09"
                 android:textSize="12sp"/>
         </LinearLayout>
 
