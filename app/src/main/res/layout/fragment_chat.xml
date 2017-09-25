@@ -38,37 +38,42 @@
 
         <io.github.rockerhieu.emojicon.EmojiconEditText
             android:id="@+id/etChat"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="@null"
             android:hint="@string/input_content_chat"
-            android:padding="16dp"
-            android:textSize="16sp"/>
+            android:maxLines="5"
+            android:paddingBottom="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="14dp"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:paddingRight="6dp">
 
-            <TextView
-                android:id="@+id/tvSend"
+
+            <ImageView
+                android:id="@+id/tvSendChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/icon_send"
-                android:enabled="false"
-                android:gravity="center"
-                />
+                android:src="@drawable/icon_send"
+                android:textColor="@color/black"/>
 
             <ProgressBar
                 android:id="@+id/progressSendChat"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_alignBottom="@+id/tvSendChat"
+                android:layout_alignTop="@+id/tvSendChat"
                 android:layout_centerInParent="true"
                 android:visibility="gone"/>
         </RelativeLayout>
 
-
     </LinearLayout>
+
 </RelativeLayout>

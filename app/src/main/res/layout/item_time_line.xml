@@ -149,7 +149,6 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:text="1 comment"
                     android:textColor="@color/colorTextMain"
                     android:textSize="12sp"/>
 
@@ -200,7 +199,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="4dp"
-                    android:text="Thích"
+                    android:text="@string/like"
                     android:textColor="@color/colorTextMain"/>
             </LinearLayout>
 

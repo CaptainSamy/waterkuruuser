@@ -114,7 +114,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private ReactionView mReactionFacebook;
 
-        private LinearLayout mLayoutLike, mLayoutComment;
+        private LinearLayout mLayoutLike, mLayoutComment, mLayoutNumberLike;
 
         private TextView mNumberComment, mTime;
 
@@ -130,6 +130,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mImageTimeline = (ImageView) itemView.findViewById(R.id.ivTimeLine);
             mNumberComment = (TextView) itemView.findViewById(R.id.tvNumberComment);
             mContent = (ExpandableTextView) itemView.findViewById(R.id.tvContent);
+            mLayoutNumberLike = (LinearLayout) itemView.findViewById(R.id.layoutNumberLike);
             mImageSmile = (ImageView) itemView.findViewById(R.id.ivSmile);
             mLayoutLike = (LinearLayout) itemView.findViewById(R.id.layoutLike);
             mLayoutComment = (LinearLayout) itemView.findViewById(R.id.layoutComment);
@@ -146,6 +147,15 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mTimeLine = listTimeline.getTimeline();
             mListLike = listTimeline.getLikes();
 
+            if (mTimeLine.getCommentNumber() == 0 && mTimeLine.getNumberLike() == 0) {
+                mLayoutNumberLike.setVisibility(View.GONE);
+            } else {
+                mLayoutNumberLike.setVisibility(View.VISIBLE);
+            }
+            if (mTimeLine.getCommentNumber() > 0) {
+                final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
+                mNumberComment.setText(numberComment);
+            }
             mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
             mTextLike.setText(getStringLike(mTimeLine.getStatusLikeId()));
             mStoreName.setText(mTimeLine.getManagerName());
@@ -198,8 +208,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             Utils.fillImageRound(mContext, urlImage, mImageStore);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
             mContent.setText(mTimeLine.getMessages());
-            final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
-            mNumberComment.setText(numberComment);
             mLayoutLike.setOnClickListener(this);
             mLayoutComment.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
@@ -274,7 +282,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     like = Constants.Like.ANGRY;
                     break;
                 default:
-                    like = "Thích";
+                    like = mContext.getString(R.string.like);
 
             }
             return like;

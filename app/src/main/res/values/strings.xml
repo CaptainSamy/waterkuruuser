@@ -224,5 +224,6 @@
     <string name="title_screen_timeline">Timeline</string>
     <string name="number_comment">%1$s Bình luận</string>
     <string name="send_comment">Gửi</string>
+    <string name="like">Thích</string>
 
 </resources>

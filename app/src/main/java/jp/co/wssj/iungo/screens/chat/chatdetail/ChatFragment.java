@@ -7,9 +7,9 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -42,7 +42,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private EmojiconEditText mInputChat;
 
-    private TextView mButtonSend;
+    private ImageView mButtonSend;
 
     private ProgressBar mProgressSendChat;
 
@@ -93,7 +93,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         mRefreshListChat = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshHistoryChat);
         mListViewChat = (ListView) rootView.findViewById(R.id.lvStoreFollow);
         mInputChat = (EmojiconEditText) rootView.findViewById(R.id.etChat);
-        mButtonSend = (TextView) rootView.findViewById(R.id.tvSend);
+        mButtonSend = (ImageView) rootView.findViewById(R.id.tvSendChat);
         mProgressSendChat = (ProgressBar) rootView.findViewById(R.id.progressSendChat);
     }
 
