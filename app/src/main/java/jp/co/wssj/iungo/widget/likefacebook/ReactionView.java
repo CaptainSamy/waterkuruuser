@@ -30,9 +30,9 @@ public class ReactionView extends View {
 
     public static final long DURATION_ANIMATION = 200;
 
-    public static final long DURATION_BEGINNING_EACH_ITEM = 300;
+    public static final long DURATION_BEGINNING_EACH_ITEM = 180;
 
-    public static final long DURATION_BEGINNING_ANIMATION = 900;
+    public static final long DURATION_BEGINNING_ANIMATION = 600;
 
     private IListenerClickIconLike mItemClickIconLike;
 
@@ -86,42 +86,48 @@ public class ReactionView extends View {
     protected void onDraw(Canvas canvas) {
         if (state != null) {
             board.drawBoard(canvas);
-            for (Emotion emotion : emotions) {
-                emotion.drawEmotion(canvas);
-            }
+            emotions[0].drawEmotion(canvas);
+            emotions[1].drawEmotion(canvas);
+            emotions[2].drawEmotion(canvas);
+            emotions[3].drawEmotion(canvas);
+            emotions[4].drawEmotion(canvas);
+            emotions[5].drawEmotion(canvas);
+//            for (Emotion emotion : emotions) {
+//                emotion.drawEmotion(canvas);
+//            }
         }
     }
 
     private void calculateInSessionDismiss(float interpolatedTime) {
-        float currentTime = interpolatedTime * DURATION_BEGINNING_ANIMATION;
+        float currentTime = interpolatedTime * 300;
 
-        if (currentTime > 0) {
-            board.currentY = board.endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime > 0) {
+        board.currentY = board.endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 120, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 100) {
-            emotions[0].currentY = emotions[0].endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 100) {
+        emotions[0].currentY = emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 200) {
-            emotions[1].currentY = emotions[1].endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 200, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 200) {
+        emotions[1].currentY = emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 80, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 300) {
-            emotions[2].currentY = emotions[2].endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 300, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 300) {
+        emotions[2].currentY = emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 60, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 400) {
-            emotions[3].currentY = emotions[3].endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 400, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 400) {
+        emotions[3].currentY = emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 40, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 500) {
-            emotions[4].currentY = emotions[4].endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 500, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 500) {
+        emotions[4].currentY = emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 20, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 600) {
-            emotions[5].currentY = emotions[5].endY - easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 600, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 600) {
+        emotions[5].currentY = emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
         invalidate();
     }
@@ -131,13 +137,13 @@ public class ReactionView extends View {
         board.endHeight = Board.BOARD_HEIGHT_NORMAL;
 
         board.beginY = Board.BOARD_BOTTOM;
-        board.endY = Board.BOARD_BOTTOM + 250;
+        board.endY = Board.BOARD_BOTTOM - 10;
 
-        easeOutBack = EaseOutBack.newInstance(DURATION_BEGINNING_EACH_ITEM, Math.abs(board.beginY - board.endY), 0);
+        easeOutBack = EaseOutBack.newInstanceDismiss(DURATION_BEGINNING_EACH_ITEM, Math.abs(board.beginY - board.endY), 0);
 
         for (int i = 0; i < emotions.length; i++) {
-            emotions[i].beginY = Board.BOARD_BOTTOM;//Board.BOARD_BOTTOM + 250;
-            emotions[i].endY = Board.BASE_LINE + 250;//Board.BASE_LINE + 250;
+            emotions[i].beginY = Board.BASE_LINE - 10;//Board.BOARD_BOTTOM + 250;
+            emotions[i].endY = Board.BOARD_BOTTOM;//Board.BASE_LINE + 250;
             emotions[i].currentX = i == 0 ? Board.BOARD_X + DIVIDE : emotions[i - 1].currentX + emotions[i - 1].currentSize + DIVIDE;
         }
     }
@@ -195,35 +201,66 @@ public class ReactionView extends View {
     }
 
     private void calculateInSessionBeginning(float interpolatedTime) {
-        float currentTime = interpolatedTime * DURATION_BEGINNING_ANIMATION;
+        float currentTime = interpolatedTime * 300;
 
-        if (currentTime > 0) {
-            board.currentY = board.endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM));
-        }
+        float calculate = Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM);
+//        float additionY = easeOutBack.getCoordinateYFromTime(calculate);
+//        Log.d("Tuan", "calculateInSessionBeginning " + calculate + " - " + additionY);
+////        if (currentTime > 0) {
+//        board.currentY = board.endY + additionY;
+////        }
+//
+////        if (currentTime >= 100) {
+//        emotions[0].currentY = emotions[0].endY + additionY;
+////        }
+//
+////        if (currentTime >= 200) {
+//        emotions[1].currentY = emotions[1].endY + additionY;
+////        }
+//
+////        if (currentTime >= 300) {
+//        emotions[2].currentY = emotions[2].endY + additionY;
+////        }
+//
+////        if (currentTime >= 400) {
+//        emotions[3].currentY = emotions[3].endY + additionY;
+////        }
+//
+////        if (currentTime >= 500) {
+//        emotions[4].currentY = emotions[4].endY + additionY;
+////        }
+//
+////        if (currentTime >= 600) {
+//        emotions[5].currentY = emotions[5].endY + additionY;
+////        }
 
-        if (currentTime >= 100) {
-            emotions[0].currentY = emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime > 0) {
+        board.currentY = board.endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM));
+//        }
+//
+//        if (currentTime >= 20) {
+        emotions[0].currentY = emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 20, DURATION_BEGINNING_EACH_ITEM));
+//        }
+//
+//        if (currentTime >= 40) {
+        emotions[1].currentY = emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 40, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 200) {
-            emotions[1].currentY = emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 200, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 60) {
+        emotions[2].currentY = emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 60, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 300) {
-            emotions[2].currentY = emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 300, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 80) {
+        emotions[3].currentY = emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 80, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 400) {
-            emotions[3].currentY = emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 400, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 100) {
+        emotions[4].currentY = emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
-        if (currentTime >= 500) {
-            emotions[4].currentY = emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 500, DURATION_BEGINNING_EACH_ITEM));
-        }
-
-        if (currentTime >= 600) {
-            emotions[5].currentY = emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 600, DURATION_BEGINNING_EACH_ITEM));
-        }
+//        if (currentTime >= 120) {
+        emotions[5].currentY = emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 120, DURATION_BEGINNING_EACH_ITEM));
+//        }
 
         invalidate();
     }
@@ -356,6 +393,7 @@ public class ReactionView extends View {
 
         @Override
         protected void applyTransformation(float interpolatedTime, Transformation t) {
+            Log.d("Tuan", "#applyTransformation " + interpolatedTime);
             calculateInSessionBeginning(interpolatedTime);
         }
     }
