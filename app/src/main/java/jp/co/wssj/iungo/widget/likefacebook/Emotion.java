@@ -61,10 +61,10 @@ public class Emotion {
         imageOrigin = BitmapFactory.decodeResource(context.getResources(), imageResource);
 
         emotionPaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        emotionPaint.setAntiAlias(true);
+//        emotionPaint.setAntiAlias(true);
 
         titlePaint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        titlePaint.setAntiAlias(true);
+//        titlePaint.setAntiAlias(true);
 
         generateTitleView(title);
     }
