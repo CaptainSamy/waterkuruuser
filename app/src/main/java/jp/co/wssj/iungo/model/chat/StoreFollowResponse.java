@@ -23,6 +23,9 @@ public class StoreFollowResponse extends ResponseData<StoreFollowResponse.StoreC
             @SerializedName("id")
             private int id;
 
+            @SerializedName("img_store")
+            private String imageStore;
+
             @SerializedName("last_message")
             private String lastMessage;
 
@@ -31,9 +34,6 @@ public class StoreFollowResponse extends ResponseData<StoreFollowResponse.StoreC
 
             @SerializedName("name")
             private String storeName;
-
-            @SerializedName("logo")
-            private String imageStore;
 
             @SerializedName("service_company_id")
             private String serviceCompanyId;

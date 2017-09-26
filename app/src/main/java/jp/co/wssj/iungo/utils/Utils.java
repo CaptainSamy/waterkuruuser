@@ -350,6 +350,11 @@ public final class Utils {
                     .into(new BitmapImageViewTarget(imageView) {
 
                         @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            imageView.setImageResource(R.drawable.icon_user);
+                        }
+
+                        @Override
                         protected void setResource(Bitmap resource) {
                             if (resource != null) {
                                 imageView.setImageBitmap(cropImage(resource));

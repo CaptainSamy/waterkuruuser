@@ -68,6 +68,9 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 @Expose
                 private String images;
 
+                @SerializedName("img_store")
+                private String imageStore;
+
                 @SerializedName("is_deleted")
                 @Expose
                 private String isDeleted;
@@ -118,6 +121,10 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
 
                 public String getImages() {
                     return images;
+                }
+
+                public String getImageStore() {
+                    return imageStore;
                 }
 
                 public String getIsDeleted() {

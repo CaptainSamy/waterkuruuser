@@ -66,8 +66,12 @@ public class StoreFollowAdapter extends ArrayAdapter<StoreFollowResponse.StoreCh
             Utils.fillImageRound(context, storeFollow.getImageStore(), mImageStore);
             mStoreName.setText(storeFollow.getStoreName());
             mLastMessage.setText(StringEscapeUtils.unescapeJava(storeFollow.getLastMessage()));
-            mTime.setText(Utils.formatDate(storeFollow.getLastTimeMessage(), "MM/dd"));
-
+            if (storeFollow.getLastTimeMessage() > 0) {
+                mTime.setText(Utils.formatDate(storeFollow.getLastTimeMessage(), "MM/dd"));
+                mTime.setVisibility(View.VISIBLE);
+            } else {
+                mTime.setVisibility(View.GONE);
+            }
         }
     }
 

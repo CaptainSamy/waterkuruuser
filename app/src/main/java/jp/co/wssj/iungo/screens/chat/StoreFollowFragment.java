@@ -56,7 +56,7 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_creen_store_follow);
+        return getString(R.string.title_screen_store_follow);
     }
 
     @Override

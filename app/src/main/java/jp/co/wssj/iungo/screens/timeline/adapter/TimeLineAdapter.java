@@ -255,9 +255,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             } else {
                 mImageTimeline.setVisibility(View.GONE);
             }
-            Utils.fillImageRound(mContext, Constants.EMPTY_STRING, mImageStore);
+            Utils.fillImageRound(mContext, mTimeLine.getImageStore(), mImageStore);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
-            mContent.setText(mTimeLine.getMessages());
+            if (TextUtils.isEmpty(mTimeLine.getMessages())) {
+                mContent.setVisibility(View.GONE);
+            } else {
+                mContent.setVisibility(View.VISIBLE);
+                mContent.setText(mTimeLine.getMessages());
+            }
             mLayoutLike.setOnClickListener(this);
             mLayoutComment.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
@@ -409,7 +414,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         private void fillImage(String url, final ImageView imageView) {
             Glide.with(mContext)
                     .load(url)
-                    .error(mContext.getResources().getDrawable(R.drawable.image_time_line))
                     .placeholder(R.drawable.ic_add_image)
                     .skipMemoryCache(false)
                     .into(new SimpleTarget<GlideDrawable>() {
@@ -426,7 +430,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            Logger.d("fillImage", "onResourceReady");
                             imageView.setImageDrawable(resource);
+                            imageView.setTag(R.id.shared_drawable, resource);
                         }
                     });
         }

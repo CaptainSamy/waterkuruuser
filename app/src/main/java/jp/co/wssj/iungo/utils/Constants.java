@@ -143,17 +143,17 @@ public final class Constants {
 
     public static final class Like {
 
-        public static final String LIKE = "like";
+        public static final String LIKE = "いいね！";
 
-        public static final String LOVE = "Love";
+        public static final String LOVE = "超いいね！";
 
-        public static final String HAHA = "Haha";
+        public static final String HAHA = "うけるね";
 
-        public static final String WOW = "Wow";
+        public static final String WOW = "すごいね";
 
-        public static final String CRY = "Cry";
+        public static final String CRY = "悲しいね";
 
-        public static final String ANGRY = "Angry";
+        public static final String ANGRY = "ひどいね";
 
     }
 }

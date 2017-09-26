@@ -73,7 +73,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     @Override
     public String getAppBarTitle() {
-        return "Comment";
+        return getString(R.string.title_screen_comment);
     }
 
     @Override

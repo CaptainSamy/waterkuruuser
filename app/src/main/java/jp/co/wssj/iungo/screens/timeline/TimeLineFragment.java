@@ -84,19 +84,17 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     protected void initData() {
-        if (mAdapter == null) {
-            mListTimeLine = new ArrayList<>();
-            mAdapter = new TimeLineAdapter(mListTimeLine, mPresenter, getActivityCallback());
-            mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
+        mListTimeLine = new ArrayList<>();
+        mAdapter = new TimeLineAdapter(mListTimeLine, mPresenter, getActivityCallback());
+        mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
 
-                @Override
-                public void onRefreshTimeline() {
-                    mPresenter.getTimeline(Constants.INIT_PAGE);
-                }
-            });
-            setFresh(true);
-            mPresenter.getTimeline(Constants.INIT_PAGE);
-        }
+            @Override
+            public void onRefreshTimeline() {
+                mPresenter.getTimeline(Constants.INIT_PAGE);
+            }
+        });
+        setFresh(true);
+        mPresenter.getTimeline(Constants.INIT_PAGE);
         mRecycleTimeLine.setAdapter(mAdapter);
     }
 

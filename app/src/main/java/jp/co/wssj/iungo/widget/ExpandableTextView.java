@@ -2,13 +2,11 @@ package jp.co.wssj.iungo.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.TextView;
 
 import jp.co.wssj.iungo.R;
 
@@ -16,11 +14,11 @@ import jp.co.wssj.iungo.R;
  * Created by Nguyen Huu Ta on 13/9/2017.
  */
 
-public class ExpandableTextView extends TextView {
+public class ExpandableTextView extends AppCompatTextView {
 
     private static final int DEFAULT_TRIM_LENGTH = 100;
 
-    private static final String ELLIPSIS = "<html><body><font color='#BDBDBD'> ...see more</font></body></html>";
+    private static final String ELLIPSIS = "<html><body><font color='#55c5f7'> ...see more</font></body></html>";
 
     private CharSequence originalText;
 
