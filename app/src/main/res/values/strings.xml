@@ -225,5 +225,6 @@
     <string name="number_comment">%1$s Bình luận</string>
     <string name="send_comment">Gửi</string>
     <string name="like">Thích</string>
+    <string name="number_rest_image">+ %1$s</string>
 
 </resources>

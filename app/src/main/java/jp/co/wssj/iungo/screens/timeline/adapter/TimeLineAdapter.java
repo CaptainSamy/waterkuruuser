@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
@@ -27,6 +28,7 @@ import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IActivityCallback;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
+import jp.co.wssj.iungo.screens.phototimeline.PhotoTimelineDialog;
 import jp.co.wssj.iungo.screens.timeline.TimeLinePresenter;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -141,6 +143,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private List<TimeLineResponse.TimeLineData.ListTimeline.Like> mListLike;
 
+        private List<String> mListUrlImage;
+
+        private PhotoTimelineDialog mDialogPhoto;
+
         public TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
@@ -167,7 +173,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         public void bind(final TimeLineResponse.TimeLineData.ListTimeline listTimeline, final int position) {
             mTimeLine = listTimeline.getTimeline();
             mListLike = listTimeline.getLikes();
-
+            if (mDialogPhoto == null) {
+                mDialogPhoto = new PhotoTimelineDialog(mContext);
+            }
             if (mTimeLine.getCommentNumber() == 0 && mTimeLine.getNumberLike() == 0) {
                 mLayoutNumberLike.setVisibility(View.GONE);
             } else {
@@ -187,11 +195,17 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (getItemViewType() == SHOW_IMAGE) {
                 mLayoutContainerImages.removeAllViews();
                 try {
+                    mListUrlImage = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
-                    switch (jsonArray.length()) {
+                    int length = jsonArray.length();
+                    for (int i = 0; i < length; i++) {
+                        mListUrlImage.add(jsonArray.getString(i));
+                    }
+                    switch (length) {
                         case ONE_IMAGE:
                             mImageTimeline.setVisibility(View.GONE);
                             ImageView viewOneImages = (ImageView) mLayoutInflate.inflate(R.layout.one_image, null);
+                            viewOneImages.setOnClickListener(this);
                             fillImage(jsonArray.getString(0), viewOneImages);
                             mLayoutContainerImages.addView(viewOneImages);
                             break;
@@ -218,6 +232,20 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                             View viewFiveImages = mLayoutInflate.inflate(R.layout.five_images, null);
                             fillFiveImages(viewFiveImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3), jsonArray.getString(4));
                             mLayoutContainerImages.addView(viewFiveImages);
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 9:
+                        case 10:
+                            mImageTimeline.setVisibility(View.GONE);
+                            View viewMoreFiveImages = mLayoutInflate.inflate(R.layout.more_five_images, null);
+                            fillFiveImages(viewMoreFiveImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3), jsonArray.getString(4));
+                            TextView viewRestImage = (TextView) viewMoreFiveImages.findViewById(R.id.tvNumberRestImages);
+                            int restImages = length - 5;
+                            String numberRestImage = mContext.getResources().getString(R.string.number_rest_image, String.valueOf(restImages));
+                            viewRestImage.setText(numberRestImage);
+                            mLayoutContainerImages.addView(viewMoreFiveImages);
                             break;
                     }
 
@@ -258,6 +286,21 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                         bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
                         mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle);
                     }
+                    break;
+                case R.id.image1:
+                    mDialogPhoto.showImages(mListUrlImage, 0);
+                    break;
+                case R.id.image2:
+                    mDialogPhoto.showImages(mListUrlImage, 1);
+                    break;
+                case R.id.image3:
+                    mDialogPhoto.showImages(mListUrlImage, 2);
+                    break;
+                case R.id.image4:
+                    mDialogPhoto.showImages(mListUrlImage, 3);
+                    break;
+                case R.id.image5:
+                    mDialogPhoto.showImages(mListUrlImage, 4);
                     break;
             }
         }
@@ -390,26 +433,31 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private void fillTwoImages(View view, String urlImage1, String urlImage2) {
             ImageView image1 = (ImageView) view.findViewById(R.id.image1);
+            image1.setOnClickListener(this);
             fillImage(urlImage1, image1);
             ImageView image2 = (ImageView) view.findViewById(R.id.image2);
+            image2.setOnClickListener(this);
             fillImage(urlImage2, image2);
         }
 
         private void fillThreeImages(View view, String urlImage1, String urlImage2, String urlImage3) {
             fillTwoImages(view, urlImage1, urlImage2);
             ImageView image3 = (ImageView) view.findViewById(R.id.image3);
+            image3.setOnClickListener(this);
             fillImage(urlImage3, image3);
         }
 
         private void fillFourImages(View view, String urlImage1, String urlImage2, String urlImage3, String urlImage4) {
             fillThreeImages(view, urlImage1, urlImage2, urlImage3);
             ImageView image4 = (ImageView) view.findViewById(R.id.image4);
+            image4.setOnClickListener(this);
             fillImage(urlImage4, image4);
         }
 
         private void fillFiveImages(View view, String urlImage1, String urlImage2, String urlImage3, String urlImage4, String urlImage5) {
             fillFourImages(view, urlImage1, urlImage2, urlImage3, urlImage4);
             ImageView image5 = (ImageView) view.findViewById(R.id.image5);
+            image5.setOnClickListener(this);
             fillImage(urlImage5, image5);
         }
     }

@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.screens.timeline;
 
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
-import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.model.timeline.TimelineModel;
 import jp.co.wssj.iungo.model.util.UtilsModel;
@@ -42,52 +41,6 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
         });
     }
 
-    public interface IOnGetListCommentCallback {
-
-        void onGetListCommentSuccess(CommentResponse.CommentData commentData);
-
-        void onGetListCommentFailure(String message);
-    }
-
-    public void getListComment(int timelineId, final IOnGetListCommentCallback callback) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel().getListComment(token, timelineId, new TimelineModel.OnGetListCommentCallback() {
-
-            @Override
-            public void onGetListCommentSuccess(CommentResponse.CommentData commentData) {
-                callback.onGetListCommentSuccess(commentData);
-            }
-
-            @Override
-            public void onGetListCommentFailure(String message) {
-                callback.onGetListCommentFailure(message);
-            }
-        });
-    }
-
-    public interface IOnCommentCallback {
-
-        void onCommentSuccess(String message);
-
-        void onCommentFailure(String message);
-    }
-
-    public void addComment(int timelineId, String comment, final IOnCommentCallback callback) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel().addComment(token, timelineId, comment, new TimelineModel.OnAddCommentCallback() {
-
-            @Override
-            public void onAddCommentSuccess() {
-                callback.onCommentSuccess(Constants.EMPTY_STRING);
-            }
-
-            @Override
-            public void onAddCommentFailure(String message) {
-                callback.onCommentFailure(message);
-            }
-        });
-    }
-
     public interface IOnLikeCallback {
 
         void onLikeSuccess(String message);
@@ -111,19 +64,4 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
         });
     }
 
-    public void likeComment(int commentId, int newLikeId, int oldLikeId, int typeLike, final IOnLikeCallback callback) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel().likeComment(token, commentId, newLikeId, oldLikeId, typeLike, new TimelineModel.OnLikeCallback() {
-
-            @Override
-            public void onLikeSuccess() {
-                callback.onLikeSuccess(Constants.EMPTY_STRING);
-            }
-
-            @Override
-            public void onLikeFailure(String message) {
-                callback.onLikeFailure(message);
-            }
-        });
-    }
 }
