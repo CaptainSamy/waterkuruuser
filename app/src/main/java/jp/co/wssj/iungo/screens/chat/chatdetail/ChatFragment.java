@@ -24,6 +24,7 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.chat.adapter.ChatAdapter;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -159,16 +160,16 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
-        mHandle.postDelayed(mRungAble, Constants.TIME_DELAY_GET_LIST_CHAT);
+        mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
     }
 
     private Handler mHandle = new Handler();
 
-    private Runnable mRungAble = new Runnable() {
+    private Runnable mRunAble = new Runnable() {
 
         @Override
         public void run() {
-            mHandle.postDelayed(mRungAble, Constants.TIME_DELAY_GET_LIST_CHAT);
+            mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
             getPresenter().getHistoryChat(mStoreId);
         }
     };
@@ -216,8 +217,9 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        mHandle.removeCallbacks(mRungAble);
+    public void onDestroyView() {
+        super.onDestroyView();
+        Logger.d(TAG, "removeCallbacks ");
+        mHandle.removeCallbacks(mRunAble);
     }
 }

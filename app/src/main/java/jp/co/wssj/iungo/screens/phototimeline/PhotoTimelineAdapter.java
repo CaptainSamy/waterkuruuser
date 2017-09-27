@@ -36,7 +36,15 @@ class PhotoTimelineAdapter extends PagerAdapter {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mListRestImages = new ArrayList<>();
-        mListRestImages = restImages;
+        mListRestImages.addAll(restImages);
+    }
+
+    public void refreshPhoto(List<String> restImages) {
+        if (mListRestImages != null) {
+            mListRestImages.clear();
+            mListRestImages.addAll(restImages);
+            notifyDataSetChanged();
+        }
     }
 
     @Override

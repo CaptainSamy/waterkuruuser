@@ -78,10 +78,7 @@ public class PhotoTimelineDialog extends BaseDialog<IPhotoTimelineView, PhotoTim
             mViewPagePhoto.setAdapter(mAdapter);
             mIndicator.setViewPager(mViewPagePhoto);
         } else {
-            if (mViewPagePhoto.getAdapter() == null) {
-                mViewPagePhoto.setAdapter(mAdapter);
-                mIndicator.setViewPager(mViewPagePhoto);
-            }
+            mAdapter.refreshPhoto(urlImages);
         }
         mViewPagePhoto.setCurrentItem(positionClick);
         show();

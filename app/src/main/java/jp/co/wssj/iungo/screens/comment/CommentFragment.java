@@ -23,6 +23,7 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.CommentAdapter;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by Nguyen Huu Ta on 21/9/2017.
@@ -210,8 +211,9 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void onDestroyView() {
+        super.onDestroyView();
+        Logger.d(TAG, "removeCallbacks ");
         mHandle.removeCallbacks(mRunAble);
     }
 }
