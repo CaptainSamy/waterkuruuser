@@ -14,7 +14,7 @@ import jp.co.wssj.iungo.model.ResponseData;
 
 public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData> {
 
-    public class TimeLineData implements GsonSerializable {
+    public static class TimeLineData implements GsonSerializable {
 
         @SerializedName("number_of_timeline_in_page")
         @Expose
@@ -40,7 +40,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
         @Expose
         private List<ListTimeline> listTimeline = null;
 
-        public class ListTimeline {
+        public static class ListTimeline {
 
             @SerializedName("likes")
             @Expose
@@ -151,8 +151,16 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                     return numberLike;
                 }
 
+                public void setNumberLike(int numberLike) {
+                    this.numberLike = numberLike;
+                }
+
                 public int getStatusLikeId() {
                     return statusLikeId;
+                }
+
+                public void setStatusLikeId(int statusLikeId) {
+                    this.statusLikeId = statusLikeId;
                 }
 
                 public String getManagerName() {
@@ -160,7 +168,11 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 }
             }
 
-            public class Like {
+            public static class Like {
+
+                public Like(int likeId) {
+                    this.likeId = likeId;
+                }
 
                 @SerializedName("count_like")
                 @Expose

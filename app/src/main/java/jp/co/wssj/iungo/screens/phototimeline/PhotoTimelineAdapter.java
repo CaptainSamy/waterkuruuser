@@ -82,7 +82,6 @@ class PhotoTimelineAdapter extends PagerAdapter {
         if (!TextUtils.isEmpty(urlImage)) {
             Glide.with(mContext)
                     .load(urlImage)
-                    .error(mContext.getResources().getDrawable(R.drawable.image_time_line))
                     .placeholder(R.drawable.ic_add_image)
                     .skipMemoryCache(false)
                     .into(new SimpleTarget<GlideDrawable>() {

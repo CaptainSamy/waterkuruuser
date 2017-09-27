@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -45,16 +46,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private static final int NOT_SHOW_IMAGE = 0;
 
     private static final int SHOW_IMAGE = 1;
-
-    private static final int ONE_IMAGE = 1;
-
-    private static final int TWO_IMAGES = 2;
-
-    private static final int THREE_IMAGES = 3;
-
-    private static final int FOUR_IMAGES = 4;
-
-    private static final int FIVE_IMAGES = 5;
 
     private List<TimeLineResponse.TimeLineData.ListTimeline> mListTimeLine;
 
@@ -123,7 +114,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private ExpandableTextView mContent;
 
-        private ImageView mImageStore, mImageTimeline, mImageSmile;
+        private ImageView mImageStore, mImageSmile;
 
         private TextView mTextLike, mStoreName, mNumberLike;
 
@@ -153,7 +144,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mLayoutInflate = LayoutInflater.from(mContext);
             mImageStore = (ImageView) itemView.findViewById(R.id.ivStore);
             mTextLike = (TextView) itemView.findViewById(R.id.tvLike);
-            mImageTimeline = (ImageView) itemView.findViewById(R.id.ivTimeLine);
             mNumberComment = (TextView) itemView.findViewById(R.id.tvNumberComment);
             mContent = (ExpandableTextView) itemView.findViewById(R.id.tvContent);
             mLayoutNumberLike = (LinearLayout) itemView.findViewById(R.id.layoutNumberLike);
@@ -176,23 +166,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (mDialogPhoto == null) {
                 mDialogPhoto = new PhotoTimelineDialog(mContext);
             }
-            if (mTimeLine.getCommentNumber() == 0 && mTimeLine.getNumberLike() == 0) {
-                mLayoutNumberLike.setVisibility(View.GONE);
-            } else {
-                mLayoutNumberLike.setVisibility(View.VISIBLE);
-            }
-            if (mTimeLine.getCommentNumber() > 0) {
-                final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
-                mNumberComment.setText(numberComment);
-                mNumberComment.setVisibility(View.VISIBLE);
-            } else {
-                mNumberComment.setVisibility(View.GONE);
-            }
-            mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
-            mTextLike.setText(getStringLike(mTimeLine.getStatusLikeId()));
             mStoreName.setText(mTimeLine.getManagerName());
             showIconLike();
             if (getItemViewType() == SHOW_IMAGE) {
+                mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
                 try {
                     mListUrlImage = new ArrayList<>();
@@ -202,33 +179,28 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                         mListUrlImage.add(jsonArray.getString(i));
                     }
                     switch (length) {
-                        case ONE_IMAGE:
-                            mImageTimeline.setVisibility(View.GONE);
+                        case 1:
                             ImageView viewOneImages = (ImageView) mLayoutInflate.inflate(R.layout.one_image, null);
                             viewOneImages.setOnClickListener(this);
                             fillImage(jsonArray.getString(0), viewOneImages);
                             mLayoutContainerImages.addView(viewOneImages);
                             break;
-                        case TWO_IMAGES:
-                            mImageTimeline.setVisibility(View.GONE);
+                        case 2:
                             View viewTwoImages = mLayoutInflate.inflate(R.layout.two_images, null);
                             fillTwoImages(viewTwoImages, jsonArray.getString(0), jsonArray.getString(1));
                             mLayoutContainerImages.addView(viewTwoImages);
                             break;
-                        case THREE_IMAGES:
-                            mImageTimeline.setVisibility(View.GONE);
+                        case 3:
                             View viewThreeImages = mLayoutInflate.inflate(R.layout.three_images, null);
                             fillThreeImages(viewThreeImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2));
                             mLayoutContainerImages.addView(viewThreeImages);
                             break;
-                        case FOUR_IMAGES:
-                            mImageTimeline.setVisibility(View.GONE);
+                        case 4:
                             View viewFourImages = mLayoutInflate.inflate(R.layout.four_images, null);
                             fillFourImages(viewFourImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3));
                             mLayoutContainerImages.addView(viewFourImages);
                             break;
-                        case FIVE_IMAGES:
-                            mImageTimeline.setVisibility(View.GONE);
+                        case 5:
                             View viewFiveImages = mLayoutInflate.inflate(R.layout.five_images, null);
                             fillFiveImages(viewFiveImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3), jsonArray.getString(4));
                             mLayoutContainerImages.addView(viewFiveImages);
@@ -238,7 +210,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                         case 8:
                         case 9:
                         case 10:
-                            mImageTimeline.setVisibility(View.GONE);
                             View viewMoreFiveImages = mLayoutInflate.inflate(R.layout.more_five_images, null);
                             fillFiveImages(viewMoreFiveImages, jsonArray.getString(0), jsonArray.getString(1), jsonArray.getString(2), jsonArray.getString(3), jsonArray.getString(4));
                             TextView viewRestImage = (TextView) viewMoreFiveImages.findViewById(R.id.tvNumberRestImages);
@@ -248,12 +219,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                             mLayoutContainerImages.addView(viewMoreFiveImages);
                             break;
                     }
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else {
-                mImageTimeline.setVisibility(View.GONE);
+                mLayoutContainerImages.setVisibility(View.GONE);
             }
             Utils.fillImageRound(mContext, mTimeLine.getImageStore(), mImageStore);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
@@ -269,8 +239,27 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                 @Override
                 public void onItemClick(int likeId) {
-                    Logger.d("onItemClick", "likeId " + likeId);
-                    likeTimeline(mTimeLine.getId(), likeId, mTimeLine.getStatusLikeId(), 1);
+                    boolean isExitsLike = false;
+                    if (likeId != mTimeLine.getStatusLikeId()) {
+                        if (mTimeLine.getStatusLikeId() == 0) {
+                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
+                        } else {
+                            isExitsLike = true;
+                        }
+                        mTimeLine.setStatusLikeId(likeId);
+                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
+                            if (likeId == like.getLikeId()) {
+                                isExitsLike = true;
+                                break;
+                            }
+                        }
+                        if (!isExitsLike || mListLike.size() == 0) {
+                            TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
+                            mListLike.add(like);
+                        }
+                        showIconLike();
+                        likeTimeline(mTimeLine.getId(), likeId, mTimeLine.getStatusLikeId(), 1);
+                    }
                 }
             });
         }
@@ -316,16 +305,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 @Override
                 public void onLikeSuccess(String message) {
                     Logger.d("likeTimeline", "onCommentSuccess ");
-                    mTextLike.setText(getStringLike(newLikeId));
-                    mImageSmile.setImageDrawable(getIconLike(newLikeId));
-                    if (mRefreshTimeline != null) {
-                        mRefreshTimeline.onRefreshTimeline();
-                    }
                 }
 
                 @Override
                 public void onLikeFailure(String message) {
                     Logger.d("likeTimeline", "onCommentFailure ");
+                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -386,23 +371,60 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         }
 
         private void showIconLike() {
+            mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
+            mTextLike.setText(getStringLike(mTimeLine.getStatusLikeId()));
+            if (mTimeLine.getNumberLike() == 0 && mTimeLine.getCommentNumber() == 0) {
+                mLayoutNumberLike.setVisibility(View.GONE);
+            } else {
+                mLayoutNumberLike.setVisibility(View.VISIBLE);
+            }
+            if (mTimeLine.getCommentNumber() > 0) {
+                final String numberComment = mContent.getResources().getString(R.string.number_comment, String.valueOf(mTimeLine.getCommentNumber()));
+                mNumberComment.setText(numberComment);
+                mNumberComment.setVisibility(View.VISIBLE);
+            } else {
+                mNumberComment.setVisibility(View.GONE);
+            }
             if (mListLike != null && mListLike.size() > 0) {
+                int myLike = mTimeLine.getStatusLikeId();
                 if (mListLike.size() == 1) {
-                    TimeLineResponse.TimeLineData.ListTimeline.Like like = mListLike.get(0);
-                    mImage1.setImageDrawable(getIconLike(like.getLikeId()));
+                    if (myLike == 0) {
+                        mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
+                    } else {
+                        mImage1.setImageDrawable(getIconLike(myLike));
+                    }
                     mImage1.setVisibility(View.VISIBLE);
                     mImage2.setVisibility(View.GONE);
                     mImage3.setVisibility(View.GONE);
                 } else if (mListLike.size() == 2) {
-                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
-                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
+                    int likeId1 = mListLike.get(0).getLikeId();
+                    int likeId2 = mListLike.get(1).getLikeId();
+                    if (myLike == 0) {
+                        mImage1.setImageDrawable(getIconLike(likeId1));
+                        mImage2.setImageDrawable(getIconLike(likeId2));
+                    } else {
+                        int chooseLike = (likeId1 == myLike) ? likeId2 : likeId1;
+                        mImage1.setImageDrawable(getIconLike(myLike));
+                        mImage2.setImageDrawable(getIconLike(chooseLike));
+                    }
                     mImage1.setVisibility(View.VISIBLE);
                     mImage2.setVisibility(View.VISIBLE);
                     mImage3.setVisibility(View.GONE);
                 } else {
-                    mImage3.setImageDrawable(getIconLike(mListLike.get(2).getLikeId()));
-                    mImage2.setImageDrawable(getIconLike(mListLike.get(1).getLikeId()));
-                    mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));
+                    int likeId1 = mListLike.get(0).getLikeId();
+                    int likeId2 = mListLike.get(1).getLikeId();
+                    int likeId3 = mListLike.get(2).getLikeId();
+                    if (myLike == 0) {
+                        mImage1.setImageDrawable(getIconLike(likeId1));
+                        mImage2.setImageDrawable(getIconLike(likeId2));
+                        mImage3.setImageDrawable(getIconLike(likeId3));
+                    } else {
+                        mImage1.setImageDrawable(getIconLike(myLike));
+                        int chooseLike2 = (myLike != likeId1) ? likeId1 : likeId2;
+                        int chooseLike3 = (myLike != likeId3) ? likeId3 : likeId2;
+                        mImage2.setImageDrawable(getIconLike(chooseLike2));
+                        mImage3.setImageDrawable(getIconLike(chooseLike3));
+                    }
                     mImage3.setVisibility(View.VISIBLE);
                     mImage2.setVisibility(View.VISIBLE);
                     mImage1.setVisibility(View.VISIBLE);

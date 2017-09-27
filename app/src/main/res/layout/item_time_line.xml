@@ -15,13 +15,14 @@
             android:id="@+id/layoutInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
 
             <ImageView
                 android:id="@+id/ivStore"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:src="@drawable/ic_add_image"/>
+                android:src="@drawable/icon_user"/>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -52,7 +53,6 @@
                     android:textSize="12sp"/>
             </LinearLayout>
 
-
         </LinearLayout>
 
         <jp.co.wssj.iungo.widget.ExpandableTextView
@@ -60,44 +60,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/layoutInfo"
-            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:textColor="@color/black"
             android:textSize="18sp"/>
 
         <LinearLayout
-            android:id="@+id/layoutImages"
+            android:id="@+id/layoutContainerImages"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvContent"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
             android:orientation="vertical"
-            >
-
-            <ImageView
-                android:id="@+id/ivTimeLine"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/image_time_line"
-                android:visibility="invisible"/>
-
-            <LinearLayout
-                android:id="@+id/layoutContainerImages"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            android:visibility="gone">
 
 
-            </LinearLayout>
         </LinearLayout>
-
 
         <LinearLayout
             android:id="@+id/layoutNumberLike"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layoutImages"
+            android:layout_below="@+id/layoutContainerImages"
             android:layout_marginBottom="10dp"
             android:orientation="vertical"
             android:visibility="visible">
@@ -123,8 +106,7 @@
                         android:layout_marginStart="-5dp"
                         android:layout_toEndOf="@+id/image2"
                         android:adjustViewBounds="true"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/image2"
@@ -134,8 +116,7 @@
                         android:layout_marginStart="-5dp"
                         android:layout_toEndOf="@+id/image1"
                         android:adjustViewBounds="true"
-                        android:visibility="gone"
-                        />
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/image1"
@@ -143,8 +124,7 @@
                         android:layout_height="15dp"
                         android:layout_centerVertical="true"
                         android:adjustViewBounds="true"
-                        android:visibility="gone"
-                        />
+                        android:visibility="visible"/>
 
 
                     <TextView
@@ -185,7 +165,7 @@
             android:layout_above="@+id/layoutButton"
             android:layout_marginLeft="20dp"
             android:background="@android:color/transparent"
-            android:visibility="invisible"/>
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/layoutButton"
