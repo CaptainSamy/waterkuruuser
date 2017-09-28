@@ -287,6 +287,9 @@ public class MainActivity extends AppCompatActivity
                         replaceFragment(new StoreFollowFragment(), true, true);
                     }
                     return true;
+                case R.id.menu_qr_code:
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_SCANNER, true, true, null, menuId);
+                    return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
                     return true;

@@ -108,6 +108,10 @@ public class CommentResponse extends ResponseData<CommentResponse.CommentData> {
                     return numberLike;
                 }
 
+                public void setNumberLike(int numberLike) {
+                    this.numberLike = numberLike;
+                }
+
                 public Integer getTimelineId() {
                     return timelineId;
                 }

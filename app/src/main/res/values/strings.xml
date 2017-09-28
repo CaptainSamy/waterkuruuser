@@ -132,6 +132,7 @@
     <string name="explain_stamp">ステンプの説明</string>
 
     <!-- menu -->
+    <string name="qr_code">QR code</string>
     <string name="menu_logout">ログアウト</string>
     <string name="menu_push_notification">通知一覧</string>
     <string name="change_password">パスワード変更</string>

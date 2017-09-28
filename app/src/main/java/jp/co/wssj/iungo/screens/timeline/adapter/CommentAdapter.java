@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -20,7 +21,6 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.screens.comment.CommentPresenter;
 import jp.co.wssj.iungo.screens.timeline.TimeLinePresenter;
-import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -65,6 +65,8 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
         private LinearLayout mLayoutNumberLike;
 
+        CommentResponse.CommentData.ListComment.Comment mComment;
+
         public CommentHolder(View view) {
             mContentComment = (TextView) view.findViewById(R.id.tvContentComment);
             mTime = (TextView) view.findViewById(R.id.tvTime);
@@ -77,67 +79,68 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
         public void bind(final CommentResponse.CommentData.ListComment comments) {
             if (comments != null) {
-                CommentResponse.CommentData.ListComment.Comment comment = comments.getComment();
-                if (comment != null) {
-                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + comment.getUserName() + "</font></strong></body></html>" + " " + StringEscapeUtils.unescapeJava(comment.getContent());
+                mComment = comments.getComment();
+                if (mComment != null) {
+                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + mComment.getUserName() + "</font></strong></body></html>" + " " + StringEscapeUtils.unescapeJava(mComment.getContent());
                     mContentComment.setText(Html.fromHtml(content));
-                    mTime.setText(Utils.distanceTimes(comment.getCreated()));
+                    mTime.setText(Utils.distanceTimes(mComment.getCreated()));
                 }
-                mNumberLike.setText(String.valueOf(comment.getNumberLike()));
-                int numberLike = comments.getComment().getNumberLike();
-                if (numberLike > 0) {
-                    mLayoutNumberLike.setVisibility(View.VISIBLE);
-                    mNumberLike.setText(String.valueOf(numberLike));
-                } else {
-                    mLayoutNumberLike.setVisibility(View.GONE);
-                }
-                if (comments.getStatusLike() != 0) {
-                    mLike.setVisibility(View.GONE);
-                    mLiked.setVisibility(View.VISIBLE);
-                } else {
-                    mLike.setVisibility(View.VISIBLE);
-                    mLiked.setVisibility(View.INVISIBLE);
-                }
+                mNumberLike.setText(String.valueOf(mComment.getNumberLike()));
+                onLikeComment(comments);
             }
             mLayoutLike.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    final int isLike = comments.getStatusLike() == 0 ? 1 : 0;
+                    if (comments != null) {
+                        final int isLike = comments.getStatusLike() == 0 ? 1 : 0;
+                        int statusLike = comments.getStatusLike();
+                        comments.setStatusLike(isLike);
+                        int numberLike;
+                        if (isLike == 1) {
+                            numberLike = comments.getComment().getNumberLike() + 1;
+                        } else {
+                            numberLike = comments.getComment().getNumberLike() - 1;
+                        }
+                        if (mComment != null) {
+                            mComment.setNumberLike(numberLike);
+                        }
+                        onLikeComment(comments);
+                        if (mTimelinePresenter != null) {
+                            mTimelinePresenter.likeComment(comments.getComment().getId(), 1, statusLike, isLike, new TimeLinePresenter.IOnLikeCallback() {
 
-                    if (mTimelinePresenter != null) {
-                        mTimelinePresenter.likeComment(comments.getComment().getId(), 1, comments.getStatusLike(), isLike, new TimeLinePresenter.IOnLikeCallback() {
+                                @Override
+                                public void onLikeSuccess(String message) {
 
-                            @Override
-                            public void onLikeSuccess(String message) {
-                                int numberLike;
-                                if (comments.getStatusLike() == 0) {
-                                    numberLike = comments.getComment().getNumberLike() + 1;
-                                    mLike.setVisibility(View.GONE);
-                                    mLiked.setVisibility(View.VISIBLE);
-                                } else {
-                                    numberLike = comments.getComment().getNumberLike() - 1;
-                                    mLike.setVisibility(View.VISIBLE);
-                                    mLiked.setVisibility(View.INVISIBLE);
                                 }
-                                if (numberLike > 0) {
-                                    mLayoutNumberLike.setVisibility(View.VISIBLE);
-                                    mNumberLike.setText(String.valueOf(numberLike));
-                                } else {
-                                    mLayoutNumberLike.setVisibility(View.GONE);
-                                }
-                                comments.setStatusLike(isLike);
-                                Logger.d("onClick", "onLikeSuccess");
-                            }
 
-                            @Override
-                            public void onLikeFailure(String message) {
-                                Logger.d("onClick", "onLikeFailure");
-                            }
-                        });
+                                @Override
+                                public void onLikeFailure(String message) {
+                                    Toast.makeText(mContex, message, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 }
             });
+
+        }
+
+        public void onLikeComment(CommentResponse.CommentData.ListComment comments) {
+            int numberLike = comments.getComment().getNumberLike();
+            if (numberLike > 0) {
+                mLayoutNumberLike.setVisibility(View.VISIBLE);
+                mNumberLike.setText(String.valueOf(numberLike));
+            } else {
+                mLayoutNumberLike.setVisibility(View.GONE);
+            }
+            if (comments.getStatusLike() != 0) {
+                mLike.setVisibility(View.GONE);
+                mLiked.setVisibility(View.VISIBLE);
+            } else {
+                mLike.setVisibility(View.VISIBLE);
+                mLiked.setVisibility(View.INVISIBLE);
+            }
         }
     }
 }

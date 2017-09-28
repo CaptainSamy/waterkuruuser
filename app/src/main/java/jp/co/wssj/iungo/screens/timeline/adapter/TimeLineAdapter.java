@@ -43,6 +43,8 @@ import jp.co.wssj.iungo.widget.likefacebook.ReactionView;
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineHolder> {
 
+    public static final String TAG = "TimeLineAdapter";
+
     private static final int NOT_SHOW_IMAGE = 0;
 
     private static final int SHOW_IMAGE = 1;
@@ -54,6 +56,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private IRefreshTimeline mRefreshTimeline;
 
     private IActivityCallback mActivityCallback;
+
+    private RecyclerView mRecycleView;
 
     public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
         mListTimeLine = listTimeline;
@@ -76,6 +80,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             return mListTimeLine.get(position);
         }
         return null;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecycleView = recyclerView;
     }
 
     @Override
@@ -234,6 +244,38 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mContent.setText(mTimeLine.getMessages());
             }
             mLayoutLike.setOnClickListener(this);
+//            mLayoutLike.setOnLongClickListener(new View.OnLongClickListener() {
+//
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    Logger.d(TAG, "onLongClick");
+//                    mReactionFacebook.show();
+//                    CustomLinearLayoutManager layoutManager = (CustomLinearLayoutManager) mRecycleView.getLayoutManager();
+//                    layoutManager.setScrollable(false);
+//                    return true;
+//                }
+//            });
+//            mLayoutLike.setOnTouchListener(new View.OnTouchListener() {
+//
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    if (event.getAction() == MotionEvent.ACTION_UP) {
+//                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
+//                            mReactionFacebook.dismiss();
+//                            CustomLinearLayoutManager layoutManager = (CustomLinearLayoutManager) mRecycleView.getLayoutManager();
+//                            layoutManager.setScrollable(true);
+//                            Logger.d(TAG, "ACTION_UP && onLongClick");
+//                            return mReactionFacebook.onTouchEvent(event);
+//                        }
+//                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
+//                            return mReactionFacebook.onTouchEvent(event);
+//                        }
+//
+//                    }
+//                    return false;
+//                }
+//            });
             mLayoutComment.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
@@ -268,10 +310,19 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.layoutLike:
-                    if (mReactionFacebook.getVisibility() == View.VISIBLE) {
-                        mReactionFacebook.dismiss();
+                    if (mTimeLine.getStatusLikeId() == 0) {
+                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
+                            mReactionFacebook.dismiss();
+                        } else {
+                            mReactionFacebook.show();
+                        }
                     } else {
-                        mReactionFacebook.show();
+                        int typeLike = 0;
+                        int newLike = 0;
+                        mTimeLine.setStatusLikeId(newLike);
+                        likeTimeline(mTimeLine.getId(), newLike, mTimeLine.getStatusLikeId(), typeLike);
+                        mImageSmile.setImageDrawable(getIconLike(newLike));
+                        mTextLike.setText(getStringLike(newLike));
                     }
                     break;
                 case R.id.layoutComment:
