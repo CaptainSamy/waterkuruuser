@@ -485,6 +485,28 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         }
 
         private void fillImage(String url, final ImageView imageView) {
+
+//            Picasso.with(mContext)
+//                    .load(url)
+//                    .placeholder(R.drawable.ic_add_image)
+//                    .into(new Target() {
+//
+//                        @Override
+//                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                            imageView.setImageBitmap(bitmap);
+//                        }
+//
+//                        @Override
+//                        public void onBitmapFailed(Drawable errorDrawable) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                            imageView.setImageDrawable(placeHolderDrawable);
+//                        }
+//                    });
+
             Glide.with(mContext)
                     .load(url)
                     .placeholder(R.drawable.ic_add_image)
@@ -543,7 +565,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     public interface IRefreshTimeline {
 
-        void onRefreshTimeline();
+        void onRefreshTimeline(ImageView view, int position, List<String> urlImages);
     }
 
     public void setRefreshTimeline(IRefreshTimeline refreshTimeline) {

@@ -283,8 +283,13 @@ public class MainActivity extends AppCompatActivity
                     }
                     return true;
                 case R.id.navigation_another:
-                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_MY_REQUEST) {
+                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_STORE_FOLLOW) {
                         replaceFragment(new StoreFollowFragment(), true, true);
+                    }
+                    return true;
+                case R.id.navigation_timeline:
+                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_TIME_LINE) {
+                        replaceFragment(new TimeLineFragment(), true, true);
                     }
                     return true;
                 case R.id.menu_qr_code:
@@ -612,7 +617,7 @@ public class MainActivity extends AppCompatActivity
                 case BaseFragment.MENU_HOME:
                     mBottomNavigationView.setSelectedItemId(R.id.navigation_home);
                     break;
-                case BaseFragment.MENU_MY_REQUEST:
+                case BaseFragment.MENU_STORE_FOLLOW:
                     mBottomNavigationView.setSelectedItemId(R.id.navigation_another);
                     break;
                 case BaseFragment.MENU_MY_STAMP:

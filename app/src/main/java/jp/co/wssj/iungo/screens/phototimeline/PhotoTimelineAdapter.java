@@ -24,7 +24,7 @@ import jp.co.wssj.iungo.widget.ImageRoundCorners;
  * Created by Nguyen Huu Ta on 19/5/2017.
  */
 
-class PhotoTimelineAdapter extends PagerAdapter {
+public class PhotoTimelineAdapter extends PagerAdapter {
 
     private final LayoutInflater mLayoutInflater;
 
@@ -32,7 +32,7 @@ class PhotoTimelineAdapter extends PagerAdapter {
 
     private Context mContext;
 
-    PhotoTimelineAdapter(Context context, List<String> restImages) {
+    public PhotoTimelineAdapter(Context context, List<String> restImages) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
         mListRestImages = new ArrayList<>();

@@ -84,6 +84,11 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected ICommentView onCreateView() {
         return this;
     }

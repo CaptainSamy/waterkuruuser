@@ -90,6 +90,11 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected void initViews(View rootView) {
         mRefreshListChat = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshHistoryChat);
         mListViewChat = (ListView) rootView.findViewById(R.id.lvStoreFollow);

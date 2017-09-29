@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.screens.timeline;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,16 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     }
 
     @Override
+    public int getMenuBottomID() {
+        return MENU_TIME_LINE;
+    }
+
+    @Override
+    public boolean isDisplayNavigationButton() {
+        return false;
+    }
+
+    @Override
     protected ITimeLineView onCreateView() {
         return this;
     }
@@ -90,7 +101,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
             mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
 
                 @Override
-                public void onRefreshTimeline() {
+                public void onRefreshTimeline(ImageView view, int position, List<String> urlImages) {
                     mPresenter.getTimeline(Constants.INIT_PAGE);
                 }
             });

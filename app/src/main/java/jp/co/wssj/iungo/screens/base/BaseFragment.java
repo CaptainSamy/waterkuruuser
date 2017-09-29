@@ -305,5 +305,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public static final int MENU_MY_STAMP = 2;
 
-    public static final int MENU_MY_REQUEST = 3;
+    public static final int MENU_STORE_FOLLOW = 3;
+
+    public static final int MENU_TIME_LINE = 4;
 }

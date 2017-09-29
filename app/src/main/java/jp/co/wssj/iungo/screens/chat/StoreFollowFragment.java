@@ -66,12 +66,17 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
 
     @Override
     public int getMenuBottomID() {
-        return MENU_MY_REQUEST;
+        return MENU_STORE_FOLLOW;
     }
 
     @Override
     protected void initViews(View rootView) {
         mListViewStoreFollow = (ListView) rootView.findViewById(R.id.lvStoreFollow);
+    }
+
+    @Override
+    public boolean isDisplayNavigationButton() {
+        return false;
     }
 
     @Override
