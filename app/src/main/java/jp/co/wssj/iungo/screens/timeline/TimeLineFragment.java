@@ -129,7 +129,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     @Override
     public void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData) {
         setFresh(false);
-        if (timeLineData != null) {
+        if (timeLineData != null && timeLineData.getListTimeline().size() > 0) {
             int page = timeLineData.getPage();
             mRecycleTimeLine.setTotalPage(timeLineData.getTotalPage());
             mRecycleTimeLine.setCurrentPage(page);

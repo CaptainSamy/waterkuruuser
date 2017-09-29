@@ -52,6 +52,8 @@ public final class Constants {
 
     public static final String KEY_SERVICE_COMPANY_ID = "KEY_SERVICE_COMPANY_ID";
 
+    public static final String KEY_FAST = "fast_";
+
     public static final int STATUS_READ = 1;
 
     public static final int STATUS_VIEW = 2;

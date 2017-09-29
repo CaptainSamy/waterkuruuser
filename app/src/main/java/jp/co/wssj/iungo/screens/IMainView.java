@@ -88,4 +88,8 @@ public interface IMainView extends IView {
     void showListPushNotificationUnRead(List<NotificationMessage> list, int page, int totalPage, int totalPushUnRead);
 
     void displayErrorMessage(String message);
+
+    void onMappingUserStoreFastSuccess();
+
+    void onMappingUserStoreFastFailure(String message);
 }

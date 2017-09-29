@@ -219,7 +219,7 @@
     <!--Comment fragment-->
     <string name="title_screen_comment">コメントする</string>
     <string name="comment">コメントする</string>
-    <string name="write_comment">コマンとする…</string>
+    <string name="write_comment">コメントする…</string>
 
     <!--Timeline Fragment-->
     <string name="title_screen_timeline">タイムライン</string>
@@ -227,7 +227,6 @@
     <string name="send_comment">送信</string>
     <string name="like">いいね</string>
     <string name="number_rest_image">+ %1$s</string>
-    <string name="lion_blurb">The lion (Panthera leo) is one of the big cats in the genus Panthera and a member of the family Felidae. The commonly used term African lion collectively denotes the several subspecies in Africa. With some males exceeding 250 kg (550 lb) in weight, it is the second-largest living cat after the tiger.</string>
 
 
 </resources>

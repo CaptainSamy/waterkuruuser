@@ -9,7 +9,7 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
  * Created by HieuPT on 6/1/2017.
  */
 
-interface IListCardView extends IFragmentView {
+interface IListCardDetailView extends IFragmentView {
 
     void showListUnusedCard(List<ListCardResponse.ListCardData.CardData> cardDataList, String explain);
 

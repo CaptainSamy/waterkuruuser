@@ -25,13 +25,13 @@ import jp.co.wssj.iungo.widget.MarginItemDecoration;
  * Created by HieuPT on 6/1/2017.
  */
 
-public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresenter> implements IListCardView {
+public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, ListCardDetailPresenter> implements IListCardDetailView {
 
     public static final String KEY_CARD_NAME = "KEY_CARD_NAME";
 
     public static final String KEY_SERVICE_ID = "KEY_SERVICE_ID";
 
-    private static final String TAG = "ListCardFragment";
+    private static final String TAG = "ListCardFragmentDetail";
 
     private RecyclerView mUnusedCardRecycler, mCanUseCardRecycler, mUsedCardRecycler;
 
@@ -51,8 +51,8 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
 
     private List<ListCardResponse.ListCardData.CardData> mListCardCanUse, mListCardUsed;
 
-    public static ListCardFragment newInstance(Bundle bundle) {
-        ListCardFragment fragment = new ListCardFragment();
+    public static ListCardFragmentDetail newInstance(Bundle bundle) {
+        ListCardFragmentDetail fragment = new ListCardFragmentDetail();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -166,12 +166,12 @@ public class ListCardFragment extends BaseFragment<IListCardView, ListCardPresen
     }
 
     @Override
-    protected ListCardPresenter onCreatePresenter(IListCardView view) {
-        return new ListCardPresenter(view);
+    protected ListCardDetailPresenter onCreatePresenter(IListCardDetailView view) {
+        return new ListCardDetailPresenter(view);
     }
 
     @Override
-    protected IListCardView onCreateView() {
+    protected IListCardDetailView onCreateView() {
         return this;
     }
 

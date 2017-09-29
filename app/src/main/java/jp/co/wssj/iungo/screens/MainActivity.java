@@ -46,7 +46,7 @@ import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
 import jp.co.wssj.iungo.screens.home.HomeFragment;
 import jp.co.wssj.iungo.screens.howtouse.HowToUserFragment;
 import jp.co.wssj.iungo.screens.introduction.IntroductionFragment;
-import jp.co.wssj.iungo.screens.listcard.ListCardFragment;
+import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
 import jp.co.wssj.iungo.screens.listservicecompany.ListServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.liststorecheckedin.ListStoreCheckedInFragment;
 import jp.co.wssj.iungo.screens.login.LoginFragment;
@@ -405,7 +405,7 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(UserMemoFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_LIST_CARD:
-                replaceFragment(ListCardFragment.newInstance(bundle), hasAnimation, addToBackStack);
+                replaceFragment(ListCardFragmentDetail.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_TERM_OF_SERVICE:
                 replaceFragment(new TermOfServiceFragment(), hasAnimation, addToBackStack);
@@ -522,14 +522,19 @@ public class MainActivity extends AppCompatActivity
                 switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             } else if (intent.getScheme() != null && intent.getScheme().equals("iungo")) {
                 final String storeCode = intent.getData().getQueryParameter("code");
-                ObjectPush objectPush = new ObjectPush(storeCode);
-                Gson gson = new Gson();
-                String json = gson.toJson(objectPush);
-                mPresenter.savePush(json);
-                if (mPresenter.isLogin()) {
-                    switchScreen(IMainView.FRAGMENT_HOME, true, true, null);
+                if (storeCode.contains(Constants.KEY_FAST)) {
+                    String code = storeCode.replace(Constants.KEY_FAST, Constants.EMPTY_STRING);
+                    mPresenter.mappingUserWithStoreFast(code);
                 } else {
-                    switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
+                    ObjectPush objectPush = new ObjectPush(storeCode);
+                    Gson gson = new Gson();
+                    String json = gson.toJson(objectPush);
+                    mPresenter.savePush(json);
+                    if (mPresenter.isLogin()) {
+                        switchScreen(IMainView.FRAGMENT_HOME, true, true, null);
+                    } else {
+                        switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
+                    }
                 }
             } else {
                 mPresenter.onCreate();
@@ -559,6 +564,16 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
+    }
+
+    @Override
+    public void onMappingUserStoreFastSuccess() {
+        switchScreen(IMainView.FRAGMENT_STAMP, true, true, null);
+    }
+
+    @Override
+    public void onMappingUserStoreFastFailure(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

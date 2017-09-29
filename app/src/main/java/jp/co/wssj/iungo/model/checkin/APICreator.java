@@ -7,6 +7,7 @@ import com.android.volley.VolleyError;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.model.volleyrequest.GsonJsonRequest;
 import jp.co.wssj.iungo.model.volleyrequest.GsonRequest;
 import jp.co.wssj.iungo.screens.pushobject.MappingUserStoreResponse;
@@ -28,6 +29,8 @@ final class APICreator {
     private static final String GET_CHECK_IN_STATUS_BY_USER = Constants.BASE_URL + "/api/client/users/get-check-in-status-by-user";
 
     private static final String MAPPING_USER_WITH_STORE = Constants.BASE_URL + "/api/client/users/feedback-ignore-session";
+
+    private static final String MAPPING_USER_WITH_STORE_FAST = Constants.BASE_URL + "/api/client/users/check-in-fast";
 
     static GsonRequest<ConfirmCheckInResponse> getFeedbackQRStoreRequest(String token, final String code, final Response.Listener<ConfirmCheckInResponse> listener, final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -81,7 +84,7 @@ final class APICreator {
 
                     @Override
                     public void onResponse(CheckInStatusResponse response) {
-                        Logger.i(TAG, "#getCheckInStatusRequest => onResponse");
+                        Logger.i(TAG, "#getCheckInStatusByUser => onResponse");
                         if (listener != null) {
                             listener.onResponse(response);
                         }
@@ -91,7 +94,7 @@ final class APICreator {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.i(TAG, "#getCheckInStatusRequest => onErrorResponse");
+                        Logger.i(TAG, "#getCheckInStatusByUser => onErrorResponse");
                         if (errorListener != null) {
                             errorListener.onErrorResponse(error);
                         }
@@ -110,7 +113,7 @@ final class APICreator {
 
                     @Override
                     public void onResponse(InfoStoreResponse response) {
-                        Logger.d(TAG, "#getQRStringRequest -> onResponse");
+                        Logger.d(TAG, "#getInfoStoreRequest -> onResponse");
                         if (responseListener != null) {
                             responseListener.onResponse(response);
                         }
@@ -120,7 +123,7 @@ final class APICreator {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getQRStringRequest -> onErrorResponse");
+                        Logger.d(TAG, "#getInfoStoreRequest -> onErrorResponse");
                         if (errorListener != null) {
                             errorListener.onErrorResponse(error);
                         }
@@ -148,7 +151,7 @@ final class APICreator {
 
                     @Override
                     public void onResponse(MappingUserStoreResponse response) {
-                        Logger.d(TAG, "#getQRStringRequest -> onResponse");
+                        Logger.d(TAG, "#mappingUserWithStore -> onResponse");
                         if (responseListener != null) {
                             responseListener.onResponse(response);
                         }
@@ -158,7 +161,7 @@ final class APICreator {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getQRStringRequest -> onErrorResponse");
+                        Logger.d(TAG, "#mappingUserWithStore -> onErrorResponse");
                         if (errorListener != null) {
                             errorListener.onErrorResponse(error);
                         }
@@ -169,6 +172,40 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> param = new HashMap<>();
                 param.put("code", code);
+                return param;
+            }
+        };
+    }
+
+    static GsonRequest<ResponseData> mappingUserWithStoreFast(String token, final String code, final Response.Listener<ResponseData> responseListener, final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<ResponseData>(Request.Method.POST,
+                MAPPING_USER_WITH_STORE_FAST,
+                ResponseData.class,
+                headers,
+                new Response.Listener<ResponseData>() {
+
+                    @Override
+                    public void onResponse(ResponseData response) {
+                        Logger.d(TAG, "#mappingUserWithStoreFast -> onResponse");
+                        responseListener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#mappingUserWithStoreFast -> onErrorResponse");
+                        errorListener.onErrorResponse(error);
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> param = new HashMap<>();
+                param.put("code_store", code);
                 return param;
             }
         };

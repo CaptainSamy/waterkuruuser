@@ -14,9 +14,9 @@ import jp.co.wssj.iungo.utils.Utils;
  * Created by HieuPT on 6/1/2017.
  */
 
-class ListCardPresenter extends FragmentPresenter<IListCardView> {
+class ListCardDetailPresenter extends FragmentPresenter<IListCardDetailView> {
 
-    ListCardPresenter(IListCardView view) {
+    ListCardDetailPresenter(IListCardDetailView view) {
         super(view);
         registerModel(new StampModel(view.getViewContext()));
         registerModel(new SharedPreferencesModel(view.getViewContext()));

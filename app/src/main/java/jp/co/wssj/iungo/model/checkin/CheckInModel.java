@@ -10,6 +10,7 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.ErrorResponse;
+import jp.co.wssj.iungo.model.ResponseData;
 import jp.co.wssj.iungo.screens.pushobject.MappingUserStoreResponse;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -41,6 +42,13 @@ public class CheckInModel extends BaseModel {
         void onMappingUserStoreSuccess(MappingUserStoreResponse.PushData data);
 
         void onMappingUserStoreFailure(String message);
+    }
+
+    public interface IMappingUserStoreFastCallback {
+
+        void onMappingUserStoreFastSuccess();
+
+        void onMappingUserStoreFastFailure(String message);
     }
 
     public interface IVerifyStoreQRCodeCallback {
@@ -134,7 +142,12 @@ public class CheckInModel extends BaseModel {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Logger.i(TAG, "#getCheckInStatusByUser => onErrorResponse");
-                        callback.onCheckInStatusFailure(new ErrorMessage(getStringResource(R.string.failure)));
+                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                        if (errorResponse != null) {
+                            callback.onCheckInStatusFailure(new ErrorMessage(errorResponse.getMessage()));
+                        } else {
+                            callback.onCheckInStatusFailure(new ErrorMessage(getStringResource(R.string.network_error)));
+                        }
                     }
                 });
         VolleySequence.getInstance().addRequest(requestCheckInStatus);
@@ -159,7 +172,42 @@ public class CheckInModel extends BaseModel {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Logger.i(TAG, "#mappingUserWithStore => onErrorResponse");
-                        callback.onMappingUserStoreFailure(getStringResource(R.string.failure));
+                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                        if (errorResponse != null) {
+                            callback.onMappingUserStoreFailure(errorResponse.getMessage());
+                        } else {
+                            callback.onMappingUserStoreFailure(getStringResource(R.string.network_error));
+                        }
+                    }
+                });
+        VolleySequence.getInstance().addRequest(requestCheckInStatus);
+    }
+
+    public void mappingUserWithStoreFast(String token, String code, final IMappingUserStoreFastCallback callback) {
+        Request requestCheckInStatus = APICreator.mappingUserWithStoreFast(token, code,
+                new Response.Listener<ResponseData>() {
+
+                    @Override
+                    public void onResponse(ResponseData response) {
+                        Logger.i(TAG, "#mappingUserWithStoreFast => onResponse message");
+                        if (response != null && response.isSuccess()) {
+                            callback.onMappingUserStoreFastSuccess();
+                        } else {
+                            callback.onMappingUserStoreFastFailure(getStringResource(R.string.failure));
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.i(TAG, "#mappingUserWithStoreFast => onErrorResponse");
+                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                        if (errorResponse != null) {
+                            callback.onMappingUserStoreFastFailure(errorResponse.getMessage());
+                        } else {
+                            callback.onMappingUserStoreFastFailure(getStringResource(R.string.network_error));
+                        }
                     }
                 });
         VolleySequence.getInstance().addRequest(requestCheckInStatus);

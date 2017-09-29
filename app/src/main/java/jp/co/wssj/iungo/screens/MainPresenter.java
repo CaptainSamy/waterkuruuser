@@ -95,6 +95,24 @@ class MainPresenter extends BasePresenter<IMainView> {
         }
     }
 
+    public void mappingUserWithStoreFast(String code) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        if (!TextUtils.isEmpty(token)) {
+            getModel(CheckInModel.class).mappingUserWithStoreFast(token, code, new CheckInModel.IMappingUserStoreFastCallback() {
+
+                @Override
+                public void onMappingUserStoreFastSuccess() {
+                    getView().onMappingUserStoreFastSuccess();
+                }
+
+                @Override
+                public void onMappingUserStoreFastFailure(String message) {
+                    getView().onMappingUserStoreFastFailure(message);
+                }
+            });
+        }
+    }
+
     public String getUserName() {
         return getModel(SharedPreferencesModel.class).getUserName();
     }

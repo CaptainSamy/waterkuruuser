@@ -13,7 +13,7 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCompanyResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.listcard.ListCardFragment;
+import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
 import jp.co.wssj.iungo.screens.listservicecompany.adapter.ServicesCompanyAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.utils.Constants;
@@ -120,8 +120,8 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, serviceCompanyId);
         if (cardType == 1) {
-            bundle.putInt(ListCardFragment.KEY_SERVICE_ID, serviceId);
-            bundle.putString(ListCardFragment.KEY_CARD_NAME, cardName);
+            bundle.putInt(ListCardFragmentDetail.KEY_SERVICE_ID, serviceId);
+            bundle.putString(ListCardFragmentDetail.KEY_CARD_NAME, cardName);
             bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, serviceName);
             fragmentId = IMainView.FRAGMENT_LIST_CARD;
         } else {
