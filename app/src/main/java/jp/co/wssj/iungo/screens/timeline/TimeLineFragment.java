@@ -68,6 +68,11 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     }
 
     @Override
+    public int getNavigationBottomId() {
+        return R.id.navigation_timeline;
+    }
+
+    @Override
     public boolean isDisplayNavigationButton() {
         return false;
     }
@@ -101,8 +106,9 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
             mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
 
                 @Override
-                public void onRefreshTimeline(ImageView view, int position, List<String> urlImages) {
-                    mPresenter.getTimeline(Constants.INIT_PAGE);
+                public void onRefreshTimeline(ImageView view) {
+//                    mPresenter.getTimeline(Constants.INIT_PAGE);
+                    imageShares = view;
                 }
             });
             setFresh(true);
@@ -110,6 +116,8 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
         }
         mRecycleTimeLine.setAdapter(mAdapter);
     }
+
+    private ImageView imageShares;
 
     @Override
     public void onClick(View v) {
@@ -147,5 +155,8 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
         mRefreshLayout.setRefreshing(fresh);
     }
 
+    public ImageView getImageShares() {
+        return imageShares;
+    }
 
 }

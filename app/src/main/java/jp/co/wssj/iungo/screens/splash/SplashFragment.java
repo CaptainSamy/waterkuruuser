@@ -99,7 +99,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
                 dialogAskUpdate.showDialog();
             } else {
-                displayScreen(IMainView.FRAGMENT_HOME);
+                displayScreen(IMainView.FRAGMENT_TIME_LINE);
             }
         }
     }

@@ -35,6 +35,8 @@ public class HistoryChatResponse extends ResponseData<HistoryChatResponse.Histor
             @SerializedName("user_name")
             private String userName;
 
+            private String date;
+
             public String getContent() {
                 return content;
             }
@@ -53,6 +55,14 @@ public class HistoryChatResponse extends ResponseData<HistoryChatResponse.Histor
 
             public String getUserName() {
                 return userName;
+            }
+
+            public String getDate() {
+                return date;
+            }
+
+            public void setDate(String date) {
+                this.date = date;
             }
         }
 

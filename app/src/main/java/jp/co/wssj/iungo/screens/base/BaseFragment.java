@@ -186,7 +186,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public void showTextNoItem(String text, View view) {
         mTextNoItem.setVisibility(View.VISIBLE);
-        view.setVisibility(View.GONE);
+        view.setVisibility(View.INVISIBLE);
         mTextNoItem.setText(text);
     }
 
@@ -305,7 +305,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public static final int MENU_MY_STAMP = 2;
 
+    public static final int MENU_TIME_LINE = 4;
+
     public static final int MENU_STORE_FOLLOW = 3;
 
-    public static final int MENU_TIME_LINE = 4;
 }

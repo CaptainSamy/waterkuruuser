@@ -292,9 +292,6 @@ public class MainActivity extends AppCompatActivity
                         replaceFragment(new TimeLineFragment(), true, true);
                     }
                     return true;
-                case R.id.menu_qr_code:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_SCANNER, true, true, null, menuId);
-                    return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
                     return true;
@@ -459,7 +456,9 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(new TimeLineFragment(), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_COMMENT:
-                replaceFragment(CommentFragment.newInstance(bundle), hasAnimation, addToBackStack);
+                if (mCurrentFragment instanceof TimeLineFragment) {
+                    replaceFragment(CommentFragment.newInstance(bundle), ((TimeLineFragment) mCurrentFragment).getImageShares());
+                }
                 break;
         }
     }
@@ -519,7 +518,14 @@ public class MainActivity extends AppCompatActivity
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
-                switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+                switch (notificationMessage.getAction()) {
+                    case Constants.PushNotification.TYPE_TIME_LINE:
+                        switchScreen(IMainView.FRAGMENT_TIME_LINE, true, true, null);
+                        break;
+                    default:
+                        switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+                }
+
             } else if (intent.getScheme() != null && intent.getScheme().equals("iungo")) {
                 final String storeCode = intent.getData().getQueryParameter("code");
                 if (storeCode.contains(Constants.KEY_FAST)) {
@@ -656,6 +662,14 @@ public class MainActivity extends AppCompatActivity
         if (fragment != null && !isFinishing()) {
             if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId() || fragment instanceof PushNotificationDetailFragment) {
                 mFragmentBackStackManager.replaceFragment(fragment, hasAnimation, addToBackStack);
+            }
+        }
+    }
+
+    private void replaceFragment(BaseFragment fragment, ImageView imageView) {
+        if (fragment != null && !isFinishing()) {
+            if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId()) {
+                mFragmentBackStackManager.replaceFragment(fragment, imageView);
             }
         }
     }

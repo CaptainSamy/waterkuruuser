@@ -122,6 +122,10 @@ public final class Constants {
         public static final String TYPE_REQUEST_REVIEW = "action_request_review";
 
         public static final String TYPE_QUESTION_NAIRE = "action_question_naire";
+
+        public static final String TYPE_TIME_LINE = "type_timeline";
+
+        public static final String TYPE_STEP_PUSH = "type_step_push";
     }
 
     public static final class MemoConfig {

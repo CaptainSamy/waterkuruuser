@@ -1,14 +1,19 @@
 package jp.co.wssj.iungo.screens.comment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -22,8 +27,12 @@ import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.CommentAdapter;
+import jp.co.wssj.iungo.screens.transition.TransitionAdapter;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.utils.Utils;
+import jp.co.wssj.iungo.widget.CirclePageIndicator;
+import jp.co.wssj.iungo.widget.CustomViewPager;
 
 /**
  * Created by Nguyen Huu Ta on 21/9/2017.
@@ -35,9 +44,13 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     public static final String KEY_TIME_LIKE_ID = "timeline_id";
 
-    private CommentAdapter mAdapterComment;
+    public static final String KEY_ITEM_POSITION = "item_position";
 
-    private List<CommentResponse.CommentData.ListComment> mListComment;
+    public static final String KEY_LIST_ITEMS = "list_items";
+
+    private CustomViewPager mViewPagePhoto;
+
+    private CirclePageIndicator mIndicator;
 
     private ListView mListViewComment;
 
@@ -45,9 +58,15 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     private EmojiconEditText mInputComment;
 
+    private RelativeLayout mLayoutViewPager;
+
     private ProgressBar mProgressSend;
 
     private CommentPresenter mPresenter;
+
+    private CommentAdapter mAdapterComment;
+
+    private List<CommentResponse.CommentData.ListComment> mListComment;
 
     private int mTimelineId;
 
@@ -94,11 +113,45 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        postponeEnterTransition();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
+        }
+        setSharedElementReturnTransition(null);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        int currentItem = getArguments().getInt(KEY_ITEM_POSITION);
+        ArrayList<String> listUrlImage = getArguments().getStringArrayList(KEY_LIST_ITEMS);
+        if (listUrlImage != null && listUrlImage.size() > 0) {
+            mLayoutViewPager.setVisibility(View.VISIBLE);
+            TransitionAdapter animalPagerAdapter = new TransitionAdapter(getChildFragmentManager(), listUrlImage);
+            mViewPagePhoto.setAdapter(animalPagerAdapter);
+            mViewPagePhoto.setCurrentItem(currentItem);
+            mIndicator.setViewPager(mViewPagePhoto);
+        } else {
+            mLayoutViewPager.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void initViews(View rootView) {
+        mViewPagePhoto = (CustomViewPager) rootView.findViewById(R.id.vpPhotoTimeline);
+        mIndicator = (CirclePageIndicator) rootView.findViewById(R.id.indicator);
         mListViewComment = (ListView) rootView.findViewById(R.id.lvComment);
         mButtonSendComment = (ImageView) rootView.findViewById(R.id.tvSendComment);
         mProgressSend = (ProgressBar) rootView.findViewById(R.id.progressSend);
         mInputComment = (EmojiconEditText) rootView.findViewById(R.id.etComment);
+        mLayoutViewPager = (RelativeLayout) rootView.findViewById(R.id.layoutViewPager);
+
+        mIndicator.setFillColor(ContextCompat.getColor(getContext(), R.color.colorMain));
+        mIndicator.setPageColor(ContextCompat.getColor(getContext(), R.color.white));
+        mIndicator.setRadius(Utils.convertDpToPixel(getContext(), 4));
+        mIndicator.setStrokeWidth(0);
     }
 
     @Override
@@ -191,11 +244,13 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     @Override
     public void onGetListCommentSuccess(CommentResponse.CommentData commentData) {
-        if (mListComment != null) {
+        if (mListComment != null && commentData.getListComment().size() > 0) {
             mListComment.clear();
             mListComment.addAll(commentData.getListComment());
             Collections.reverse(mListComment);
             mAdapterComment.notifyDataSetChanged();
+        } else {
+            showTextNoItem("No comment", mListViewComment);
         }
 
     }

@@ -100,7 +100,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     @Override
     public void displayHomeScreen() {
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, false, false);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_TIME_LINE, false, false);
     }
 
     @Override

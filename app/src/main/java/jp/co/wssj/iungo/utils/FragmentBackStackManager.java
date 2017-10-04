@@ -5,6 +5,8 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewCompat;
+import android.widget.ImageView;
 
 import java.util.LinkedList;
 
@@ -48,6 +50,21 @@ public class FragmentBackStackManager {
                 ft.setCustomAnimations(mEnterAnim, mExitAnim, mPopEnterAnim, mPopExitAnim);
             }
             ft.replace(mContainerViewId, fragment, fragment.getClass().getName());
+            ft.addToBackStack(tag);
+            ft.commitAllowingStateLoss();
+        }
+    }
+
+    public void replaceFragment(Fragment fragment, ImageView imageView) {
+        if (fragment != null) {
+            String tag = String.valueOf(System.currentTimeMillis());
+            mBackStacks.add(new BackStack(mFragmentManager.findFragmentById(mContainerViewId),
+                    true, tag));
+            FragmentTransaction ft = mFragmentManager.beginTransaction();
+            ft.replace(mContainerViewId, fragment, fragment.getClass().getName());
+            if (imageView != null) {
+                ft.addSharedElement(imageView, ViewCompat.getTransitionName(imageView));
+            }
             ft.addToBackStack(tag);
             ft.commitAllowingStateLoss();
         }

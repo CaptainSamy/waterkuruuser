@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.screens.timeline.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -148,6 +149,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private PhotoTimelineDialog mDialogPhoto;
 
+        private ImageView mImagePhoto1;
+
         public TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
@@ -191,6 +194,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     switch (length) {
                         case 1:
                             ImageView viewOneImages = (ImageView) mLayoutInflate.inflate(R.layout.one_image, null);
+                            mImagePhoto1 = viewOneImages;
                             viewOneImages.setOnClickListener(this);
                             fillImage(jsonArray.getString(0), viewOneImages);
                             mLayoutContainerImages.addView(viewOneImages);
@@ -328,27 +332,38 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     }
                     break;
                 case R.id.layoutComment:
-                    if (mActivityCallback != null) {
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
-                        mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle);
+                    if (mListUrlImage != null && mListUrlImage.size() > 0) {
+                        commentFragment(0, mImagePhoto1);
+                    } else {
+                        commentFragment(0, null);
                     }
                     break;
                 case R.id.image1:
-                    mDialogPhoto.showImages(mListUrlImage, 0);
+                    commentFragment(0, (ImageView) v);
                     break;
                 case R.id.image2:
-                    mDialogPhoto.showImages(mListUrlImage, 1);
+                    commentFragment(1, (ImageView) v);
                     break;
                 case R.id.image3:
-                    mDialogPhoto.showImages(mListUrlImage, 2);
+                    commentFragment(2, (ImageView) v);
                     break;
                 case R.id.image4:
-                    mDialogPhoto.showImages(mListUrlImage, 3);
+                    commentFragment(3, (ImageView) v);
                     break;
                 case R.id.image5:
-                    mDialogPhoto.showImages(mListUrlImage, 4);
+                    commentFragment(4, (ImageView) v);
                     break;
+            }
+        }
+
+        private void commentFragment(int positionClick, ImageView view) {
+            if (mActivityCallback != null) {
+                mRefreshTimeline.onRefreshTimeline(view);
+                Bundle bundle = new Bundle();
+                bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
+                bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
+                bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
+                mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle);
             }
         }
 
@@ -487,11 +502,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         }
 
         private void fillImage(String url, final ImageView imageView) {
+            String fileNameJPG = url.substring(url.lastIndexOf("/") + 1);
+            ViewCompat.setTransitionName(imageView, fileNameJPG);
 
             Glide.with(mContext)
                     .load(url)
                     .placeholder(R.drawable.ic_add_image)
-                    .skipMemoryCache(false)
                     .into(new SimpleTarget<GlideDrawable>() {
 
                         @Override
@@ -515,6 +531,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private void fillTwoImages(View view, String urlImage1, String urlImage2) {
             ImageView image1 = (ImageView) view.findViewById(R.id.image1);
+            mImagePhoto1 = image1;
             image1.setOnClickListener(this);
             fillImage(urlImage1, image1);
             ImageView image2 = (ImageView) view.findViewById(R.id.image2);
@@ -546,7 +563,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     public interface IRefreshTimeline {
 
-        void onRefreshTimeline(ImageView view, int position, List<String> urlImages);
+        void onRefreshTimeline(ImageView view);
     }
 
     public void setRefreshTimeline(IRefreshTimeline refreshTimeline) {

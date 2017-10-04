@@ -187,8 +187,26 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         }
         mListChat.addAll(history);
         Collections.reverse(mListChat);
+        sortListChat(mListChat);
+//
         mAdapter.notifyDataSetChanged();
-        scrollEndOfListView();
+//         scrollEndOfListView();
+    }
+
+    private void sortListChat(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
+        String date = Constants.EMPTY_STRING;
+        for (HistoryChatResponse.HistoryChatData.ChatData chatData : history) {
+            if (TextUtils.isEmpty(date)) {
+                date = Utils.formatDate(chatData.getTimeCreate(), "MM/dd/yyyy");
+                chatData.setDate(date);
+            } else {
+                String dateTemp = Utils.formatDate(chatData.getTimeCreate(), "MM/dd/yyyy");
+                if (!TextUtils.equals(date, dateTemp)) {
+                    date = dateTemp;
+                    chatData.setDate(dateTemp);
+                }
+            }
+        }
     }
 
     @Override

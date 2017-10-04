@@ -3,10 +3,12 @@ package jp.co.wssj.iungo.screens.chat.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -81,16 +83,28 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
     public class ChatDetailHolderUser {
 
+        private TextView mDate;
+
         private TextView mTime;
 
         private EmojiconTextView mContent;
 
+        private LinearLayout mLayoutDate;
+
         public ChatDetailHolderUser(View view) {
+            mDate = (TextView) view.findViewById(R.id.tvDate);
             mContent = (EmojiconTextView) view.findViewById(R.id.tvContent);
             mTime = (TextView) view.findViewById(R.id.tvTime);
+            mLayoutDate = (LinearLayout)view.findViewById(R.id.layoutDate);
         }
 
         public void bind(HistoryChatResponse.HistoryChatData.ChatData chat) {
+            if (TextUtils.isEmpty(chat.getDate())) {
+                mLayoutDate.setVisibility(View.GONE);
+            } else {
+                mLayoutDate.setVisibility(View.VISIBLE);
+                mDate.setText(chat.getDate());
+            }
             mContent.setText(StringEscapeUtils.unescapeJava(chat.getContent()));
             mTime.setText(Utils.formatDate(chat.getTimeCreate(), "HH:mm"));
         }
