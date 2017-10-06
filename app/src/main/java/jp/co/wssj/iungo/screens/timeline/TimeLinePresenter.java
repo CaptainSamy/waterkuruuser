@@ -26,6 +26,7 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
     }
 
     public void getTimeline(int page) {
+
         String token = getModel(SharedPreferencesModel.class).getToken();
         getModel().getTimeLine(token, page, new TimelineModel.OnGetTimelineCallback() {
 

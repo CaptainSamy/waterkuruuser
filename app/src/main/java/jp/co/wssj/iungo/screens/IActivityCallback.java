@@ -17,4 +17,5 @@ public interface IActivityCallback {
     void clearBackStack();
 
     void onFragmentResumed(BaseFragment fragment);
+
 }

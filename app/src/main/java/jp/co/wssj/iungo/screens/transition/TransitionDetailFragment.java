@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import jp.co.wssj.iungo.R;
 
@@ -52,13 +55,30 @@ public class TransitionDetailFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String animalItem = getArguments().getString(EXTRA_ANIMAL_ITEM);
+        String urlImage = getArguments().getString(EXTRA_ANIMAL_ITEM);
         String transitionName = getArguments().getString(EXTRA_TRANSITION_NAME);
         ImageView imageView = (ImageView) view.findViewById(R.id.animal_detail_image_view);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             imageView.setTransitionName(transitionName);
         }
-        Glide.with(getContext()).load(animalItem).into(imageView);
+        Glide.with(this)
+                .load(urlImage)
+                .dontAnimate()
+                .listener(new RequestListener<String, GlideDrawable>() {
+
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        startPostponedEnterTransition();
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        startPostponedEnterTransition();
+                        return false;
+                    }
+                })
+                .into(imageView);
 
 //        Picasso.with(getContext())
 //                .load(animalItem)

@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity
             mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
         mPresenter = new MainPresenter(this);
+
         setupFragmentBackStackManager();
         initView();
         initAction();
@@ -252,6 +253,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+        Logger.d(TAG, "onStop");
         mPresenter.onViewDetached();
     }
 
@@ -603,7 +605,7 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-            if (fragment instanceof HomeFragment && isRequestFirstNotification) {
+            if (fragment instanceof TimeLineFragment && isRequestFirstNotification) {
                 isRequestFirstNotification = false;
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
             }

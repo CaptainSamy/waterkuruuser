@@ -38,7 +38,6 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/clock"
             android:paddingLeft="4dp"
-            android:text="12：00"
             android:textSize="12sp"/>
     </LinearLayout>
 
@@ -91,7 +90,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="15dp"
-            android:text="Question Naire"
+            android:text="@string/question_naire"
             android:textColor="@color/white"
             android:visibility="gone"/>
 

@@ -64,6 +64,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         mListTimeLine = listTimeline;
         mPresenter = presenter;
         mActivityCallback = activityCallback;
+
     }
 
     public void refreshList(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, int page) {
@@ -356,14 +357,32 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             }
         }
 
-        private void commentFragment(int positionClick, ImageView view) {
+        private void commentFragment(int positionClick, ImageView imageView) {
             if (mActivityCallback != null) {
-                mRefreshTimeline.onRefreshTimeline(view);
+                if (imageView != null) {
+                    String urlImage = mListUrlImage.get(positionClick);
+                    String fileName = urlImage.substring(urlImage.lastIndexOf("/") + 1);
+                    ViewCompat.setTransitionName(imageView, fileName);
+                }
+                mRefreshTimeline.onRefreshTimeline(imageView);
                 Bundle bundle = new Bundle();
                 bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
                 bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
                 mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle);
+
+//                mActivityCallback.onComment(imageView, mListUrlImage, positionClick);
+
+//                ViewCompat.setTransitionName(imageView, "simple_activity_transition");
+//                Intent intent = new Intent(mContext, CommentActivity.class);
+//                ActivityOptionsCompat options = ActivityOptionsCompat.
+//                        makeSceneTransitionAnimation((Activity) mContext,
+//                                imageView,
+//                                ViewCompat.getTransitionName(imageView));
+//                intent.putStringArrayListExtra("LIST_URL", (ArrayList<String>) mListUrlImage);
+//                intent.putExtra("POSITION", positionClick);
+//                mContext.startActivity(intent, options.toBundle());
+
             }
         }
 
@@ -502,8 +521,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         }
 
         private void fillImage(String url, final ImageView imageView) {
-            String fileNameJPG = url.substring(url.lastIndexOf("/") + 1);
-            ViewCompat.setTransitionName(imageView, fileNameJPG);
 
             Glide.with(mContext)
                     .load(url)

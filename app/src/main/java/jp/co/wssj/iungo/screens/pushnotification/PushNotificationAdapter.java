@@ -64,11 +64,14 @@ public class PushNotificationAdapter extends ArrayAdapter<NotificationMessage> {
         void fillDataToView(final Context context, final NotificationMessage notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
             Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany);
-
-            String time = Utils.distanceTimes(notificationMessage.getPushTime());
-            if (!TextUtils.isEmpty(time)) {
-                mTime.setText(time);
+            long timeSendPush = notificationMessage.getPushTime();
+            if (timeSendPush != 0) {
+                String time = Utils.distanceTimes(timeSendPush);
+                if (!TextUtils.isEmpty(time)) {
+                    mTime.setText(time);
+                }
             }
+
         }
     }
 

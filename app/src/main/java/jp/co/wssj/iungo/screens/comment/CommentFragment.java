@@ -108,6 +108,11 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     }
 
     @Override
+    public boolean isDisplayActionBar() {
+        return false;
+    }
+
+    @Override
     protected ICommentView onCreateView() {
         return this;
     }
@@ -119,7 +124,6 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
         }
-        setSharedElementReturnTransition(null);
     }
 
     @Override
@@ -127,16 +131,54 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         super.onViewCreated(view, savedInstanceState);
         int currentItem = getArguments().getInt(KEY_ITEM_POSITION);
         ArrayList<String> listUrlImage = getArguments().getStringArrayList(KEY_LIST_ITEMS);
+
         if (listUrlImage != null && listUrlImage.size() > 0) {
             mLayoutViewPager.setVisibility(View.VISIBLE);
             TransitionAdapter animalPagerAdapter = new TransitionAdapter(getChildFragmentManager(), listUrlImage);
             mViewPagePhoto.setAdapter(animalPagerAdapter);
             mViewPagePhoto.setCurrentItem(currentItem);
             mIndicator.setViewPager(mViewPagePhoto);
+            if (listUrlImage.size() == 1) {
+                mIndicator.setVisibility(View.GONE);
+            } else {
+                mIndicator.setVisibility(View.VISIBLE);
+            }
         } else {
             mLayoutViewPager.setVisibility(View.GONE);
         }
+
+
+//        ImageView imageView = (ImageView) view.findViewById(R.id.ivPhoto);
+//        String urlImage = listUrlImage.get(0);
+//        ViewCompat.setTransitionName(imageView, urlImage.substring(urlImage.lastIndexOf("/") + 1));
+//        Glide.with(this)
+//                .load(urlImage)
+//                .dontAnimate()
+//                .listener(new RequestListener<String, GlideDrawable>() {
+//
+//                    @Override
+//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                        startPostponedEnterTransition();
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                        startPostponedEnterTransition();
+//                        return false;
+//                    }
+//                })
+//                .into(imageView);
     }
+//        if (listUrlImage != null && listUrlImage.size() > 0) {
+//            mLayoutViewPager.setVisibility(View.VISIBLE);
+//            TransitionAdapter animalPagerAdapter = new TransitionAdapter(getChildFragmentManager(), listUrlImage);
+//            mViewPagePhoto.setAdapter(animalPagerAdapter);
+//            mViewPagePhoto.setCurrentItem(currentItem);
+//            mIndicator.setViewPager(mViewPagePhoto);
+//        } else {
+//            mLayoutViewPager.setVisibility(View.GONE);
+//        }
 
     @Override
     protected void initViews(View rootView) {
@@ -160,7 +202,6 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -250,7 +291,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
             Collections.reverse(mListComment);
             mAdapterComment.notifyDataSetChanged();
         } else {
-            showTextNoItem("No comment", mListViewComment);
+            showTextNoItem("no comment", mListViewComment);
         }
 
     }

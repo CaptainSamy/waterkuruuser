@@ -66,7 +66,7 @@ public class FragmentBackStackManager {
                 ft.addSharedElement(imageView, ViewCompat.getTransitionName(imageView));
             }
             ft.addToBackStack(tag);
-            ft.commitAllowingStateLoss();
+            ft.commit();
         }
     }
 

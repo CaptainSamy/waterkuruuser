@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               xmlns:tools="http://schemas.android.com/tools"
                                                android:id="@+id/activity_simple_two"
                                                android:layout_width="match_parent"
                                                android:layout_height="wrap_content"
-                                               android:layout_gravity="center"
                                                android:gravity="center">
 
     <ImageView
         android:id="@+id/animal_detail_image_view"
-        android:adjustViewBounds="true"
         android:src="@drawable/image_choose"
         app:layout_heightPercent="100%"
-        app:layout_widthPercent="100%"/>
+        app:layout_widthPercent="100%"
+        tools:ignore="UnusedAttribute"/>
 
 </android.support.percent.PercentRelativeLayout>

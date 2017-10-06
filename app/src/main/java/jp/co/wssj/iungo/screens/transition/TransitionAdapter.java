@@ -31,4 +31,5 @@ public class TransitionAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return mListUrlImage.size();
     }
+
 }
