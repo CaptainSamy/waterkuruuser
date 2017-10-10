@@ -262,9 +262,10 @@ public class MainActivity extends AppCompatActivity
         if (mNavigationView != null && mDrawerLayout != null && mNavigationView.isShown()) {
             mDrawerLayout.closeDrawer(GravityCompat.END);
         } else {
-            if (!mFragmentBackStackManager.popBackStackImmediate()) {
-                finish();
-            }
+            super.onBackPressed();
+//            if (!mFragmentBackStackManager.popBackStackImmediate()) {
+//                finish();
+//            }
         }
     }
 

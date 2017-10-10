@@ -40,7 +40,7 @@ public class ReactionView extends View {
 
     private Board board;
 
-    private Emotion[] emotions = new Emotion[6];
+    private static Emotion[] emotions = new Emotion[6];
 
     private StateDraw state = StateDraw.BEGIN;
 
@@ -64,20 +64,20 @@ public class ReactionView extends View {
     private void init() {
         board = new Board(getContext());
         setLayerType(LAYER_TYPE_SOFTWARE, board.boardPaint);
-
-        emotions[0] = new Emotion(getContext(), Constants.Like.LIKE, R.drawable.like);
-        emotions[1] = new Emotion(getContext(), Constants.Like.LOVE, R.drawable.love);
-        emotions[2] = new Emotion(getContext(), Constants.Like.HAHA, R.drawable.haha);
-        emotions[3] = new Emotion(getContext(), Constants.Like.WOW, R.drawable.wow);
-        emotions[4] = new Emotion(getContext(), Constants.Like.CRY, R.drawable.cry);
-        emotions[5] = new Emotion(getContext(), Constants.Like.ANGRY, R.drawable.angry);
-
+        if (ReactionView.emotions[0] == null) {
+            ReactionView.emotions[0] = new Emotion(getContext(), Constants.Like.LIKE, R.drawable.like);
+            ReactionView.emotions[1] = new Emotion(getContext(), Constants.Like.LOVE, R.drawable.love);
+            ReactionView.emotions[2] = new Emotion(getContext(), Constants.Like.HAHA, R.drawable.haha);
+            ReactionView.emotions[3] = new Emotion(getContext(), Constants.Like.WOW, R.drawable.wow);
+            ReactionView.emotions[4] = new Emotion(getContext(), Constants.Like.CRY, R.drawable.cry);
+            ReactionView.emotions[5] = new Emotion(getContext(), Constants.Like.ANGRY, R.drawable.angry);
+        }
         initElement();
     }
 
     private void initElement() {
         board.currentY = CommonDimen.HEIGHT_VIEW_REACTION + 10;
-        for (Emotion e : emotions) {
+        for (Emotion e : ReactionView.emotions) {
             e.currentY = board.currentY + DIVIDE;
         }
     }
@@ -86,13 +86,13 @@ public class ReactionView extends View {
     protected void onDraw(Canvas canvas) {
         if (state != null) {
             board.drawBoard(canvas);
-            emotions[0].drawEmotion(canvas);
-            emotions[1].drawEmotion(canvas);
-            emotions[2].drawEmotion(canvas);
-            emotions[3].drawEmotion(canvas);
-            emotions[4].drawEmotion(canvas);
-            emotions[5].drawEmotion(canvas);
-//            for (Emotion emotion : emotions) {
+            ReactionView.emotions[0].drawEmotion(canvas);
+            ReactionView.emotions[1].drawEmotion(canvas);
+            ReactionView.emotions[2].drawEmotion(canvas);
+            ReactionView.emotions[3].drawEmotion(canvas);
+            ReactionView.emotions[4].drawEmotion(canvas);
+            ReactionView.emotions[5].drawEmotion(canvas);
+//            for (Emotion emotion : ReactionView.emotions) {
 //                emotion.drawEmotion(canvas);
 //            }
         }
@@ -106,27 +106,27 @@ public class ReactionView extends View {
 //        }
 
 //        if (currentTime >= 100) {
-        emotions[0].currentY = emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[0].currentY = ReactionView.emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 200) {
-        emotions[1].currentY = emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 80, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[1].currentY = ReactionView.emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 80, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 300) {
-        emotions[2].currentY = emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 60, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[2].currentY = ReactionView.emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 60, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 400) {
-        emotions[3].currentY = emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 40, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[3].currentY = ReactionView.emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 40, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 500) {
-        emotions[4].currentY = emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 20, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[4].currentY = ReactionView.emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 20, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 600) {
-        emotions[5].currentY = emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[5].currentY = ReactionView.emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
         invalidate();
@@ -141,10 +141,10 @@ public class ReactionView extends View {
 
         easeOutBack = EaseOutBack.newInstanceDismiss(DURATION_BEGINNING_EACH_ITEM, Math.abs(board.beginY - board.endY), 0);
 
-        for (int i = 0; i < emotions.length; i++) {
-            emotions[i].beginY = Board.BASE_LINE - 10;//Board.BOARD_BOTTOM + 250;
-            emotions[i].endY = Board.BOARD_BOTTOM;//Board.BASE_LINE + 250;
-            emotions[i].currentX = i == 0 ? Board.BOARD_X + DIVIDE : emotions[i - 1].currentX + emotions[i - 1].currentSize + DIVIDE;
+        for (int i = 0; i < ReactionView.emotions.length; i++) {
+            ReactionView.emotions[i].beginY = Board.BASE_LINE - 10;//Board.BOARD_BOTTOM + 250;
+            ReactionView.emotions[i].endY = Board.BOARD_BOTTOM;//Board.BASE_LINE + 250;
+            ReactionView.emotions[i].currentX = i == 0 ? Board.BOARD_X + DIVIDE : ReactionView.emotions[i - 1].currentX + ReactionView.emotions[i - 1].currentSize + DIVIDE;
         }
     }
 
@@ -157,10 +157,10 @@ public class ReactionView extends View {
 
         easeOutBack = EaseOutBack.newInstance(DURATION_BEGINNING_EACH_ITEM, Math.abs(board.beginY - board.endY), 0);
 
-        for (int i = 0; i < emotions.length; i++) {
-            emotions[i].endY = Board.BASE_LINE - Emotion.NORMAL_SIZE;
-            emotions[i].beginY = Board.BOARD_BOTTOM + 10;
-            emotions[i].currentX = i == 0 ? Board.BOARD_X + DIVIDE : emotions[i - 1].currentX + emotions[i - 1].currentSize + DIVIDE;
+        for (int i = 0; i < ReactionView.emotions.length; i++) {
+            ReactionView.emotions[i].endY = Board.BASE_LINE - Emotion.NORMAL_SIZE;
+            ReactionView.emotions[i].beginY = Board.BOARD_BOTTOM + 10;
+            ReactionView.emotions[i].currentX = i == 0 ? Board.BOARD_X + DIVIDE : ReactionView.emotions[i - 1].currentX + ReactionView.emotions[i - 1].currentSize + DIVIDE;
         }
     }
 
@@ -168,13 +168,13 @@ public class ReactionView extends View {
         board.beginHeight = board.getCurrentHeight();
         board.endHeight = Board.BOARD_HEIGHT_MINIMAL;
 
-        for (int i = 0; i < emotions.length; i++) {
-            emotions[i].beginSize = emotions[i].currentSize;
+        for (int i = 0; i < ReactionView.emotions.length; i++) {
+            ReactionView.emotions[i].beginSize = ReactionView.emotions[i].currentSize;
 
             if (i == currentPosition) {
-                emotions[i].endSize = Emotion.CHOOSE_SIZE;
+                ReactionView.emotions[i].endSize = Emotion.CHOOSE_SIZE;
             } else {
-                emotions[i].endSize = Emotion.MINIMAL_SIZE;
+                ReactionView.emotions[i].endSize = Emotion.MINIMAL_SIZE;
             }
         }
     }
@@ -183,18 +183,18 @@ public class ReactionView extends View {
         board.beginHeight = board.getCurrentHeight();
         board.endHeight = Board.BOARD_HEIGHT_NORMAL;
 
-        for (int i = 0; i < emotions.length; i++) {
-            emotions[i].beginSize = emotions[i].currentSize;
-            emotions[i].endSize = Emotion.NORMAL_SIZE;
+        for (int i = 0; i < ReactionView.emotions.length; i++) {
+            ReactionView.emotions[i].beginSize = ReactionView.emotions[i].currentSize;
+            ReactionView.emotions[i].endSize = Emotion.NORMAL_SIZE;
         }
     }
 
     private void calculateInSessionChoosingAndEnding(float interpolatedTime) {
         board.setCurrentHeight(board.beginHeight + (int) (interpolatedTime * (board.endHeight - board.beginHeight)));
 
-        for (int i = 0; i < emotions.length; i++) {
-            emotions[i].currentSize = calculateSize(i, interpolatedTime);
-            emotions[i].currentY = Board.BASE_LINE - emotions[i].currentSize;
+        for (int i = 0; i < ReactionView.emotions.length; i++) {
+            ReactionView.emotions[i].currentSize = calculateSize(i, interpolatedTime);
+            ReactionView.emotions[i].currentY = Board.BASE_LINE - ReactionView.emotions[i].currentSize;
         }
         calculateCoordinateX();
         invalidate();
@@ -211,27 +211,27 @@ public class ReactionView extends View {
 ////        }
 //
 ////        if (currentTime >= 100) {
-//        emotions[0].currentY = emotions[0].endY + additionY;
+//        ReactionView.emotions[0].currentY = ReactionView.emotions[0].endY + additionY;
 ////        }
 //
 ////        if (currentTime >= 200) {
-//        emotions[1].currentY = emotions[1].endY + additionY;
+//        ReactionView.emotions[1].currentY = ReactionView.emotions[1].endY + additionY;
 ////        }
 //
 ////        if (currentTime >= 300) {
-//        emotions[2].currentY = emotions[2].endY + additionY;
+//        ReactionView.emotions[2].currentY = ReactionView.emotions[2].endY + additionY;
 ////        }
 //
 ////        if (currentTime >= 400) {
-//        emotions[3].currentY = emotions[3].endY + additionY;
+//        ReactionView.emotions[3].currentY = ReactionView.emotions[3].endY + additionY;
 ////        }
 //
 ////        if (currentTime >= 500) {
-//        emotions[4].currentY = emotions[4].endY + additionY;
+//        ReactionView.emotions[4].currentY = ReactionView.emotions[4].endY + additionY;
 ////        }
 //
 ////        if (currentTime >= 600) {
-//        emotions[5].currentY = emotions[5].endY + additionY;
+//        ReactionView.emotions[5].currentY = ReactionView.emotions[5].endY + additionY;
 ////        }
 
 //        if (currentTime > 0) {
@@ -239,54 +239,54 @@ public class ReactionView extends View {
 //        }
 //
 //        if (currentTime >= 20) {
-        emotions[0].currentY = emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 20, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[0].currentY = ReactionView.emotions[0].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 20, DURATION_BEGINNING_EACH_ITEM));
 //        }
 //
 //        if (currentTime >= 40) {
-        emotions[1].currentY = emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 40, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[1].currentY = ReactionView.emotions[1].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 40, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 60) {
-        emotions[2].currentY = emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 60, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[2].currentY = ReactionView.emotions[2].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 60, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 80) {
-        emotions[3].currentY = emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 80, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[3].currentY = ReactionView.emotions[3].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 80, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 100) {
-        emotions[4].currentY = emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[4].currentY = ReactionView.emotions[4].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 100, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
 //        if (currentTime >= 120) {
-        emotions[5].currentY = emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 120, DURATION_BEGINNING_EACH_ITEM));
+        ReactionView.emotions[5].currentY = ReactionView.emotions[5].endY + easeOutBack.getCoordinateYFromTime(Math.min(currentTime - 120, DURATION_BEGINNING_EACH_ITEM));
 //        }
 
         invalidate();
     }
 
     private int calculateSize(int position, float interpolatedTime) {
-        int changeSize = emotions[position].endSize - emotions[position].beginSize;
-        return emotions[position].beginSize + (int) (interpolatedTime * changeSize);
+        int changeSize = ReactionView.emotions[position].endSize - ReactionView.emotions[position].beginSize;
+        return ReactionView.emotions[position].beginSize + (int) (interpolatedTime * changeSize);
     }
 
     private void calculateCoordinateX() {
-        emotions[0].currentX = Board.BOARD_X + DIVIDE;
-        emotions[emotions.length - 1].currentX = Board.BOARD_X + Board.BOARD_WIDTH - DIVIDE - emotions[emotions.length - 1].currentSize;
+        ReactionView.emotions[0].currentX = Board.BOARD_X + DIVIDE;
+        ReactionView.emotions[ReactionView.emotions.length - 1].currentX = Board.BOARD_X + Board.BOARD_WIDTH - DIVIDE - ReactionView.emotions[ReactionView.emotions.length - 1].currentSize;
 
         for (int i = 1; i < currentPosition; i++) {
-            emotions[i].currentX = emotions[i - 1].currentX + emotions[i - 1].currentSize + DIVIDE;
+            ReactionView.emotions[i].currentX = ReactionView.emotions[i - 1].currentX + ReactionView.emotions[i - 1].currentSize + DIVIDE;
         }
 
-        for (int i = emotions.length - 2; i > currentPosition; i--) {
-            emotions[i].currentX = emotions[i + 1].currentX - emotions[i].currentSize - DIVIDE;
+        for (int i = ReactionView.emotions.length - 2; i > currentPosition; i--) {
+            ReactionView.emotions[i].currentX = ReactionView.emotions[i + 1].currentX - ReactionView.emotions[i].currentSize - DIVIDE;
         }
 
-        if (currentPosition != 0 && currentPosition != emotions.length - 1) {
-            if (currentPosition <= (emotions.length / 2 - 1)) {
-                emotions[currentPosition].currentX = emotions[currentPosition - 1].currentX + emotions[currentPosition - 1].currentSize + DIVIDE;
+        if (currentPosition != 0 && currentPosition != ReactionView.emotions.length - 1) {
+            if (currentPosition <= (ReactionView.emotions.length / 2 - 1)) {
+                ReactionView.emotions[currentPosition].currentX = ReactionView.emotions[currentPosition - 1].currentX + ReactionView.emotions[currentPosition - 1].currentSize + DIVIDE;
             } else {
-                emotions[currentPosition].currentX = emotions[currentPosition + 1].currentX - emotions[currentPosition].currentSize - DIVIDE;
+                ReactionView.emotions[currentPosition].currentX = ReactionView.emotions[currentPosition + 1].currentX - ReactionView.emotions[currentPosition].currentSize - DIVIDE;
             }
         }
     }
@@ -325,8 +325,8 @@ public class ReactionView extends View {
                 handled = true;
                 break;
             case MotionEvent.ACTION_MOVE:
-                for (int i = 0; i < emotions.length; i++) {
-                    if (event.getX() > emotions[i].currentX && event.getX() < emotions[i].currentX + emotions[i].currentSize) {
+                for (int i = 0; i < ReactionView.emotions.length; i++) {
+                    if (event.getX() > ReactionView.emotions[i].currentX && event.getX() < ReactionView.emotions[i].currentX + ReactionView.emotions[i].currentSize) {
                         selected(i);
                         break;
                     }
@@ -335,8 +335,8 @@ public class ReactionView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d("onTouchEvent", "ACTION_UP");
-                for (int i = 0; i < emotions.length; i++) {
-                    if (event.getX() > emotions[i].currentX && event.getX() < emotions[i].currentX + emotions[i].currentSize) {
+                for (int i = 0; i < ReactionView.emotions.length; i++) {
+                    if (event.getX() > ReactionView.emotions[i].currentX && event.getX() < ReactionView.emotions[i].currentX + ReactionView.emotions[i].currentSize) {
                         selected(i);
                         Log.d("onTouchEvent", "ACTION_UP---------");
                         new Handler().postDelayed(new Runnable() {
