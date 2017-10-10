@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.changepassword;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 
 /**
  * Created by Nguyen Huu Ta on 5/7/2017.
@@ -41,14 +43,13 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
         return new ChangePasswordPresenter(view);
     }
 
-
     @Override
     protected String getLogTag() {
         return TAG;
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_change_password;
     }
 
@@ -98,7 +99,9 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
 
             @Override
             public void run() {
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, true, false);
+                Bundle bundle = new Bundle();
+                bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
             }
         }, 1000);
     }

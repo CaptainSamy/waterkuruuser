@@ -50,7 +50,7 @@ public class AboutFragment extends BaseFragment<IAboutView, AboutPresenter> impl
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_version;
     }
 

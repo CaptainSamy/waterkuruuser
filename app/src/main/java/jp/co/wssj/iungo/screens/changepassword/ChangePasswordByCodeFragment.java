@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.changepassword;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 
 /**
  * Created by Nguyen Huu Ta on 11/5/2017.
@@ -73,7 +75,6 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
 
     @Override
     protected void initViews(View rootView) {
-        super.initViews(rootView);
         mInputCode = (EditText) rootView.findViewById(R.id.inputCode);
         mInputNewPassword = (EditText) rootView.findViewById(R.id.inputNewPassword);
         mInputConfirmPassword = (EditText) rootView.findViewById(R.id.inputConfirmPassword);
@@ -82,7 +83,6 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
 
     @Override
     protected void initAction() {
-        super.initAction();
         mButtonChangePassword.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -93,11 +93,6 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
                 getPresenter().onChangePasswordByCodeClicked(code, newPassword, confirmPassword);
             }
         });
-    }
-
-    @Override
-    protected void initData() {
-        super.initData();
     }
 
     @Override
@@ -112,7 +107,9 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
 
             @Override
             public void run() {
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, true, false);
+                Bundle bundle = new Bundle();
+                bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
             }
         }, 1000);
     }

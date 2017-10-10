@@ -264,9 +264,4 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
         bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, mServiceName);
         getActivityCallback().displayScreen(IMainView.FRAGMENT_USER_MEMO, true, true, bundle);
     }
-
-    @Override
-    public int getMenuBottomID() {
-        return MENU_MY_STAMP;
-    }
 }

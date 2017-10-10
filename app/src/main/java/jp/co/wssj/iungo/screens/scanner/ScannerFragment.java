@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.screens.scanner;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -17,8 +18,9 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.IWrapperFragment;
+import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
+import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.scanner.dialog.ConfirmCheckInDialog;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -26,7 +28,8 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by HieuPT on 5/19/2017.
  */
 
-public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter> implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog {
+public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresenter>
+        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog, IWrapperFragmentController {
 
     private static final String TAG = "ScannerFragment";
 
@@ -39,6 +42,8 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     private ConfirmCheckInDialog mDialog;
 
     private boolean mIsSurfaceCreated, mIsCameraStarted;
+
+    private IWrapperFragment mWrapperFragment;
 
     private final Handler mHandler = new Handler();
 
@@ -65,38 +70,13 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     };
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnableBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_SCANNER;
-    }
-
-    @Override
-    public boolean isDisplayNavigationButton() {
-        return false;
-    }
-
-    @Override
-    public String getAppBarTitle() {
-        return getString(R.string.read_qr_code);
+    public String getPageTitle(Context context) {
+        return getString(context, R.string.read_qr_code);
     }
 
     @Override
     protected int getResourceLayout() {
         return R.layout.fragment_scanner;
-    }
-
-    @Override
-    public int getMenuBottomID() {
-        return MENU_HOME;
     }
 
     @Override
@@ -162,7 +142,7 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
     public void displayConfirmDialog(String qrCode) {
         if (mDialog == null) {
-            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), this);
+            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), mWrapperFragment, this);
         }
         mDialog.showDialog(qrCode);
     }
@@ -218,5 +198,10 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
             mCameraSource.release();
             mCameraSource = null;
         }
+    }
+
+    @Override
+    public void setWrapperFragment(IWrapperFragment fragment) {
+        mWrapperFragment = fragment;
     }
 }

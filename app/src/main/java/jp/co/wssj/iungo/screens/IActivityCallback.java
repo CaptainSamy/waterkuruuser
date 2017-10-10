@@ -18,4 +18,9 @@ public interface IActivityCallback {
 
     void onFragmentResumed(BaseFragment fragment);
 
+    void setSelectedNavigationBottom(int id);
+
+    void setAppBarTitle(String title);
+
+    void onBackPressed(Bundle bundle);
 }

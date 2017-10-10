@@ -59,7 +59,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_push_notification;
     }
 

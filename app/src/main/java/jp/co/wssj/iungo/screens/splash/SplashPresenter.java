@@ -71,7 +71,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
 
                 @Override
                 public void onCheckVersionAppFailure() {
-                    getView().displayScreen(IMainView.FRAGMENT_TIME_LINE);
+                    getView().displayScreen(IMainView.FRAGMENT_PRIMARY);
                 }
             });
 //            getView().displayScreen(IMainView.FRAGMENT_HOME);

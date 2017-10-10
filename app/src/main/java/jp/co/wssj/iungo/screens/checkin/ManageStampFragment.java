@@ -14,9 +14,10 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.listcard.adapter.CardAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
+import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -26,7 +27,7 @@ import jp.co.wssj.iungo.widget.MarginItemDecoration;
  * Created by Nguyen Huu Ta on 23/5/2017.
  */
 
-public class ManageStampFragment extends BaseFragment<IManageStampView, ManageStampPresenter> implements IManageStampView {
+public class ManageStampFragment extends PagedFragment<IManageStampView, ManageStampPresenter> implements IManageStampView {
 
     private static final String TAG = "ManageStampFragment";
 
@@ -47,15 +48,9 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
     private String mStoreName, mServiceName;
 
     public static ManageStampFragment newInstance(Bundle args) {
-
         ManageStampFragment fragment = new ManageStampFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_MANAGER_STAMP;
     }
 
     @Override
@@ -66,11 +61,6 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
     @Override
     protected ManageStampPresenter onCreatePresenter(IManageStampView view) {
         return new ManageStampPresenter(view);
-    }
-
-    @Override
-    public int getMenuBottomID() {
-        return MENU_HOME;
     }
 
     @Override
@@ -257,6 +247,6 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
 
     @Override
     public void displayMyStampScreen() {
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_STAMP, true, false, null);
+        getPagerFragmentCallback().setSelectedPage(PrimaryFragment.SCREEN_LIST_SERVICE_COMPANY);
     }
 }

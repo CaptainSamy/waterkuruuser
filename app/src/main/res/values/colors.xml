@@ -19,6 +19,7 @@
 
     <color name="colorMain">#D9594C</color>
     <color name="colorMainPress">#f7301b</color>
+    <color name="whitePress">#ececec</color>
     <color name="colorButtonRegister">#A6C36F</color>
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorBackground_Actionbar">#F5F5F5</color>

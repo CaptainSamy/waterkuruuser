@@ -3,6 +3,8 @@ package jp.co.wssj.iungo.screens;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import jp.co.wssj.iungo.model.auth.AuthModel;
@@ -12,6 +14,10 @@ import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.model.util.UtilsModel;
 import jp.co.wssj.iungo.screens.base.BasePresenter;
+import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
+import jp.co.wssj.iungo.screens.pushobject.MappingUserStoreResponse;
+import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 class MainPresenter extends BasePresenter<IMainView> {
@@ -27,7 +33,7 @@ class MainPresenter extends BasePresenter<IMainView> {
         registerModel(new AuthModel(view.getViewContext()));
     }
 
-    void onCreate() {
+    void displaySplashScreen() {
         getView().switchScreen(IMainView.FRAGMENT_SPLASH_SCREEN, true, false, null);
     }
 
@@ -51,12 +57,24 @@ class MainPresenter extends BasePresenter<IMainView> {
         getView().onCloseDrawableLayout(screenId, hasAnimation, addToBackStack, bundle, navigationId);
     }
 
-    void onEnableDrawableLayout() {
-        getView().onEnableDrawableLayout();
+    void onBottomNavigationButtonClicked(int itemId) {
+        getView().setSelectedPage(itemId);
     }
 
-    void onDisableDrawableLayout() {
-        getView().onDisableDrawableLayout();
+    void onDispatchFinishActivity() {
+        getView().finishActivity();
+    }
+
+    void onEnableDrawerLayout() {
+        getView().onEnableDrawerLayout();
+    }
+
+    void clearData() {
+        getModel(SharedPreferencesModel.class).clearAll();
+    }
+
+    void onDisableDrawerLayout() {
+        getView().onDisableDrawerLayout();
     }
 
     public void getListPushNotificationUnRead(int page, int limit) {
@@ -110,6 +128,42 @@ class MainPresenter extends BasePresenter<IMainView> {
                     getView().onMappingUserStoreFastFailure(message);
                 }
             });
+        }
+    }
+
+    public void mappingUserWithStore() {
+        String jsonPush = getModel(SharedPreferencesModel.class).getObjectPush();
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        Gson gson = new Gson();
+        ObjectPush objectPush = gson.fromJson(jsonPush, ObjectPush.class);
+        if (objectPush != null) {
+            if (System.currentTimeMillis() <= objectPush.getSaveTime()) {
+                getModel(CheckInModel.class).mappingUserWithStore(token, objectPush.getCode(), new CheckInModel.IMappingUserStoreCallback() {
+
+                    @Override
+                    public void onMappingUserStoreSuccess(MappingUserStoreResponse.PushData data) {
+                        getModel(SharedPreferencesModel.class).putObjectPush(Constants.EMPTY_STRING);
+                        NotificationMessage notificationMessage = new NotificationMessage(data.getPushId(),
+                                Constants.EMPTY_STRING, Constants.EMPTY_STRING, Constants.EMPTY_STRING, 0);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
+                        bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
+                        bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
+                        getView().switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, false, bundle);
+                    }
+
+                    @Override
+                    public void onMappingUserStoreFailure(String message) {
+                        getView().displayScanCodeScreen();
+                    }
+                });
+            } else {
+                getModel(SharedPreferencesModel.class).putObjectPush(Constants.EMPTY_STRING);
+                getView().displayScanCodeScreen();
+            }
+        } else {
+            getModel(SharedPreferencesModel.class).putObjectPush(Constants.EMPTY_STRING);
+            getView().displayScanCodeScreen();
         }
     }
 

@@ -13,6 +13,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.text.Html;
 import android.text.Spanned;
@@ -366,6 +367,14 @@ public final class Utils {
         } else {
             imageView.setImageResource(R.drawable.icon_user);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T findViewById(View rootView, @IdRes int id) {
+        if (rootView != null) {
+            return (T) rootView.findViewById(id);
+        }
+        return null;
     }
 
     public static Bitmap cropImage(Bitmap bitmap) {

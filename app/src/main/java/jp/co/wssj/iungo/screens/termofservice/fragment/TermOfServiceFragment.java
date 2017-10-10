@@ -52,7 +52,7 @@ public class TermOfServiceFragment extends BaseFragment<ITermOfServicesView, Ter
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_term_of_service;
     }
 

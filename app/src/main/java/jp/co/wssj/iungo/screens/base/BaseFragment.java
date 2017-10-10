@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -41,6 +43,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     private TextView mTextNoItem;
 
+    private View mRootView;
+
+    private boolean mIsAttached;
+
     @Override
     public Context getViewContext() {
         return mActivity;
@@ -55,6 +61,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
             mActivityCallback = (IActivityCallback) activity;
             mPresenter = onCreatePresenter(onCreateView());
             mPresenter.onFragmentAttach();
+            mIsAttached = true;
         } else {
             throw new RuntimeException("Activity must implement IFragmentCallback");
         }
@@ -75,18 +82,27 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         mActivityCallback.onFragmentResumed(this);
         mProgressDialog = new ProgressDialog(mActivity);
         mProgressDialog.setCancelable(false);
+        if (isRetainState()) {
+            if (mRootView == null) {
+                mRootView = onCreateViewInternal(inflater, container);
+            }
+        } else {
+            mRootView = onCreateViewInternal(inflater, container);
+        }
+        Utils.setupUI(mRootView, mActivity);
+        return mRootView;
+    }
+
+    private View onCreateViewInternal(LayoutInflater inflater, @Nullable ViewGroup container) {
         View rootView = null;
         int resId = getResourceLayout();
         if (resId > 0) {
             rootView = inflater.inflate(resId, container, false);
             initViews(rootView);
-            initAction();
             mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
+            initAction();
         }
         initData();
-        if (rootView != null && getActivity() != null) {
-            Utils.setupUI(rootView, getActivity());
-        }
         return rootView;
     }
 
@@ -130,6 +146,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         mPresenter.onFragmentPause();
     }
 
+    public boolean onBackPressed() {
+        return false;
+    }
+
     @Override
     public void onStop() {
         Logger.i(TAG, "#onStop: " + getInternalLogTag());
@@ -155,7 +175,12 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     public void onDetach() {
         Logger.i(TAG, "#onDetach: " + getInternalLogTag());
         super.onDetach();
+        mIsAttached = false;
         mPresenter.onFragmentDetach();
+    }
+
+    public boolean isAttached() {
+        return mIsAttached;
     }
 
     @Override
@@ -165,8 +190,15 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     @Override
+    public void backToPreviousScreen(Bundle bundle) {
+        Logger.d(TAG, "#backToPreviousScreenWithBundle");
+        getActivityCallback().onBackPressed(bundle);
+    }
+
+    @Override
     public final void showProgress() {
         if (mProgressDialog != null && mPresenter.isViewAttached()) {
+            Logger.i(TAG, "#showProgress");
             mProgressDialog.show();
         }
     }
@@ -174,10 +206,19 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     @Override
     public final void hideProgress() {
         if (mProgressDialog != null && mProgressDialog.isShowing() && mPresenter.isViewAttached()) {
+            Logger.i(TAG, "#hideProgress");
             mProgressDialog.dismiss();
         }
     }
 
+    public String getString(Context context, @StringRes int resId) {
+        if (context != null) {
+            return context.getString(resId);
+        }
+        return Constants.EMPTY_STRING;
+    }
+
+    @Override
     public void showToast(String message) {
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
@@ -185,18 +226,22 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public void showTextNoItem(String text, View view) {
-        mTextNoItem.setVisibility(View.VISIBLE);
+        if (mTextNoItem != null) {
+            mTextNoItem.setVisibility(View.VISIBLE);
+            mTextNoItem.setText(text);
+        }
         view.setVisibility(View.INVISIBLE);
-        mTextNoItem.setText(text);
     }
 
     public void hideTextNoItem(boolean isShow, View view) {
-        mTextNoItem.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        if (mTextNoItem != null) {
+            mTextNoItem.setVisibility(isShow ? View.VISIBLE : View.GONE);
+        }
         view.setVisibility(isShow ? View.GONE : View.VISIBLE);
     }
 
     public boolean isDisplayBottomNavigationMenu() {
-        return true;
+        return false;
     }
 
     public boolean isEnableBottomNavigationMenu() {
@@ -205,6 +250,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public String getAppBarTitle() {
         return Constants.EMPTY_STRING;
+    }
+
+    public boolean isTopScreen() {
+        return false;
     }
 
     public boolean isDisplayActionBar() {
@@ -216,6 +265,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public boolean isDisplayNavigationButton() {
+        return true;
+    }
+
+    public boolean isGlobal() {
         return true;
     }
 
@@ -235,8 +288,16 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return 0;
     }
 
+    public int getNavigationMenuId() {
+        return 0;
+    }
+
     public boolean isEnableDrawableLayout() {
         return true;
+    }
+
+    protected boolean isRetainState() {
+        return false;
     }
 
     protected Context getActivityContext() {
@@ -264,6 +325,11 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     protected void initData() {
     }
 
+    @SuppressWarnings("unchecked")
+    protected <T> T findViewById(View rootView, @IdRes int id) {
+        return Utils.findViewById(rootView, id);
+    }
+
     private String getInternalLogTag() {
         String tag = getLogTag();
         return tag != null ? tag : getClass().getSimpleName();
@@ -279,7 +345,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     protected abstract V onCreateView();
 
-    private class ProgressDialog extends Dialog {
+    private static final class ProgressDialog extends Dialog {
 
         private ProgressDialog(Context context) {
             super(context);
@@ -292,21 +358,4 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
             }
         }
     }
-
-    public int getMenuBottomID() {
-        return 0;
-    }
-
-    public int getNavigationMenuID() {
-        return 0;
-    }
-
-    public static final int MENU_HOME = 1;
-
-    public static final int MENU_MY_STAMP = 2;
-
-    public static final int MENU_TIME_LINE = 4;
-
-    public static final int MENU_STORE_FOLLOW = 3;
-
 }

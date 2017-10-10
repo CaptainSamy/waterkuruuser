@@ -49,7 +49,7 @@ public class HowToUserFragment extends BaseFragment<IHowToUseView, HowToUsePrese
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_how_to_use;
     }
 

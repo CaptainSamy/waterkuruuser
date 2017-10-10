@@ -109,4 +109,9 @@
     <style name="styleRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/rating</item>
     </style>
+
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/tab_layout_text_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>
