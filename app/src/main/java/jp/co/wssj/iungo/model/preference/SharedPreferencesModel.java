@@ -177,7 +177,6 @@ public class SharedPreferencesModel extends BaseModel {
         mSharedPreference.remove(TYPE_LOGIN);
         mSharedPreference.remove(PHOTO_URL);
         mSharedPreference.remove(STATUS_LOGIN);
-
     }
 
     public void clearAll() {

@@ -114,11 +114,6 @@ public class UserMemoFragment extends BaseFragment<IUserMemoView, UserMemoPresen
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_user_memo);
     }

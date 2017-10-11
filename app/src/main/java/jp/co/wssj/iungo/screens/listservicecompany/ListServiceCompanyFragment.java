@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.listservicecompany;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -12,7 +13,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCompanyResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
 import jp.co.wssj.iungo.screens.listservicecompany.adapter.ServicesCompanyAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
@@ -23,7 +24,7 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by HieuPT on 17/5/2017.
  */
 
-public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompanyView, ListServiceCompanyPresenter>
+public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompanyView, ListServiceCompanyPresenter>
         implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     private static final String TAG = "ListServiceCompanyFragment";
@@ -37,23 +38,13 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
     private List<ListCompanyResponse.ListCompanyData.CompanyData> mCardList;
 
     @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_STAMP;
+    public String getPageTitle(Context context) {
+        return getString(context, R.string.title_screen_stamp);
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
+    protected boolean isRetainState() {
         return true;
-    }
-
-    @Override
-    public boolean isDisplayNavigationButton() {
-        return false;
-    }
-
-    @Override
-    public String getAppBarTitle() {
-        return getString(R.string.title_screen_stamp);
     }
 
     @Override
@@ -90,15 +81,12 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
 
     @Override
     protected void initData() {
-
         if (mCardList == null) {
             mCardList = new ArrayList<>();
             mAdapter = new ServicesCompanyAdapter(getActivityContext(), mCardList);
             getPresenter().getCompanyList();
-        } else {
-            if (mCardList != null && mCardList.size() == 0) {
-                showTextNoItem(getString(R.string.no_item_service), mCardListView);
-            }
+        } else if (mCardList.isEmpty()) {
+            showTextNoItem(getString(R.string.no_item_service), mCardListView);
         }
         mCardListView.setAdapter(mAdapter);
     }
@@ -165,10 +153,5 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Logger.i(TAG, "#onItemClick");
         getPresenter().onItemClicked((ListCompanyResponse.ListCompanyData.CompanyData) parent.getItemAtPosition(position));
-    }
-
-    @Override
-    public int getMenuBottomID() {
-        return MENU_MY_STAMP;
     }
 }

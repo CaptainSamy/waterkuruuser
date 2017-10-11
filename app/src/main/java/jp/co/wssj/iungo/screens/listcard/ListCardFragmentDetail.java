@@ -68,13 +68,13 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
     }
 
     @Override
-    public String getAppBarTitle() {
-        return getString(R.string.title_screen_stamp);
+    protected boolean isRetainState() {
+        return true;
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
+    public String getAppBarTitle() {
+        return getString(R.string.title_screen_stamp);
     }
 
     @Override
@@ -263,10 +263,5 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
         bundle.putInt(UserMemoFragment.KEY_SERVICE_ID, serviceId);
         bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, mServiceName);
         getActivityCallback().displayScreen(IMainView.FRAGMENT_USER_MEMO, true, true, bundle);
-    }
-
-    @Override
-    public int getMenuBottomID() {
-        return MENU_MY_STAMP;
     }
 }

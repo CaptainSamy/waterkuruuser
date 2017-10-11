@@ -36,23 +36,21 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.about.AboutFragment;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordByCodeFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
-import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
-import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
 import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
-import jp.co.wssj.iungo.screens.home.HomeFragment;
 import jp.co.wssj.iungo.screens.howtouse.HowToUserFragment;
 import jp.co.wssj.iungo.screens.introduction.IntroductionFragment;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
-import jp.co.wssj.iungo.screens.listservicecompany.ListServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.liststorecheckedin.ListStoreCheckedInFragment;
 import jp.co.wssj.iungo.screens.login.LoginFragment;
 import jp.co.wssj.iungo.screens.memomanager.MemoManagerFragment;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
+import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
@@ -61,16 +59,15 @@ import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.qadetail.QADetailFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
-import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
 import jp.co.wssj.iungo.screens.splash.SplashFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
 import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
-import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.ReflectionUtils;
+import jp.co.wssj.iungo.utils.VolleySequence;
 import jp.co.wssj.iungo.widget.CenterTitleToolbar;
 
 public class MainActivity extends AppCompatActivity
@@ -97,6 +94,8 @@ public class MainActivity extends AppCompatActivity
     private MainPresenter mPresenter;
 
     private FragmentBackStackManager mFragmentBackStackManager;
+
+    private PrimaryFragment mPrimaryFragment;
 
     private DialogNotification mDialogNotification;
 
@@ -161,8 +160,6 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
         imageNotification = (ImageView) findViewById(R.id.iconTest);
-
-
     }
 
     private void initAction() {
@@ -261,13 +258,27 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        Logger.i(TAG, "#onBackPressed");
         if (mNavigationView != null && mDrawerLayout != null && mNavigationView.isShown()) {
             mDrawerLayout.closeDrawer(GravityCompat.END);
         } else {
-            super.onBackPressed();
-//            if (!mFragmentBackStackManager.popBackStackImmediate()) {
-//                finish();
-//            }
+            boolean isConsumed = false;
+            if (mCurrentFragment != null) {
+                isConsumed = mCurrentFragment.onBackPressed();
+            }
+            if (!isConsumed) {
+                if (!mFragmentBackStackManager.popBackStackImmediate()) {
+                    mPresenter.onDispatchFinishActivity();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed(Bundle bundle) {
+        Logger.i(TAG, "#onBackPressedWithBundle");
+        if (!mFragmentBackStackManager.popBackStackImmediate(bundle)) {
+            finish();
         }
     }
 
@@ -278,24 +289,10 @@ public class MainActivity extends AppCompatActivity
             int menuId = item.getItemId();
             switch (menuId) {
                 case R.id.navigation_stamp:
-                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_MY_STAMP) {
-                        replaceFragment(new ListServiceCompanyFragment(), true, true);
-                    }
-                    return true;
                 case R.id.navigation_home:
-                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_HOME) {
-                        replaceFragment(new HomeFragment(), true, true);
-                    }
-                    return true;
                 case R.id.navigation_another:
-                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_STORE_FOLLOW) {
-                        replaceFragment(new StoreFollowFragment(), true, true);
-                    }
-                    return true;
                 case R.id.navigation_timeline:
-                    if (mCurrentFragment.getMenuBottomID() != BaseFragment.MENU_TIME_LINE) {
-                        replaceFragment(new TimeLineFragment(), true, true);
-                    }
+                    mPresenter.onBottomNavigationButtonClicked(menuId);
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
@@ -357,12 +354,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEnableDrawableLayout() {
+    public void finishActivity() {
+        finish();
+    }
+
+    @Override
+    public void onEnableDrawerLayout() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
-    public void onDisableDrawableLayout() {
+    public void onDisableDrawerLayout() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
@@ -385,23 +387,15 @@ public class MainActivity extends AppCompatActivity
             case FRAGMENT_CHANGE_PASSWORD_CODE:
                 replaceFragment(new ChangePasswordByCodeFragment(), hasAnimation, addToBackStack);
                 break;
+            case FRAGMENT_PRIMARY:
+                mPrimaryFragment = PrimaryFragment.newInstance(bundle);
+                replaceFragment(mPrimaryFragment, hasAnimation, addToBackStack);
+                break;
             case FRAGMENT_REGISTER_ACCOUNT:
                 replaceFragment(new RegisterAccountFragment(), hasAnimation, addToBackStack);
                 break;
-            case FRAGMENT_STAMP:
-                replaceFragment(new ListServiceCompanyFragment(), hasAnimation, addToBackStack);
-                break;
             case FRAGMENT_MEMO_MANAGER:
                 replaceFragment(new MemoManagerFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_SCANNER:
-                replaceFragment(new ScannerFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_WAIT_STORE_CONFIRM:
-                replaceFragment(WaitStoreConfirmFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_MANAGER_STAMP:
-                replaceFragment(ManageStampFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_USER_MEMO:
                 replaceFragment(UserMemoFragment.newInstance(bundle), hasAnimation, addToBackStack);
@@ -420,9 +414,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case FRAGMENT_PUSH_NOTIFICATION_DETAIL:
                 replaceFragment(PushNotificationDetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_HOME:
-                replaceFragment(new HomeFragment(), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_LIST_STORE_CHECKED_IN:
                 replaceFragment(ListStoreCheckedInFragment.newInstance(bundle), hasAnimation, addToBackStack);
@@ -451,26 +442,47 @@ public class MainActivity extends AppCompatActivity
             case FRAGMENT_QA_DETAIL:
                 replaceFragment(QADetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case FRAGMENT_STORE_FOLLOW:
-                replaceFragment(new StoreFollowFragment(), hasAnimation, addToBackStack);
-                break;
             case FRAGMENT_CHAT:
                 replaceFragment(ChatFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
-            case FRAGMENT_TIME_LINE:
-                replaceFragment(new TimeLineFragment(), hasAnimation, addToBackStack);
-                break;
             case FRAGMENT_COMMENT:
-                if (mCurrentFragment instanceof TimeLineFragment) {
-                    replaceFragment(CommentFragment.newInstance(bundle), ((TimeLineFragment) mCurrentFragment).getImageShares());
-                }
+                replaceFragment(CommentFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
+        }
+    }
+
+    @Override
+    public void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement) {
+        if (sharedElement == null) {
+            switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+        } else {
+            switch (screenId) {
+                case FRAGMENT_COMMENT:
+                    replaceFragment(CommentFragment.newInstance(bundle), sharedElement);
+                    break;
+            }
         }
     }
 
     @Override
     public void goBack() {
         onBackPressed();
+    }
+
+    @Override
+    public void setSelectedPage(int itemId) {
+        if (mPrimaryFragment != null) {
+            List<PagedFragment> fragments = mPrimaryFragment.getFragments();
+            if (fragments != null) {
+                for (int i = 0; i < fragments.size(); i++) {
+                    PagedFragment fragment = fragments.get(i);
+                    if (fragment.getNavigationBottomId() == itemId) {
+                        mPrimaryFragment.setSelectedPage(i);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -487,8 +499,6 @@ public class MainActivity extends AppCompatActivity
                 displayScreen(screenId, hasAnimation, addToBackStack, null);
             }
         }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
-
-
     }
 
     @Override
@@ -502,8 +512,17 @@ public class MainActivity extends AppCompatActivity
                 switchScreen(screenId, hasAnimation, addToBackStack, bundle);
             }
         }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
+    }
 
+    @Override
+    public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack, final Bundle bundle, final View sharedElement) {
+        new Handler().postDelayed(new Runnable() {
 
+            @Override
+            public void run() {
+                switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
+            }
+        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
     }
 
     @Override
@@ -525,7 +544,7 @@ public class MainActivity extends AppCompatActivity
                 switch (notificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_TIME_LINE:
                     case Constants.PushNotification.TYPE_STEP_PUSH:
-                        switchScreen(IMainView.FRAGMENT_TIME_LINE, true, true, null);
+                        switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, null);
                         break;
                     default:
                         switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
@@ -542,15 +561,14 @@ public class MainActivity extends AppCompatActivity
                     String json = gson.toJson(objectPush);
                     mPresenter.savePush(json);
                     if (mPresenter.isLogin()) {
-                        switchScreen(IMainView.FRAGMENT_HOME, true, true, null);
+                        mPresenter.mappingUserWithStore();
                     } else {
                         switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
                     }
                 }
             } else {
-                mPresenter.onCreate();
+                mPresenter.displaySplashScreen();
             }
-
         }
     }
 
@@ -570,7 +588,6 @@ public class MainActivity extends AppCompatActivity
                     } catch (NumberFormatException e) {
                         Logger.d(TAG, "NumberFormatException");
                     }
-
                 }
             }
         }
@@ -579,12 +596,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMappingUserStoreFastSuccess() {
-        switchScreen(IMainView.FRAGMENT_STAMP, true, true, null);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_LIST_SERVICE_COMPANY);
+        switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, bundle);
     }
 
     @Override
     public void onMappingUserStoreFastFailure(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void displayScanCodeScreen() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+        displayScreen(FRAGMENT_PRIMARY, true, false, bundle);
     }
 
     @Override
@@ -613,52 +639,51 @@ public class MainActivity extends AppCompatActivity
                 mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
             }
             disablePushUpView();
-            if (fragment.isEnableDrawableLayout()) {
-                mPresenter.onEnableDrawableLayout();
-            } else {
-                mPresenter.onDisableDrawableLayout();
-            }
-            mCurrentFragment = fragment;
-            mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
-            int navigationBottomId = fragment.getNavigationBottomId();
-            if (navigationBottomId != 0) {
-                mBottomNavigationView.setSelectedItemId(navigationBottomId);
-            }
-            mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
-
-            boolean isShowNavigationButton = fragment.isDisplayNavigationButton();
-            mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
-            mToolbar.setShowIconNotificationButton(fragment.isDisplayIconNotification());
-            if (isShowNavigationButton) {
-                mToolbar.setNavigationIcon(R.drawable.ic_back);
-            } else {
-                mToolbar.setNavigationIcon(null);
-            }
-            mToolbar.setTitleActionBar(fragment.getAppBarTitle());
-            mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
-            int actionBarColor = fragment.getActionBarColor();
-            mToolbar.setBackgroundColor(actionBarColor);
-            int menuId = fragment.getMenuBottomID();
-            switch (menuId) {
-                case BaseFragment.MENU_HOME:
-                    mBottomNavigationView.setSelectedItemId(R.id.navigation_home);
-                    break;
-                case BaseFragment.MENU_STORE_FOLLOW:
-                    mBottomNavigationView.setSelectedItemId(R.id.navigation_another);
-                    break;
-                case BaseFragment.MENU_MY_STAMP:
-                    mBottomNavigationView.setSelectedItemId(R.id.navigation_stamp);
-                    break;
-            }
-            if (fragment.getNavigationMenuID() == 0) {
-                mNavigationView.setCheckedItem(R.id.menu_visible);
-            } else {
-                mNavigationView.setCheckedItem(fragment.getNavigationMenuID());
+            if (fragment.isGlobal()) {
+                if (fragment.isEnableDrawableLayout()) {
+                    mPresenter.onEnableDrawerLayout();
+                } else {
+                    mPresenter.onDisableDrawerLayout();
+                }
+                mCurrentFragment = fragment;
+                mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
+                int navigationBottomId = fragment.getNavigationBottomId();
+                if (navigationBottomId != 0) {
+                    mBottomNavigationView.setSelectedItemId(navigationBottomId);
+                }
+                mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
+                boolean isShowNavigationButton = fragment.isDisplayNavigationButton();
+                if (isShowNavigationButton) {
+                    mToolbar.setNavigationIcon(R.drawable.ic_back);
+                } else {
+                    mToolbar.setNavigationIcon(null);
+                }
+                mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
+                mToolbar.setShowIconNotificationButton(fragment.isDisplayIconNotification());
+                mToolbar.setTitleActionBar(fragment.getAppBarTitle());
+                mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
+                int actionBarColor = fragment.getActionBarColor();
+                mToolbar.setBackgroundColor(actionBarColor);
+                if (fragment.getNavigationMenuId() == 0) {
+                    mNavigationView.setCheckedItem(R.id.menu_visible);
+                } else {
+                    mNavigationView.setCheckedItem(fragment.getNavigationMenuId());
+                }
             }
         }
     }
 
-    void disablePushUpView() {
+    @Override
+    public void setSelectedNavigationBottom(int id) {
+        mBottomNavigationView.setSelectedItemId(id);
+    }
+
+    @Override
+    public void setAppBarTitle(String title) {
+        mToolbar.setTitleActionBar(title);
+    }
+
+    private void disablePushUpView() {
         this.getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
@@ -671,10 +696,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void replaceFragment(BaseFragment fragment, ImageView imageView) {
+    private void replaceFragment(BaseFragment fragment, View sharedElement) {
         if (fragment != null && !isFinishing()) {
             if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId()) {
-                mFragmentBackStackManager.replaceFragment(fragment, imageView);
+                mFragmentBackStackManager.replaceFragment(fragment, sharedElement);
             }
         }
     }
@@ -682,6 +707,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        VolleySequence.getInstance().release();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mLogoutReceiver);
 

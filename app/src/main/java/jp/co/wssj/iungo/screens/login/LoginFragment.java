@@ -53,11 +53,6 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     public boolean isDisplayExtraNavigationButton() {
         return false;
     }
@@ -100,7 +95,7 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     @Override
     public void displayHomeScreen() {
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_TIME_LINE, false, false);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, false, false);
     }
 
     @Override

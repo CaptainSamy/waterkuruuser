@@ -56,11 +56,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     private TimeLinePresenter mPresenter;
 
-    private IRefreshTimeline mRefreshTimeline;
-
     private IActivityCallback mActivityCallback;
-
-    private RecyclerView mRecycleView;
 
     private Map<String, GlideDrawable> mImageMap = new HashMap<>();
 
@@ -86,12 +82,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             return mListTimeLine.get(position);
         }
         return null;
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        mRecycleView = recyclerView;
     }
 
     @Override
@@ -312,36 +302,35 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     }
                     break;
                 case R.id.image1:
-                    commentFragment(0, (ImageView) v);
+                    commentFragment(0, v);
                     break;
                 case R.id.image2:
-                    commentFragment(1, (ImageView) v);
+                    commentFragment(1, v);
                     break;
                 case R.id.image3:
-                    commentFragment(2, (ImageView) v);
+                    commentFragment(2, v);
                     break;
                 case R.id.image4:
-                    commentFragment(3, (ImageView) v);
+                    commentFragment(3, v);
                     break;
                 case R.id.image5:
-                    commentFragment(4, (ImageView) v);
+                    commentFragment(4, v);
                     break;
             }
         }
 
-        private void commentFragment(int positionClick, ImageView imageView) {
+        private void commentFragment(int positionClick, View sharedView) {
             if (mActivityCallback != null) {
-                if (imageView != null) {
+                if (sharedView != null) {
                     String urlImage = mListUrlImage.get(positionClick);
                     String fileName = urlImage.substring(urlImage.lastIndexOf("/") + 1);
-                    ViewCompat.setTransitionName(imageView, fileName);
+                    ViewCompat.setTransitionName(sharedView, fileName);
                 }
-                mRefreshTimeline.onRefreshTimeline(imageView);
                 Bundle bundle = new Bundle();
                 bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
                 bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
-                mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle);
+                mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, sharedView);
 
 //                mActivityCallback.onComment(imageView, mListUrlImage, positionClick);
 
@@ -555,14 +544,5 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             image5.setOnClickListener(this);
             fillImage(urlImage5, image5);
         }
-    }
-
-    public interface IRefreshTimeline {
-
-        void onRefreshTimeline(ImageView view);
-    }
-
-    public void setRefreshTimeline(IRefreshTimeline refreshTimeline) {
-        this.mRefreshTimeline = refreshTimeline;
     }
 }

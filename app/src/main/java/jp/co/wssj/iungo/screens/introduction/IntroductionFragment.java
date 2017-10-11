@@ -41,6 +41,7 @@ import java.util.Arrays;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -77,7 +78,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
     @Override
     public String getAppBarTitle() {
-        return "";
+        return Constants.EMPTY_STRING;
     }
 
     @Override
@@ -96,13 +97,13 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
+    public boolean isEnableDrawableLayout() {
         return false;
     }
 
     @Override
-    public boolean isEnableDrawableLayout() {
-        return false;
+    protected boolean isRetainState() {
+        return true;
     }
 
     @Override
@@ -151,7 +152,6 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
 
     @Override
     protected void initData() {
-        super.initData();
         String text = "スマホでかんたん<font color='#D9594C'>ツナグ</font>アプリ";
         mButtonHowToUsed.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
         onLoginTwitter();
@@ -201,7 +201,9 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     public void displayHomeScreen() {
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, false, false);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
     }
 
     /*

@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.screens;
 
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.List;
 
@@ -21,15 +22,7 @@ public interface IMainView extends IView {
 
     int FRAGMENT_REGISTER_ACCOUNT = 5;
 
-    int FRAGMENT_STAMP = 7;
-
     int FRAGMENT_MEMO_MANAGER = 8;
-
-    int FRAGMENT_SCANNER = 9;
-
-    int FRAGMENT_WAIT_STORE_CONFIRM = 10;
-
-    int FRAGMENT_MANAGER_STAMP = 11;
 
     int FRAGMENT_USER_MEMO = 12;
 
@@ -40,8 +33,6 @@ public interface IMainView extends IView {
     int FRAGMENT_PUSH_NOTIFICATION_LIST = 15;
 
     int FRAGMENT_PUSH_NOTIFICATION_DETAIL = 16;
-
-    int FRAGMENT_HOME = 17;
 
     int FRAGMENT_LIST_STORE_CHECKED_IN = 18;
 
@@ -63,25 +54,31 @@ public interface IMainView extends IView {
 
     int FRAGMENT_QA_DETAIL = 27;
 
-    int FRAGMENT_STORE_FOLLOW = 28;
-
     int FRAGMENT_CHAT = 29;
-
-    int FRAGMENT_TIME_LINE = 30;
 
     int FRAGMENT_COMMENT = 36;
 
+    int FRAGMENT_PRIMARY = 37;
+
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
+    void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement);
+
     void goBack();
+
+    void clearBackStack();
+
+    void setSelectedPage(int itemId);
+
+    void finishActivity();
 
     void onOpenDrawableLayout();
 
     void onCloseDrawableLayout(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, int navigationId);
 
-    void onEnableDrawableLayout();
+    void onEnableDrawerLayout();
 
-    void onDisableDrawableLayout();
+    void onDisableDrawerLayout();
 
     void onLogout();
 
@@ -92,4 +89,6 @@ public interface IMainView extends IView {
     void onMappingUserStoreFastSuccess();
 
     void onMappingUserStoreFastFailure(String message);
+
+    void displayScanCodeScreen();
 }

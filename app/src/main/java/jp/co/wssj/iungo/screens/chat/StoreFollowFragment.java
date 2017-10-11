@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.chat;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,7 +12,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.StoreFollowResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.chat.adapter.StoreFollowAdapter;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 
@@ -19,9 +20,9 @@ import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
  * Created by Nguyen Huu Ta on 26/6/2017.
  */
 
-public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView {
+public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView {
 
-    private static String TAG = "StoreFollowFragment";
+    private static final String TAG = "StoreFollowFragment";
 
     private ListView mListViewStoreFollow;
 
@@ -35,13 +36,13 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
     }
 
     @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_STORE_FOLLOW;
+    protected int getResourceLayout() {
+        return R.layout.fragment_store_follow;
     }
 
     @Override
-    protected int getResourceLayout() {
-        return R.layout.fragment_store_follow;
+    protected boolean isRetainState() {
+        return true;
     }
 
     @Override
@@ -55,8 +56,8 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
     }
 
     @Override
-    public String getAppBarTitle() {
-        return getString(R.string.title_screen_store_follow);
+    public String getPageTitle(Context context) {
+        return getString(context, R.string.title_screen_store_follow);
     }
 
     @Override
@@ -65,18 +66,8 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
     }
 
     @Override
-    public int getMenuBottomID() {
-        return MENU_STORE_FOLLOW;
-    }
-
-    @Override
     protected void initViews(View rootView) {
         mListViewStoreFollow = (ListView) rootView.findViewById(R.id.lvStoreFollow);
-    }
-
-    @Override
-    public boolean isDisplayNavigationButton() {
-        return false;
     }
 
     @Override

@@ -46,11 +46,6 @@ public class TermOfServiceNoMenuBottom extends BaseFragment<ITermOfServicesView,
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     public boolean isDisplayExtraNavigationButton() {
         return false;
     }

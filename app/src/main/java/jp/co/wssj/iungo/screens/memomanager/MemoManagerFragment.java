@@ -89,11 +89,6 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_another);
     }
@@ -114,7 +109,7 @@ public class MemoManagerFragment extends BaseFragment<IMemoManagerView, MemoMana
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_memo;
     }
 

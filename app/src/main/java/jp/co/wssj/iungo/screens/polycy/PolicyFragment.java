@@ -49,7 +49,7 @@ public class PolicyFragment extends BaseFragment<IPolicyView, PolicyPresenter> i
     }
 
     @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_privacy_policy;
     }
 

@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.registeraccount;
 
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +31,7 @@ import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.auth.RegisterData;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
 /**
@@ -79,11 +81,6 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     @Override
     public boolean isDisplayActionBar() {
         return true;
-    }
-
-    @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
     }
 
     @Override
@@ -281,7 +278,9 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
         showToast(message);
 
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_HOME, true, false);
+        Bundle bundle = new Bundle();
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
     }
 
     @Override

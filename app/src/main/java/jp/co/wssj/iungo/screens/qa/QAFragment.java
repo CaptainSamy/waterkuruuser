@@ -63,12 +63,7 @@ public class QAFragment extends BaseFragment<IQAView, QAPresenter> implements IQ
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
-    public int getNavigationMenuID() {
+    public int getNavigationMenuId() {
         return R.id.menu_question_answer;
     }
 

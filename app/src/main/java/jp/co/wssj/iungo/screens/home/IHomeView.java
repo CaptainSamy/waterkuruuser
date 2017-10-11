@@ -8,9 +8,11 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
  * Created by Nguyen Huu Ta on 20/6/2017.
  */
 
-public interface IHomeView extends IFragmentView {
+interface IHomeView extends IFragmentView {
 
-    void requestCameraPermission();
+    void displayStampManagerScreen(Bundle bundle);
 
-    void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
+    void displayScanQRCodeScreen();
+
+    void displayWaitStoreConfirmScreen(Bundle bundle);
 }

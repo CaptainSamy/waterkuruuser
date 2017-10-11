@@ -1,8 +1,10 @@
 package jp.co.wssj.iungo.screens.scanner;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -17,8 +19,9 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.IWrapperFragment;
+import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
+import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.scanner.dialog.ConfirmCheckInDialog;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -26,9 +29,12 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by HieuPT on 5/19/2017.
  */
 
-public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter> implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog {
+public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresenter>
+        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog, IWrapperFragmentController, PagedFragment.IOnPageSelectChangeListener {
 
     private static final String TAG = "ScannerFragment";
+
+    private static final int REQUEST_CAMERA_CODE = 100;
 
     private BarcodeDetector mBarcode;
 
@@ -40,6 +46,8 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
     private boolean mIsSurfaceCreated, mIsCameraStarted;
 
+    private IWrapperFragment mWrapperFragment;
+
     private final Handler mHandler = new Handler();
 
     private final SurfaceHolder.Callback mHolderCallback = new SurfaceHolder.Callback() {
@@ -48,7 +56,7 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
         public void surfaceCreated(SurfaceHolder holder) {
             Logger.d(TAG, "#surfaceCreated");
             mIsSurfaceCreated = true;
-            startCamera();
+            attemptStartCamera();
         }
 
         @Override
@@ -65,38 +73,18 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     };
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
+    protected boolean isRetainState() {
         return true;
     }
 
     @Override
-    public boolean isEnableBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_SCANNER;
-    }
-
-    @Override
-    public boolean isDisplayNavigationButton() {
-        return false;
-    }
-
-    @Override
-    public String getAppBarTitle() {
-        return getString(R.string.read_qr_code);
+    public String getPageTitle(Context context) {
+        return getString(context, R.string.read_qr_code);
     }
 
     @Override
     protected int getResourceLayout() {
         return R.layout.fragment_scanner;
-    }
-
-    @Override
-    public int getMenuBottomID() {
-        return MENU_HOME;
     }
 
     @Override
@@ -146,6 +134,7 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
                 .setAutoFocusEnabled(true)
                 .setRequestedPreviewSize(getResources().getDisplayMetrics().heightPixels, getResources().getDisplayMetrics().widthPixels)
                 .build();
+        addOnPageSelectChangeListener(this);
     }
 
     @Override
@@ -162,26 +151,32 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
     public void displayConfirmDialog(String qrCode) {
         if (mDialog == null) {
-            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), this);
+            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), mWrapperFragment, this);
         }
         mDialog.showDialog(qrCode);
     }
 
     @Override
     public void onDismissDialog() {
-        startCamera();
+        attemptStartCamera();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        startCamera();
+        if (getUserVisibleHint() && ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            startCamera();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
         stopCamera();
+    }
+
+    private void attemptStartCamera() {
+        getPresenter().attemptStartCamera();
     }
 
     @Override
@@ -213,10 +208,49 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     }
 
     @Override
+    public void requestCameraPermission() {
+        requestPermissions(new String[]{
+                Manifest.permission.CAMERA
+        }, REQUEST_CAMERA_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA_CODE
+                && permissions.length > 0
+                && Manifest.permission.CAMERA.equals(permissions[0])) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    getPresenter().onPermissionDenied();
+                } else {
+                    getPresenter().onPermissionDeniedAndDontAskAgain();
+                }
+            }
+        }
+    }
+
+    @Override
     public void releaseCamera() {
         if (mCameraSource != null) {
             mCameraSource.release();
             mCameraSource = null;
         }
+    }
+
+    @Override
+    public void setWrapperFragment(IWrapperFragment fragment) {
+        mWrapperFragment = fragment;
+    }
+
+    @Override
+    public void onPageSelected() {
+        attemptStartCamera();
+    }
+
+    @Override
+    public void onPageUnselected() {
+        stopCamera();
     }
 }

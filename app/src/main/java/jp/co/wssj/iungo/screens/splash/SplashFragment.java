@@ -2,7 +2,6 @@ package jp.co.wssj.iungo.screens.splash;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Twitter;
@@ -23,9 +22,11 @@ import jp.co.wssj.iungo.utils.Constants;
 
 public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> implements ISplashView {
 
+    private static final String TAG = "SplashFragment";
+
     @Override
     protected String getLogTag() {
-        return null;
+        return TAG;
     }
 
     @Override
@@ -40,11 +41,6 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     @Override
     public boolean isDisplayActionBar() {
-        return false;
-    }
-
-    @Override
-    public boolean isDisplayBottomNavigationMenu() {
         return false;
     }
 
@@ -69,18 +65,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     }
 
     @Override
-    protected void initViews(View rootView) {
-        super.initViews(rootView);
-    }
-
-    @Override
-    protected void initAction() {
-        super.initAction();
-    }
-
-    @Override
     protected void initData() {
-        super.initData();
         TwitterConfig config = new TwitterConfig.Builder(getActivityContext())
                 .logger(new DefaultLogger(Log.DEBUG))
                 .twitterAuthConfig(new TwitterAuthConfig(Constants.Introduction.TWITTER_KEY, Constants.Introduction.TWITTER_SECRET))
@@ -99,7 +84,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
                 dialogAskUpdate.showDialog();
             } else {
-                displayScreen(IMainView.FRAGMENT_TIME_LINE);
+                displayScreen(IMainView.FRAGMENT_PRIMARY);
             }
         }
     }
@@ -110,8 +95,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
             @Override
             public void run() {
-                getActivityCallback().displayScreen(fragmentId, true, false, null);
-                getActivityCallback().clearBackStack();
+                getActivityCallback().displayScreen(fragmentId, true, false);
             }
         }, Constants.TIME_WAITING_SPLASH);
 
