@@ -70,6 +70,7 @@ import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
 import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.utils.ReflectionUtils;
 import jp.co.wssj.iungo.widget.CenterTitleToolbar;
 
 public class MainActivity extends AppCompatActivity
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setItemIconTintList(null);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNavigationView.setItemIconTintList(null);
+        ReflectionUtils.setBottomNavigationViewShiftingMode(mBottomNavigationView, false);
         mToolbar = (CenterTitleToolbar) findViewById(R.id.tool_bar);
         mToolbar.setExtraNavigationIcon(R.drawable.ic_menu);
         mToolbar.setNavigationIcon(R.drawable.ic_back);
@@ -523,6 +525,7 @@ public class MainActivity extends AppCompatActivity
                 bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switch (notificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_TIME_LINE:
+                    case Constants.PushNotification.TYPE_STEP_PUSH:
                         switchScreen(IMainView.FRAGMENT_TIME_LINE, true, true, null);
                         break;
                     default:

@@ -253,38 +253,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mContent.setText(mTimeLine.getMessages());
             }
             mLayoutLike.setOnClickListener(this);
-//            mLayoutLike.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    Logger.d(TAG, "onLongClick");
-//                    mReactionFacebook.show();
-//                    CustomLinearLayoutManager layoutManager = (CustomLinearLayoutManager) mRecycleView.getLayoutManager();
-//                    layoutManager.setScrollable(false);
-//                    return true;
-//                }
-//            });
-//            mLayoutLike.setOnTouchListener(new View.OnTouchListener() {
-//
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (event.getAction() == MotionEvent.ACTION_UP) {
-//                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
-//                            mReactionFacebook.dismiss();
-//                            CustomLinearLayoutManager layoutManager = (CustomLinearLayoutManager) mRecycleView.getLayoutManager();
-//                            layoutManager.setScrollable(true);
-//                            Logger.d(TAG, "ACTION_UP && onLongClick");
-//                            return mReactionFacebook.onTouchEvent(event);
-//                        }
-//                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
-//                            return mReactionFacebook.onTouchEvent(event);
-//                        }
-//
-//                    }
-//                    return false;
-//                }
-//            });
             mLayoutComment.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
@@ -456,7 +424,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     like = mContext.getResources().getDrawable(R.drawable.angry);
                     break;
                 default:
-                    like = mContext.getResources().getDrawable(R.drawable.icon_smile);
+                    like = mContext.getResources().getDrawable(R.drawable.like_default);
             }
             return like;
         }
@@ -556,7 +524,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 imageView.setImageDrawable(drawable);
             }
         }
-
 
         private void fillTwoImages(View view, String urlImage1, String urlImage2) {
             ImageView image1 = (ImageView) view.findViewById(R.id.image1);
