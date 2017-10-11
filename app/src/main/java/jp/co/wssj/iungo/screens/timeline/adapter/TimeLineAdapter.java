@@ -23,7 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
@@ -55,6 +57,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     private TimeLinePresenter mPresenter;
 
     private IActivityCallback mActivityCallback;
+
+    private Map<String, GlideDrawable> mImageMap = new HashMap<>();
 
     public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
         mListTimeLine = listTimeline;
@@ -239,38 +243,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mContent.setText(mTimeLine.getMessages());
             }
             mLayoutLike.setOnClickListener(this);
-//            mLayoutLike.setOnLongClickListener(new View.OnLongClickListener() {
-//
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    Logger.d(TAG, "onLongClick");
-//                    mReactionFacebook.show();
-//                    CustomLinearLayoutManager layoutManager = (CustomLinearLayoutManager) mRecycleView.getLayoutManager();
-//                    layoutManager.setScrollable(false);
-//                    return true;
-//                }
-//            });
-//            mLayoutLike.setOnTouchListener(new View.OnTouchListener() {
-//
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if (event.getAction() == MotionEvent.ACTION_UP) {
-//                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
-//                            mReactionFacebook.dismiss();
-//                            CustomLinearLayoutManager layoutManager = (CustomLinearLayoutManager) mRecycleView.getLayoutManager();
-//                            layoutManager.setScrollable(true);
-//                            Logger.d(TAG, "ACTION_UP && onLongClick");
-//                            return mReactionFacebook.onTouchEvent(event);
-//                        }
-//                    } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//                        if (mReactionFacebook.getVisibility() == View.VISIBLE) {
-//                            return mReactionFacebook.onTouchEvent(event);
-//                        }
-//
-//                    }
-//                    return false;
-//                }
-//            });
             mLayoutComment.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
@@ -441,7 +413,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     like = mContext.getResources().getDrawable(R.drawable.angry);
                     break;
                 default:
-                    like = mContext.getResources().getDrawable(R.drawable.icon_smile);
+                    like = mContext.getResources().getDrawable(R.drawable.like_default);
             }
             return like;
         }
@@ -509,30 +481,37 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             }
         }
 
-        private void fillImage(String url, final ImageView imageView) {
+        private void fillImage(final String url, final ImageView imageView) {
+            GlideDrawable drawable = mImageMap.get(url);
+            if (drawable == null) {
+                Glide.with(mContext)
+                        .load(url)
+                        .placeholder(R.drawable.ic_add_image)
+                        .into(new SimpleTarget<GlideDrawable>() {
 
-            Glide.with(mContext)
-                    .load(url)
-                    .placeholder(R.drawable.ic_add_image)
-                    .into(new SimpleTarget<GlideDrawable>() {
+                            @Override
+                            public void onLoadStarted(Drawable placeholder) {
+                                imageView.setImageDrawable(placeholder);
+                            }
 
-                        @Override
-                        public void onLoadStarted(Drawable placeholder) {
-                            imageView.setImageDrawable(placeholder);
-                        }
+                            @Override
+                            public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                imageView.setImageDrawable(errorDrawable);
+                            }
 
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            imageView.setImageDrawable(errorDrawable);
-                        }
-
-                        @Override
-                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            Logger.d("fillImage", "onResourceReady");
-                            imageView.setImageDrawable(resource);
-                            imageView.setTag(R.id.shared_drawable, resource);
-                        }
-                    });
+                            @Override
+                            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                Logger.d("fillImage", "onResourceReady " + imageView.getId() + " resource : " + resource);
+                                imageView.setImageDrawable(null);
+                                imageView.setImageDrawable(resource);
+//                                imageView.setTag(R.id.shared_drawable, resource);
+                                mImageMap.put(url, resource);
+                            }
+                        });
+            } else {
+                imageView.setImageDrawable(null);
+                imageView.setImageDrawable(drawable);
+            }
         }
 
         private void fillTwoImages(View view, String urlImage1, String urlImage2) {

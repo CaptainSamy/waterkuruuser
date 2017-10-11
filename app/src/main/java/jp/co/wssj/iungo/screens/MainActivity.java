@@ -66,6 +66,7 @@ import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
 import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.utils.ReflectionUtils;
 import jp.co.wssj.iungo.utils.VolleySequence;
 import jp.co.wssj.iungo.widget.CenterTitleToolbar;
 
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setItemIconTintList(null);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNavigationView.setItemIconTintList(null);
+        ReflectionUtils.setBottomNavigationViewShiftingMode(mBottomNavigationView, false);
         mToolbar = (CenterTitleToolbar) findViewById(R.id.tool_bar);
         mToolbar.setExtraNavigationIcon(R.drawable.ic_menu);
         mToolbar.setNavigationIcon(R.drawable.ic_back);
@@ -539,9 +541,9 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
-                bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switch (notificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_TIME_LINE:
+                    case Constants.PushNotification.TYPE_STEP_PUSH:
                         switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, null);
                         break;
                     default:
@@ -578,14 +580,15 @@ public class MainActivity extends AppCompatActivity
         int stampId = 0;
         if (!TextUtils.isEmpty(action)) {
             String[] splitAction = action.split(Constants.SPLIT);
-            action = splitAction[0];
-            if (splitAction.length == 2) {
-                try {
-                    stampId = Integer.parseInt(splitAction[1]);
-                } catch (NumberFormatException e) {
-                    Logger.d(TAG, "NumberFormatException");
+            if (splitAction != null) {
+                action = splitAction[0];
+                if (splitAction.length == 2) {
+                    try {
+                        stampId = Integer.parseInt(splitAction[1]);
+                    } catch (NumberFormatException e) {
+                        Logger.d(TAG, "NumberFormatException");
+                    }
                 }
-
             }
         }
         return new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
