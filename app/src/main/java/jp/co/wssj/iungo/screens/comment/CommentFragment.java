@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.transition.TransitionInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.github.rockerhieu.emojicon.EmojiconEditText;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.screens.IMainView;
@@ -56,7 +56,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     private ImageView mButtonSendComment;
 
-    private EmojiconEditText mInputComment;
+    private EditText mInputComment;
 
     private RelativeLayout mLayoutViewPager;
 
@@ -142,38 +142,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
             mLayoutViewPager.setVisibility(View.GONE);
         }
 
-
-//        ImageView imageView = (ImageView) view.findViewById(R.id.ivPhoto);
-//        String urlImage = listUrlImage.get(0);
-//        ViewCompat.setTransitionName(imageView, urlImage.substring(urlImage.lastIndexOf("/") + 1));
-//        Glide.with(this)
-//                .load(urlImage)
-//                .dontAnimate()
-//                .listener(new RequestListener<String, GlideDrawable>() {
-//
-//                    @Override
-//                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                        startPostponedEnterTransition();
-//                        return false;
-//                    }
-//
-//                    @Override
-//                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                        startPostponedEnterTransition();
-//                        return false;
-//                    }
-//                })
-//                .into(imageView);
     }
-//        if (listUrlImage != null && listUrlImage.size() > 0) {
-//            mLayoutViewPager.setVisibility(View.VISIBLE);
-//            TransitionAdapter animalPagerAdapter = new TransitionAdapter(getChildFragmentManager(), listUrlImage);
-//            mViewPagePhoto.setAdapter(animalPagerAdapter);
-//            mViewPagePhoto.setCurrentItem(currentItem);
-//            mIndicator.setViewPager(mViewPagePhoto);
-//        } else {
-//            mLayoutViewPager.setVisibility(View.GONE);
-//        }
 
     @Override
     protected void initViews(View rootView) {
@@ -182,7 +151,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         mListViewComment = (ListView) rootView.findViewById(R.id.lvComment);
         mButtonSendComment = (ImageView) rootView.findViewById(R.id.tvSendComment);
         mProgressSend = (ProgressBar) rootView.findViewById(R.id.progressSend);
-        mInputComment = (EmojiconEditText) rootView.findViewById(R.id.etComment);
+        mInputComment = (EditText) rootView.findViewById(R.id.etComment);
         mLayoutViewPager = (RelativeLayout) rootView.findViewById(R.id.layoutViewPager);
 
         mIndicator.setFillColor(ContextCompat.getColor(getContext(), R.color.colorMain));

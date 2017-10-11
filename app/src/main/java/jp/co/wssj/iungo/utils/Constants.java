@@ -60,6 +60,12 @@ public final class Constants {
 
     public static final int TIME_DELAY_GET_LIST_CHAT = 5000;
 
+    public static final String KEY_VIDEO = "video_iungo";
+
+    public static final String KEY_FRAME_VIDEO = "frame_video";
+
+    public static final String KEY_SPLIT_FRAME_VIDEO = "|";
+
     private Constants() {
     }
 

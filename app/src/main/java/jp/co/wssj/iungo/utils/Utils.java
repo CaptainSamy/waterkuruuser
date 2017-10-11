@@ -498,4 +498,12 @@ public final class Utils {
         }, null);
         textView.setText(spanned);
     }
+
+    public static String convertDuration(int duration) {
+        return String.format("%2d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(duration),
+                TimeUnit.MILLISECONDS.toSeconds(duration) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration))
+        );
+    }
 }

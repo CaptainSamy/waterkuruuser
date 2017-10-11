@@ -14,20 +14,22 @@
 
         <ImageView
             android:id="@+id/image1"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:padding="1sp"
+            android:src="@drawable/ic_add_image"
             />
 
         <ImageView
             android:id="@+id/image2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:adjustViewBounds="true"
             android:padding="1sp"
+            android:src="@drawable/ic_add_image"
             />
 
     </LinearLayout>
@@ -39,19 +41,21 @@
 
         <ImageView
             android:id="@+id/image3"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:src="@drawable/ic_add_image"
             android:adjustViewBounds="true"
             android:padding="1sp"
             />
 
         <ImageView
             android:id="@+id/image4"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:adjustViewBounds="true"
+            android:src="@drawable/ic_add_image"
             android:padding="1sp"
             />
     </LinearLayout>

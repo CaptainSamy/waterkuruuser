@@ -609,7 +609,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void displayScanCodeScreen() {
         Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
         displayScreen(FRAGMENT_PRIMARY, true, false, bundle);
     }
 

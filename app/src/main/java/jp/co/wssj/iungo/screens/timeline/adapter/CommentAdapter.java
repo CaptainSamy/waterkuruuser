@@ -33,13 +33,13 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
     private CommentPresenter mTimelinePresenter;
 
-    private Context mContex;
+    private Context mContext;
 
     public CommentAdapter(@NonNull Context context, @NonNull List<CommentResponse.CommentData.ListComment> objects, CommentPresenter presenter) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
         mTimelinePresenter = presenter;
-        mContex = context;
+        mContext = context;
     }
 
     @NonNull
@@ -82,7 +82,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
                 mComment = comments.getComment();
                 if (mComment != null) {
                     String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + mComment.getUserName() + "</font></strong></body></html>" + " " + StringEscapeUtils.unescapeJava(mComment.getContent());
-                    mContentComment.setText(Html.fromHtml(content));
+                    mContentComment.setText(Html.fromHtml(content.replace("\n", "<br />")));
                     mTime.setText(Utils.distanceTimes(mComment.getCreated()));
                 }
                 mNumberLike.setText(String.valueOf(mComment.getNumberLike()));
@@ -116,7 +116,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
                                 @Override
                                 public void onLikeFailure(String message) {
-                                    Toast.makeText(mContex, message, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
                                 }
                             });
                         }
