@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -33,6 +34,8 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
 
     private static final String TAG = "ScannerFragment";
 
+    private static final int REQUEST_CAMERA_CODE = 100;
+
     private BarcodeDetector mBarcode;
 
     private CameraSource mCameraSource;
@@ -53,7 +56,7 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
         public void surfaceCreated(SurfaceHolder holder) {
             Logger.d(TAG, "#surfaceCreated");
             mIsSurfaceCreated = true;
-            startCamera();
+            attemptStartCamera();
         }
 
         @Override
@@ -155,13 +158,13 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
 
     @Override
     public void onDismissDialog() {
-        startCamera();
+        attemptStartCamera();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserVisibleHint()) {
+        if (getUserVisibleHint() && ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera();
         }
     }
@@ -170,6 +173,10 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     public void onPause() {
         super.onPause();
         stopCamera();
+    }
+
+    private void attemptStartCamera() {
+        getPresenter().attemptStartCamera();
     }
 
     @Override
@@ -201,6 +208,30 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     }
 
     @Override
+    public void requestCameraPermission() {
+        requestPermissions(new String[]{
+                Manifest.permission.CAMERA
+        }, REQUEST_CAMERA_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CAMERA_CODE
+                && permissions.length > 0
+                && Manifest.permission.CAMERA.equals(permissions[0])) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCamera();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    getPresenter().onPermissionDenied();
+                } else {
+                    getPresenter().onPermissionDeniedAndDontAskAgain();
+                }
+            }
+        }
+    }
+
+    @Override
     public void releaseCamera() {
         if (mCameraSource != null) {
             mCameraSource.release();
@@ -215,7 +246,7 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
 
     @Override
     public void onPageSelected() {
-        startCamera();
+        attemptStartCamera();
     }
 
     @Override

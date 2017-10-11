@@ -53,11 +53,6 @@ public class ContactUsFragment extends BaseFragment<IContactUsView, ContactUsPre
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return super.isDisplayBottomNavigationMenu();
-    }
-
-    @Override
     public int getNavigationMenuId() {
         return R.id.menu_contact_us;
     }

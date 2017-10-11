@@ -54,11 +54,6 @@ public class HowToUserFragment extends BaseFragment<IHowToUseView, HowToUsePrese
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
         mWebHowUseAPp = (WebView) rootView.findViewById(R.id.howUseApp);

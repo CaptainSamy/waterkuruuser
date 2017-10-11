@@ -16,4 +16,5 @@ interface IScannerView extends IFragmentView {
 
     void stopCamera();
 
+    void requestCameraPermission();
 }
