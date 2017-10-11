@@ -45,11 +45,6 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     public boolean isDisplayIconNotification() {
         return false;
     }

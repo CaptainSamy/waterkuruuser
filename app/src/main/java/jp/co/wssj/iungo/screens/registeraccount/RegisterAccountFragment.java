@@ -84,11 +84,6 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     public boolean isDisplayExtraNavigationButton() {
         return false;
     }

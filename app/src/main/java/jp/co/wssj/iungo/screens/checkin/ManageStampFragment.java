@@ -64,11 +64,6 @@ public class ManageStampFragment extends PagedFragment<IManageStampView, ManageS
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_manager_stamp);
     }

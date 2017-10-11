@@ -41,11 +41,6 @@ public class ResetPasswordFragment extends BaseFragment<IResetPasswordView, Rese
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     public boolean isDisplayIconNotification() {
         return false;
     }

@@ -49,11 +49,6 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     public boolean isDisplayExtraNavigationButton() {
         return false;
     }
