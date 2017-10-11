@@ -1,6 +1,7 @@
 package jp.co.wssj.iungo.screens;
 
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.List;
 
@@ -60,6 +61,8 @@ public interface IMainView extends IView {
     int FRAGMENT_PRIMARY = 37;
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
+
+    void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement);
 
     void goBack();
 

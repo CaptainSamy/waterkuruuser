@@ -444,10 +444,21 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(ChatFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_COMMENT:
-                if (mCurrentFragment instanceof TimeLineFragment) {
-                    replaceFragment(CommentFragment.newInstance(bundle), ((TimeLineFragment) mCurrentFragment).getImageShares());
-                }
+                replaceFragment(CommentFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
+        }
+    }
+
+    @Override
+    public void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement) {
+        if (sharedElement == null) {
+            switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+        } else {
+            switch (screenId) {
+                case FRAGMENT_COMMENT:
+                    replaceFragment(CommentFragment.newInstance(bundle), sharedElement);
+                    break;
+            }
         }
     }
 
@@ -497,6 +508,17 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void run() {
                 switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+            }
+        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
+    }
+
+    @Override
+    public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack, final Bundle bundle, final View sharedElement) {
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
             }
         }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
     }
@@ -671,10 +693,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void replaceFragment(BaseFragment fragment, ImageView imageView) {
+    private void replaceFragment(BaseFragment fragment, View sharedElement) {
         if (fragment != null && !isFinishing()) {
             if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId()) {
-                mFragmentBackStackManager.replaceFragment(fragment, imageView);
+                mFragmentBackStackManager.replaceFragment(fragment, sharedElement);
             }
         }
     }

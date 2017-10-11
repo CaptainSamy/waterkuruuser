@@ -70,6 +70,11 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     };
 
     @Override
+    protected boolean isRetainState() {
+        return true;
+    }
+
+    @Override
     public String getPageTitle(Context context) {
         return getString(context, R.string.read_qr_code);
     }

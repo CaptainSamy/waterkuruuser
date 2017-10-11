@@ -41,6 +41,11 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
     }
 
     @Override
+    protected boolean isRetainState() {
+        return true;
+    }
+
+    @Override
     protected StoreFollowPresenter onCreatePresenter(IStoreFollowView view) {
         return new StoreFollowPresenter(view);
     }

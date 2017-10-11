@@ -73,11 +73,6 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return true;
-    }
-
-    @Override
     protected int getResourceLayout() {
         return R.layout.fragment_list_card;
     }

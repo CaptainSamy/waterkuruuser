@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +32,6 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
 
     private TimeLineAdapter mAdapter;
 
-    private List<TimeLineResponse.TimeLineData.ListTimeline> mListTimeLine;
-
     @Override
     protected String getLogTag() {
         return TAG;
@@ -56,13 +53,13 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
     }
 
     @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_timeline;
+    protected boolean isRetainState() {
+        return true;
     }
 
     @Override
-    public boolean isDisplayNavigationButton() {
-        return false;
+    public int getNavigationBottomId() {
+        return R.id.navigation_timeline;
     }
 
     @Override
@@ -89,23 +86,12 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
     @Override
     protected void initData() {
         if (mAdapter == null) {
-            mListTimeLine = new ArrayList<>();
-            mAdapter = new TimeLineAdapter(mListTimeLine, getPresenter(), getActivityCallback());
-            mAdapter.setRefreshTimeline(new TimeLineAdapter.IRefreshTimeline() {
-
-                @Override
-                public void onRefreshTimeline(ImageView view) {
-//                    mPresenter.getTimeline(Constants.INIT_PAGE);
-                    imageShares = view;
-                }
-            });
+            mAdapter = new TimeLineAdapter(new ArrayList<TimeLineResponse.TimeLineData.ListTimeline>(), getPresenter(), getActivityCallback());
             setRefresh(true);
             getPresenter().getTimeline(Constants.INIT_PAGE);
         }
         mRecycleTimeLine.setAdapter(mAdapter);
     }
-
-    private ImageView imageShares;
 
     @Override
     public void onClick(View v) {
@@ -142,9 +128,4 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
     private void setRefresh(boolean fresh) {
         mRefreshLayout.setRefreshing(fresh);
     }
-
-    public ImageView getImageShares() {
-        return imageShares;
-    }
-
 }

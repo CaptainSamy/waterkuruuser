@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
-import android.widget.ImageView;
+import android.view.View;
 
 import java.util.LinkedList;
 
@@ -66,7 +66,7 @@ public class FragmentBackStackManager {
         }
     }
 
-    public void replaceFragment(Fragment fragment, ImageView imageView) {
+    public void replaceFragment(Fragment fragment, View sharedElement) {
         Logger.d(TAG, "#replaceFragmentSharedImage");
         if (fragment != null) {
             if (fragment.getArguments() == null) {
@@ -80,8 +80,8 @@ public class FragmentBackStackManager {
             mBackStacks.add(new BackStack(currentFragment, true, tag));
             FragmentTransaction ft = mFragmentManager.beginTransaction();
             ft.replace(mContainerViewId, fragment, fragment.getClass().getName());
-            if (imageView != null) {
-                ft.addSharedElement(imageView, ViewCompat.getTransitionName(imageView));
+            if (sharedElement != null) {
+                ft.addSharedElement(sharedElement, ViewCompat.getTransitionName(sharedElement));
             }
             ft.addToBackStack(tag);
             ft.commitAllowingStateLoss();

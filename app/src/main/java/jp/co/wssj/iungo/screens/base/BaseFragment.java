@@ -252,10 +252,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return Constants.EMPTY_STRING;
     }
 
-    public boolean isTopScreen() {
-        return false;
-    }
-
     public boolean isDisplayActionBar() {
         return true;
     }

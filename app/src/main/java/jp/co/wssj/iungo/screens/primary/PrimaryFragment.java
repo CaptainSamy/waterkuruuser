@@ -59,8 +59,8 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     }
 
     @Override
-    public boolean isTopScreen() {
-        return true;
+    public boolean isDisplayNavigationButton() {
+        return false;
     }
 
     @Override
