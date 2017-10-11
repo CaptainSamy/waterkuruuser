@@ -98,7 +98,6 @@ public class HomePresenter extends FragmentPresenter<IHomeView> {
                             Bundle bundle = new Bundle();
                             bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                             bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
-                            bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                             getView().switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
                         }
 

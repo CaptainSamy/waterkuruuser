@@ -32,8 +32,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     public static final String NOTIFICATION_ARG = "notification";
 
-    public static final String NOTIFICATION_SHOW_RATING = "show_rating";
-
     public static final String FLAG_FROM_ACTIVITY = "from_activity";
 
     private TextView mTitle, mTime;
@@ -123,7 +121,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
 
             boolean isFromActivity = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
-            boolean isShowRating = bundle.getInt(NOTIFICATION_SHOW_RATING) == 1 ? true : false;
             if (mNotificationMessage != null) {
                 if (mNotificationMessage.getStatusRead() != Constants.STATUS_READ) {
                     List<Long> list = new ArrayList<>();
@@ -144,13 +141,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_REQUEST_REVIEW:
                             mButtonRating.setVisibility(View.VISIBLE);
-                            showRating(isShowRating);
+                            showRating(true);
                             break;
                         case Constants.PushNotification.TYPE_QUESTION_NAIRE:
                             mButtonRating.setVisibility(View.GONE);
                             mButtonQuestionNaire.setVisibility(View.VISIBLE);
                             getPresenter().getQuestionNaire(mNotificationMessage.getPushId());
-                            showRating(isShowRating);
                             break;
                         default:
                             mButtonRating.setVisibility(View.GONE);

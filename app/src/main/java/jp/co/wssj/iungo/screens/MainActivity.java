@@ -522,7 +522,6 @@ public class MainActivity extends AppCompatActivity
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
-                bundle.putInt(PushNotificationDetailFragment.NOTIFICATION_SHOW_RATING, 1);
                 switch (notificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_TIME_LINE:
                     case Constants.PushNotification.TYPE_STEP_PUSH:
