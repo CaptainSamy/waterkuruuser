@@ -144,7 +144,7 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
                     }
                 } else {
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+                    bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
                     mActivityCallback.displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
                 }
                 break;
@@ -156,7 +156,7 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
                     }
                 } else if (mStatus.equals(STATUS_PREPARE)) {
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+                    bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
                     mActivityCallback.displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
                 }
                 break;

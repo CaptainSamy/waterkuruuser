@@ -207,7 +207,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     public void displayHomeScreen() {
         getActivityCallback().clearBackStack();
         Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
         getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
     }
 

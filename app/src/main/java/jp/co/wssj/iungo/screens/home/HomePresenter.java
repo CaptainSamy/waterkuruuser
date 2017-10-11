@@ -51,19 +51,19 @@ class HomePresenter extends FragmentPresenter<IHomeView> {
                             getView().displayWaitStoreConfirmScreen(bundle);
                             break;
                         case Constants.CheckInStatus.STATUS_CANCEL:
-                            getView().displayScanQRCodeScreen(null);
+                            getView().displayScanQRCodeScreen();
                             break;
                     }
                 } else {
                     getView().hideProgress();
-                    getView().displayScanQRCodeScreen(null);
+                    getView().displayScanQRCodeScreen();
                 }
             }
 
             @Override
             public void onCheckInStatusFailure(ErrorMessage errorMessage) {
                 getView().hideProgress();
-                getView().displayScanQRCodeScreen(null);
+                getView().displayScanQRCodeScreen();
             }
         });
     }

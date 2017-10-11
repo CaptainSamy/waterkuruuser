@@ -12,7 +12,7 @@ interface IHomeView extends IFragmentView {
 
     void displayStampManagerScreen(Bundle bundle);
 
-    void displayScanQRCodeScreen(Bundle bundle);
+    void displayScanQRCodeScreen();
 
     void displayWaitStoreConfirmScreen(Bundle bundle);
 }

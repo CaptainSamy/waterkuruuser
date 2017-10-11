@@ -29,7 +29,7 @@ import jp.co.wssj.iungo.utils.Logger;
  */
 
 public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresenter>
-        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog, IWrapperFragmentController {
+        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog, IWrapperFragmentController, PagedFragment.IOnPageSelectChangeListener {
 
     private static final String TAG = "ScannerFragment";
 
@@ -131,6 +131,7 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
                 .setAutoFocusEnabled(true)
                 .setRequestedPreviewSize(getResources().getDisplayMetrics().heightPixels, getResources().getDisplayMetrics().widthPixels)
                 .build();
+        addOnPageSelectChangeListener(this);
     }
 
     @Override
@@ -160,7 +161,9 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     @Override
     public void onResume() {
         super.onResume();
-        startCamera();
+        if (getUserVisibleHint()) {
+            startCamera();
+        }
     }
 
     @Override
@@ -208,5 +211,15 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     @Override
     public void setWrapperFragment(IWrapperFragment fragment) {
         mWrapperFragment = fragment;
+    }
+
+    @Override
+    public void onPageSelected() {
+        startCamera();
+    }
+
+    @Override
+    public void onPageUnselected() {
+        stopCamera();
     }
 }

@@ -198,8 +198,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     @Override
     public final void showProgress() {
         if (mProgressDialog != null && mPresenter.isViewAttached()) {
-            Logger.i(TAG, "#showProgress");
-            mProgressDialog.show();
+            if (getUserVisibleHint()) {
+                Logger.i(TAG, "#showProgress");
+                mProgressDialog.show();
+            }
         }
     }
 

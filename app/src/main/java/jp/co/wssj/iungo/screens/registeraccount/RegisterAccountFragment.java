@@ -284,7 +284,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
         getActivityCallback().clearBackStack();
         Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_HOME);
+        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
         getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
     }
 

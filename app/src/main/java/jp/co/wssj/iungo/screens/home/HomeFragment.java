@@ -28,6 +28,8 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
 
     private FragmentManager mFragmentManager;
 
+    private ScannerFragment mScannerFragment;
+
     @Override
     protected String getLogTag() {
         return TAG;
@@ -58,9 +60,7 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
 
     @Override
     public void refresh() {
-        if (mCurrentFragment != null) {
-            mCurrentFragment.refresh();
-        }
+        getPresenter().showFragment();
     }
 
     @Override
@@ -87,7 +87,9 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
     @Override
     protected void initViews(View rootView) {
         mFragmentManager = getChildFragmentManager();
-        getPresenter().showFragment();
+        if (getUserVisibleHint()) {
+            getPresenter().showFragment();
+        }
     }
 
     @Override
@@ -97,11 +99,23 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
 
     private void replaceFragment(PagedFragment fragment) {
         if (fragment != null && mCurrentFragment != fragment) {
+            if (mCurrentFragment != null) {
+                mCurrentFragment.setUserVisibleHint(false);
+            }
             mFragmentManager.beginTransaction()
                     .replace(R.id.home_fragment_container, fragment)
                     .commitAllowingStateLoss();
             mCurrentFragment = fragment;
+            mCurrentFragment.setUserVisibleHint(getUserVisibleHint());
             getActivityCallback().setAppBarTitle(fragment.getPageTitle(getActivityContext()));
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCurrentFragment != null) {
+            mCurrentFragment.setUserVisibleHint(getUserVisibleHint());
         }
     }
 
@@ -126,9 +140,11 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
     }
 
     @Override
-    public void displayScanQRCodeScreen(Bundle bundle) {
-        ScannerFragment fragment = new ScannerFragment();
-        replaceFragment(fragment);
+    public void displayScanQRCodeScreen() {
+        if (mScannerFragment == null) {
+            mScannerFragment = new ScannerFragment();
+        }
+        replaceFragment(mScannerFragment);
     }
 
     @Override

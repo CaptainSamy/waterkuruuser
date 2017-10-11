@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_home:
                 case R.id.navigation_another:
                 case R.id.navigation_timeline:
-                    mPresenter.onBottomNavigationButtonClicked(item.getItemId());
+                    mPresenter.onBottomNavigationButtonClicked(menuId);
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);

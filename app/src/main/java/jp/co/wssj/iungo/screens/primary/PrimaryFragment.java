@@ -103,15 +103,6 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     }
 
     @Override
-    protected void initData() {
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            int extraScreenId = bundle.getInt(KEY_SCREEN_ID, SCREEN_TIMELINE);
-            getViewPager().setCurrentItem(extraScreenId);
-        }
-    }
-
-    @Override
     public boolean onBackPressed() {
         if (getSelectedPage() != SCREEN_TIMELINE) {
             setSelectedPage(SCREEN_TIMELINE);
@@ -134,11 +125,17 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     protected void initAction() {
         super.initAction();
         addOnPageChangeListener(new PrimaryPageChangeListener(getFragments(), getActivityCallback()));
+        Bundle bundle = getArguments();
+        int extraScreenId = SCREEN_TIMELINE;
+        if (bundle != null) {
+            extraScreenId = bundle.getInt(KEY_SCREEN_ID, SCREEN_TIMELINE);
+        }
+        final int selectedPage = extraScreenId;
         getViewPager().post(new Runnable() {
 
             @Override
             public void run() {
-                dispatchOnPageSelected(1);
+                dispatchOnPageSelected(selectedPage);
             }
         });
     }
