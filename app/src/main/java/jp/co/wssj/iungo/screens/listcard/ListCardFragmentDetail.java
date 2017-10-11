@@ -68,6 +68,11 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
     }
 
     @Override
+    protected boolean isRetainState() {
+        return true;
+    }
+
+    @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_stamp);
     }
