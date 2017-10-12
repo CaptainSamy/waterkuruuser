@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity
 
     private PrimaryFragment mPrimaryFragment;
 
+    private TextView mTextNoItem;
+
     private DialogNotification mDialogNotification;
 
     private int mTotalNotificationUnRead;
@@ -106,6 +108,8 @@ public class MainActivity extends AppCompatActivity
     private TextView mTextUserName;
 
     private LogoutReceiver mLogoutReceiver;
+
+    private boolean mIsAppStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,9 +128,9 @@ public class MainActivity extends AppCompatActivity
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
-
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
+        mIsAppStart = true;
     }
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -159,6 +163,7 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setNavigationIcon(R.drawable.ic_back);
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
+        mTextNoItem = (TextView) findViewById(R.id.textNoItem);
         imageNotification = (ImageView) findViewById(R.id.iconTest);
     }
 
@@ -192,7 +197,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (mDialogNotification != null) {
-//                    mPresenter.getListPushNotificationUnRead(Constants.INIT_PAGE, Constants.LIMIT);
                     mDialogNotification.show();
                 }
             }
@@ -566,7 +570,7 @@ public class MainActivity extends AppCompatActivity
                         switchScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
                     }
                 }
-            } else {
+            } else if (!mIsAppStart) {
                 mPresenter.displaySplashScreen();
             }
         }
@@ -633,6 +637,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
+        showTextNoItem(false, null);
         if (fragment != null) {
             if (fragment instanceof TimeLineFragment && isRequestFirstNotification) {
                 isRequestFirstNotification = false;
@@ -705,8 +710,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void showTextNoItem(boolean isShow, String content) {
+        if (isShow) {
+            mTextNoItem.setText(TextUtils.isEmpty(content) ? Constants.EMPTY_STRING : content);
+            mTextNoItem.setVisibility(View.VISIBLE);
+        } else {
+            mTextNoItem.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        mIsAppStart = false;
         VolleySequence.getInstance().release();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mLogoutReceiver);

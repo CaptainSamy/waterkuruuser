@@ -53,7 +53,7 @@ public class ExpandableTextView extends AppCompatTextView {
     }
 
     private void setText() {
-        super.setText(Html.fromHtml(getDisplayableText().toString()), bufferType);
+        super.setText(Html.fromHtml(getDisplayableText().toString().replace("\n", "<br />")), bufferType);
     }
 
     private CharSequence getDisplayableText() {

@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,11 +38,13 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     public static final String KEY_STORE_ID = "store_id";
 
+    public static final String KEY_STORE_NAME = "store_name";
+
     private SwipeRefreshLayout mRefreshListChat;
 
     private ListView mListViewChat;
 
-    private EmojiconEditText mInputChat;
+    private EditText mInputChat;
 
     private ImageView mButtonSend;
 
@@ -86,14 +89,18 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_screen_chat);
+        String storeName = getString(R.string.title_screen_chat);
+        if (getArguments() != null) {
+            storeName = getArguments().getString(KEY_STORE_NAME);
+        }
+        return storeName;
     }
 
     @Override
     protected void initViews(View rootView) {
         mRefreshListChat = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshHistoryChat);
         mListViewChat = (ListView) rootView.findViewById(R.id.lvStoreFollow);
-        mInputChat = (EmojiconEditText) rootView.findViewById(R.id.etChat);
+        mInputChat = (EditText) rootView.findViewById(R.id.etChat);
         mButtonSend = (ImageView) rootView.findViewById(R.id.tvSendChat);
         mProgressSendChat = (ProgressBar) rootView.findViewById(R.id.progressSendChat);
     }
@@ -177,15 +184,22 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     @Override
     public void onGetHistoryChatSuccess(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
         mRefreshListChat.setRefreshing(false);
-        if (mListChat != null) {
-            mListChat.clear();
+        if (history != null && history.size() > 0) {
+            boolean isNewMessage = mListChat.size() < history.size();
+            if (mListChat != null) {
+                mListChat.clear();
+            }
+            mListChat.addAll(history);
+            Collections.reverse(mListChat);
+            sortListChat(mListChat);
+            mAdapter.notifyDataSetChanged();
+            showTextNoItem(false, null);
+            if (isNewMessage) {
+                scrollEndOfListView();
+            }
+        } else {
+            showTextNoItem(true, getString(R.string.no_conversation));
         }
-        mListChat.addAll(history);
-        Collections.reverse(mListChat);
-        sortListChat(mListChat);
-//
-        mAdapter.notifyDataSetChanged();
-//         scrollEndOfListView();
     }
 
     private void sortListChat(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
@@ -207,7 +221,9 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     @Override
     public void onGetHistoryChatFailure(String message) {
         mRefreshListChat.setRefreshing(false);
-        showToast(message);
+        if (mListChat.size() == 0) {
+            showToast(message);
+        }
     }
 
     @Override

@@ -103,8 +103,13 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     }
 
     @Override
-    public boolean isDisplayActionBar() {
+    public boolean isEnableDrawableLayout() {
         return false;
+    }
+
+    @Override
+    public boolean isDisplayActionBar() {
+        return true;
     }
 
     @Override
@@ -254,8 +259,9 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
             mListComment.addAll(commentData.getListComment());
             Collections.reverse(mListComment);
             mAdapterComment.notifyDataSetChanged();
+            showTextNoItem(false, null);
         } else {
-            showTextNoItem("no comment", mListViewComment);
+            showTextNoItem(true, getString(R.string.no_comment));
         }
 
     }

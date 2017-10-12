@@ -2,6 +2,7 @@ package jp.co.wssj.iungo.screens.chat;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -20,11 +21,13 @@ import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
  * Created by Nguyen Huu Ta on 26/6/2017.
  */
 
-public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView {
+public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "StoreFollowFragment";
 
     private ListView mListViewStoreFollow;
+
+    private SwipeRefreshLayout mRefreshStoreFollow;
 
     private List<StoreFollowResponse.StoreChatData.StoreFollow> mStoreFollows;
 
@@ -68,6 +71,8 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
     @Override
     protected void initViews(View rootView) {
         mListViewStoreFollow = (ListView) rootView.findViewById(R.id.lvStoreFollow);
+        mRefreshStoreFollow = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshStoreFollow);
+        setRefreshing(true);
     }
 
     @Override
@@ -79,9 +84,12 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
                 Bundle bundle = new Bundle();
                 StoreFollowResponse.StoreChatData.StoreFollow store = (StoreFollowResponse.StoreChatData.StoreFollow) parent.getItemAtPosition(position);
                 bundle.putInt(ChatFragment.KEY_STORE_ID, store.getId());
+                bundle.putString(ChatFragment.KEY_STORE_NAME, store.getStoreName());
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
             }
         });
+
+        mRefreshStoreFollow.setOnRefreshListener(this);
     }
 
     @Override
@@ -94,12 +102,31 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
 
     @Override
     public void onGetListStoreFollowSuccess(List<StoreFollowResponse.StoreChatData.StoreFollow> storeFollows) {
-        mStoreFollows.addAll(storeFollows);
-        mAdapter.notifyDataSetChanged();
+        setRefreshing(false);
+        if (storeFollows != null && storeFollows.size() > 0) {
+            if (mStoreFollows != null) {
+                mStoreFollows.clear();
+            }
+            mStoreFollows.addAll(storeFollows);
+            mAdapter.notifyDataSetChanged();
+            showTextNoItem(false, null);
+        } else {
+            showTextNoItem(true, getString(R.string.no_conversation));
+        }
     }
 
     @Override
     public void onGetListStoreFollowFailure(String message) {
         showToast(message);
+        setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        getPresenter().getListStoreFollow();
+    }
+
+    public void setRefreshing(boolean isRefresh) {
+        mRefreshStoreFollow.setRefreshing(isRefresh);
     }
 }

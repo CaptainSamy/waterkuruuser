@@ -3,7 +3,6 @@ package jp.co.wssj.iungo.screens.timeline.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -140,8 +140,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private PhotoTimelineDialog mDialogPhoto;
 
-        private ImageView mImagePhoto1;
-
         public TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
@@ -174,7 +172,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (getItemViewType() == SHOW_IMAGE) {
                 mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
-                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(),mImagePhoto1, mActivityCallback);
+                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mActivityCallback);
                 try {
                     mListUrlImage = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
@@ -189,6 +187,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 }
             } else {
                 mLayoutContainerImages.setVisibility(View.GONE);
+                mLayoutComment.setOnClickListener(this);
             }
             Utils.fillImageRound(mContext, mTimeLine.getImageStore(), mImageStore);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
@@ -196,10 +195,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mContent.setVisibility(View.GONE);
             } else {
                 mContent.setVisibility(View.VISIBLE);
-                mContent.setText(mTimeLine.getMessages());
+                mContent.setText(StringEscapeUtils.unescapeJava(mTimeLine.getMessages()));
             }
             mLayoutLike.setOnClickListener(this);
-            mLayoutComment.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
                 @Override
@@ -251,27 +249,18 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     }
                     break;
                 case R.id.layoutComment:
-                    if (mListUrlImage != null && mListUrlImage.size() > 0) {
-                        commentFragment(0, mImagePhoto1);
-                    } else {
-                        commentFragment(0, null);
-                    }
+                    commentFragment();
                     break;
             }
         }
 
-        private void commentFragment(int positionClick, View sharedView) {
+        private void commentFragment() {
             if (mActivityCallback != null) {
-                if (sharedView != null) {
-                    String urlImage = mListUrlImage.get(positionClick);
-                    String fileName = urlImage.substring(urlImage.lastIndexOf("/") + 1);
-                    ViewCompat.setTransitionName(sharedView, fileName);
-                }
                 Bundle bundle = new Bundle();
                 bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
-                bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
+                bundle.putInt(CommentFragment.KEY_ITEM_POSITION, 0);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
-                mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, sharedView);
+                mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, null);
 
 
             }

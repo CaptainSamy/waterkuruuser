@@ -52,13 +52,13 @@ public class ViewContainerImages extends LinearLayout implements View.OnClickLis
 
     private int mTimelineId;
 
-    public ViewContainerImages(Context context, int timelineId, ImageView imageView1, IActivityCallback activityCallback) {
+    public ViewContainerImages(Context context, int timelineId, LinearLayout layoutComment, IActivityCallback activityCallback) {
         super(context);
         mLayoutInflate = LayoutInflater.from(context);
         mTimelineId = timelineId;
-        mImageView1 = imageView1;
         mActivityCallback = activityCallback;
         setOrientation(VERTICAL);
+        layoutComment.setOnClickListener(this);
     }
 
     public ViewContainerImages(Context context, @Nullable AttributeSet attrs) {
@@ -254,6 +254,13 @@ public class ViewContainerImages extends LinearLayout implements View.OnClickLis
                 Intent intent = new Intent(getContext(), PlayVideoActivity.class);
                 intent.putExtra(PlayVideoActivity.KEY_URL_VIDEO, mVideoObject.getUrlVideo());
                 getContext().startActivity(intent);
+                break;
+            case R.id.layoutComment:
+                if (mListUrlImage != null && mListUrlImage.size() > 0) {
+                    commentFragment(0, mImageView1);
+                } else {
+                    commentFragment(0, null);
+                }
                 break;
         }
     }

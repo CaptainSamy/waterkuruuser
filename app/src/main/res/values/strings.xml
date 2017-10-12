@@ -213,14 +213,16 @@
     <string name="dialog_button_late">あとでアップデートする</string>
 
     <!--Chat Fragment-->
-    <string name="title_screen_store_follow">店舗一覧</string>
+    <string name="title_screen_store_follow">チャット</string>
     <string name="title_screen_chat">チェット</string>
     <string name="input_content_chat">メッセージを入力します…</string>
+    <string name="no_conversation">メッセージがありません。</string>
 
     <!--Comment fragment-->
     <string name="title_screen_comment">コメントする</string>
     <string name="comment">コメントする</string>
     <string name="write_comment">コメントする…</string>
+    <string name="no_comment">コメントがありません。</string>
 
     <!--Timeline Fragment-->
     <string name="title_screen_timeline">タイムライン</string>

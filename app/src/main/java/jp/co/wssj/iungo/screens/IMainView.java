@@ -91,4 +91,5 @@ public interface IMainView extends IView {
     void onMappingUserStoreFastFailure(String message);
 
     void displayScanCodeScreen();
+
 }

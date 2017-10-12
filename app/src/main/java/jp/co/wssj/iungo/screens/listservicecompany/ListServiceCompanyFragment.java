@@ -84,9 +84,10 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
         if (mCardList == null) {
             mCardList = new ArrayList<>();
             mAdapter = new ServicesCompanyAdapter(getActivityContext(), mCardList);
+            setRefreshing(true);
             getPresenter().getCompanyList();
         } else if (mCardList.isEmpty()) {
-            showTextNoItem(getString(R.string.no_item_service), mCardListView);
+            showTextNoItem(true, getString(R.string.no_item_service));
         }
         mCardListView.setAdapter(mAdapter);
     }
@@ -121,31 +122,30 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     @Override
     public void showListCompany(List<ListCompanyResponse.ListCompanyData.CompanyData> cardList) {
         if (cardList != null && cardList.size() > 0) {
-            hideTextNoItem(false, mCardListView);
-            hideSwipeRefreshLayout();
+            showTextNoItem(false, null);
+            setRefreshing(false);
+            if (mCardList != null && mCardList.size() > 0) {
+                mCardList.clear();
+            }
             mCardList.addAll(cardList);
             mAdapter.notifyDataSetChanged();
         } else {
-            showTextNoItem(getString(R.string.no_item_service), mCardListView);
+            showTextNoItem(true, getString(R.string.no_item_service));
         }
     }
 
     @Override
     public void showNoCompany() {
-        hideSwipeRefreshLayout();
+        setRefreshing(false);
     }
 
-    public void hideSwipeRefreshLayout() {
-        if (mRefreshLayout != null && mRefreshLayout.isRefreshing()) {
-            mRefreshLayout.setRefreshing(false);
-        }
+    public void setRefreshing(boolean refreshing) {
+
+        mRefreshLayout.setRefreshing(refreshing);
     }
 
     @Override
     public void onRefresh() {
-        if (mCardList != null) {
-            mCardList.clear();
-        }
         getPresenter().getCompanyList();
     }
 

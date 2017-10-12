@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import jp.co.wssj.iungo.R;
@@ -40,8 +39,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     private Activity mActivity;
 
     private ProgressDialog mProgressDialog;
-
-    private TextView mTextNoItem;
 
     private View mRootView;
 
@@ -99,7 +96,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         if (resId > 0) {
             rootView = inflater.inflate(resId, container, false);
             initViews(rootView);
-            mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
             initAction();
         }
         initData();
@@ -227,21 +223,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         }
     }
 
-    public void showTextNoItem(String text, View view) {
-        if (mTextNoItem != null) {
-            mTextNoItem.setVisibility(View.VISIBLE);
-            mTextNoItem.setText(text);
-        }
-        view.setVisibility(View.INVISIBLE);
-    }
-
-    public void hideTextNoItem(boolean isShow, View view) {
-        if (mTextNoItem != null) {
-            mTextNoItem.setVisibility(isShow ? View.VISIBLE : View.GONE);
-        }
-        view.setVisibility(isShow ? View.GONE : View.VISIBLE);
-    }
-
     public boolean isDisplayBottomNavigationMenu() {
         return false;
     }
@@ -292,6 +273,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public boolean isEnableDrawableLayout() {
         return true;
+    }
+
+    public void showTextNoItem(boolean isShow, String content) {
+        getActivityCallback().showTextNoItem(isShow, content);
     }
 
     protected boolean isRetainState() {

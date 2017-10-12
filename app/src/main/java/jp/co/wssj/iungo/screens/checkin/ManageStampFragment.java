@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.checkin;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -64,8 +65,8 @@ public class ManageStampFragment extends PagedFragment<IManageStampView, ManageS
     }
 
     @Override
-    public String getAppBarTitle() {
-        return getString(R.string.title_screen_manager_stamp);
+    public String getPageTitle(Context context) {
+        return getString(context, R.string.title_screen_manager_stamp);
     }
 
     @Override

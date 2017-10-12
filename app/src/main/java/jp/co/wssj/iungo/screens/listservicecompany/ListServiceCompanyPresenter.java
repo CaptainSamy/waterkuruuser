@@ -21,13 +21,11 @@ class ListServiceCompanyPresenter extends FragmentPresenter<IListServiceCompanyV
     }
 
     void getCompanyList() {
-        getView().showProgress();
         String token = getModel(SharedPreferencesModel.class).getToken();
         getModel(StampModel.class).getListCompany(token, new StampModel.IGetListCompanyResponse() {
 
             @Override
             public void onSuccess(List<ListCompanyResponse.ListCompanyData.CompanyData> companyDataList) {
-                getView().hideProgress();
                 if (companyDataList != null) {
                     getView().showListCompany(companyDataList);
                 } else {
@@ -37,7 +35,6 @@ class ListServiceCompanyPresenter extends FragmentPresenter<IListServiceCompanyV
 
             @Override
             public void onFailure(ErrorMessage errorMessage) {
-                getView().hideProgress();
                 getView().showNoCompany();
             }
         });

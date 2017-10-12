@@ -26,4 +26,6 @@ public interface IActivityCallback {
     void setAppBarTitle(String title);
 
     void onBackPressed(Bundle bundle);
+
+    void showTextNoItem(boolean isShow, String content);
 }

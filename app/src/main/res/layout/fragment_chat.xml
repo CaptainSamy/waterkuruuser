@@ -15,6 +15,7 @@
             android:layout_height="match_parent"
             android:divider="@null"
             android:dividerHeight="0dp"
+            android:paddingBottom="10dp"
             android:stackFromBottom="true"
             android:transcriptMode="normal"/>
 
@@ -32,10 +33,11 @@
         android:id="@+id/layoutInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="true">
 
-        <io.github.rockerhieu.emojicon.EmojiconEditText
+        <EditText
             android:id="@+id/etChat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
