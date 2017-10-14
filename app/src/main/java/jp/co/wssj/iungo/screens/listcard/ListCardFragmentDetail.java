@@ -83,6 +83,11 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return true;
+    }
+
+    @Override
     protected void initViews(View rootView) {
         mLayoutButton = (LinearLayout) rootView.findViewById(R.id.layoutButton);
         mEditMemoTextView = (TextView) rootView.findViewById(R.id.edit_memo_text_view);

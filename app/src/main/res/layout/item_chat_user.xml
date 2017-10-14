@@ -58,7 +58,7 @@
             android:text="00:21"
             android:textSize="10sp"/>
 
-        <io.github.rockerhieu.emojicon.EmojiconTextView
+        <TextView
             android:id="@+id/tvContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

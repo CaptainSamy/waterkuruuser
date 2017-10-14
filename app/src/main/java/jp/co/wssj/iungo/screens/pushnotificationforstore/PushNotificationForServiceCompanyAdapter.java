@@ -64,7 +64,7 @@ public class PushNotificationForServiceCompanyAdapter extends ArrayAdapter<Notif
         void fillDataToView(final Context context, final NotificationMessage notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
             String time = Utils.distanceTimes(notificationMessage.getPushTime());
-            Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany);
+            Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany,R.drawable.logo_app);
             if (!TextUtils.isEmpty(time)) {
                 mTime.setText(time);
             }

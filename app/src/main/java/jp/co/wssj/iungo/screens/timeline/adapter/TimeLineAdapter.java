@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IActivityCallback;
@@ -118,7 +119,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private ExpandableTextView mContent;
 
-        private ImageView mImageStore, mImageSmile;
+        private ImageView mImageSmile;
+
+        private CircleImageView mImageStore;
 
         private TextView mTextLike, mStoreName, mNumberLike;
 
@@ -143,7 +146,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         public TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
-            mImageStore = (ImageView) itemView.findViewById(R.id.ivStore);
+            mImageStore = (CircleImageView) itemView.findViewById(R.id.ivStore);
             mTextLike = (TextView) itemView.findViewById(R.id.tvLike);
             mNumberComment = (TextView) itemView.findViewById(R.id.tvNumberComment);
             mContent = (ExpandableTextView) itemView.findViewById(R.id.tvContent);
@@ -189,7 +192,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mLayoutContainerImages.setVisibility(View.GONE);
                 mLayoutComment.setOnClickListener(this);
             }
-            Utils.fillImageRound(mContext, mTimeLine.getImageStore(), mImageStore);
+            Utils.fillImage(mContext, mTimeLine.getImageStore(), mImageStore, R.drawable.icon_user);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
             if (TextUtils.isEmpty(mTimeLine.getMessages())) {
                 mContent.setVisibility(View.GONE);

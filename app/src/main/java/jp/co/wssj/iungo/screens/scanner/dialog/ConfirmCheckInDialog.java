@@ -91,7 +91,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
         if (data != null) {
             mStoreName = data.getStoreName();
             mStoreNameTextView.setText(mStoreName);
-            Utils.fillImage(getContext(), data.getLogoCompany(), mImageLogoCompany);
+            Utils.fillImage(getContext(), data.getLogoCompany(), mImageLogoCompany, R.drawable.logo_app);
             showView();
         }
     }

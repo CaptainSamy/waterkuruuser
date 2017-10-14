@@ -35,10 +35,10 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
         return TAG;
     }
 
-    @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_home;
-    }
+//    @Override
+//    public int getNavigationBottomId() {
+//        return R.id.navigation_home;
+//    }
 
     @Override
     protected int getResourceLayout() {

@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.screens.comment.CommentPresenter;
@@ -65,6 +66,8 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
         private LinearLayout mLayoutNumberLike;
 
+        private CircleImageView mImageStore;
+
         CommentResponse.CommentData.ListComment.Comment mComment;
 
         public CommentHolder(View view) {
@@ -75,6 +78,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
             mLiked = (TextView) view.findViewById(R.id.tvUnlike);
             mLayoutLike = (RelativeLayout) view.findViewById(R.id.layoutLike);
             mLayoutNumberLike = (LinearLayout) view.findViewById(R.id.layoutNumberLike);
+            mImageStore = (CircleImageView) view.findViewById(R.id.imageStore);
         }
 
         public void bind(final CommentResponse.CommentData.ListComment comments) {
@@ -87,6 +91,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
                 }
                 mNumberLike.setText(String.valueOf(mComment.getNumberLike()));
                 onLikeComment(comments);
+                Utils.fillImage(getContext(), mComment.getImageStore(), mImageStore, R.drawable.icon_user);
             }
             mLayoutLike.setOnClickListener(new View.OnClickListener() {
 

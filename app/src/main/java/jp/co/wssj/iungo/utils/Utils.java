@@ -35,7 +35,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -320,50 +319,33 @@ public final class Utils {
                 + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public static void fillImage(final Context context, String imgPath, final ImageView imageView) {
+    public static void fillImage(final Context context, String imgPath, final ImageView imageView, final int resIdError) {
         Logger.d(TAG, "imgPath : " + imgPath);
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
-                    .asBitmap()
-                    .into(new BitmapImageViewTarget(imageView) {
+                    .into(new SimpleTarget<GlideDrawable>() {
 
                         @Override
-                        protected void setResource(Bitmap resource) {
-                            if (resource != null) {
-                                imageView.setImageBitmap(cropImage(resource));
-                            } else {
-                                imageView.setImageResource(R.drawable.logo_app);
-                            }
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            imageView.setImageResource(resIdError);
+                        }
+
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            imageView.setImageDrawable(resource);
                         }
                     });
         } else {
-            imageView.setImageResource(R.drawable.logo_app);
+            imageView.setImageResource(resIdError);
         }
     }
 
     public static void fillImageRound(final Context context, String imgPath, final ImageView imageView) {
-        Logger.d(TAG, "imgPath : " + imgPath);
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
-                    .asBitmap()
-                    .into(new BitmapImageViewTarget(imageView) {
-
-                        @Override
-                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
-                            imageView.setImageResource(R.drawable.icon_user);
-                        }
-
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            if (resource != null) {
-                                imageView.setImageBitmap(cropImage(resource));
-                            } else {
-                                imageView.setImageResource(R.drawable.icon_user);
-                            }
-                        }
-                    });
+                    .into(imageView);
         } else {
             imageView.setImageResource(R.drawable.icon_user);
         }

@@ -15,7 +15,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.List;
 
-import io.github.rockerhieu.emojicon.EmojiconTextView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
 import jp.co.wssj.iungo.utils.Utils;
@@ -87,13 +86,13 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
         private TextView mTime;
 
-        private EmojiconTextView mContent;
+        private TextView mContent;
 
         private LinearLayout mLayoutDate;
 
         public ChatDetailHolderUser(View view) {
             mDate = (TextView) view.findViewById(R.id.tvDate);
-            mContent = (EmojiconTextView) view.findViewById(R.id.tvContent);
+            mContent = (TextView) view.findViewById(R.id.tvContent);
             mTime = (TextView) view.findViewById(R.id.tvTime);
             mLayoutDate = (LinearLayout)view.findViewById(R.id.layoutDate);
         }

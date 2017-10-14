@@ -111,6 +111,8 @@ public class MainActivity extends AppCompatActivity
 
     private boolean mIsAppStart;
 
+    private boolean mIsNewIntent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity
         setupFragmentBackStackManager();
         initView();
         initAction();
+        mIsNewIntent = false;
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
@@ -293,10 +296,11 @@ public class MainActivity extends AppCompatActivity
             int menuId = item.getItemId();
             switch (menuId) {
                 case R.id.navigation_stamp:
-                case R.id.navigation_home:
+//                case R.id.navigation_home:
                 case R.id.navigation_another:
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(menuId);
+                    replaceFragment(mPrimaryFragment, true, true);
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
@@ -531,6 +535,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onNewIntent(Intent intent) {
+        mIsNewIntent = true;
         checkStartNotification(intent);
     }
 
@@ -600,9 +605,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMappingUserStoreFastSuccess() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_LIST_SERVICE_COMPANY);
-        switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, bundle);
+        if (mIsNewIntent) {
+            setSelectedPage(R.id.navigation_stamp);
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_LIST_SERVICE_COMPANY);
+            switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, bundle);
+        }
     }
 
     @Override

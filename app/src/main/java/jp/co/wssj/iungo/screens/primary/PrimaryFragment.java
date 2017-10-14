@@ -12,7 +12,6 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.base.PagerFragment;
 import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
-import jp.co.wssj.iungo.screens.home.HomeFragment;
 import jp.co.wssj.iungo.screens.listservicecompany.ListServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
 import jp.co.wssj.iungo.utils.Constants;
@@ -27,11 +26,11 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
 
     public static final int SCREEN_LIST_SERVICE_COMPANY = 0;
 
-    public static final int SCREEN_HOME = 1;
+//    public static final int SCREEN_HOME = 1;
 
-    public static final int SCREEN_TIMELINE = 2;
+    public static final int SCREEN_TIMELINE = 1;
 
-    public static final int SCREEN_STORE_FOLLOW = 3;
+    public static final int SCREEN_STORE_FOLLOW = 2;
 
     private static final String TAG = "PrimaryFragment";
 
@@ -115,7 +114,7 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     protected List<PagedFragment> initFragments() {
         List<PagedFragment> fragments = new ArrayList<>();
         fragments.add(new ListServiceCompanyFragment());
-        fragments.add(new HomeFragment());
+//        fragments.add(new HomeFragment());
         fragments.add(new TimeLineFragment());
         fragments.add(new StoreFollowFragment());
         return fragments;

@@ -3,7 +3,8 @@
 
     <group
         android:id="@+id/navigation_menu"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        android:visible="false">
         <item
             android:id="@id/menu_memo"
             android:icon="@drawable/icon_memo"
@@ -15,7 +16,7 @@
         <item
             android:id="@id/menu_push_notification"
             android:icon="@drawable/notification"
-            android:title="@string/menu_push_notification"/>
+            android:title="@string/title_push_notification_list"/>
     </group>
     <group
         android:id="@+id/navigation_menu2"
@@ -28,7 +29,8 @@
 
     <group
         android:id="@+id/navigation_menu3"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        android:visible="false">
         <item
             android:id="@id/menu_how_to_use"
             android:icon="@drawable/how_to_use"
@@ -38,7 +40,8 @@
 
     <group
         android:id="@+id/navigation_menu4"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single"
+        android:visible="false">
         <item
             android:id="@id/menu_question_answer"
             android:icon="@drawable/qa"

@@ -39,7 +39,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
 
     @Override
     public String getPageTitle(Context context) {
-        return getString(context, R.string.title_screen_stamp);
+        return getString(context, R.string.title_bottom_stamp);
     }
 
     @Override
@@ -124,11 +124,27 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
         if (cardList != null && cardList.size() > 0) {
             showTextNoItem(false, null);
             setRefreshing(false);
-            if (mCardList != null && mCardList.size() > 0) {
-                mCardList.clear();
+            if (cardList.size() == 1) {
+                ListCompanyResponse.ListCompanyData.CompanyData companyData = cardList.get(0);
+                int fragmentId;
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, companyData.getServiceCompanyId());
+                if (companyData.getCardType() == 1) {
+                    bundle.putInt(ListCardFragmentDetail.KEY_SERVICE_ID, companyData.getServiceId());
+                    bundle.putString(ListCardFragmentDetail.KEY_CARD_NAME, companyData.getCardName());
+                    bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, companyData.getServiceName());
+                    fragmentId = IMainView.FRAGMENT_LIST_CARD;
+                } else {
+                    fragmentId = IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
+                }
+                getActivityCallback().displayScreen(fragmentId, false, false, bundle);
+            } else {
+                if (mCardList != null && mCardList.size() > 0) {
+                    mCardList.clear();
+                }
+                mCardList.addAll(cardList);
+                mAdapter.notifyDataSetChanged();
             }
-            mCardList.addAll(cardList);
-            mAdapter.notifyDataSetChanged();
         } else {
             showTextNoItem(true, getString(R.string.no_item_service));
         }

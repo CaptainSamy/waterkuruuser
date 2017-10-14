@@ -65,7 +65,7 @@ public class DialogNotification {
         mTextNoItem = mEasyDialog.getTextNoItem();
         if (mPushNotificationAdapter == null) {
             mListNotification = new ArrayList<>();
-            mPushNotificationAdapter = new PushNotificationAdapter(mActivity, R.layout.item_push_notification, mListNotification);
+            mPushNotificationAdapter = new PushNotificationAdapter(mActivity, mListNotification);
             mListViewNotification.setAdapter(mPushNotificationAdapter);
         }
         if (page == 1) {

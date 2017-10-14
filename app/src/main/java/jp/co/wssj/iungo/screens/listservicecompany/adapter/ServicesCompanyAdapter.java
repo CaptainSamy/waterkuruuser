@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCompanyResponse;
 import jp.co.wssj.iungo.utils.Utils;
@@ -49,7 +49,7 @@ public class ServicesCompanyAdapter extends ArrayAdapter<ListCompanyResponse.Lis
         if (view == null) {
             view = mInflater.inflate(R.layout.company_card_item_layout, parent, false);
             vh = new ViewHolder();
-            vh.mCompanyLogoImageView = (ImageView) view.findViewById(R.id.company_logo_image_view);
+            vh.mCompanyLogoImageView = (CircleImageView) view.findViewById(R.id.company_logo_image_view);
             vh.mCompanyNameTextView = (TextView) view.findViewById(R.id.company_name_text_view);
             vh.mCardAmountTextView = (TextView) view.findViewById(R.id.card_amount_text_view);
             view.setTag(vh);
@@ -62,7 +62,7 @@ public class ServicesCompanyAdapter extends ArrayAdapter<ListCompanyResponse.Lis
 
     private static class ViewHolder {
 
-        private ImageView mCompanyLogoImageView;
+        private CircleImageView mCompanyLogoImageView;
 
         private TextView mCompanyNameTextView;
 
@@ -71,7 +71,7 @@ public class ServicesCompanyAdapter extends ArrayAdapter<ListCompanyResponse.Lis
         private void fillData(Context context, ListCompanyResponse.ListCompanyData.CompanyData data) {
             if (data != null) {
                 if (!TextUtils.isEmpty(data.getLogo())) {
-                    Utils.fillImage(context,data.getLogo(),mCompanyLogoImageView);
+                    Utils.fillImage(context, data.getLogo(), mCompanyLogoImageView, R.drawable.logo_app);
                 } else {
                     mCompanyLogoImageView.setImageBitmap(null);
                 }

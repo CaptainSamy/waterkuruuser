@@ -7,14 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.List;
 
-import io.github.rockerhieu.emojicon.EmojiconTextView;
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.StoreFollowResponse;
 import jp.co.wssj.iungo.utils.Utils;
@@ -49,21 +48,21 @@ public class StoreFollowAdapter extends ArrayAdapter<StoreFollowResponse.StoreCh
 
     public class ChatHolder {
 
-        private ImageView mImageStore;
+        private CircleImageView mImageStore;
 
         private TextView mStoreName, mTime;
 
-        private EmojiconTextView mLastMessage;
+        private TextView mLastMessage;
 
         public ChatHolder(View view) {
-            mImageStore = (ImageView) view.findViewById(R.id.ivStore);
+            mImageStore = (CircleImageView) view.findViewById(R.id.ivStore);
             mStoreName = (TextView) view.findViewById(R.id.tvStoreName);
-            mLastMessage = (EmojiconTextView) view.findViewById(R.id.tvLastMessage);
+            mLastMessage = (TextView) view.findViewById(R.id.tvLastMessage);
             mTime = (TextView) view.findViewById(R.id.tvTime);
         }
 
         public void bindData(Context context, StoreFollowResponse.StoreChatData.StoreFollow storeFollow) {
-            Utils.fillImageRound(context, storeFollow.getImageStore(), mImageStore);
+            Utils.fillImage(context, storeFollow.getImageStore(), mImageStore,R.drawable.icon_user);
             mStoreName.setText(storeFollow.getStoreName());
             mLastMessage.setText(StringEscapeUtils.unescapeJava(storeFollow.getLastMessage()));
             if (storeFollow.getLastTimeMessage() > 0) {

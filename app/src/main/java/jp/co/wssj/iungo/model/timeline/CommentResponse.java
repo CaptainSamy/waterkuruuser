@@ -76,6 +76,9 @@ public class CommentResponse extends ResponseData<CommentResponse.CommentData> {
                 @Expose
                 private String userName;
 
+                @SerializedName("img_store")
+                private String mImageStore;
+
                 public String getContent() {
                     return content;
                 }
@@ -122,6 +125,10 @@ public class CommentResponse extends ResponseData<CommentResponse.CommentData> {
 
                 public String getUserName() {
                     return userName;
+                }
+
+                public String getImageStore() {
+                    return mImageStore;
                 }
             }
 
