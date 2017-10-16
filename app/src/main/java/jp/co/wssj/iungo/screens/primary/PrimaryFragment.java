@@ -1,10 +1,12 @@
 package jp.co.wssj.iungo.screens.primary;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import jp.co.wssj.iungo.screens.IActivityCallback;
@@ -24,6 +26,8 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
 
     public static final String KEY_SCREEN_ID = "KEY_SCREEN_ID";
 
+    public static final String KEY_GLOBAL_SELECT_SCREEN_ID = "KEY_GLOBAL_SELECT_SCREEN_ID";
+
     public static final int SCREEN_LIST_SERVICE_COMPANY = 0;
 
 //    public static final int SCREEN_HOME = 1;
@@ -39,6 +43,10 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
         fragment.setArguments(bundle);
         return fragment;
     }
+
+    private int mGlobalSelectScreen;
+
+    private final LinkedList<Integer> mBackList = new LinkedList<>();
 
     @Override
     protected String getLogTag() {
@@ -102,10 +110,51 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mGlobalSelectScreen = bundle.getInt(KEY_GLOBAL_SELECT_SCREEN_ID, -1);
+            bundle.remove(KEY_GLOBAL_SELECT_SCREEN_ID);
+        }
+        if (mGlobalSelectScreen != -1) {
+            final int selectedPage = getScreenIdByMenuId(mGlobalSelectScreen);
+            if (selectedPage != -1) {
+                getViewPager().post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        getViewPager().setCurrentItem(selectedPage);
+                    }
+                });
+            }
+        }
+    }
+
+    private int getScreenIdByMenuId(int menuId) {
+        List<PagedFragment> fragments = getFragments();
+        for (int i = 0; i < getFragmentsSize(); i++) {
+            PagedFragment fragment = fragments.get(i);
+            if (fragment.getNavigationBottomId() == menuId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Override
     public boolean onBackPressed() {
-        if (getSelectedPage() != SCREEN_TIMELINE) {
-            setSelectedPage(SCREEN_TIMELINE);
-            return true;
+        if (mGlobalSelectScreen == -1) {
+            if (mBackList.size() > 1) {
+                mBackList.pollFirst();
+                int screen = mBackList.getFirst();
+                if (screen == -1) {
+                    return super.onBackPressed();
+                } else {
+                    setSelectedPage(screen);
+                }
+                return true;
+            }
         }
         return super.onBackPressed();
     }
@@ -121,9 +170,9 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     }
 
     @Override
-    protected void initAction() {
-        super.initAction();
-        addOnPageChangeListener(new PrimaryPageChangeListener(getFragments(), getActivityCallback()));
+    protected void initData() {
+        super.initData();
+        mBackList.addFirst(-1);
         Bundle bundle = getArguments();
         int extraScreenId = SCREEN_TIMELINE;
         if (bundle != null) {
@@ -139,20 +188,35 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
         });
     }
 
+    @Override
+    protected void initAction() {
+        super.initAction();
+        addOnPageChangeListener(new PrimaryPageChangeListener(getFragments(), getActivityCallback(), mBackList));
+    }
+
     private final class PrimaryPageChangeListener extends ViewPager.SimpleOnPageChangeListener {
 
         private final List<PagedFragment> mFragments;
 
         private final IActivityCallback mActivityCallback;
 
-        private PrimaryPageChangeListener(List<PagedFragment> fragments, IActivityCallback activityCallback) {
+        private final LinkedList<Integer> mBackList;
+
+        private PrimaryPageChangeListener(List<PagedFragment> fragments, IActivityCallback activityCallback, LinkedList<Integer> backList) {
             mFragments = fragments;
             mActivityCallback = activityCallback;
+            mBackList = backList;
         }
 
         @Override
         public void onPageSelected(int position) {
             if (position < getFragmentsSize()) {
+                for (int i = 0; i < mBackList.size(); i++) {
+                    if (mBackList.get(i) == position) {
+                        mBackList.remove(i);
+                    }
+                }
+                mBackList.addFirst(position);
                 PagedFragment fragment = mFragments.get(position);
                 if (mActivityCallback != null) {
                     mActivityCallback.setSelectedNavigationBottom(fragment.getNavigationBottomId());
