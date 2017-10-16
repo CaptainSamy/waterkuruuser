@@ -43,6 +43,10 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     private SearchView mInputSearch;
 
+    private TextView mTextSearch;
+
+    private boolean isExpanableSearchView;
+
     @Override
     protected String getLogTag() {
         return TAG;
@@ -69,11 +73,6 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     }
 
     @Override
-    public boolean isDisplayIconNotification() {
-        return false;
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -82,6 +81,11 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     @Override
     protected PushNotificationListPresenter onCreatePresenter(IPushNotificationListView view) {
         return new PushNotificationListPresenter(view);
+    }
+
+    @Override
+    protected boolean isRetainState() {
+        return false;
     }
 
     @Override
@@ -96,6 +100,9 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
+        mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
+//        mInputSearch.onActionViewExpanded();
+        mInputSearch.clearFocus();
 
     }
 
@@ -108,7 +115,6 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             mRefreshLayout.setRefreshing(true);
             getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
         }
-
         mListView.setAdapter(mAdapter);
     }
 
@@ -125,6 +131,13 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
+        mTextSearch.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mInputSearch.setIconified(false);
+            }
+        });
         mInputSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -136,7 +149,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             @Override
             public boolean onQueryTextChange(String newText) {
                 Logger.d(TAG, "onQueryTextChange");
-                mAdapter.setIsAllowOnLoadMore(false);
+                statusSearchView(true);
                 if (mAdapter != null) {
                     mAdapter.filter(newText);
                 }
@@ -144,22 +157,35 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             }
 
         });
+        mInputSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+
+            @Override
+            public boolean onClose() {
+                Logger.d(TAG, "setOnCloseListener");
+                mTextSearch.setVisibility(View.VISIBLE);
+                isExpanableSearchView = false;
+                return false;
+            }
+        });
         mInputSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 Logger.d(TAG, "onFocusChange " + hasFocus);
                 if (hasFocus) {
-                    if (mAdapter != null) {
-                        mAdapter.setIsAllowOnLoadMore(false);
-                    }
-                } else {
-                    if (mAdapter != null) {
-                        mAdapter.setIsAllowOnLoadMore(true);
-                    }
+                    isExpanableSearchView = hasFocus;
                 }
+                statusSearchView(hasFocus);
             }
         });
+    }
+
+    private void statusSearchView(boolean hasFocus) {
+        mTextSearch.setVisibility(isExpanableSearchView ? View.GONE : View.VISIBLE);
+        mRefreshLayout.setEnabled(!hasFocus);
+        if (mAdapter != null) {
+            mAdapter.setIsAllowOnLoadMore(!hasFocus);
+        }
     }
 
     @Override

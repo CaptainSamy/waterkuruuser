@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
 import jp.co.wssj.iungo.utils.Utils;
@@ -32,6 +33,8 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
     private static final int TYPE_COUNT = TYPE_STORE + 1;
 
     private LayoutInflater mInflate;
+
+    private String mUrlImageStore;
 
     public ChatAdapter(@NonNull Context context, @NonNull List<HistoryChatResponse.HistoryChatData.ChatData> objects) {
         super(context, 0, objects);
@@ -76,7 +79,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
         } else {
             holderUser = (ChatDetailHolderUser) convertView.getTag();
         }
-        holderUser.bind(chat);
+        holderUser.bind(chat, position);
         return convertView;
     }
 
@@ -88,16 +91,25 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
         private TextView mContent;
 
+        private CircleImageView mImageStore;
+
         private LinearLayout mLayoutDate;
 
         public ChatDetailHolderUser(View view) {
             mDate = (TextView) view.findViewById(R.id.tvDate);
             mContent = (TextView) view.findViewById(R.id.tvContent);
             mTime = (TextView) view.findViewById(R.id.tvTime);
-            mLayoutDate = (LinearLayout)view.findViewById(R.id.layoutDate);
+            mLayoutDate = (LinearLayout) view.findViewById(R.id.layoutDate);
+            mImageStore = (CircleImageView) view.findViewById(R.id.imageStore);
         }
 
-        public void bind(HistoryChatResponse.HistoryChatData.ChatData chat) {
+        public void bind(HistoryChatResponse.HistoryChatData.ChatData chat, int position) {
+
+            switch (getItemViewType(position)) {
+                case TYPE_STORE:
+                    Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
+                    break;
+            }
             if (TextUtils.isEmpty(chat.getDate())) {
                 mLayoutDate.setVisibility(View.GONE);
             } else {
@@ -107,5 +119,9 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
             mContent.setText(StringEscapeUtils.unescapeJava(chat.getContent()));
             mTime.setText(Utils.formatDate(chat.getTimeCreate(), "HH:mm"));
         }
+    }
+
+    public void setImageStore(String imageStore) {
+        this.mUrlImageStore = imageStore;
     }
 }

@@ -25,7 +25,7 @@ import jp.co.wssj.iungo.utils.Logger;
  */
 
 public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompanyView, ListServiceCompanyPresenter>
-        implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+        implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, PagedFragment.IOnPageSelectChangeListener {
 
     private static final String TAG = "ListServiceCompanyFragment";
 
@@ -77,6 +77,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
         mCardListView.setOnItemClickListener(this);
+        addOnPageSelectChangeListener(this);
     }
 
     @Override
@@ -121,30 +122,14 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
 
     @Override
     public void showListCompany(List<ListCompanyResponse.ListCompanyData.CompanyData> cardList) {
+        Logger.d(TAG, "showListCompany");
         if (cardList != null && cardList.size() > 0) {
             showTextNoItem(false, null);
             setRefreshing(false);
-            if (cardList.size() == 1) {
-                ListCompanyResponse.ListCompanyData.CompanyData companyData = cardList.get(0);
-                int fragmentId;
-                Bundle bundle = new Bundle();
-                bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, companyData.getServiceCompanyId());
-                if (companyData.getCardType() == 1) {
-                    bundle.putInt(ListCardFragmentDetail.KEY_SERVICE_ID, companyData.getServiceId());
-                    bundle.putString(ListCardFragmentDetail.KEY_CARD_NAME, companyData.getCardName());
-                    bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, companyData.getServiceName());
-                    fragmentId = IMainView.FRAGMENT_LIST_CARD;
-                } else {
-                    fragmentId = IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
-                }
-                getActivityCallback().displayScreen(fragmentId, false, false, bundle);
-            } else {
-                if (mCardList != null && mCardList.size() > 0) {
-                    mCardList.clear();
-                }
-                mCardList.addAll(cardList);
-                mAdapter.notifyDataSetChanged();
+            if (mCardList != null) {
+                mCardList.clear();
             }
+            mCardList.addAll(cardList);
         } else {
             showTextNoItem(true, getString(R.string.no_item_service));
         }
@@ -156,7 +141,6 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     }
 
     public void setRefreshing(boolean refreshing) {
-
         mRefreshLayout.setRefreshing(refreshing);
     }
 
@@ -169,5 +153,39 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Logger.i(TAG, "#onItemClick");
         getPresenter().onItemClicked((ListCompanyResponse.ListCompanyData.CompanyData) parent.getItemAtPosition(position));
+    }
+
+    @Override
+    public void onPageSelected() {
+        Logger.d(TAG, "onPageSelected");
+        if (mCardList.size() == 1) {
+            getView().setVisibility(View.INVISIBLE);
+            ListCompanyResponse.ListCompanyData.CompanyData companyData = mCardList.get(0);
+            int fragmentId;
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, companyData.getServiceCompanyId());
+            if (companyData.getCardType() == 1) {
+                bundle.putInt(ListCardFragmentDetail.KEY_SERVICE_ID, companyData.getServiceId());
+                bundle.putString(ListCardFragmentDetail.KEY_CARD_NAME, companyData.getCardName());
+                bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, companyData.getServiceName());
+                fragmentId = IMainView.FRAGMENT_LIST_CARD;
+            } else {
+                fragmentId = IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
+            }
+            getActivityCallback().displayScreen(fragmentId, false, true, bundle);
+        } else {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPageUnselected() {
+
     }
 }

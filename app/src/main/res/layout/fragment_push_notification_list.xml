@@ -10,16 +10,38 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
+        android:background="@color/color_gray"
+        android:gravity="center"
+        android:padding="4dp">
 
-        <android.support.v7.widget.SearchView
-            android:id="@+id/inputSearch"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:queryBackground="@android:color/transparent"
-            app:defaultQueryHint="@string/search"
-            app:queryBackground="@android:color/transparent"
-            />
+            android:background="@drawable/border_search_view"
+            android:gravity="center">
+
+            <android.support.v7.widget.SearchView
+                android:id="@+id/inputSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:queryBackground="@android:color/transparent"
+                app:defaultQueryHint="@string/search"
+                app:queryBackground="@android:color/transparent"
+                />
+
+            <TextView
+                android:id="@+id/tvSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="-8dp"
+                android:layout_toEndOf="@+id/inputSearch"
+                android:text="@string/search"
+                android:textSize="14sp"
+                android:visibility="visible"/>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
     <View

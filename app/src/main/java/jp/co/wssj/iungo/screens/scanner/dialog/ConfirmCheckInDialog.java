@@ -7,11 +7,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.checkin.ConfirmCheckInResponse;
 import jp.co.wssj.iungo.model.checkin.InfoStoreResponse;
@@ -35,7 +35,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
 
     private TextView mOkButton, mCancelButton;
 
-    private ImageView mImageLogoCompany;
+    private CircleImageView mImageLogoCompany;
 
     private ProgressBar mProgressBar;
 
@@ -65,7 +65,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
         mStoreNameTextView = (TextView) findViewById(R.id.tvNameStore);
         mOkButton = (TextView) findViewById(R.id.tvCheckIn);
         mCancelButton = (TextView) findViewById(R.id.tvCancelCheckIn);
-        mImageLogoCompany = (ImageView) findViewById(R.id.ivLogoCompany);
+        mImageLogoCompany = (CircleImageView) findViewById(R.id.ivLogoCompany);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 

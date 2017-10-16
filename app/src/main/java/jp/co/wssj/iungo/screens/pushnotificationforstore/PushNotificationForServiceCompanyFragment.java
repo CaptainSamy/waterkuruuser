@@ -2,10 +2,12 @@ package jp.co.wssj.iungo.screens.pushnotificationforstore;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -16,8 +18,10 @@ import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -29,13 +33,19 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     private SwipeRefreshLayout mRefreshLayout;
 
-    private PushNotificationForServiceCompanyAdapter mAdapter;
+    private PushNotificationAdapter mAdapter;
 
     private ListView mListView;
 
     private List<NotificationMessage> mListNotification;
 
     private int mServiceCompanyId;
+
+    private SearchView mInputSearch;
+
+    private TextView mTextSearch;
+
+    private boolean isExpandedSearchView;
 
     public static PushNotificationForServiceCompanyFragment newInstance(Bundle args) {
         PushNotificationForServiceCompanyFragment fragment = new PushNotificationForServiceCompanyFragment();
@@ -64,11 +74,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
-    public boolean isDisplayIconNotification() {
-        return false;
-    }
-
-    @Override
     protected PushNotificationForServiceCompanyPresenter onCreatePresenter(IPushNotificationForServiceCompany view) {
         return new PushNotificationForServiceCompanyPresenter(view);
     }
@@ -82,19 +87,23 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     protected void initViews(View rootView) {
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
+        mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
+        mInputSearch.setMaxWidth(Integer.MAX_VALUE);
+        mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
     }
 
     @Override
     protected void initData() {
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
-            mListNotification = new ArrayList<>();
-            mAdapter = new PushNotificationForServiceCompanyAdapter(getActivityContext(), R.layout.item_push_notification, mListNotification);
+            if (mListNotification == null) {
+                mListNotification = new ArrayList<>();
+                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+                mRefreshLayout.setRefreshing(true);
+                getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
+            }
             mListView.setAdapter(mAdapter);
-            mRefreshLayout.setRefreshing(true);
-            getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
         }
 
     }
@@ -112,6 +121,62 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
+
+        mTextSearch.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                mInputSearch.setIconified(false);
+            }
+        });
+        mInputSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Logger.d(TAG, "onQueryTextSubmit");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Logger.d(TAG, "onQueryTextChange");
+                statusSearchView(true);
+                if (mAdapter != null) {
+                    mAdapter.filter(newText);
+                }
+                return false;
+            }
+
+        });
+        mInputSearch.setOnCloseListener(new SearchView.OnCloseListener() {
+
+            @Override
+            public boolean onClose() {
+                Logger.d(TAG, "setOnCloseListener");
+                mTextSearch.setVisibility(View.VISIBLE);
+                isExpandedSearchView = false;
+                return false;
+            }
+        });
+        mInputSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Logger.d(TAG, "onFocusChange " + hasFocus);
+                if (hasFocus) {
+                    isExpandedSearchView = hasFocus;
+                }
+                statusSearchView(hasFocus);
+            }
+        });
+    }
+
+    private void statusSearchView(boolean hasFocus) {
+        mTextSearch.setVisibility(isExpandedSearchView ? View.GONE : View.VISIBLE);
+        mRefreshLayout.setEnabled(!hasFocus);
+        if (mAdapter != null) {
+            mAdapter.setIsAllowOnLoadMore(!hasFocus);
+        }
     }
 
     @Override
@@ -133,9 +198,10 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
                 mListNotification.clear();
             }
             mListNotification.addAll(list);
+            mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
         }
-        mAdapter.setListenerEndOfListView(new PushNotificationForServiceCompanyAdapter.IEndOfListView() {
+        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
 
             @Override
             public void onEndOfListView() {

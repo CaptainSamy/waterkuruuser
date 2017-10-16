@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.utils.Utils;
@@ -53,12 +53,12 @@ public class PushNotificationForServiceCompanyAdapter extends ArrayAdapter<Notif
 
         TextView mTitle, mTime;
 
-        ImageView mImageCompany;
+        CircleImageView mImageCompany;
 
         ViewHolder(View root) {
             mTitle = (TextView) root.findViewById(R.id.title_notification);
             mTime = (TextView) root.findViewById(R.id.time_notification);
-            mImageCompany = (ImageView) root.findViewById(R.id.iconNotification);
+            mImageCompany = (CircleImageView) root.findViewById(R.id.iconNotification);
         }
 
         void fillDataToView(final Context context, final NotificationMessage notificationMessage) {

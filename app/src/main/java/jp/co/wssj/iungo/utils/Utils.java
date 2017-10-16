@@ -58,6 +58,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
@@ -319,8 +320,7 @@ public final class Utils {
                 + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public static void fillImage(final Context context, String imgPath, final ImageView imageView, final int resIdError) {
-        Logger.d(TAG, "imgPath : " + imgPath);
+    public static void fillImage(final Context context, final String imgPath, final CircleImageView imageView, final int resIdError) {
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
@@ -328,11 +328,13 @@ public final class Utils {
 
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            Logger.d(TAG, "onLoadFailed " + imgPath);
                             imageView.setImageResource(resIdError);
                         }
 
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            Logger.d(TAG, "onResourceReady");
                             imageView.setImageDrawable(resource);
                         }
                     });

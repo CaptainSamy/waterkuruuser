@@ -120,6 +120,8 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
         return fragments;
     }
 
+
+
     @Override
     protected void initAction() {
         super.initAction();

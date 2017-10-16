@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.github.rockerhieu.emojicon.EmojiconEditText;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
 import jp.co.wssj.iungo.screens.IMainView;
@@ -39,6 +38,8 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     public static final String KEY_STORE_ID = "store_id";
 
     public static final String KEY_STORE_NAME = "store_name";
+
+    public static final String KEY_IMAGE_STORE = "image_store";
 
     private SwipeRefreshLayout mRefreshListChat;
 
@@ -159,6 +160,8 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         mListViewChat.setAdapter(mAdapter);
         if (getArguments() != null) {
             mStoreId = getArguments().getInt(KEY_STORE_ID);
+            String imageStore = getArguments().getString(KEY_IMAGE_STORE);
+            mAdapter.setImageStore(imageStore);
             mRefreshListChat.setRefreshing(true);
             getPresenter().getHistoryChat(mStoreId);
         }

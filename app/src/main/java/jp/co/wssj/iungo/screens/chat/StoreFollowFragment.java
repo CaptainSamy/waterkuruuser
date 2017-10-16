@@ -85,6 +85,7 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
                 StoreFollowResponse.StoreChatData.StoreFollow store = (StoreFollowResponse.StoreChatData.StoreFollow) parent.getItemAtPosition(position);
                 bundle.putInt(ChatFragment.KEY_STORE_ID, store.getId());
                 bundle.putString(ChatFragment.KEY_STORE_NAME, store.getStoreName());
+                bundle.putString(ChatFragment.KEY_IMAGE_STORE, store.getImageStore());
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
             }
         });

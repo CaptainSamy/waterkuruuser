@@ -69,11 +69,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     }
 
     @Override
-    public boolean isDisplayIconNotification() {
-        return false;
-    }
-
-    @Override
     protected PushNotificationDetailPresenter onCreatePresenter(IPushNotificationDetailView view) {
         return new PushNotificationDetailPresenter(view);
     }
