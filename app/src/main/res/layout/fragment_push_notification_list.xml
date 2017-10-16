@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,8 +25,7 @@
                 android:layout_height="35dp"
                 android:queryBackground="@android:color/transparent"
                 app:defaultQueryHint="@string/search"
-                app:queryBackground="@android:color/transparent"
-                />
+                app:queryBackground="@android:color/transparent" />
 
             <TextView
                 android:id="@+id/tvSearch"
@@ -38,7 +36,7 @@
                 android:layout_toEndOf="@+id/inputSearch"
                 android:text="@string/search"
                 android:textSize="14sp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
         </RelativeLayout>
 
@@ -49,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@id/tool_bar"
-        android:background="@color/colorTextDisable"/>
+        android:background="@color/colorTextDisable" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,8 +60,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/text_no_item_push_all"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
 
         <android.support.v4.widget.SwipeRefreshLayout
@@ -75,7 +72,7 @@
             <ListView
                 android:id="@+id/list_push_notification"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
 

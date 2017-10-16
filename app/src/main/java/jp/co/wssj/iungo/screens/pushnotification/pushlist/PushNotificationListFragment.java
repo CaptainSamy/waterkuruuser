@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification;
+package jp.co.wssj.iungo.screens.pushnotification.pushlist;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -91,6 +91,11 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     @Override
     protected IPushNotificationListView onCreateView() {
         return this;
+    }
+
+    @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return true;
     }
 
     @Override
@@ -243,8 +248,6 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             mListView.setVisibility(View.GONE);
             mTextNoItem.setVisibility(View.VISIBLE);
         }
-
-
     }
 
     @Override
