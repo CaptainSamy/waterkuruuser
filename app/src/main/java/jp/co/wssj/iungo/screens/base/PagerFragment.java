@@ -138,6 +138,18 @@ public abstract class PagerFragment<V extends IFragmentView, P extends FragmentP
         }
     }
 
+    public void setSelectedPageByItemId(int itemId) {
+        if (mFragments != null) {
+            for (int i = 0; i < getFragmentsSize(); i++) {
+                PagedFragment fragment = mFragments.get(i);
+                if (fragment.getNavigationBottomId() == itemId) {
+                    setSelectedPage(i);
+                    break;
+                }
+            }
+        }
+    }
+
     public void addOnTabSelectedListener(TabLayout.OnTabSelectedListener listener) {
         if (mTabLayout != null && listener != null) {
             mTabLayout.addOnTabSelectedListener(listener);
