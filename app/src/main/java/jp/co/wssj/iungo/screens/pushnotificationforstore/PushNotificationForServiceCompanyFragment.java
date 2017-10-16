@@ -18,7 +18,7 @@ import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationAdapter;
+import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;

@@ -37,7 +37,6 @@ import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.about.AboutFragment;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordByCodeFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
@@ -52,7 +51,8 @@ import jp.co.wssj.iungo.screens.memomanager.MemoManagerFragment;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationListFragment;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
+import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
@@ -290,6 +290,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private int mCurrentNavigationBottomId;
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Logger.d(TAG, "#onNavigationItemSelected");
@@ -300,8 +302,16 @@ public class MainActivity extends AppCompatActivity
 //                case R.id.navigation_home:
                 case R.id.navigation_another:
                 case R.id.navigation_timeline:
-                    mPresenter.onBottomNavigationButtonClicked(menuId);
-                    replaceFragment(mPrimaryFragment, true, true);
+                    if (mCurrentNavigationBottomId != menuId) {
+                        mCurrentNavigationBottomId = menuId;
+                        if (mPrimaryFragment.isVisible()) {
+                            mPresenter.onBottomNavigationButtonClicked(menuId);
+                        } else {
+                            Bundle bundle = mPrimaryFragment.getArguments();
+                            bundle.putInt(PrimaryFragment.KEY_GLOBAL_SELECT_SCREEN_ID, menuId);
+                            replaceFragment(mPrimaryFragment, true, true);
+                        }
+                    }
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
@@ -420,7 +430,7 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(new TermOfServiceNoMenuBottom(), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_PUSH_NOTIFICATION_LIST:
-                replaceFragment(new PushNotificationListFragment(), hasAnimation, addToBackStack);
+                replaceFragment(new PushNotificationPageFragment(), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_PUSH_NOTIFICATION_DETAIL:
                 replaceFragment(PushNotificationDetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
@@ -482,16 +492,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void setSelectedPage(int itemId) {
         if (mPrimaryFragment != null) {
-            List<PagedFragment> fragments = mPrimaryFragment.getFragments();
-            if (fragments != null) {
-                for (int i = 0; i < fragments.size(); i++) {
-                    PagedFragment fragment = fragments.get(i);
-                    if (fragment.getNavigationBottomId() == itemId) {
-                        mPrimaryFragment.setSelectedPage(i);
-                        break;
-                    }
-                }
-            }
+            mPrimaryFragment.setSelectedPageByItemId(itemId);
         }
     }
 

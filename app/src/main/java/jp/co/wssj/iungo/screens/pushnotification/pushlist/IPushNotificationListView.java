@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification;
+package jp.co.wssj.iungo.screens.pushnotification.pushlist;
 
 import java.util.List;
 

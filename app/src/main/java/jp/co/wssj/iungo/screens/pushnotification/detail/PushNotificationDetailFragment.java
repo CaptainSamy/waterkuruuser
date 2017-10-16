@@ -54,6 +54,11 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return true;
+    }
+
+    @Override
     protected String getLogTag() {
         return "PushNotificationDetailServiceCompanyFragment";
     }

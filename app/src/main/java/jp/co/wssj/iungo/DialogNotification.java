@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationAdapter;
+import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationAdapter;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.widget.EasyDialog;
