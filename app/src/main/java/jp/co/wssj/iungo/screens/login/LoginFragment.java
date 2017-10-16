@@ -78,6 +78,9 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
         mInputPassword = (EditText) rootView.findViewById(R.id.password_edit_text);
         mButtonLogin = (TextView) rootView.findViewById(R.id.tvLogin);
         mTextResetPassword = (TextView) rootView.findViewById(R.id.tvResetPassword);
+
+        mInputUserId.setText("taikhoantest");
+        mInputPassword.setText("mandem123");
     }
 
     @Override

@@ -34,8 +34,8 @@ public class PushNotificationAdapter extends BaseAdapter {
 
     public PushNotificationAdapter(Context context, List<NotificationMessage> objects) {
         mContext = context;
-        mListPushTemp = new ArrayList<>();
         mListPush = objects;
+        mListPushTemp = new ArrayList<>();
     }
 
     @Override
@@ -75,9 +75,9 @@ public class PushNotificationAdapter extends BaseAdapter {
 
     private static class ViewHolder {
 
-        TextView mTitle, mTime;
+        private TextView mTitle, mTime;
 
-        CircleImageView mImageCompany;
+        private CircleImageView mImageCompany;
 
         ViewHolder(View root) {
             mTitle = (TextView) root.findViewById(R.id.title_notification);

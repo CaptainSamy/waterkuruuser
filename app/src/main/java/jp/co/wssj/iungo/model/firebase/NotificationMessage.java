@@ -47,8 +47,12 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("stamp_id")
     private int mStampId;
 
-    @SerializedName("action_question_naire")
-    private int mActionQuestionNaire;
+    @SerializedName("like")
+    private int mIsLike;
+
+    public NotificationMessage() {
+
+    }
 
     public NotificationMessage(long pushId, String title, String message, String action, int stampId) {
         this.mTitle = title;
@@ -62,6 +66,46 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     public long getPushTime() {
         return mPushTime;
+    }
+
+    public void setPushId(long mPushId) {
+        this.mPushId = mPushId;
+    }
+
+    public void setTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
+    public void setMessage(String mMessage) {
+        this.mMessage = mMessage;
+    }
+
+    public void setPushTime(long mPushTime) {
+        this.mPushTime = mPushTime;
+    }
+
+    public void setLogo(String mLogo) {
+        this.mLogo = mLogo;
+    }
+
+    public void setIsSound(boolean mIsSound) {
+        this.mIsSound = mIsSound;
+    }
+
+    public void setmStatusRead(int mStatusRead) {
+        this.mStatusRead = mStatusRead;
+    }
+
+    public void setAction(String mAction) {
+        this.mAction = mAction;
+    }
+
+    public void setStampId(int mStampId) {
+        this.mStampId = mStampId;
+    }
+
+    public void setIsLike(int mIsLike) {
+        this.mIsLike = mIsLike;
     }
 
     public long getPushId() {
@@ -96,7 +140,7 @@ public class NotificationMessage implements GsonSerializable, Serializable {
         return mLogo;
     }
 
-    public int getActionQuestionNaire() {
-        return mActionQuestionNaire;
+    public int isLike() {
+        return mIsLike;
     }
 }

@@ -27,6 +27,7 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
 
     public void getListPushNotification(int page, int limit) {
         String token = getModel(SharedPreferencesModel.class).getToken();
+        Logger.d(TAG, "getListPushNotification");
         getModel(PushNotificationModel.class).getListPushNotification(token, page, limit, new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override

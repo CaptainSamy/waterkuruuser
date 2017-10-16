@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.R;
+import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
 import jp.co.wssj.iungo.model.pushnotification.QuestionNaireResponse;
@@ -26,7 +27,7 @@ import jp.co.wssj.iungo.utils.Utils;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationDetailFragment extends BaseFragment<IPushNotificationDetailView, PushNotificationDetailPresenter> implements IPushNotificationDetailView {
+public class PushNotificationDetailFragment extends BaseFragment<IPushNotificationDetailView, PushNotificationDetailPresenter> implements IPushNotificationDetailView, View.OnClickListener {
 
     public static final String TAG = "PushNotificationDetailServiceCompanyFragment";
 
@@ -36,11 +37,15 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     private TextView mTitle, mTime;
 
+    private TextView mTextLike, mTextUnlike;
+
     private WebView mBody;
 
     private TextView mButtonRating, mButtonQuestionNaire;
 
     private NotificationMessage mNotificationMessage;
+
+    DBManager mDatabase = DBManager.getInstance();
 
     public static PushNotificationDetailFragment newInstance(Bundle bundle) {
         PushNotificationDetailFragment fragment = new PushNotificationDetailFragment();
@@ -85,6 +90,9 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mTime = (TextView) rootView.findViewById(R.id.time_notification);
         mButtonRating = (TextView) rootView.findViewById(R.id.buttonRating);
         mButtonQuestionNaire = (TextView) rootView.findViewById(R.id.buttonQuestionNaire);
+        mTextLike = (TextView) rootView.findViewById(R.id.tvLike);
+        mTextUnlike = (TextView) rootView.findViewById(R.id.tvUnlike);
+
     }
 
     @Override
@@ -97,7 +105,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 showRating(true);
             }
         });
-
         mButtonQuestionNaire.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -107,6 +114,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 startActivity(intent);
             }
         });
+        mTextLike.setOnClickListener(this);
+        mTextUnlike.setOnClickListener(this);
     }
 
     @Override
@@ -122,6 +131,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                     list.add(mNotificationMessage.getPushId());
                     getPresenter().setListPushUnRead(list, Constants.STATUS_READ);
                 }
+                updateStatusLike(mNotificationMessage.isLike());
                 mTitle.setText(mNotificationMessage.getTitle().trim());
                 mBody.getSettings().setJavaScriptEnabled(true);
                 mBody.getSettings().setBuiltInZoomControls(true);
@@ -208,4 +218,36 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     public void onGetQuestionNaireFailure() {
         mButtonQuestionNaire.setVisibility(View.GONE);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tvLike:
+                updateStatusLike(1);
+                if (mNotificationMessage != null) {
+                    mDatabase.likePush(mNotificationMessage.getPushId(), 1);
+                }
+                break;
+            case R.id.tvUnlike:
+                updateStatusLike(0);
+                if (mNotificationMessage != null) {
+                    mDatabase.likePush(mNotificationMessage.getPushId(), 0);
+                }
+                break;
+        }
+    }
+
+    public void updateStatusLike(int status) {
+        switch (status) {
+            case 0:
+                mTextLike.setVisibility(View.VISIBLE);
+                mTextUnlike.setVisibility(View.GONE);
+                break;
+            case 1:
+                mTextLike.setVisibility(View.GONE);
+                mTextUnlike.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
 }

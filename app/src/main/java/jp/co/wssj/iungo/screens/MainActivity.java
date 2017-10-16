@@ -33,6 +33,7 @@ import io.fabric.sdk.android.Fabric;
 import jp.co.wssj.iungo.BuildConfig;
 import jp.co.wssj.iungo.DialogNotification;
 import jp.co.wssj.iungo.R;
+import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.about.AboutFragment;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
@@ -123,13 +124,13 @@ public class MainActivity extends AppCompatActivity
             mWindow.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
         mPresenter = new MainPresenter(this);
-
         setupFragmentBackStackManager();
         initView();
         initAction();
         mIsNewIntent = false;
         checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
+        DBManager.getInstance().init(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
@@ -333,6 +334,7 @@ public class MainActivity extends AppCompatActivity
                 case R.id.menu_logout:
                     mDrawerLayout.closeDrawer(GravityCompat.END);
                     mPresenter.onLogout();
+                    DBManager.getInstance().clearDatabase();
                     return true;
             }
         }

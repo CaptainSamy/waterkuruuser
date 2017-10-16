@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
@@ -320,10 +319,13 @@ public final class Utils {
                 + "-" + String.format(Locale.getDefault(), "%02d", calendar.get(Calendar.DAY_OF_MONTH));
     }
 
-    public static void fillImage(final Context context, final String imgPath, final CircleImageView imageView, final int resIdError) {
+    public static void fillImage(final Context context, final String imgPath, final ImageView imageView, final int resIdError) {
+        Logger.d(TAG, "image " + imgPath);
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
+                    .fitCenter()
+                    .override(convertDpToPixel(context, 50), convertDpToPixel(context, 50))
                     .into(new SimpleTarget<GlideDrawable>() {
 
                         @Override

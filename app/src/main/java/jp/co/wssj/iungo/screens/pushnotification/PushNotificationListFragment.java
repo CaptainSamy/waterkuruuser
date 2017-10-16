@@ -16,6 +16,7 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
@@ -45,7 +46,9 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     private TextView mTextSearch;
 
-    private boolean isExpanableSearchView;
+    private boolean isExpandedSearchView;
+
+    DBManager mDatabase = DBManager.getInstance();
 
     @Override
     protected String getLogTag() {
@@ -101,19 +104,24 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
-//        mInputSearch.onActionViewExpanded();
         mInputSearch.clearFocus();
+        mListNotification = new ArrayList<>();
+        mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
 
     }
 
     @Override
     protected void initData() {
         mInputSearch.setEnabled(false);
-        if (mListNotification == null) {
-            mListNotification = new ArrayList<>();
-            mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+        mRefreshLayout.setEnabled(false);
+        mListNotification.addAll(mDatabase.getListPush());
+        if (mListNotification.size() == 0) {
             mRefreshLayout.setRefreshing(true);
             getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+        } else {
+            int page = mListNotification.size() / Constants.LIMIT;
+            mPage = page == 0 ? 1 : page;
+            mAdapter.setListPushTemp(mListNotification);
         }
         mListView.setAdapter(mAdapter);
     }
@@ -163,7 +171,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             public boolean onClose() {
                 Logger.d(TAG, "setOnCloseListener");
                 mTextSearch.setVisibility(View.VISIBLE);
-                isExpanableSearchView = false;
+                isExpandedSearchView = false;
                 return false;
             }
         });
@@ -173,15 +181,33 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
             public void onFocusChange(View v, boolean hasFocus) {
                 Logger.d(TAG, "onFocusChange " + hasFocus);
                 if (hasFocus) {
-                    isExpanableSearchView = hasFocus;
+                    isExpandedSearchView = hasFocus;
                 }
                 statusSearchView(hasFocus);
+            }
+        });
+
+
+        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+            @Override
+            public void onEndOfListView() {
+
+                Logger.d(TAG, "page : " + mPage + " totalPage " + mTotalPage);
+                if (mTotalPage != 0) {
+                    if (mPage < mTotalPage) {
+                        mRefreshLayout.setRefreshing(true);
+                        getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
+                    }
+                } else {
+                    getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
+                }
             }
         });
     }
 
     private void statusSearchView(boolean hasFocus) {
-        mTextSearch.setVisibility(isExpanableSearchView ? View.GONE : View.VISIBLE);
+        mTextSearch.setVisibility(isExpandedSearchView ? View.GONE : View.VISIBLE);
         mRefreshLayout.setEnabled(!hasFocus);
         if (mAdapter != null) {
             mAdapter.setIsAllowOnLoadMore(!hasFocus);
@@ -190,7 +216,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
     @Override
     public void onRefresh() {
-        getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+//        getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
     }
 
     public void hideSwipeRefreshLayout() {
@@ -205,29 +231,21 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         mInputSearch.setEnabled(true);
         hideSwipeRefreshLayout();
+        mPage = page;
+        mTotalPage = totalPage;
         if (list != null && list.size() > 0) {
             mListView.setVisibility(View.VISIBLE);
             mTextNoItem.setVisibility(View.GONE);
-            mPage = page;
-            mTotalPage = totalPage;
-            if (list != null) {
-                if (page == Constants.INIT_PAGE) {
-                    mListNotification.clear();
-                }
-                mListNotification.addAll(list);
-                mAdapter.setListPushTemp(mListNotification);
-                mAdapter.notifyDataSetChanged();
-            }
-            mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+//            if (page == Constants.INIT_PAGE) {
+//                mListNotification.clear();
+//            }
 
-                @Override
-                public void onEndOfListView() {
-                    if (page < totalPage) {
-                        mRefreshLayout.setRefreshing(true);
-                        getPresenter().getListPushNotification(page + 1, Constants.LIMIT);
-                    }
-                }
-            });
+            mListNotification.addAll(list);
+            mAdapter.setListPushTemp(mListNotification);
+            mAdapter.notifyDataSetChanged();
+            mDatabase.insertPushNotification(list);
+
+
             if (list.size() > 0) {
                 List<Long> listPushId = new ArrayList<>();
                 for (NotificationMessage notificationMessage : list) {
@@ -237,6 +255,7 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
                 }
                 if (listPushId != null && listPushId.size() > 0) {
                     getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
+                    //TODO update status read in database
                 }
             }
         } else {
