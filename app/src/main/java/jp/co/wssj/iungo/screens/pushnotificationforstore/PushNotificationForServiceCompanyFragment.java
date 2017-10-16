@@ -79,6 +79,11 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return true;
+    }
+
+    @Override
     protected IPushNotificationForServiceCompany onCreateView() {
         return this;
     }

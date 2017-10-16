@@ -20,6 +20,7 @@ import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -119,7 +120,9 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
     protected void initData() {
         mInputSearch.setEnabled(false);
         mRefreshLayout.setEnabled(false);
-        mListNotification.addAll(mDatabase.getListPush());
+        Bundle bundle = getArguments();
+        int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
+        mListNotification.addAll(mDatabase.getListPush(type));
         if (mListNotification.size() == 0) {
             mRefreshLayout.setRefreshing(true);
             getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
@@ -244,8 +247,17 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 //            if (page == Constants.INIT_PAGE) {
 //                mListNotification.clear();
 //            }
-
-            mListNotification.addAll(list);
+            Bundle bundle = getArguments();
+            int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
+            if (type == PushNotificationPageAdapter.TYPE_ALL_PUSH) {
+                mListNotification.addAll(list);
+            } else if (type == PushNotificationPageAdapter.TYPE_QUESTIONAIRE_PUSH) {
+                for (NotificationMessage item : list) {
+                    if (Constants.PushNotification.TYPE_QUESTION_NAIRE.equals(item.getAction())) {
+                        mListNotification.add(item);
+                    }
+                }
+            }
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
             mDatabase.insertPushNotification(list);

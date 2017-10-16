@@ -31,6 +31,7 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
 
         Fragment fragment = new PushNotificationListFragment();
         Bundle args = new Bundle();
+        args.putInt(ARG_TYPE_PUSH, position);
         fragment.setArguments(args);
 
         return fragment;

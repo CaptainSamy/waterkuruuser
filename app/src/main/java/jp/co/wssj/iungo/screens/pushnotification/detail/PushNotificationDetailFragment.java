@@ -230,12 +230,14 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             case R.id.tvLike:
                 updateStatusLike(1);
                 if (mNotificationMessage != null) {
+                    mNotificationMessage.setIsLike(1);
                     mDatabase.likePush(mNotificationMessage.getPushId(), 1);
                 }
                 break;
             case R.id.tvUnlike:
                 updateStatusLike(0);
                 if (mNotificationMessage != null) {
+                    mNotificationMessage.setIsLike(0);
                     mDatabase.likePush(mNotificationMessage.getPushId(), 0);
                 }
                 break;

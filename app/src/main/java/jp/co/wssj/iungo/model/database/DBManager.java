@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
+import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 16/10/2017.
@@ -93,9 +95,16 @@ public class DBManager {
         return listPush;
     }
 
-    public List<NotificationMessage> getListPush() {
+    public List<NotificationMessage> getListPush(int type) {
         List<NotificationMessage> listPush = new ArrayList<>();
-        String sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME;
+        String sqlGetListPush = null;
+        if (type == PushNotificationPageAdapter.TYPE_LIKED_PUSH) {
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_LIKE + " = 1";
+        } else if (type == PushNotificationPageAdapter.TYPE_QUESTIONAIRE_PUSH) {
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " = '" + Constants.PushNotification.TYPE_QUESTION_NAIRE+"'";
+        } else {
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME;
+        }
         Cursor cursorSearchPush = mDatabaseRead.rawQuery(sqlGetListPush, null);
         while (cursorSearchPush.moveToNext()) {
             NotificationMessage notificationMessage = new NotificationMessage();
@@ -113,6 +122,7 @@ public class DBManager {
         Collections.reverse(listPush);
         return listPush;
     }
+
 
     public boolean isExitsPush(long pushId) {
         String columnSelection[] = new String[]{DatabaseContract.PushNotification.COLUMN_PUSH_ID};
