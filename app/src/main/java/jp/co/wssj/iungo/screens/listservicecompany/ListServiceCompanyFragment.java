@@ -136,7 +136,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
             }
             mCardList.addAll(cardList);
         } else {
-            showTextNoItem(true, getString(R.string.no_item_service));
+//            showTextNoItem(true, getString(R.string.no_item_service));
         }
     }
 
@@ -181,6 +181,12 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
         } else {
             mAdapter.notifyDataSetChanged();
         }
+
+        if (mCardList.size() == 0) {
+            showTextNoItem(true, getString(R.string.no_item_service));
+        } else {
+            showTextNoItem(false, null);
+        }
     }
 
     @Override
@@ -191,7 +197,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
 
     @Override
     public void onPageUnselected() {
-
+        showTextNoItem(false, null);
     }
 
     @Override

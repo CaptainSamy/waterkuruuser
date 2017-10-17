@@ -79,6 +79,11 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
+    public boolean isGlobal() {
+        return false;
+    }
+
+    @Override
     protected PushNotificationForServiceCompanyPresenter onCreatePresenter(IPushNotificationForServiceCompany view) {
         return new PushNotificationForServiceCompanyPresenter(view);
     }

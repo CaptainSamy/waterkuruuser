@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.changepassword;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import jp.co.wssj.iungo.R;
+import jp.co.wssj.iungo.model.auth.InfoUserResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
@@ -109,8 +111,60 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
         }, 1000);
     }
 
+    /*=================================================================*/
     @Override
     public void onChangePasswordFailure(String message) {
         showToast(message);
     }
+
+    @Override
+    public void onGetInfoUserFailure(String message) {
+
+    }
+
+    @Override
+    public void onGetInfoUserSuccess(InfoUserResponse.InfoUser infoUser) {
+
+    }
+
+    @Override
+    public void showPhotoDialog(Drawable drawable, int requestCode) {
+
+    }
+
+    @Override
+    public void showDialogChoose(int requestCodePicker, int requestCodeCamera) {
+
+    }
+
+    @Override
+    public void openCamera(int requestCode) {
+
+    }
+
+    @Override
+    public void requestCameraAndWriteStoragePermission(int requestCode) {
+
+    }
+
+    @Override
+    public void openChooseImageScreen(int requestCode) {
+
+    }
+
+    @Override
+    public void requestStoragePermission(int requestCode) {
+
+    }
+
+    @Override
+    public void onOnUpdateInfoUserSuccess() {
+
+    }
+
+    @Override
+    public void onOnUpdateInfoUserFailure(String message) {
+
+    }
+    /*================================================================*/
 }

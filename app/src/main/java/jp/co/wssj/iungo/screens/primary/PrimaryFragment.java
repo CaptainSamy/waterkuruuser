@@ -14,7 +14,9 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.base.PagerFragment;
 import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
+import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 import jp.co.wssj.iungo.screens.listservicecompany.ListServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
 import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
@@ -37,6 +39,8 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     public static final int SCREEN_STORE_FOLLOW = 2;
 
     private static final String TAG = "PrimaryFragment";
+
+    private int mServiceCompanyId;
 
     public static PrimaryFragment newInstance(Bundle bundle) {
         PrimaryFragment fragment = new PrimaryFragment();
@@ -162,14 +166,38 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
     @Override
     protected List<PagedFragment> initFragments() {
         List<PagedFragment> fragments = new ArrayList<>();
-        fragments.add(new ListServiceCompanyFragment());
+        if (getArguments() != null) {
+            mServiceCompanyId = getArguments().getInt(Constants.KEY_SERVICE_COMPANY_ID);
+        }
+        if (mServiceCompanyId == 0) {
+            fragments.add(new ListServiceCompanyFragment());
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
+            fragments.add(PushNotificationPageFragment.newInstance(bundle));
+        }
 //        fragments.add(new HomeFragment());
         fragments.add(new TimeLineFragment());
-        fragments.add(new StoreFollowFragment());
+//
+        if (getArguments() != null) {
+            Bundle bundle = getArguments();
+            int storeId = bundle.getInt(ChatFragment.KEY_STORE_ID);
+            String storeName = bundle.getString(ChatFragment.KEY_STORE_NAME);
+            String imageStore = bundle.getString(ChatFragment.KEY_IMAGE_STORE);
+            if (storeId != 0) {
+                bundle.putInt(ChatFragment.KEY_STORE_ID, storeId);
+                bundle.putString(ChatFragment.KEY_STORE_NAME, storeName);
+                bundle.putString(ChatFragment.KEY_IMAGE_STORE, imageStore);
+                fragments.add(ChatFragment.newInstance(bundle));
+            } else {
+                fragments.add(new StoreFollowFragment());
+            }
+        } else {
+            fragments.add(new StoreFollowFragment());
+        }
+
         return fragments;
     }
-
-
 
     @Override
     protected void initData() {
@@ -179,6 +207,7 @@ public class PrimaryFragment extends PagerFragment<IPrimaryView, PrimaryPresente
         int extraScreenId = SCREEN_TIMELINE;
         if (bundle != null) {
             extraScreenId = bundle.getInt(KEY_SCREEN_ID, SCREEN_TIMELINE);
+            mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
         }
         final int selectedPage = extraScreenId;
         getViewPager().post(new Runnable() {

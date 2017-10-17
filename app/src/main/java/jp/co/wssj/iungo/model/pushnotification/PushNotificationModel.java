@@ -78,8 +78,8 @@ public class PushNotificationModel extends BaseModel {
         super(context);
     }
 
-    public void getListPushNotification(String token, int page, int limit, final IGetListPushNotificationCallback callback) {
-        Request request = APICreator.getListNotification(token, page, limit, new Response.Listener<ListNotificationResponse>() {
+    public void getListPushNotification(String token, long pushId, final IGetListPushNotificationCallback callback) {
+        Request request = APICreator.getListNotification(token, pushId, new Response.Listener<ListNotificationResponse>() {
 
             @Override
             public void onResponse(ListNotificationResponse response) {

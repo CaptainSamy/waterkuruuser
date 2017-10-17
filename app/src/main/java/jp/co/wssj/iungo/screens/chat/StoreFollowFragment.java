@@ -21,7 +21,7 @@ import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
  * Created by Nguyen Huu Ta on 26/6/2017.
  */
 
-public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView, SwipeRefreshLayout.OnRefreshListener {
+public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView, SwipeRefreshLayout.OnRefreshListener, PagedFragment.IOnPageSelectChangeListener {
 
     private static final String TAG = "StoreFollowFragment";
 
@@ -91,6 +91,7 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
         });
 
         mRefreshStoreFollow.setOnRefreshListener(this);
+        addOnPageSelectChangeListener(this);
     }
 
     @Override
@@ -112,8 +113,20 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
             mAdapter.notifyDataSetChanged();
             showTextNoItem(false, null);
         } else {
+//            showTextNoItem(true, getString(R.string.no_conversation));
+        }
+    }
+
+    @Override
+    public void onPageSelected() {
+        if (mStoreFollows.size() == 0) {
             showTextNoItem(true, getString(R.string.no_conversation));
         }
+    }
+
+    @Override
+    public void onPageUnselected() {
+        showTextNoItem(false, null);
     }
 
     @Override

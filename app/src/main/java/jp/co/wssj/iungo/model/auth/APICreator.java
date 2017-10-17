@@ -36,6 +36,10 @@ final class APICreator {
 
     private static final String CHECK_VERSION_APP = Constants.BASE_URL + "/api/client/users/check-version-app-and-server-user";
 
+    private static final String ON_GET_INFO_USER = Constants.BASE_URL + "/api/client/users/get-info-user";
+
+    private static final String ON_SET_INFO_USER = Constants.BASE_URL + "/api/client/users/set-info-user";
+
     public static GsonRequest<RegisterResponse> getRegisterAWSRequest(final String userId, final String password, final String name, final String email, final int age, final int sex, final int typeLogin, final String token, final Response.Listener<RegisterResponse> listener, final Response.ErrorListener errorListener) {
 
         Map<String, String> headers = new HashMap<>();
@@ -277,6 +281,50 @@ final class APICreator {
                 params.put("app_type", 1);
                 params.put("os_type", 1);
                 return params;
+            }
+        };
+    }
+
+    static GsonRequest<InfoUserResponse> onGetInfoUser(String token, final Response.Listener<InfoUserResponse> responseListener,
+                                                       final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        ResponseListener<InfoUserResponse> listener = new ResponseListener<>(TAG, "onGetInfoUser", responseListener, errorListener);
+        return new GsonJsonRequest<InfoUserResponse>(Request.Method.GET,
+                ON_GET_INFO_USER,
+                InfoUserResponse.class,
+                headers,
+                listener,
+                listener) {
+
+        };
+    }
+
+    static GsonRequest<ResponseData> onUpdateInfoUser(String token, final InfoUserResponse.InfoUser infoUser, final Response.Listener<ResponseData> responseListener,
+                                                      final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        ResponseListener<ResponseData> listener = new ResponseListener<>(TAG, "onUpdateInfoUser", responseListener, errorListener);
+        return new GsonJsonRequest<ResponseData>(Request.Method.POST,
+                ON_SET_INFO_USER,
+                ResponseData.class,
+                headers,
+                listener,
+                listener) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", infoUser.getName());
+                map.put("age_avg", infoUser.getAvg());
+                map.put("img_url", infoUser.getAvatar());
+                map.put("email", infoUser.getEmail());
+                map.put("sex", infoUser.getSex());
+                map.put("old_pass ", Constants.EMPTY_STRING);
+                map.put("new_pass", Constants.EMPTY_STRING);
+                return map;
             }
         };
     }

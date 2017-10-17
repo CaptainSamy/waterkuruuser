@@ -4,15 +4,20 @@ import android.content.Context;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+
+import java.io.File;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.ResponseData;
+import jp.co.wssj.iungo.utils.AmazonS3Utils;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
@@ -78,6 +83,27 @@ public class AuthModel extends BaseModel {
         void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response);
 
         void onCheckVersionAppFailure();
+    }
+
+    public interface IOnGetInfoUserCallback {
+
+        void onGetInfoUserSuccess(InfoUserResponse.InfoUser infoUser);
+
+        void onGetInfoUserFailure(String message);
+    }
+
+    public interface IOnUpdateInfoUserCallback {
+
+        void onOnUpdateInfoUserSuccess();
+
+        void onOnUpdateInfoUserFailure(String message);
+    }
+
+    public interface IOnUploadImage {
+
+        void onSuccess();
+
+        void onFailure();
     }
 
     private static final String TAG = "AuthModel";
@@ -411,6 +437,95 @@ public class AuthModel extends BaseModel {
             }
         });
         VolleySequence.getInstance().addRequest(requestCheckVersionApp);
+    }
+
+    public void onGetInfoUser(String token, final IOnGetInfoUserCallback callback) {
+        Request resetPassword = APICreator.onGetInfoUser(token, new Response.Listener<InfoUserResponse>() {
+
+            @Override
+            public void onResponse(InfoUserResponse response) {
+                Logger.d(TAG, "#onGetInfoUser => onErrorResponse");
+                if (response != null && response.isSuccess()) {
+                    callback.onGetInfoUserSuccess(response.getData());
+                } else {
+                    callback.onGetInfoUserFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.d(TAG, "#onGetInfoUser => onErrorResponse");
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onGetInfoUserFailure(errorResponse.getMessage());
+                } else {
+                    callback.onGetInfoUserFailure(getStringResource(R.string.network_error));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(resetPassword);
+    }
+
+    public void uploadImageUser(String url, final InfoUserResponse.InfoUser infoUser, final IOnUploadImage uploadImage) {
+        File file = new File(url);
+        if (file.exists()) {
+            final String fileName = Utils.getFileName(url);
+            AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
+
+                @Override
+                public void onStateChanged(int id, TransferState state) {
+                    if (state == TransferState.COMPLETED) {
+                        infoUser.setAvatar(AmazonS3Utils.BASE_IMAGE_URL + fileName);
+                        uploadImage.onSuccess();
+                    }
+                }
+
+                @Override
+                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                    Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
+                }
+
+                @Override
+                public void onError(int id, Exception ex) {
+                    Logger.d(TAG, "#onError " + ex);
+                    infoUser.setAvatar(Constants.EMPTY_STRING);
+                    uploadImage.onFailure();
+
+                }
+            });
+        } else {
+            uploadImage.onSuccess();
+        }
+
+    }
+
+    public void onUpdateInfoUser(String token, InfoUserResponse.InfoUser infoUser, final IOnUpdateInfoUserCallback callback) {
+        Request resetPassword = APICreator.onUpdateInfoUser(token, infoUser, new Response.Listener<ResponseData>() {
+
+            @Override
+            public void onResponse(ResponseData response) {
+                Logger.d(TAG, "#onUpdateInfoUser => onErrorResponse");
+                if (response != null && response.isSuccess()) {
+                    callback.onOnUpdateInfoUserSuccess();
+                } else {
+                    callback.onOnUpdateInfoUserFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.d(TAG, "#onUpdateInfoUser => onErrorResponse");
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onOnUpdateInfoUserFailure(errorResponse.getMessage());
+                } else {
+                    callback.onOnUpdateInfoUserFailure(getStringResource(R.string.network_error));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(resetPassword);
     }
 
     private boolean isEmailValid(CharSequence email) {

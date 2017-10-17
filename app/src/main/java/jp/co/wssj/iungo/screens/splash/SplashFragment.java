@@ -1,5 +1,6 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
@@ -101,4 +102,8 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     }
 
+    @Override
+    public void displayScreen(int fragmentId, Bundle bundle) {
+        getActivityCallback().displayScreen(fragmentId, true, false, bundle);
+    }
 }

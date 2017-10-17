@@ -67,9 +67,9 @@ public class PushNotificationAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.fillDataToView(mContext, getItem(position));
-        if (position == (getCount() - 1) && mCallback != null && mIsAllowOnLoadMore) {
-            mCallback.onEndOfListView();
-        }
+//        if (position == (getCount() - 1) && mCallback != null && mIsAllowOnLoadMore) {
+//            mCallback.onEndOfListView();
+//        }
         return convertView;
     }
 

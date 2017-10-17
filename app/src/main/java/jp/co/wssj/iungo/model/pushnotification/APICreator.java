@@ -36,15 +36,14 @@ public class APICreator {
 
     private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-code-to-survey";
 
-    static GsonRequest<ListNotificationResponse> getListNotification(final String token, int page, int limit,
+    static GsonRequest<ListNotificationResponse> getListNotification(final String token, final long pushId,
                                                                      final Response.Listener<ListNotificationResponse> listener,
                                                                      final Response.ErrorListener errorListener) {
-        String url = API_GET_LIST_NOTIFICATION + "?page=" + page + "&limit=" + limit;
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
-        return new GsonRequest<ListNotificationResponse>(Request.Method.GET,
-                url,
+        return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
+                API_GET_LIST_NOTIFICATION,
                 ListNotificationResponse.class,
                 headers,
                 new Response.Listener<ListNotificationResponse>() {
@@ -68,6 +67,12 @@ public class APICreator {
                     }
                 }) {
 
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("push_id", pushId);
+                return map;
+            }
         };
     }
 

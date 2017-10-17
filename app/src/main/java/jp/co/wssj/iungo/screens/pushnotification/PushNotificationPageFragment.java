@@ -1,11 +1,11 @@
 package jp.co.wssj.iungo.screens.pushnotification;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
 import com.flyco.tablayout.SegmentTabLayout;
-import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 
 import jp.co.wssj.iungo.R;
@@ -31,6 +31,21 @@ public class PushNotificationPageFragment extends PagedFragment<IPushNotificatio
         PushNotificationPageFragment fragment = new PushNotificationPageFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public int getNavigationBottomId() {
+        return R.id.navigation_stamp;
+    }
+
+    @Override
+    public String getAppBarTitle() {
+        return getString(R.string.title_push_notification_list);
+    }
+
+    @Override
+    public String getPageTitle(Context context) {
+        return getString(context, R.string.title_push_notification_list);
     }
 
     @Override

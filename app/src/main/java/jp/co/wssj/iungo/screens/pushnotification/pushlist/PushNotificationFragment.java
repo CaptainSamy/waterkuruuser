@@ -23,7 +23,6 @@ import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
-import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -49,6 +48,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private boolean isExpandedSearchView;
 
+    private long mPushId;
+
     DBManager mDatabase = DBManager.getInstance();
 
     @Override
@@ -69,6 +70,11 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     public String getAppBarTitle() {
         return getString(R.string.title_push_notification_list);
+    }
+
+    @Override
+    public boolean isGlobal() {
+        return false;
     }
 
     @Override
@@ -123,14 +129,24 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         Bundle bundle = getArguments();
         int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
         mListNotification.addAll(mDatabase.getListPush(type, 0));
-        if (mListNotification.size() == 0) {
-            mRefreshLayout.setRefreshing(true);
-            getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
-        } else {
-            int page = mListNotification.size() / Constants.LIMIT;
-            mPage = page == 0 ? 1 : page;
-            mAdapter.setListPushTemp(mListNotification);
+        switch (type) {
+            case PushNotificationPageAdapter.TYPE_ALL_PUSH:
+                if (mListNotification.size() == 0) {
+                    mRefreshLayout.setRefreshing(true);
+                    getPresenter().getListPushNotification(mPushId);
+                } else {
+                    mPushId = mListNotification.get(0).getPushId();
+                    getPresenter().getListPushNotification(mPushId);
+                }
+                break;
+            case PushNotificationPageAdapter.TYPE_LIKED_PUSH:
+                mAdapter.setIsAllowOnLoadMore(false);
+                break;
+            case PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH:
+                mAdapter.setIsAllowOnLoadMore(false);
+                break;
         }
+        mAdapter.setListPushTemp(mListNotification);
         mListView.setAdapter(mAdapter);
     }
 
@@ -169,7 +185,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 }
                 return false;
             }
-
         });
         mInputSearch.setOnCloseListener(new SearchView.OnCloseListener() {
 
@@ -192,22 +207,22 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         });
 
 
-        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-
-            @Override
-            public void onEndOfListView() {
-
-                Logger.d(TAG, "page : " + mPage + " totalPage " + mTotalPage);
-                if (mTotalPage != 0) {
-                    if (mPage < mTotalPage) {
-                        mRefreshLayout.setRefreshing(true);
-                        getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
-                    }
-                } else {
-                    getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
-                }
-            }
-        });
+//        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+//
+//            @Override
+//            public void onEndOfListView() {
+//
+//                Logger.d(TAG, "page : " + mPage + " totalPage " + mTotalPage);
+//                if (mTotalPage != 0) {
+//                    if (mPage < mTotalPage) {
+//                        mRefreshLayout.setRefreshing(true);
+//                        getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
+//                    }
+//                } else {
+//                    getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
+//                }
+//            }
+//        });
     }
 
     private void statusSearchView(boolean hasFocus) {
@@ -269,8 +284,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 }
             }
         } else {
-            mListView.setVisibility(View.GONE);
-            mTextNoItem.setVisibility(View.VISIBLE);
+            if (mListNotification != null && mListNotification.size() == 0) {
+                mListView.setVisibility(View.GONE);
+                mTextNoItem.setVisibility(View.VISIBLE);
+            }
         }
     }
 

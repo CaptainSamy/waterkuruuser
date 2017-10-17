@@ -42,7 +42,7 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
 
     private static final String TAG = "RegisterAccountFragment";
 
-    private String[] mArrayAge = {"１０代", "２０代", "３０代", "４０代", "５０代", "６０代"};
+    private String[] mArrayAge = Constants.mArrayAge;
 
     private EditText mInputUserName, mInputUserId, mInputPassword, mInputConfirmPassword, mInputEmail;
 
@@ -117,13 +117,11 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
         mInputEmail = (EditText) rootView.findViewById(R.id.etEmail);
         mTextRegisterAccount = (TextView) rootView.findViewById(R.id.tvRegisterAccount);
         mTermOfService = (TextView) rootView.findViewById(R.id.tvTermOfService);
-
         mTextUserNameError = (TextView) rootView.findViewById(R.id.tvUserNameError);
         mTextUserIdError = (TextView) rootView.findViewById(R.id.tvUserIdError);
         mTextEmailError = (TextView) rootView.findViewById(R.id.tvEmailError);
         mTextPasswordError = (TextView) rootView.findViewById(R.id.tvPasswordError);
         mTextConfirmPasswordError = (TextView) rootView.findViewById(R.id.tvConfirmPasswordError);
-
         mSpinnerAge = (Spinner) rootView.findViewById(R.id.spAge);
         mRadioGroupSex = (RadioGroup) rootView.findViewById(R.id.radioGroupSex);
         mRadioMale = (RadioButton) rootView.findViewById(R.id.radioMale);

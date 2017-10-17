@@ -66,6 +66,8 @@ public final class Constants {
 
     public static final String KEY_SPLIT_FRAME_VIDEO = "|";
 
+    public static final String[] mArrayAge = {"１０代", "２０代", "３０代", "４０代", "５０代", "６０代"};
+
     private Constants() {
     }
 
