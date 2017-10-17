@@ -260,23 +260,14 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
                 }
                 break;
             case R.id.buttonChangePassword:
-                String currentPassword = mInputCurrentPassword.getText().toString().trim();
-                String newPassword = mInputNewPassword.getText().toString().trim();
-                String confirmPassword = mInputConfirmPassword.getText().toString().trim();
+//                String currentPassword = mInputCurrentPassword.getText().toString().trim();
+//                String newPassword = mInputNewPassword.getText().toString().trim();
+//                String confirmPassword = mInputConfirmPassword.getText().toString().trim();
                 mInfoUser.setAvg(mAgeChoose * Constants.Register.MIN_AGE);
                 mInfoUser.setEmail(mInputEmail.getText().toString().trim());
                 mInfoUser.setSex(mSex);
                 mInfoUser.setName(mInputUserName.getText().toString().trim());
-                String newAvatar = mInfoUser.getNewAvatar();
-                if (!TextUtils.isEmpty(newAvatar)) {
-                    if (TextUtils.equals(mInfoUser.getNewAvatar(), mInfoUser.getAvatar())) {
-                        getPresenter().onUploadImage(newAvatar, mInfoUser);
-                    } else {
-                        getPresenter().onUpdateInfoUser(mInfoUser);
-                    }
-                } else {
-                    getPresenter().onUpdateInfoUser(mInfoUser);
-                }
+                getPresenter().onUploadImage(mInfoUser);
 //                getPresenter().onChangePasswordClicked(currentPassword, newPassword, confirmPassword);
                 break;
             case R.id.ivAvatar:
@@ -317,7 +308,8 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         Logger.d(TAG, "#onRequestPermissionsResult");
         boolean isRequestPicker = requestCode == REQUEST_CODE_PICKER_PHOTO_1;
         boolean isRequestCamera = requestCode == REQUEST_CODE_CAMERA_PHOTO_1;
@@ -366,7 +358,7 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
     private void handleCroppedImage(Uri imageUri, int requestCode) {
 
         String pathAvatar = imageUri.getPath();
-        mInfoUser.setNewAvatar(pathAvatar);
+        mInfoUser.setAvatar(pathAvatar);
         if (!TextUtils.isEmpty(pathAvatar)) {
             fillImage(pathAvatar);
         }
@@ -479,7 +471,7 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
 
     @Override
     public void onDeleteClicked(int imageCode) {
-        mInfoUser.setNewAvatar(Constants.EMPTY_STRING);
+        mInfoUser.setAvatar(Constants.EMPTY_STRING);
         mImageAvatar.setImageDrawable(ContextCompat.getDrawable(getActivityContext(), R.drawable.ic_add_image));
         mImageAvatar.setTag(R.id.shared_drawable, null);
 

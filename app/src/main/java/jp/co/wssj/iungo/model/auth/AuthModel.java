@@ -467,33 +467,38 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequest(resetPassword);
     }
 
-    public void uploadImageUser(String url, final InfoUserResponse.InfoUser infoUser, final IOnUploadImage uploadImage) {
-        File file = new File(url);
-        if (file.exists()) {
-            final String fileName = Utils.getFileName(url);
-            AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
+    public void uploadImageUser(final InfoUserResponse.InfoUser infoUser, final IOnUploadImage uploadImage) {
+        String url = infoUser.getAvatar();
+        if (!TextUtils.isEmpty(url)) {
+            File file = new File(url);
+            if (file.exists()) {
+                final String fileName = Utils.getFileName(url);
+                AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
 
-                @Override
-                public void onStateChanged(int id, TransferState state) {
-                    if (state == TransferState.COMPLETED) {
-                        infoUser.setAvatar(AmazonS3Utils.BASE_IMAGE_URL + fileName);
-                        uploadImage.onSuccess();
+                    @Override
+                    public void onStateChanged(int id, TransferState state) {
+                        if (state == TransferState.COMPLETED) {
+                            infoUser.setAvatar(AmazonS3Utils.BASE_IMAGE_URL + fileName);
+                            uploadImage.onSuccess();
+                        }
                     }
-                }
 
-                @Override
-                public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                    Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
-                }
+                    @Override
+                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                        Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
+                    }
 
-                @Override
-                public void onError(int id, Exception ex) {
-                    Logger.d(TAG, "#onError " + ex);
-                    infoUser.setAvatar(Constants.EMPTY_STRING);
-                    uploadImage.onFailure();
+                    @Override
+                    public void onError(int id, Exception ex) {
+                        Logger.d(TAG, "#onError " + ex);
+                        infoUser.setAvatar(Constants.EMPTY_STRING);
+                        uploadImage.onFailure();
 
-                }
-            });
+                    }
+                });
+            } else {
+                uploadImage.onSuccess();
+            }
         } else {
             uploadImage.onSuccess();
         }

@@ -106,8 +106,8 @@ class ChangePasswordPresenter extends FragmentPresenter<IChangePasswordView> {
         });
     }
 
-    public void onUploadImage(String url, final InfoUserResponse.InfoUser infoUser) {
-        getAuth().uploadImageUser(url, infoUser, new AuthModel.IOnUploadImage() {
+    public void onUploadImage(final InfoUserResponse.InfoUser infoUser) {
+        getAuth().uploadImageUser(infoUser, new AuthModel.IOnUploadImage() {
 
             @Override
             public void onSuccess() {

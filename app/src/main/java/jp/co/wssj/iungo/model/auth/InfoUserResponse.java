@@ -28,8 +28,6 @@ public class InfoUserResponse extends ResponseData<InfoUserResponse.InfoUser> {
         @SerializedName("sex")
         private int mSex;
 
-        private String mNewAvatar;
-
         public int getAvg() {
             return mAvg;
         }
@@ -68,14 +66,6 @@ public class InfoUserResponse extends ResponseData<InfoUserResponse.InfoUser> {
 
         public void setSex(int mSex) {
             this.mSex = mSex;
-        }
-
-        public String getNewAvatar() {
-            return mNewAvatar;
-        }
-
-        public void setNewAvatar(String mNewAvatar) {
-            this.mNewAvatar = mNewAvatar;
         }
     }
 
