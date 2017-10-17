@@ -3,23 +3,24 @@
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground_Actionbar"
     android:orientation="vertical">
 
-    <com.flyco.tablayout.CommonTabLayout
+    <com.flyco.tablayout.SegmentTabLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="38dp"
         android:background="@color/colorBackground_Actionbar"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        tl:tl_iconVisible="false"
-        tl:tl_indicator_color="@color/colorPrimary"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="4dp"
+        tl:tl_bar_color="@color/colorBackground_Actionbar"
         tl:tl_textUnselectColor="@color/colorPrimary"
         tl:tl_textSelectColor="@color/white"
-        tl:tl_indicator_margin_left="5dp"
-        tl:tl_indicator_margin_right="5dp"
-        tl:tl_indicator_style="BLOCK"
-        tl:tl_textsize="14sp"/>
+        tl:tl_indicator_color="@color/colorPrimary"
+        tl:tl_indicator_corner_radius="8dp"
+        tl:tl_tab_padding="20dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/push_pager"

@@ -23,38 +23,19 @@ public class PushNotificationPageFragment extends BaseFragment<IPushNotification
     private ViewPager mViewPager;
     private PushNotificationPageAdapter mAdapter;
     private String[] mTitles = {"すべて", "お気に入り", "アンケート"};
-    private CommonTabLayout mTabLayout;
-    private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
+    private SegmentTabLayout mTabLayout;
 
     @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
         mViewPager = (ViewPager) rootView.findViewById(R.id.push_pager);
-        mTabLayout = (CommonTabLayout) rootView.findViewById(R.id.tablayout);
+        mTabLayout = (SegmentTabLayout) rootView.findViewById(R.id.tablayout);
     }
 
     @Override
     protected void initData() {
         mAdapter = new PushNotificationPageAdapter(getChildFragmentManager(), getActivityContext());
-        for (final String title : mTitles) {
-            mTabEntities.add(new CustomTabEntity() {
-                @Override
-                public String getTabTitle() {
-                    return title;
-                }
-
-                @Override
-                public int getTabSelectedIcon() {
-                    return 0;
-                }
-
-                @Override
-                public int getTabUnselectedIcon() {
-                    return 0;
-                }
-            });
-        }
-        mTabLayout.setTabData(mTabEntities);
+        mTabLayout.setTabData(mTitles);
         mViewPager.setAdapter(mAdapter);
     }
 
