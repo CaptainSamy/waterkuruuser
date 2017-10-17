@@ -122,7 +122,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         mRefreshLayout.setEnabled(false);
         Bundle bundle = getArguments();
         int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
-        mListNotification.addAll(mDatabase.getListPush(type));
+        mListNotification.addAll(mDatabase.getListPush(type, 0));
         if (mListNotification.size() == 0) {
             mRefreshLayout.setRefreshing(true);
             getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);

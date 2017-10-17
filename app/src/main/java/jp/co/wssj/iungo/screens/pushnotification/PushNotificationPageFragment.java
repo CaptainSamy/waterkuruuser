@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.flyco.tablayout.CommonTabLayout;
+import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
-
-import java.util.ArrayList;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
@@ -27,9 +25,7 @@ public class PushNotificationPageFragment extends PagedFragment<IPushNotificatio
 
     private String[] mTitles = {"すべて", "お気に入り", "アンケート"};
 
-    private CommonTabLayout mTabLayout;
-
-    private ArrayList<CustomTabEntity> mTabEntities = new ArrayList<>();
+    private SegmentTabLayout mTabLayout;
 
     public static PushNotificationPageFragment newInstance(Bundle args) {
         PushNotificationPageFragment fragment = new PushNotificationPageFragment();
@@ -66,7 +62,7 @@ public class PushNotificationPageFragment extends PagedFragment<IPushNotificatio
     protected void initViews(View rootView) {
         super.initViews(rootView);
         mViewPager = (ViewPager) rootView.findViewById(R.id.push_pager);
-        mTabLayout = (CommonTabLayout) rootView.findViewById(R.id.tablayout);
+        mTabLayout = (SegmentTabLayout) rootView.findViewById(R.id.tablayout);
     }
 
     @Override
@@ -75,30 +71,8 @@ public class PushNotificationPageFragment extends PagedFragment<IPushNotificatio
         if (getArguments() != null) {
             serviceCompanyId = getArguments().getInt(Constants.KEY_SERVICE_COMPANY_ID, 0);
         }
-
         mAdapter = new PushNotificationPageAdapter(getChildFragmentManager(), getActivityContext(), serviceCompanyId);
-        if (mTabEntities.size() == 0) {
-            for (final String title : mTitles) {
-                mTabEntities.add(new CustomTabEntity() {
-
-                    @Override
-                    public String getTabTitle() {
-                        return title;
-                    }
-
-                    @Override
-                    public int getTabSelectedIcon() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getTabUnselectedIcon() {
-                        return 0;
-                    }
-                });
-            }
-        }
-        mTabLayout.setTabData(mTabEntities);
+        mTabLayout.setTabData(mTitles);
         mViewPager.setAdapter(mAdapter);
     }
 

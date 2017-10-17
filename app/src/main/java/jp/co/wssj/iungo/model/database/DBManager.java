@@ -71,7 +71,7 @@ public class DBManager {
         }
     }
 
-    public void insertPushStoreAnnounce(List<NotificationMessage> listPush) {
+    public void insertPushStoreAnnounce(List<NotificationMessage> listPush, int serviceCompanyId) {
         if (listPush != null && listPush.size() > 0) {
             for (NotificationMessage notificationMessage : listPush) {
                 if (!isExitsPush(notificationMessage.getPushId())) {
@@ -83,7 +83,7 @@ public class DBManager {
                     values.put(DatabaseContract.PushNotification.COLUMN_ACTION_PUSH, notificationMessage.getAction());
                     values.put(DatabaseContract.PushNotification.COLUMN_IMAGE_STORE, notificationMessage.getLogo());
                     values.put(DatabaseContract.PushNotification.COLUMN_LIKE, notificationMessage.isLike());
-                    values.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, 1);
+                    values.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, serviceCompanyId);
                     values.put(DatabaseContract.PushNotification.COLUMN_STATUS_READ, notificationMessage.getStatusRead());
                     mDatabaseWrite.insert(DatabaseContract.PushNotification.TABLE_NAME, null, values);
                 } else {
@@ -127,7 +127,7 @@ public class DBManager {
         return listPush;
     }
 
-    public List<NotificationMessage> getListPush(int type) {
+    public List<NotificationMessage> getListPush(int type, int serviceCompanyId) {
         List<NotificationMessage> listPush = new ArrayList<>();
         String sqlGetListPush;
         if (type == PushNotificationPageAdapter.TYPE_LIKED_PUSH) {
@@ -135,7 +135,7 @@ public class DBManager {
         } else if (type == PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " = '" + Constants.PushNotification.TYPE_QUESTION_NAIRE + "'";
         } else if (type == PushNotificationPageAdapter.TYPE_PUSH_ANNOUNCE) {
-            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE + " = 1";
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE + " = " + serviceCompanyId;
         } else {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME;
         }

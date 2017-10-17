@@ -96,6 +96,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     protected void initViews(View rootView) {
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+        mRefreshLayout.setEnabled(false);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
@@ -111,7 +112,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         if (bundle != null) {
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH, 0);
-            mListNotification.addAll(mDatabase.getListPush(type));
+            mListNotification.addAll(mDatabase.getListPush(type, mServiceCompanyId));
             if (mListNotification.size() == 0) {
                 mRefreshLayout.setRefreshing(true);
                 getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
@@ -209,7 +210,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     @Override
     public void onRefresh() {
-        getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
+//        getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
     }
 
     public void hideSwipeRefreshLayout() {
@@ -227,7 +228,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
             mListNotification.addAll(list);
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
-            mDatabase.insertPushStoreAnnounce(list);
+            mDatabase.insertPushStoreAnnounce(list, mServiceCompanyId);
         }
 
 
