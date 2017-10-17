@@ -82,6 +82,7 @@ public class APICreator {
                 url,
                 ListNotificationResponse.class,
                 headers,
+                Constants.TIME_OUT_CUSTOM,
                 new Response.Listener<ListNotificationResponse>() {
 
                     @Override

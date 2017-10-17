@@ -52,7 +52,6 @@ import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
-import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationListFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
@@ -430,7 +429,7 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(new TermOfServiceNoMenuBottom(), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_PUSH_NOTIFICATION_LIST:
-                replaceFragment(new PushNotificationPageFragment(), hasAnimation, addToBackStack);
+                replaceFragment(PushNotificationPageFragment.newInstance(bundle), hasAnimation, addToBackStack);
                 break;
             case FRAGMENT_PUSH_NOTIFICATION_DETAIL:
                 replaceFragment(PushNotificationDetailFragment.newInstance(bundle), hasAnimation, addToBackStack);

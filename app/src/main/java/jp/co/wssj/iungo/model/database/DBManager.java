@@ -63,11 +63,42 @@ public class DBManager {
                     values.put(DatabaseContract.PushNotification.COLUMN_ACTION_PUSH, notificationMessage.getAction());
                     values.put(DatabaseContract.PushNotification.COLUMN_IMAGE_STORE, notificationMessage.getLogo());
                     values.put(DatabaseContract.PushNotification.COLUMN_LIKE, notificationMessage.isLike());
+                    values.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, notificationMessage.getStoreAnnounce());
                     values.put(DatabaseContract.PushNotification.COLUMN_STATUS_READ, notificationMessage.getStatusRead());
                     mDatabaseWrite.insert(DatabaseContract.PushNotification.TABLE_NAME, null, values);
                 }
             }
         }
+    }
+
+    public void insertPushStoreAnnounce(List<NotificationMessage> listPush) {
+        if (listPush != null && listPush.size() > 0) {
+            for (NotificationMessage notificationMessage : listPush) {
+                if (!isExitsPush(notificationMessage.getPushId())) {
+                    ContentValues values = new ContentValues();
+                    values.put(DatabaseContract.PushNotification.COLUMN_PUSH_ID, notificationMessage.getPushId());
+                    values.put(DatabaseContract.PushNotification.COLUMN_PUSH_TIME, notificationMessage.getPushTime());
+                    values.put(DatabaseContract.PushNotification.COLUMN_TITLE_PUSH, notificationMessage.getTitle());
+                    values.put(DatabaseContract.PushNotification.COLUMN_CONTENT_PUSH, notificationMessage.getMessage());
+                    values.put(DatabaseContract.PushNotification.COLUMN_ACTION_PUSH, notificationMessage.getAction());
+                    values.put(DatabaseContract.PushNotification.COLUMN_IMAGE_STORE, notificationMessage.getLogo());
+                    values.put(DatabaseContract.PushNotification.COLUMN_LIKE, notificationMessage.isLike());
+                    values.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, 1);
+                    values.put(DatabaseContract.PushNotification.COLUMN_STATUS_READ, notificationMessage.getStatusRead());
+                    mDatabaseWrite.insert(DatabaseContract.PushNotification.TABLE_NAME, null, values);
+                } else {
+                    updateStoreAnnounce(notificationMessage.getPushId());
+                }
+            }
+        }
+    }
+
+    public void updateStoreAnnounce(long pushId) {
+        String selection = DatabaseContract.PushNotification.COLUMN_PUSH_ID + " = ? ";
+        String selectionArgs[] = new String[]{String.valueOf(pushId)};
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, 1);
+        mDatabaseRead.update(DatabaseContract.PushNotification.TABLE_NAME, contentValues, selection, selectionArgs);
     }
 
     public List<NotificationMessage> searchListPush(String keySearch) {
@@ -81,12 +112,13 @@ public class DBManager {
             while (cursorSearchPush.moveToFirst()) {
                 NotificationMessage notificationMessage = new NotificationMessage();
                 notificationMessage.setPushId(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_PUSH_ID)));
-                notificationMessage.setPushTime(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_PUSH_TIME)));
+                notificationMessage.setPushTime(cursorSearchPush.getLong(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_PUSH_TIME)));
                 notificationMessage.setTitle(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_TITLE_PUSH)));
                 notificationMessage.setMessage(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_CONTENT_PUSH)));
                 notificationMessage.setAction(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_ACTION_PUSH)));
                 notificationMessage.setLogo(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_IMAGE_STORE)));
                 notificationMessage.setIsLike(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_LIKE)));
+                notificationMessage.setStoreAnnounce(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE)));
                 notificationMessage.setmStatusRead(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_STATUS_READ)));
                 listPush.add(notificationMessage);
             }
@@ -97,11 +129,13 @@ public class DBManager {
 
     public List<NotificationMessage> getListPush(int type) {
         List<NotificationMessage> listPush = new ArrayList<>();
-        String sqlGetListPush = null;
+        String sqlGetListPush;
         if (type == PushNotificationPageAdapter.TYPE_LIKED_PUSH) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_LIKE + " = 1";
-        } else if (type == PushNotificationPageAdapter.TYPE_QUESTIONAIRE_PUSH) {
-            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " = '" + Constants.PushNotification.TYPE_QUESTION_NAIRE+"'";
+        } else if (type == PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH) {
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " = '" + Constants.PushNotification.TYPE_QUESTION_NAIRE + "'";
+        } else if (type == PushNotificationPageAdapter.TYPE_PUSH_ANNOUNCE) {
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE + " = 1";
         } else {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME;
         }
@@ -109,12 +143,13 @@ public class DBManager {
         while (cursorSearchPush.moveToNext()) {
             NotificationMessage notificationMessage = new NotificationMessage();
             notificationMessage.setPushId(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_PUSH_ID)));
-            notificationMessage.setPushTime(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_PUSH_TIME)));
+            notificationMessage.setPushTime(cursorSearchPush.getLong(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_PUSH_TIME)));
             notificationMessage.setTitle(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_TITLE_PUSH)));
             notificationMessage.setMessage(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_CONTENT_PUSH)));
             notificationMessage.setAction(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_ACTION_PUSH)));
             notificationMessage.setLogo(cursorSearchPush.getString(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_IMAGE_STORE)));
             notificationMessage.setIsLike(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_LIKE)));
+            notificationMessage.setStoreAnnounce(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE)));
             notificationMessage.setmStatusRead(cursorSearchPush.getInt(cursorSearchPush.getColumnIndex(DatabaseContract.PushNotification.COLUMN_STATUS_READ)));
             listPush.add(notificationMessage);
         }
@@ -122,7 +157,6 @@ public class DBManager {
         Collections.reverse(listPush);
         return listPush;
     }
-
 
     public boolean isExitsPush(long pushId) {
         String columnSelection[] = new String[]{DatabaseContract.PushNotification.COLUMN_PUSH_ID};

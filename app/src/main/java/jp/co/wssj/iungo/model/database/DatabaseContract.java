@@ -26,6 +26,8 @@ public final class DatabaseContract {
 
         public static final String COLUMN_STATUS_READ = "status_read";
 
+        public static final String COLUMN_STORE_ANNOUNCE = "store_announce";
+
         public static final String COLUMN_LIKE = "like";
 
     }

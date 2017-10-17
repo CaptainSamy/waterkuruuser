@@ -28,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " VARCHAR, "
                 + DatabaseContract.PushNotification.COLUMN_IMAGE_STORE + " VARCHAR, "
                 + DatabaseContract.PushNotification.COLUMN_LIKE + " INTEGER, "
+                + DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE + " INTEGER, "
                 + DatabaseContract.PushNotification.COLUMN_STATUS_READ + " INTEGER) ");
     }
 

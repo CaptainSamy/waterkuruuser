@@ -13,6 +13,8 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCompanyResponse;
 import jp.co.wssj.iungo.screens.IMainView;
+import jp.co.wssj.iungo.screens.base.IWrapperFragment;
+import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
 import jp.co.wssj.iungo.screens.base.PagedFragment;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
 import jp.co.wssj.iungo.screens.listservicecompany.adapter.ServicesCompanyAdapter;
@@ -25,7 +27,8 @@ import jp.co.wssj.iungo.utils.Logger;
  */
 
 public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompanyView, ListServiceCompanyPresenter>
-        implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener, PagedFragment.IOnPageSelectChangeListener {
+        implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener,
+        AdapterView.OnItemClickListener, PagedFragment.IOnPageSelectChangeListener, IWrapperFragmentController {
 
     private static final String TAG = "ListServiceCompanyFragment";
 
@@ -36,6 +39,8 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     private ServicesCompanyAdapter mAdapter;
 
     private List<ListCompanyResponse.ListCompanyData.CompanyData> mCardList;
+
+    private IWrapperFragment mWrapperFragment;
 
     @Override
     public String getPageTitle(Context context) {
@@ -115,7 +120,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
             bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, serviceName);
             fragmentId = IMainView.FRAGMENT_LIST_CARD;
         } else {
-            fragmentId = IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
+            fragmentId = IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST;
         }
         getActivityCallback().displayScreen(fragmentId, true, true, bundle);
     }
@@ -170,7 +175,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
                 bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, companyData.getServiceName());
                 fragmentId = IMainView.FRAGMENT_LIST_CARD;
             } else {
-                fragmentId = IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
+                fragmentId = IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST;
             }
             getActivityCallback().displayScreen(fragmentId, false, true, bundle);
         } else {
@@ -187,5 +192,10 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     @Override
     public void onPageUnselected() {
 
+    }
+
+    @Override
+    public void setWrapperFragment(IWrapperFragment fragment) {
+        mWrapperFragment = fragment;
     }
 }

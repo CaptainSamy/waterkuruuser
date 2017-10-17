@@ -15,13 +15,14 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
+import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationAdapter;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
+import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationAdapter;
 import jp.co.wssj.iungo.utils.Constants;
-import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -46,6 +47,10 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     private TextView mTextSearch;
 
     private boolean isExpandedSearchView;
+
+    DBManager mDatabase = DBManager.getInstance();
+
+    private int mPage, mTotalPage;
 
     public static PushNotificationForServiceCompanyFragment newInstance(Bundle args) {
         PushNotificationForServiceCompanyFragment fragment = new PushNotificationForServiceCompanyFragment();
@@ -95,6 +100,9 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
+        mInputSearch.clearFocus();
+        mListNotification = new ArrayList<>();
+        mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
     }
 
     @Override
@@ -102,20 +110,39 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         Bundle bundle = getArguments();
         if (bundle != null) {
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
-            if (mListNotification == null) {
-                mListNotification = new ArrayList<>();
-                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+            int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH, 0);
+            mListNotification.addAll(mDatabase.getListPush(type));
+            if (mListNotification.size() == 0) {
                 mRefreshLayout.setRefreshing(true);
                 getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
+            } else {
+                int page = mListNotification.size() / Constants.LIMIT;
+                mPage = page == 0 ? 1 : page;
+                mAdapter.setListPushTemp(mListNotification);
             }
             mListView.setAdapter(mAdapter);
         }
-
     }
 
     @Override
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
+        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+            @Override
+            public void onEndOfListView() {
+                if (mTotalPage != 0) {
+                    if (mPage < mTotalPage) {
+                        mRefreshLayout.setRefreshing(true);
+                        getPresenter().getListPushNotification(mServiceCompanyId, mPage + 1, Constants.LIMIT);
+                    }
+                } else {
+                    mRefreshLayout.setRefreshing(true);
+                    getPresenter().getListPushNotification(mServiceCompanyId, mPage + 1, Constants.LIMIT);
+                }
+            }
+        });
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -138,13 +165,11 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Logger.d(TAG, "onQueryTextSubmit");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Logger.d(TAG, "onQueryTextChange");
                 statusSearchView(true);
                 if (mAdapter != null) {
                     mAdapter.filter(newText);
@@ -157,7 +182,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
             @Override
             public boolean onClose() {
-                Logger.d(TAG, "setOnCloseListener");
                 mTextSearch.setVisibility(View.VISIBLE);
                 isExpandedSearchView = false;
                 return false;
@@ -167,7 +191,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Logger.d(TAG, "onFocusChange " + hasFocus);
                 if (hasFocus) {
                     isExpandedSearchView = hasFocus;
                 }
@@ -198,24 +221,14 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
+        mPage = page;
+        mTotalPage = totalPage;
         if (list != null) {
-            if (page == Constants.INIT_PAGE) {
-                mListNotification.clear();
-            }
             mListNotification.addAll(list);
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
+            mDatabase.insertPushStoreAnnounce(list);
         }
-        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-
-            @Override
-            public void onEndOfListView() {
-                if (page < totalPage) {
-                    mRefreshLayout.setRefreshing(true);
-                    getPresenter().getListPushNotification(mServiceCompanyId, page + 1, Constants.LIMIT);
-                }
-            }
-        });
 
 
     }

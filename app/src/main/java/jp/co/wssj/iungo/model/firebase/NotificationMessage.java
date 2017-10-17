@@ -50,6 +50,8 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("like")
     private int mIsLike;
 
+    private int mStoreAnnounce;
+
     public NotificationMessage() {
 
     }
@@ -142,5 +144,13 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     public int isLike() {
         return mIsLike;
+    }
+
+    public int getStoreAnnounce() {
+        return mStoreAnnounce;
+    }
+
+    public void setStoreAnnounce(int storeAnnounce) {
+        this.mStoreAnnounce = storeAnnounce;
     }
 }

@@ -7,4 +7,5 @@ package jp.co.wssj.iungo.screens.base;
 public interface IWrapperFragment {
 
     void displayScreen(PagedFragment fragment);
+
 }

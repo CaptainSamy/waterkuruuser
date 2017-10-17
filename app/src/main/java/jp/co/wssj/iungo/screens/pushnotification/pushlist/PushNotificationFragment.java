@@ -29,9 +29,9 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationListFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter> implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
+public class PushNotificationFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter> implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "PushNotificationListFragment";
+    private static final String TAG = "PushNotificationFragment";
 
     private SwipeRefreshLayout mRefreshLayout;
 
@@ -158,13 +158,11 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Logger.d(TAG, "onQueryTextSubmit");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Logger.d(TAG, "onQueryTextChange");
                 statusSearchView(true);
                 if (mAdapter != null) {
                     mAdapter.filter(newText);
@@ -177,7 +175,6 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
             @Override
             public boolean onClose() {
-                Logger.d(TAG, "setOnCloseListener");
                 mTextSearch.setVisibility(View.VISIBLE);
                 isExpandedSearchView = false;
                 return false;
@@ -187,7 +184,6 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Logger.d(TAG, "onFocusChange " + hasFocus);
                 if (hasFocus) {
                     isExpandedSearchView = hasFocus;
                 }
@@ -244,14 +240,11 @@ public class PushNotificationListFragment extends BaseFragment<IPushNotification
         if (list != null && list.size() > 0) {
             mListView.setVisibility(View.VISIBLE);
             mTextNoItem.setVisibility(View.GONE);
-//            if (page == Constants.INIT_PAGE) {
-//                mListNotification.clear();
-//            }
             Bundle bundle = getArguments();
             int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
             if (type == PushNotificationPageAdapter.TYPE_ALL_PUSH) {
                 mListNotification.addAll(list);
-            } else if (type == PushNotificationPageAdapter.TYPE_QUESTIONAIRE_PUSH) {
+            } else if (type == PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH) {
                 for (NotificationMessage item : list) {
                     if (Constants.PushNotification.TYPE_QUESTION_NAIRE.equals(item.getAction())) {
                         mListNotification.add(item);
