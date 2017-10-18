@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentBackStackManager mFragmentBackStackManager;
 
-    private TextView mTextNoItem;
-
     private DialogNotification mDialogNotification;
 
     private int mTotalNotificationUnRead;
@@ -142,7 +140,6 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setNavigationIcon(R.drawable.ic_back);
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
-        mTextNoItem = (TextView) findViewById(R.id.textNoItem);
         imageNotification = (ImageView) findViewById(R.id.iconTest);
     }
 
@@ -201,6 +198,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void endOfListView(int page, int limit) {
+                mDialogNotification.getRefreshLayout().setRefreshing(true);
                 mPresenter.getListPushNotificationUnRead(page, Constants.LIMIT);
             }
         });
@@ -216,11 +214,13 @@ public class MainActivity extends AppCompatActivity
                 mPresenter.setListPushUnRead(listPushId, Constants.STATUS_VIEW);
             }
         }
+        mDialogNotification.getRefreshLayout().setRefreshing(false);
 
     }
 
     @Override
     public void displayErrorMessage(String message) {
+        mDialogNotification.getRefreshLayout().setRefreshing(false);
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
@@ -537,7 +537,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
-        showTextNoItem(false, null);
         if (fragment != null) {
             if (fragment instanceof TimeLineFragment && isRequestFirstNotification) {
                 isRequestFirstNotification = false;
@@ -601,16 +600,6 @@ public class MainActivity extends AppCompatActivity
             if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId()) {
                 mFragmentBackStackManager.replaceFragment(fragment, sharedElement);
             }
-        }
-    }
-
-    @Override
-    public void showTextNoItem(boolean isShow, String content) {
-        if (isShow) {
-            mTextNoItem.setText(TextUtils.isEmpty(content) ? Constants.EMPTY_STRING : content);
-            mTextNoItem.setVisibility(View.VISIBLE);
-        } else {
-            mTextNoItem.setVisibility(View.GONE);
         }
     }
 

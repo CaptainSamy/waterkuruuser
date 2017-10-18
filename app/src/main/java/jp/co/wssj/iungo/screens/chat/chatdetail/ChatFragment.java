@@ -122,7 +122,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 0) {
+                if (s.toString().trim().length() == 0) {
                     mButtonSend.setEnabled(false);
                     mButtonSend.setImageDrawable(getResources().getDrawable(R.drawable.icon_send));
                 } else {
@@ -135,7 +135,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
             @Override
             public void onClick(View v) {
-                String content = mInputChat.getText().toString();
+                String content = mInputChat.getText().toString().trim();
                 if (!TextUtils.isEmpty(content)) {
                     mProgressSendChat.setVisibility(View.VISIBLE);
                     mButtonSend.setVisibility(View.GONE);

@@ -19,8 +19,17 @@
             android:stackFromBottom="true"
             android:transcriptMode="normal"/>
 
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/textNoItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/refreshHistoryChat"
+        android:layout_alignTop="@id/refreshHistoryChat"
+        android:gravity="center"
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/line"
@@ -33,9 +42,9 @@
         android:id="@+id/layoutInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/etChat"

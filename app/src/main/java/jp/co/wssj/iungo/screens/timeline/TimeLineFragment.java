@@ -121,6 +121,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     @Override
     public void onLoadMore(int pageNumber) {
         Logger.d(TAG, "onLoadMore " + pageNumber);
+        setRefresh(true);
         getPresenter().getTimeline(pageNumber);
     }
 

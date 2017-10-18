@@ -205,27 +205,47 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                 @Override
                 public void onItemClick(int likeId) {
-                    boolean isExitsLike = false;
-                    if (likeId != mTimeLine.getStatusLikeId()) {
-                        if (mTimeLine.getStatusLikeId() == 0) {
-                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
-                        } else {
-                            isExitsLike = true;
-                        }
-                        mTimeLine.setStatusLikeId(likeId);
+                    //Status like
+//                    boolean isExitsLike = false;
+//                    if (likeId != mTimeLine.getMyLikeId()) {
+//                        if (mTimeLine.getMyLikeId() == 0) {
+//                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
+//                        } else {
+//                            isExitsLike = true;
+//                        }
+//                        mTimeLine.setMyLikeId(likeId);
+//                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
+//                            if (likeId == like.getLikeId()) {
+//                                isExitsLike = true;
+//                                break;
+//                            }
+//                        }
+//                        if (!isExitsLike || mListLike.size() == 0) {
+//                            TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
+//                            mListLike.add(like);
+//                        }
+                    if (likeId != 0) {
+                        mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
+                        mTimeLine.setMyLikeId(likeId);
+                        boolean isExitsLike = false;
                         for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
                             if (likeId == like.getLikeId()) {
                                 isExitsLike = true;
+                                like.getListUserLike().add(mPresenter.getUserName());
+                                like.setCountLike(like.getCountLike() + 1);
                                 break;
                             }
                         }
-                        if (!isExitsLike || mListLike.size() == 0) {
+                        if (!isExitsLike) {
                             TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
+                            like.setCountLike(like.getCountLike() + 1);
+                            like.getListUserLike().add(mPresenter.getUserName());
                             mListLike.add(like);
                         }
-                        showIconLike();
-                        likeTimeline(mTimeLine.getId(), likeId, mTimeLine.getStatusLikeId(), 1);
+
                     }
+                    showIconLike();
+                    likeTimeline(mTimeLine.getId(), likeId, mTimeLine.getMyLikeId(), 1);
                 }
             });
         }
@@ -234,20 +254,34 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.layoutLike:
-                    if (mTimeLine.getStatusLikeId() == 0) {
+                    if (mTimeLine.getMyLikeId() == 0) {
                         if (mReactionFacebook.getVisibility() == View.VISIBLE) {
                             mReactionFacebook.dismiss();
                         } else {
                             mReactionFacebook.show();
                         }
                     } else {
+                        //status unlike
                         int typeLike = 0;
-                        int newLike = 0;
-                        likeTimeline(mTimeLine.getId(), newLike, mTimeLine.getStatusLikeId(), typeLike);
-                        mImageSmile.setImageDrawable(getIconLike(newLike));
-                        mTextLike.setText(getStringLike(newLike));
-                        mTimeLine.setStatusLikeId(newLike);
+                        int unLike = 0;
+                        likeTimeline(mTimeLine.getId(), unLike, mTimeLine.getMyLikeId(), typeLike);
+                        mImageSmile.setImageDrawable(getIconLike(unLike));
+                        mTextLike.setText(getStringLike(unLike));
                         mTimeLine.setNumberLike(mTimeLine.getNumberLike() - 1);
+                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
+                            if (mTimeLine.getMyLikeId() == like.getLikeId()) {
+                                if (like.getCountLike() == 1) {
+                                    mListLike.remove(like);
+                                } else {
+                                    if (like.getListUserLike() != null) {
+                                        like.getListUserLike().remove(mPresenter.getUserName());
+                                    }
+                                    like.setCountLike(like.getCountLike() - 1);
+                                }
+                                break;
+                            }
+                        }
+                        mTimeLine.setMyLikeId(unLike);
                         showIconLike();
                     }
                     break;
@@ -341,8 +375,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         }
 
         private void showIconLike() {
-            mImageSmile.setImageDrawable(getIconLike(mTimeLine.getStatusLikeId()));
-            mTextLike.setText(getStringLike(mTimeLine.getStatusLikeId()));
+            mImageSmile.setImageDrawable(getIconLike(mTimeLine.getMyLikeId()));
+            mTextLike.setText(getStringLike(mTimeLine.getMyLikeId()));
             if (mTimeLine.getNumberLike() == 0 && mTimeLine.getCommentNumber() == 0) {
                 mLayoutNumberLike.setVisibility(View.GONE);
             } else {
@@ -356,7 +390,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mNumberComment.setVisibility(View.GONE);
             }
             if (mListLike != null && mListLike.size() > 0) {
-                int myLike = mTimeLine.getStatusLikeId();
+                int myLike = mTimeLine.getMyLikeId();
                 if (mListLike.size() == 1) {
                     if (myLike == 0) {
                         mImage1.setImageDrawable(getIconLike(mListLike.get(0).getLikeId()));

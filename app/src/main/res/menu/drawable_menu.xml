@@ -24,7 +24,7 @@
         <item
             android:id="@id/menu_change_password"
             android:icon="@drawable/change_password"
-            android:title="@string/change_password"/>
+            android:title="@string/title_screen_change_password"/>
     </group>
 
     <group

@@ -3,6 +3,7 @@ package jp.co.wssj.iungo;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.SystemClock;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -25,6 +26,8 @@ import jp.co.wssj.iungo.widget.EasyDialog;
 public class DialogNotification {
 
     private TextView mTextNoItem;
+
+    private SwipeRefreshLayout mRefreshLayout;
 
     private ListView mListViewNotification;
 
@@ -62,6 +65,7 @@ public class DialogNotification {
 
     public void addListNotification(final int page, final int totalPage, List<NotificationMessage> list) {
         mListViewNotification = mEasyDialog.getListView();
+        mRefreshLayout = mEasyDialog.getRefreshLayout();
         mTextNoItem = mEasyDialog.getTextNoItem();
         if (mPushNotificationAdapter == null) {
             mListNotification = new ArrayList<>();
@@ -135,6 +139,10 @@ public class DialogNotification {
     public void show() {
         mEasyDialog.show();
         mPushNotificationAdapter.notifyDataSetChanged();
+    }
+
+    public SwipeRefreshLayout getRefreshLayout() {
+        return mRefreshLayout;
     }
 
     public void dismiss() {

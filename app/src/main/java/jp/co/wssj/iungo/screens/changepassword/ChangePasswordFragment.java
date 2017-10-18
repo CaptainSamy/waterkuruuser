@@ -92,6 +92,8 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
 
     private InfoUserResponse.InfoUser mInfoUser;
 
+    private String mPathAvatar;
+
     @Override
     public int getFragmentId() {
         return IMainView.FRAGMENT_CHANGE_PASSWORD;
@@ -140,7 +142,6 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
         mInputConfirmPassword = (EditText) rootView.findViewById(R.id.inputConfirmPassword);
         mButtonChangePassword = (TextView) rootView.findViewById(R.id.buttonChangePassword);
         mInputUserName = (EditText) rootView.findViewById(R.id.etUserName);
-        mInputConfirmPassword = (EditText) rootView.findViewById(R.id.etConfirmPassword);
         mInputEmail = (EditText) rootView.findViewById(R.id.etEmail);
         mSpinnerAge = (Spinner) rootView.findViewById(R.id.spAge);
         mRadioGroupSex = (RadioGroup) rootView.findViewById(R.id.radioGroupSex);
@@ -218,8 +219,9 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
                 mRadioFemale.setChecked(true);
             }
             mAgeChoose = infoUser.getAvg() / Constants.Register.MIN_AGE - 1;
+            mPathAvatar = infoUser.getAvatar();
             mSpinnerAge.setSelection(mAgeChoose);
-            fillImage(infoUser.getAvatar());
+            fillImage(mPathAvatar);
 
         }
     }
@@ -260,17 +262,30 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
                 } else {
                     mLayoutChangePassword.setVisibility(View.VISIBLE);
                 }
+                mInfoUser.setChangePassword(mLayoutChangePassword.isShown());
                 break;
             case R.id.buttonChangePassword:
-//                String currentPassword = mInputCurrentPassword.getText().toString().trim();
-//                String newPassword = mInputNewPassword.getText().toString().trim();
-//                String confirmPassword = mInputConfirmPassword.getText().toString().trim();
-                mInfoUser.setAvg(mAgeChoose * Constants.Register.MIN_AGE);
-                mInfoUser.setEmail(mInputEmail.getText().toString().trim());
-                mInfoUser.setSex(mSex);
-                mInfoUser.setName(mInputUserName.getText().toString().trim());
-                getPresenter().onUploadImage(mInfoUser);
-//                getPresenter().onChangePasswordClicked(currentPassword, newPassword, confirmPassword);
+                String nickName = mInputUserName.getText().toString().trim();
+                String email = mInputEmail.getText().toString().trim();
+                String currentPassword = mInputCurrentPassword.getText().toString().trim();
+                String newPassword = mInputNewPassword.getText().toString().trim();
+                String confirmPassword = mInputConfirmPassword.getText().toString().trim();
+
+                InfoUserResponse.InfoUser newInfoUser = new InfoUserResponse.InfoUser();
+                newInfoUser.setName(nickName);
+                newInfoUser.setEmail(email);
+                newInfoUser.setAvatar(mPathAvatar);
+                newInfoUser.setAvg(mAgeChoose * Constants.Register.MIN_AGE);
+                newInfoUser.setSex(mSex);
+                if (mInfoUser.isChangePassword()) {
+                    newInfoUser.setChangePassword(mInfoUser.isChangePassword());
+                    newInfoUser.setCurrentPassword(currentPassword);
+                    newInfoUser.setNewPassword(newPassword);
+                    newInfoUser.setConfirmPassword(confirmPassword);
+                }
+                if (isChangeData(newInfoUser) || newInfoUser.isChangePassword()) {
+                    getPresenter().validateInfoUser(newInfoUser);
+                }
                 break;
             case R.id.ivAvatar:
                 getPresenter().onImageViewClicked((Drawable) v.getTag(R.id.shared_drawable), REQUEST_CODE_PICKER_PHOTO_1, REQUEST_CODE_CAMERA_PHOTO_1);
@@ -278,9 +293,29 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
         }
     }
 
+    private boolean isChangeData(InfoUserResponse.InfoUser newInfoUser) {
+        boolean isChange = false;
+        if (!TextUtils.equals(newInfoUser.getName(), mInfoUser.getName())) {
+            isChange = true;
+        }
+        if (!TextUtils.equals(newInfoUser.getEmail(), mInfoUser.getEmail())) {
+            isChange = true;
+        }
+        if (!TextUtils.equals(newInfoUser.getAvatar(), mInfoUser.getAvatar())) {
+            isChange = true;
+        }
+        if (newInfoUser.getAvg() != mInfoUser.getAvg()) {
+            isChange = true;
+        }
+        if (newInfoUser.getSex() != mInfoUser.getSex()) {
+            isChange = true;
+        }
+        return isChange;
+    }
+
     @Override
     public void onOnUpdateInfoUserSuccess() {
-
+        showToast(getString(R.string.success));
     }
 
     @Override
@@ -358,11 +393,9 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
     }
 
     private void handleCroppedImage(Uri imageUri, int requestCode) {
-
-        String pathAvatar = imageUri.getPath();
-        mInfoUser.setAvatar(pathAvatar);
-        if (!TextUtils.isEmpty(pathAvatar)) {
-            fillImage(pathAvatar);
+        mPathAvatar = imageUri.getPath();
+        if (!TextUtils.isEmpty(mPathAvatar)) {
+            fillImage(mPathAvatar);
         }
     }
 
@@ -473,7 +506,7 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
 
     @Override
     public void onDeleteClicked(int imageCode) {
-        mInfoUser.setAvatar(Constants.EMPTY_STRING);
+        mPathAvatar = Constants.EMPTY_STRING;
         mImageAvatar.setImageDrawable(ContextCompat.getDrawable(getActivityContext(), R.drawable.ic_add_image));
         mImageAvatar.setTag(R.id.shared_drawable, null);
 

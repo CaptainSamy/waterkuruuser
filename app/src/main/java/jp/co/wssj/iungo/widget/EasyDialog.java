@@ -13,6 +13,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RotateDrawable;
 import android.os.Build;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -106,6 +107,8 @@ public class EasyDialog {
 
     private TextView mTextNoItem;
 
+    private SwipeRefreshLayout mRefreshLayout;
+
     public EasyDialog(Context context) {
         initDialog(context);
     }
@@ -129,6 +132,7 @@ public class EasyDialog {
         ivTriangle = (ImageView) dialogView.findViewById(R.id.ivTriangle);
         llContent = (LinearLayout) dialogView.findViewById(R.id.llContent);
         mListView = (ListView) dialogView.findViewById(R.id.listView);
+        mRefreshLayout = (SwipeRefreshLayout) dialogView.findViewById(R.id.refreshPush);
         mTextNoItem = (TextView) dialogView.findViewById(R.id.textNoItem);
         dialog = new Dialog(context, isFullScreen() ? android.R.style.Theme_Translucent_NoTitleBar_Fullscreen : android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setContentView(dialogView);
@@ -161,6 +165,10 @@ public class EasyDialog {
 
     public ListView getListView() {
         return mListView;
+    }
+
+    public SwipeRefreshLayout getRefreshLayout() {
+        return mRefreshLayout;
     }
 
     public TextView getTextNoItem() {
