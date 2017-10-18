@@ -135,9 +135,9 @@ public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompany
     @Override
     public void showListCompany(List<ListCompanyResponse.ListCompanyData.CompanyData> cardList) {
         Logger.d(TAG, "showListCompany");
+        setRefreshing(false);
         if (cardList != null && cardList.size() > 0) {
             showTextNoItem(false, null);
-            setRefreshing(false);
             if (mCardList != null) {
                 mCardList.clear();
             }

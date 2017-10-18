@@ -93,7 +93,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         } else {
             mRootView = onCreateViewInternal(inflater, container);
         }
-        mTextNoItem = (TextView) mRootView.findViewById(R.id.textNoItem);
         Utils.setupUI(mRootView, mActivity);
         return mRootView;
     }
@@ -104,6 +103,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         if (resId > 0) {
             rootView = inflater.inflate(resId, container, false);
             initViews(rootView);
+            mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
             initAction();
         }
         initData();
