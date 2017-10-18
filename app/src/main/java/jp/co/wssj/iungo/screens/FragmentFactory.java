@@ -42,6 +42,10 @@ import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 
 public final class FragmentFactory {
 
+    public static final String KEY_NEED_OVERRIDE_RETAIN_GLOBAL = "KEY_NEED_OVERRIDE_RETAIN_GLOBAL";
+
+    public static final String KEY_VALUE_OVERRIDE_RETAIN_GLOBAL = "KEY_VALUE_OVERRIDE_RETAIN_GLOBAL";
+
     private static SparseArray<BaseFragment> sFragmentMap;
 
     public static void init() {
@@ -54,6 +58,12 @@ public final class FragmentFactory {
 
     public static BaseFragment getFragment(int screenId, Bundle bundle, boolean retain) {
         BaseFragment fragment = null;
+        if (bundle != null) {
+            boolean needOverrideRetain = bundle.getBoolean(KEY_NEED_OVERRIDE_RETAIN_GLOBAL, false);
+            if (needOverrideRetain) {
+                retain = bundle.getBoolean(KEY_VALUE_OVERRIDE_RETAIN_GLOBAL, false);
+            }
+        }
         if (retain) {
             fragment = sFragmentMap.get(screenId);
         }

@@ -31,6 +31,8 @@ import jp.co.wssj.iungo.utils.Utils;
 public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPresenter<V>>
         extends Fragment implements IFragmentView {
 
+    public static final String KEY_SET_BOTTOM_NAVIGATION_ID = "KEY_SET_BOTTOM_NAVIGATION_ID";
+
     private static final String TAG = "BaseFragment";
 
     protected static final String KEY_SET_GLOBAL = TAG + "_KEY_SET_GLOBAL";
@@ -271,6 +273,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public int getNavigationBottomId() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            return bundle.getInt(KEY_SET_BOTTOM_NAVIGATION_ID, 0);
+        }
         return 0;
     }
 

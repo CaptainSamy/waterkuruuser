@@ -46,6 +46,7 @@ import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.ReflectionUtils;
 import jp.co.wssj.iungo.utils.VolleySequence;
 import jp.co.wssj.iungo.widget.CenterTitleToolbar;
+import jp.co.wssj.iungo.widget.EnhancedBottomNavigationView;
 
 public class MainActivity extends AppCompatActivity
         implements IMainView, IActivityCallback, BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = "MainActivity";
 
-    private BottomNavigationView mBottomNavigationView;
+    private EnhancedBottomNavigationView mBottomNavigationView;
 
     private BaseFragment mCurrentFragment;
 
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity
         mTextUserName = (TextView) header.findViewById(R.id.textUserName);
         mImageUser = (ImageView) header.findViewById(R.id.imageMenu);
         mNavigationView.setItemIconTintList(null);
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        mBottomNavigationView = (EnhancedBottomNavigationView) findViewById(R.id.navigation);
         mBottomNavigationView.setItemIconTintList(null);
         ReflectionUtils.setBottomNavigationViewShiftingMode(mBottomNavigationView, false);
         mToolbar = (CenterTitleToolbar) findViewById(R.id.tool_bar);
@@ -503,7 +504,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMappingUserStoreFastSuccess() {
-        switchScreen(FRAGMENT_LIST_SERVICE_COMPANY, true, true, null);
+        Bundle bundle = new Bundle();
+        bundle.putInt(BaseFragment.KEY_SET_BOTTOM_NAVIGATION_ID, R.id.navigation_stamp);
+        bundle.putBoolean(FragmentFactory.KEY_NEED_OVERRIDE_RETAIN_GLOBAL, true);
+        bundle.putBoolean(FragmentFactory.KEY_VALUE_OVERRIDE_RETAIN_GLOBAL, false);
+        switchScreen(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, true, true, bundle);
     }
 
     @Override
@@ -553,7 +558,7 @@ public class MainActivity extends AppCompatActivity
                 mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
                 int navigationBottomId = fragment.getNavigationBottomId();
                 if (navigationBottomId != 0) {
-                    mBottomNavigationView.setSelectedItemId(navigationBottomId);
+                    mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
                 }
                 mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
                 boolean isShowNavigationButton = fragment.isDisplayNavigationButton();
