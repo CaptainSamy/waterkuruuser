@@ -21,11 +21,11 @@ public interface IActivityCallback {
 
     void onFragmentResumed(BaseFragment fragment);
 
-    void setSelectedNavigationBottom(int id);
-
     void setAppBarTitle(String title);
 
     void onBackPressed(Bundle bundle);
 
     void showTextNoItem(boolean isShow, String content);
+
+    void finishActivity();
 }

@@ -35,33 +35,10 @@ import jp.co.wssj.iungo.DialogNotification;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
-import jp.co.wssj.iungo.screens.about.AboutFragment;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.changepassword.ChangePasswordByCodeFragment;
-import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
-import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
-import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
-import jp.co.wssj.iungo.screens.howtouse.HowToUserFragment;
-import jp.co.wssj.iungo.screens.introduction.IntroductionFragment;
-import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
-import jp.co.wssj.iungo.screens.liststorecheckedin.ListStoreCheckedInFragment;
-import jp.co.wssj.iungo.screens.login.LoginFragment;
-import jp.co.wssj.iungo.screens.memomanager.MemoManagerFragment;
-import jp.co.wssj.iungo.screens.note.UserMemoFragment;
-import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
-import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
-import jp.co.wssj.iungo.screens.qa.QAFragment;
-import jp.co.wssj.iungo.screens.qadetail.QADetailFragment;
-import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
-import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
-import jp.co.wssj.iungo.screens.splash.SplashFragment;
-import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceFragment;
-import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
 import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
@@ -95,8 +72,6 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentBackStackManager mFragmentBackStackManager;
 
-    private PrimaryFragment mPrimaryFragment;
-
     private TextView mTextNoItem;
 
     private DialogNotification mDialogNotification;
@@ -117,6 +92,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FragmentFactory.init();
         mWindow = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -289,8 +265,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private int mCurrentNavigationBottomId;
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Logger.d(TAG, "#onNavigationItemSelected");
@@ -298,19 +272,14 @@ public class MainActivity extends AppCompatActivity
             int menuId = item.getItemId();
             switch (menuId) {
                 case R.id.navigation_stamp:
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, null);
+                    return true;
 //                case R.id.navigation_home:
                 case R.id.navigation_another:
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_WRAPPER, null);
+                    return true;
                 case R.id.navigation_timeline:
-                    if (mCurrentNavigationBottomId != menuId) {
-                        mCurrentNavigationBottomId = menuId;
-                        if (mPrimaryFragment.isVisible()) {
-                            mPresenter.onBottomNavigationButtonClicked(menuId);
-                        } else {
-                            Bundle bundle = mPrimaryFragment.getArguments();
-                            bundle.putInt(PrimaryFragment.KEY_GLOBAL_SELECT_SCREEN_ID, menuId);
-                            replaceFragment(mPrimaryFragment, true, true);
-                        }
-                    }
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
@@ -342,7 +311,7 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 case R.id.menu_logout:
                     mDrawerLayout.closeDrawer(GravityCompat.END);
-                    mPresenter.onLogout();
+                    mPresenter.logout();
                     DBManager.getInstance().clearDatabase();
                     return true;
             }
@@ -378,96 +347,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEnableDrawerLayout() {
+    public void enableDrawerLayout() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
-    public void onDisableDrawerLayout() {
+    public void disableDrawerLayout() {
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
     public void switchScreen(int screenId, boolean hasAnimation,
                              boolean addToBackStack, Bundle bundle) {
+        boolean retain;
         switch (screenId) {
-            case FRAGMENT_SPLASH_SCREEN:
-                replaceFragment(new SplashFragment(), hasAnimation, addToBackStack);
+            case FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER:
+            case FRAGMENT_CHAT_WRAPPER:
+            case FRAGMENT_TIMELINE:
+                retain = true;
                 break;
-            case FRAGMENT_INTRODUCTION_SCREEN:
-                replaceFragment(new IntroductionFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_LOGIN:
-                replaceFragment(new LoginFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_RESET_PASSWORD:
-                replaceFragment(new ResetPasswordFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_CHANGE_PASSWORD_CODE:
-                replaceFragment(new ChangePasswordByCodeFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_PRIMARY:
-                mPrimaryFragment = PrimaryFragment.newInstance(bundle);
-                replaceFragment(mPrimaryFragment, hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_REGISTER_ACCOUNT:
-                replaceFragment(new RegisterAccountFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_MEMO_MANAGER:
-                replaceFragment(new MemoManagerFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_USER_MEMO:
-                replaceFragment(UserMemoFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_LIST_CARD:
-                replaceFragment(ListCardFragmentDetail.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_TERM_OF_SERVICE:
-                replaceFragment(new TermOfServiceFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM:
-                replaceFragment(new TermOfServiceNoMenuBottom(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_PUSH_NOTIFICATION_LIST:
-                replaceFragment(PushNotificationPageFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_PUSH_NOTIFICATION_DETAIL:
-                replaceFragment(PushNotificationDetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_LIST_STORE_CHECKED_IN:
-                replaceFragment(ListStoreCheckedInFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_HOW_TO_USE:
-                replaceFragment(new HowToUserFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_QA:
-                replaceFragment(new QAFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_CONTACT_US:
-                replaceFragment(new ContactUsFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_CHANGE_PASSWORD:
-                replaceFragment(new ChangePasswordFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_POLICY:
-                replaceFragment(new PolicyFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_ABOUT:
-                replaceFragment(new AboutFragment(), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
-                replaceFragment(PushNotificationForServiceCompanyFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_QA_DETAIL:
-                replaceFragment(QADetailFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_CHAT:
-                replaceFragment(ChatFragment.newInstance(bundle), hasAnimation, addToBackStack);
-                break;
-            case FRAGMENT_COMMENT:
-                replaceFragment(CommentFragment.newInstance(bundle), hasAnimation, addToBackStack);
+            default:
+                retain = false;
                 break;
         }
+        replaceFragment(FragmentFactory.getFragment(screenId, bundle, retain), hasAnimation, addToBackStack);
     }
 
     @Override
@@ -486,13 +389,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void goBack() {
         onBackPressed();
-    }
-
-    @Override
-    public void setSelectedPage(int itemId) {
-        if (mPrimaryFragment != null) {
-            mPrimaryFragment.setSelectedPageByItemId(itemId);
-        }
     }
 
     @Override
@@ -555,7 +451,7 @@ public class MainActivity extends AppCompatActivity
                 switch (notificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_TIME_LINE:
                     case Constants.PushNotification.TYPE_STEP_PUSH:
-                        switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, null);
+                        switchScreen(FRAGMENT_TIMELINE, true, true, null);
                         break;
                     default:
                         switchScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
@@ -607,13 +503,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMappingUserStoreFastSuccess() {
-        if (mIsNewIntent) {
-            setSelectedPage(R.id.navigation_stamp);
-        } else {
-            Bundle bundle = new Bundle();
-            bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_LIST_SERVICE_COMPANY);
-            switchScreen(IMainView.FRAGMENT_PRIMARY, true, true, bundle);
-        }
+        switchScreen(FRAGMENT_LIST_SERVICE_COMPANY, true, true, null);
     }
 
     @Override
@@ -623,9 +513,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void displayScanCodeScreen() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-        displayScreen(FRAGMENT_PRIMARY, true, false, bundle);
+        displayScreen(FRAGMENT_TIMELINE, true, false);
     }
 
     @Override
@@ -634,7 +522,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLogout() {
+    public void logout() {
         clearBackStack();
         displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false);
         if (mDialogNotification != null) {
@@ -687,11 +575,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
-    }
-
-    @Override
-    public void setSelectedNavigationBottom(int id) {
-        mBottomNavigationView.setSelectedItemId(id);
     }
 
     @Override
@@ -748,7 +631,7 @@ public class MainActivity extends AppCompatActivity
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "#onReceive");
             if (ACTION_LOGOUT.equals(intent.getAction())) {
-                onLogout();
+                logout();
             }
         }
     }

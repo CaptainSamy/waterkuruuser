@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.chat.chatdetail;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,7 +21,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.chat.adapter.ChatAdapter;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -32,7 +31,7 @@ import jp.co.wssj.iungo.utils.Utils;
  * Created by Nguyen Huu Ta on 26/6/2017.
  */
 
-public class ChatFragment extends PagedFragment<IChatView, ChatPresenter> implements IChatView, SwipeRefreshLayout.OnRefreshListener {
+public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> implements IChatView, SwipeRefreshLayout.OnRefreshListener {
 
     private static String TAG = "ChatFragment";
 
@@ -70,11 +69,6 @@ public class ChatFragment extends PagedFragment<IChatView, ChatPresenter> implem
     }
 
     @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_another;
-    }
-
-    @Override
     public int getFragmentId() {
         return IMainView.FRAGMENT_CHAT;
     }
@@ -97,15 +91,6 @@ public class ChatFragment extends PagedFragment<IChatView, ChatPresenter> implem
     @Override
     public String getAppBarTitle() {
         String storeName = getString(R.string.title_screen_chat);
-        if (getArguments() != null) {
-            storeName = getArguments().getString(KEY_STORE_NAME);
-        }
-        return storeName;
-    }
-
-    @Override
-    public String getPageTitle(Context context) {
-        String storeName = getString(context, R.string.title_screen_chat);
         if (getArguments() != null) {
             storeName = getArguments().getString(KEY_STORE_NAME);
         }

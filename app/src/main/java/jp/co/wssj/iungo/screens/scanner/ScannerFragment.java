@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.screens.scanner;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -19,9 +18,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.screens.base.IWrapperFragment;
-import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.IMainView;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.scanner.dialog.ConfirmCheckInDialog;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -29,8 +27,8 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by HieuPT on 5/19/2017.
  */
 
-public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresenter>
-        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog, IWrapperFragmentController, PagedFragment.IOnPageSelectChangeListener {
+public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter>
+        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog {
 
     private static final String TAG = "ScannerFragment";
 
@@ -45,8 +43,6 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     private ConfirmCheckInDialog mDialog;
 
     private boolean mIsSurfaceCreated, mIsCameraStarted;
-
-    private IWrapperFragment mWrapperFragment;
 
     private final Handler mHandler = new Handler();
 
@@ -73,8 +69,13 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
     };
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.read_qr_code);
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_SCANNER;
+    }
+
+    @Override
+    public String getAppBarTitle() {
+        return getString(R.string.read_qr_code);
     }
 
     @Override
@@ -129,7 +130,6 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
                 .setAutoFocusEnabled(true)
                 .setRequestedPreviewSize(getResources().getDisplayMetrics().heightPixels, getResources().getDisplayMetrics().widthPixels)
                 .build();
-        addOnPageSelectChangeListener(this);
     }
 
     @Override
@@ -146,7 +146,7 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
 
     public void displayConfirmDialog(String qrCode) {
         if (mDialog == null) {
-            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), mWrapperFragment, this);
+            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), this);
         }
         mDialog.showDialog(qrCode);
     }
@@ -232,20 +232,5 @@ public class ScannerFragment extends PagedFragment<IScannerView, ScannerPresente
             mCameraSource.release();
             mCameraSource = null;
         }
-    }
-
-    @Override
-    public void setWrapperFragment(IWrapperFragment fragment) {
-        mWrapperFragment = fragment;
-    }
-
-    @Override
-    public void onPageSelected() {
-        attemptStartCamera();
-    }
-
-    @Override
-    public void onPageUnselected() {
-        stopCamera();
     }
 }

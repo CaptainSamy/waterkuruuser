@@ -18,7 +18,6 @@ import jp.co.wssj.iungo.model.checkin.InfoStoreResponse;
 import jp.co.wssj.iungo.screens.IActivityCallback;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseDialog;
-import jp.co.wssj.iungo.screens.base.IWrapperFragment;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
@@ -41,17 +40,14 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
 
     private final IActivityCallback mActivityCallback;
 
-    private final IWrapperFragment mWrapperFragment;
-
     private String mCode;
 
     private String mStoreName;
 
     private IListenerDismissDialog mCallbackDismissDialog;
 
-    public ConfirmCheckInDialog(@NonNull Context context, IActivityCallback activityCallback, IWrapperFragment wrapperFragmentCallback, IListenerDismissDialog dismissDialog) {
+    public ConfirmCheckInDialog(@NonNull Context context, IActivityCallback activityCallback, IListenerDismissDialog dismissDialog) {
         super(context, R.style.DialogTheme);
-        mWrapperFragment = wrapperFragmentCallback;
         mActivityCallback = activityCallback;
         mCallbackDismissDialog = dismissDialog;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -148,9 +144,7 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
                 bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
                 bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());
                 bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_SESSION, data.getNumberSession());
-                if (mWrapperFragment != null) {
-                    mWrapperFragment.displayScreen(WaitStoreConfirmFragment.newInstance(bundle));
-                }
+                mActivityCallback.displayScreen(IMainView.FRAGMENT_WAIT_STORE_CONFIRM, true, false, bundle);
             }
         }
     }

@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.timeline;
 
-import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -10,7 +9,8 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.IMainView;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -21,7 +21,7 @@ import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
  * Created by Nguyen Huu Ta on 13/9/2017.
  */
 
-public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePresenter>
+public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresenter>
         implements ITimeLineView, View.OnClickListener, ILoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "TimeLineFragment";
@@ -43,8 +43,13 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
     }
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.title_screen_timeline);
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_TIMELINE;
+    }
+
+    @Override
+    public String getAppBarTitle() {
+        return getString(R.string.title_screen_timeline);
     }
 
     @Override
@@ -55,6 +60,11 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
     @Override
     protected boolean isRetainState() {
         return true;
+    }
+
+    @Override
+    public boolean isDisplayNavigationButton() {
+        return false;
     }
 
     @Override
@@ -91,6 +101,12 @@ public class TimeLineFragment extends PagedFragment<ITimeLineView, TimeLinePrese
             getPresenter().getTimeline(Constants.INIT_PAGE);
         }
         mRecycleTimeLine.setAdapter(mAdapter);
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getActivityCallback().finishActivity();
+        return true;
     }
 
     @Override

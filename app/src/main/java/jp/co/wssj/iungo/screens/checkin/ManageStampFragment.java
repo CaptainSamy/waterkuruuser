@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.checkin;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +14,9 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.listcard.adapter.CardAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
@@ -28,7 +26,7 @@ import jp.co.wssj.iungo.widget.MarginItemDecoration;
  * Created by Nguyen Huu Ta on 23/5/2017.
  */
 
-public class ManageStampFragment extends PagedFragment<IManageStampView, ManageStampPresenter> implements IManageStampView {
+public class ManageStampFragment extends BaseFragment<IManageStampView, ManageStampPresenter> implements IManageStampView {
 
     private static final String TAG = "ManageStampFragment";
 
@@ -65,8 +63,13 @@ public class ManageStampFragment extends PagedFragment<IManageStampView, ManageS
     }
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.title_screen_manager_stamp);
+    public String getAppBarTitle() {
+        return getString(R.string.title_screen_manager_stamp);
+    }
+
+    @Override
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_MANAGE_STAMP;
     }
 
     @Override
@@ -238,6 +241,6 @@ public class ManageStampFragment extends PagedFragment<IManageStampView, ManageS
 
     @Override
     public void displayMyStampScreen() {
-        getPagerFragmentCallback().setSelectedPage(PrimaryFragment.SCREEN_LIST_SERVICE_COMPANY);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_SERVICE_COMPANY, true, true);
     }
 }

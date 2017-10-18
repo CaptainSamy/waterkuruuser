@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.registeraccount;
 
-import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,14 +30,14 @@ import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.auth.RegisterData;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
  */
 
-public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, RegisterAccountPresenter> implements IRegisterAccountView, View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, RegisterAccountPresenter>
+        implements IRegisterAccountView, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "RegisterAccountFragment";
 
@@ -274,11 +273,8 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
             message = getString(R.string.register_success);
         }
         showToast(message);
-
         getActivityCallback().clearBackStack();
-        Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_TIMELINE, true, false);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.listservicecompany;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -13,9 +12,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCompanyResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.IWrapperFragment;
-import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
 import jp.co.wssj.iungo.screens.listservicecompany.adapter.ServicesCompanyAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
@@ -26,9 +23,10 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by HieuPT on 17/5/2017.
  */
 
-public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompanyView, ListServiceCompanyPresenter>
-        implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener,
-        AdapterView.OnItemClickListener, PagedFragment.IOnPageSelectChangeListener, IWrapperFragmentController {
+public class ListServiceCompanyFragment extends BaseFragment<IListServiceCompanyView, ListServiceCompanyPresenter>
+        implements IListServiceCompanyView, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
+
+    public static final String KEY_COMPANY_LIST = "KEY_COMPANY_LIST";
 
     private static final String TAG = "ListServiceCompanyFragment";
 
@@ -40,11 +38,15 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
 
     private List<ListCompanyResponse.ListCompanyData.CompanyData> mCardList;
 
-    private IWrapperFragment mWrapperFragment;
+    public static ListServiceCompanyFragment newInstance(Bundle bundle) {
+        ListServiceCompanyFragment fragment = new ListServiceCompanyFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.title_bottom_stamp);
+    public String getAppBarTitle() {
+        return getString(R.string.title_bottom_stamp);
     }
 
     @Override
@@ -53,8 +55,8 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     }
 
     @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_stamp;
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_LIST_SERVICE_COMPANY;
     }
 
     @Override
@@ -82,11 +84,14 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
         mCardListView.setOnItemClickListener(this);
-        addOnPageSelectChangeListener(this);
     }
 
     @Override
     protected void initData() {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mCardList = bundle.getParcelableArrayList(KEY_COMPANY_LIST);
+        }
         if (mCardList == null) {
             mCardList = new ArrayList<>();
             mAdapter = new ServicesCompanyAdapter(getActivityContext(), mCardList);
@@ -94,6 +99,8 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
             getPresenter().getCompanyList();
         } else if (mCardList.isEmpty()) {
             showTextNoItem(true, getString(R.string.no_item_service));
+        } else {
+            mAdapter = new ServicesCompanyAdapter(getActivityContext(), mCardList);
         }
         mCardListView.setAdapter(mAdapter);
     }
@@ -120,7 +127,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
             bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, serviceName);
             fragmentId = IMainView.FRAGMENT_LIST_CARD;
         } else {
-            fragmentId = IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST;
+            fragmentId = IMainView.FRAGMENT_PUSH_NOTIFICATION_PAGER;
         }
         getActivityCallback().displayScreen(fragmentId, true, true, bundle);
     }
@@ -136,7 +143,7 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
             }
             mCardList.addAll(cardList);
         } else {
-//            showTextNoItem(true, getString(R.string.no_item_service));
+            showTextNoItem(true, getString(R.string.no_item_service));
         }
     }
 
@@ -158,50 +165,5 @@ public class ListServiceCompanyFragment extends PagedFragment<IListServiceCompan
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Logger.i(TAG, "#onItemClick");
         getPresenter().onItemClicked((ListCompanyResponse.ListCompanyData.CompanyData) parent.getItemAtPosition(position));
-    }
-
-    @Override
-    public void onPageSelected() {
-        Logger.d(TAG, "onPageSelected");
-        if (mCardList.size() == 1) {
-            getView().setVisibility(View.INVISIBLE);
-            ListCompanyResponse.ListCompanyData.CompanyData companyData = mCardList.get(0);
-            int fragmentId;
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, companyData.getServiceCompanyId());
-            if (companyData.getCardType() == 1) {
-                bundle.putInt(ListCardFragmentDetail.KEY_SERVICE_ID, companyData.getServiceId());
-                bundle.putString(ListCardFragmentDetail.KEY_CARD_NAME, companyData.getCardName());
-                bundle.putString(UserMemoFragment.KEY_SERVICE_NAME, companyData.getServiceName());
-                fragmentId = IMainView.FRAGMENT_LIST_CARD;
-            } else {
-                fragmentId = IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST;
-            }
-            getActivityCallback().displayScreen(fragmentId, false, true, bundle);
-        } else {
-            mAdapter.notifyDataSetChanged();
-        }
-
-        if (mCardList.size() == 0) {
-            showTextNoItem(true, getString(R.string.no_item_service));
-        } else {
-            showTextNoItem(false, null);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getView().setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onPageUnselected() {
-        showTextNoItem(false, null);
-    }
-
-    @Override
-    public void setWrapperFragment(IWrapperFragment fragment) {
-        mWrapperFragment = fragment;
     }
 }

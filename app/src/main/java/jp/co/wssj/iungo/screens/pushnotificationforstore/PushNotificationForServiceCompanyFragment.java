@@ -28,9 +28,10 @@ import jp.co.wssj.iungo.utils.Constants;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPushNotificationForServiceCompany, PushNotificationForServiceCompanyPresenter> implements IPushNotificationForServiceCompany, SwipeRefreshLayout.OnRefreshListener {
+public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPushNotificationForServiceCompany, PushNotificationForServiceCompanyPresenter>
+        implements IPushNotificationForServiceCompany, SwipeRefreshLayout.OnRefreshListener {
 
-    private String TAG = "PushNotificationForServiceCompanyFragment";
+    private static final String TAG = "PushNotificationForServiceCompanyFragment";
 
     private SwipeRefreshLayout mRefreshLayout;
 
@@ -76,11 +77,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     public String getAppBarTitle() {
         return getString(R.string.title_push_notification_list);
-    }
-
-    @Override
-    public boolean isGlobal() {
-        return false;
     }
 
     @Override

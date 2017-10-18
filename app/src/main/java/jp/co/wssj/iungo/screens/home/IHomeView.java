@@ -2,13 +2,13 @@ package jp.co.wssj.iungo.screens.home;
 
 import android.os.Bundle;
 
-import jp.co.wssj.iungo.screens.base.IFragmentView;
+import jp.co.wssj.iungo.screens.switcher.ISwitcherView;
 
 /**
  * Created by Nguyen Huu Ta on 20/6/2017.
  */
 
-interface IHomeView extends IFragmentView {
+interface IHomeView extends ISwitcherView {
 
     void displayStampManagerScreen(Bundle bundle);
 
