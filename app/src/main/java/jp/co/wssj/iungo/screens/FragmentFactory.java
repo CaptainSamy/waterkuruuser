@@ -23,6 +23,7 @@ import jp.co.wssj.iungo.screens.memomanager.MemoManagerFragment;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
+import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageNavigationFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
@@ -91,9 +92,6 @@ public final class FragmentFactory {
                 case IMainView.FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM:
                     fragment = new TermOfServiceNoMenuBottom();
                     break;
-                case IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST:
-                    fragment = PushNotificationPageFragment.newInstance(bundle);
-                    break;
                 case IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL:
                     fragment = PushNotificationDetailFragment.newInstance(bundle);
                     break;
@@ -139,6 +137,9 @@ public final class FragmentFactory {
                 case IMainView.FRAGMENT_PUSH_NOTIFICATION_PAGER:
                     fragment = PushNotificationPageFragment.newInstance(bundle);
                     break;
+                case IMainView.FRAGMENT_PUSH_NOTIFICATION_PAGER_NAVIGATION:
+                    fragment = PushNotificationPageNavigationFragment.newInstance(bundle);
+                    break;
                 case IMainView.FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER:
                     fragment = new ListServiceCompanyWrapperFragment();
                     break;
@@ -151,6 +152,7 @@ public final class FragmentFactory {
                 case IMainView.FRAGMENT_WAIT_STORE_CONFIRM:
                     fragment = WaitStoreConfirmFragment.newInstance(bundle);
                     break;
+                case IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST:
             }
         }
         if (fragment != null) {

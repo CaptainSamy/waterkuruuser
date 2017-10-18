@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
                     return true;
                 case R.id.menu_push_notification:
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST, true, true, null, menuId);
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_PUSH_NOTIFICATION_PAGER_NAVIGATION, true, true, null, menuId);
                     return true;
                 case R.id.menu_change_password:
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_CHANGE_PASSWORD, true, true, null, menuId);
