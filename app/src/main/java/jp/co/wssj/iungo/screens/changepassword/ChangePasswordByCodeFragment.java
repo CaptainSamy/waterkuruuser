@@ -39,6 +39,11 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected ChangePasswordPresenter onCreatePresenter(IChangePasswordView view) {
         return new ChangePasswordPresenter(view);
     }

@@ -47,6 +47,10 @@ public final class FragmentFactory {
         sFragmentMap = new SparseArray<>();
     }
 
+    public static void destroy() {
+        sFragmentMap.clear();
+    }
+
     public static BaseFragment getFragment(int screenId, Bundle bundle, boolean retain) {
         BaseFragment fragment = null;
         if (retain) {

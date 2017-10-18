@@ -34,8 +34,6 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
 
     public static final int TYPE_PUSH_ANNOUNCE = 3;
 
-    private Bundle bundle = new Bundle();
-
     public PushNotificationPageAdapter(FragmentManager fm, Context context, int serviceCompanyId) {
         super(fm);
         mContext = context;

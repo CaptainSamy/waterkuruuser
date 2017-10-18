@@ -107,6 +107,11 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     public int getActionBarColor() {
         return Color.TRANSPARENT;
     }

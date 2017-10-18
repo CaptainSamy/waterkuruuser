@@ -65,6 +65,11 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
+    public boolean isGlobal() {
+        return false;
+    }
+
+    @Override
     public int getFragmentId() {
         return IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY;
     }

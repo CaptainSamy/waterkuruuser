@@ -74,6 +74,11 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
+    public boolean isGlobal() {
+        return false;
+    }
+
+    @Override
     public int getNavigationMenuId() {
         return R.id.menu_push_notification;
     }

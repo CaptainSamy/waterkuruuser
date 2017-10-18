@@ -108,6 +108,11 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected ChangePasswordPresenter onCreatePresenter(IChangePasswordView view) {
         return new ChangePasswordPresenter(view);
     }

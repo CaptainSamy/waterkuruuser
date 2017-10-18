@@ -68,6 +68,11 @@ public class LoginFragment extends BaseFragment<ILoginView, LoginPresenter> impl
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected ILoginView onCreateView() {
         return this;
     }

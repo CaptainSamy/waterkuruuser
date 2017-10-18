@@ -523,6 +523,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void logout() {
+        FragmentFactory.destroy();
         clearBackStack();
         displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN, true, false);
         if (mDialogNotification != null) {
@@ -617,6 +618,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         mIsAppStart = false;
+        FragmentFactory.destroy();
         VolleySequence.getInstance().release();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mLogoutReceiver);
