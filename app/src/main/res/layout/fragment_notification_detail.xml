@@ -26,8 +26,9 @@
         android:paddingTop="4dp">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:id="@+id/ivLike"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@drawable/like_default"/>
 
         <RelativeLayout
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:animateLayoutChanges="true"
             android:paddingLeft="4dp">
 
             <TextView

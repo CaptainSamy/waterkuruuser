@@ -34,7 +34,7 @@
 
     <!--Reset/change password fragment-->
     <string name="title_screen_reset_password">パスワード初期化</string>
-    <string name="title_screen_change_password">パスワード変更</string>
+    <string name="title_screen_change_password">プロフィール設定</string>
     <string name="title_user">ログインIDまたはメールアドレス</string>
     <string name="reset">リセット</string>
     <string name="back">キャンセル</string>
@@ -58,6 +58,11 @@
     <string name="new_password_not_null"> 新パスワードを入力してください。</string>
     <string name="confirm_new_password_not_null">新パスワード(確認)を入力してください。</string>
     <string name="confirm_different_new_password">新パスワード(確認)はパスワードに誤りがあります。</string>
+
+    <string name="nick_name">ニックネーム</string>
+    <string name="email_address">メールアドレス</string>
+    <string name="avatar">画像 </string>
+    <string name="change">画像 </string>
 
 
     <!--Register account fragment-->
@@ -220,14 +225,14 @@
     <string name="no_conversation">メッセージがありません。</string>
 
     <!--Comment fragment-->
-    <string name="title_screen_comment">コメントする</string>
-    <string name="comment">コメントする</string>
+    <string name="title_screen_comment">コメント</string>
+    <string name="comment">コメント</string>
     <string name="write_comment">コメントする…</string>
     <string name="no_comment">コメントがありません。</string>
 
     <!--Timeline Fragment-->
     <string name="title_screen_timeline">タイムライン</string>
-    <string name="number_comment">%1$s コメントする</string>
+    <string name="number_comment">%1$s コメント</string>
     <string name="send_comment">送信</string>
     <string name="like">いいね</string>
     <string name="number_rest_image">+ %1$s</string>

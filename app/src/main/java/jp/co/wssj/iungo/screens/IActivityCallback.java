@@ -27,5 +27,4 @@ public interface IActivityCallback {
 
     void onBackPressed(Bundle bundle);
 
-    void showTextNoItem(boolean isShow, String content);
 }

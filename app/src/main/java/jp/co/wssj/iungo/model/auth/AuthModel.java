@@ -106,6 +106,13 @@ public class AuthModel extends BaseModel {
         void onFailure();
     }
 
+    public interface IOnValidate {
+
+        void onSuccess();
+
+        void onFailure(String message);
+    }
+
     private static final String TAG = "AuthModel";
 
     public AuthModel(Context context) {
@@ -290,6 +297,7 @@ public class AuthModel extends BaseModel {
         } else if (newPassword.length() < 8 || newPassword.length() > 14) {
             message = getStringResource(R.string.password_length);
         }
+
         return message;
     }
 
@@ -333,61 +341,71 @@ public class AuthModel extends BaseModel {
         }
     }
 
-    public String validateChangePassword(String currentPassword, String newPassword, String confirmNewPassword) {
+    public void validateInfoUser(InfoUserResponse.InfoUser infoUser, IOnValidate callback) {
         String message = Constants.EMPTY_STRING;
-        if (TextUtils.isEmpty(currentPassword.trim())) {
-            message = getStringResource(R.string.current_password_not_null);
-        } else if (TextUtils.isEmpty(newPassword.trim())) {
-            message = getStringResource(R.string.new_password_not_null);
-        } else if ((TextUtils.isEmpty(confirmNewPassword.trim()))) {
-            message = getStringResource(R.string.confirm_new_password_not_null);
-        } else if (!TextUtils.equals(newPassword, confirmNewPassword)) {
-            message = getStringResource(R.string.confirm_different_new_password);
-        } else if (newPassword.length() < 8 || newPassword.length() > 14) {
-            message = getStringResource(R.string.password_length);
+        if (TextUtils.isEmpty(infoUser.getName())) {
+            message = getStringResource(R.string.user_name_not_null);
+        } else if (!isEmailValid(infoUser.getEmail())) {
+            message = getStringResource(R.string.email_validate);
+        } else if (infoUser.isChangePassword()) {
+            if (TextUtils.isEmpty(infoUser.getCurrentPassword())) {
+                message = getStringResource(R.string.current_password_not_null);
+            } else if (TextUtils.isEmpty(infoUser.getNewPassword())) {
+                message = getStringResource(R.string.new_password_not_null);
+            } else if ((TextUtils.isEmpty(infoUser.getConfirmPassword()))) {
+                message = getStringResource(R.string.confirm_new_password_not_null);
+            } else if (!TextUtils.equals(infoUser.getNewPassword(), infoUser.getConfirmPassword())) {
+                message = getStringResource(R.string.confirm_different_new_password);
+            } else if (infoUser.getNewPassword().length() < 8 || infoUser.getNewPassword().length() > 14) {
+                message = getStringResource(R.string.password_length);
+            }
         }
-        return message;
-    }
-
-    public void changePassword(String token, String currentPassword, String newPassword, String confirmNewPassword, final IOnChangePasswordCallback callback) {
-        String isValid = validateChangePassword(currentPassword, newPassword, confirmNewPassword);
-        if (TextUtils.isEmpty(isValid)) {
-            Request resetPassword = APICreator.changePassword(token, currentPassword, newPassword,
-                    new Response.Listener<RegisterResponse>() {
-
-                        @Override
-                        public void onResponse(RegisterResponse response) {
-                            Logger.d(TAG, "#changePassword => onResponse");
-                            if (response.isSuccess()) {
-                                if (TextUtils.isEmpty(response.getMessage())) {
-                                    String message = getStringResource(R.string.change_password_success);
-                                    callback.onChangePasswordSuccess(response.getData(), message);
-                                } else {
-                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
-                                }
-                            } else {
-                                callback.onChangePasswordFailure(response.getMessage());
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Logger.d(TAG, "#changePassword => onErrorResponse");
-                            ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                            if (errorResponse != null) {
-                                callback.onChangePasswordFailure(errorResponse.getMessage());
-                            } else {
-                                callback.onChangePasswordFailure(getStringResource(R.string.network_error));
-                            }
-                        }
-                    });
-            VolleySequence.getInstance().addRequest(resetPassword);
+        if (TextUtils.isEmpty(message)) {
+            callback.onSuccess();
         } else {
-            callback.onValidateFailure(isValid);
+            callback.onFailure(message);
         }
     }
+
+//    public void changePassword(String token, String currentPassword, String newPassword, String confirmNewPassword, final IOnChangePasswordCallback callback) {
+//        String isValid = validateInfoUser(currentPassword, newPassword, confirmNewPassword);
+//        if (TextUtils.isEmpty(isValid)) {
+//            Request resetPassword = APICreator.changePassword(token, currentPassword, newPassword,
+//                    new Response.Listener<RegisterResponse>() {
+//
+//                        @Override
+//                        public void onResponse(RegisterResponse response) {
+//                            Logger.d(TAG, "#changePassword => onResponse");
+//                            if (response.isSuccess()) {
+//                                if (TextUtils.isEmpty(response.getMessage())) {
+//                                    String message = getStringResource(R.string.change_password_success);
+//                                    callback.onChangePasswordSuccess(response.getData(), message);
+//                                } else {
+//                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
+//                                }
+//                            } else {
+//                                callback.onChangePasswordFailure(response.getMessage());
+//                            }
+//                        }
+//                    },
+//                    new Response.ErrorListener() {
+//
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            Logger.d(TAG, "#changePassword => onErrorResponse");
+//                            ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+//                            if (errorResponse != null) {
+//                                callback.onChangePasswordFailure(errorResponse.getMessage());
+//                            } else {
+//                                callback.onChangePasswordFailure(getStringResource(R.string.network_error));
+//                            }
+//                        }
+//                    });
+//            VolleySequence.getInstance().addRequest(resetPassword);
+//        } else {
+//            callback.onValidateFailure(isValid);
+//        }
+//    }
 
     public void removeDeviceToken(String token) {
         String androidId = Settings.Secure.getString(getContext().getContentResolver(),
@@ -510,7 +528,7 @@ public class AuthModel extends BaseModel {
 
             @Override
             public void onResponse(ResponseData response) {
-                Logger.d(TAG, "#onUpdateInfoUser => onErrorResponse");
+                Logger.d(TAG, "#onUpdateInfoUser => onUpdateInfoUser");
                 if (response != null && response.isSuccess()) {
                     callback.onOnUpdateInfoUserSuccess();
                 } else {

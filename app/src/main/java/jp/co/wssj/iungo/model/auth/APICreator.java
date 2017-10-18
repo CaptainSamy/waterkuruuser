@@ -13,6 +13,7 @@ import jp.co.wssj.iungo.model.volleyrequest.GsonJsonRequest;
 import jp.co.wssj.iungo.model.volleyrequest.GsonRequest;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
@@ -197,7 +198,7 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
                 params.put("code", code);
-                params.put("password", newPassword);
+                params.put("password", Utils.toMD5(newPassword));
                 return params;
             }
 
@@ -322,8 +323,14 @@ final class APICreator {
                 map.put("img_url", infoUser.getAvatar());
                 map.put("email", infoUser.getEmail());
                 map.put("sex", infoUser.getSex());
-                map.put("old_pass ", Constants.EMPTY_STRING);
-                map.put("new_pass", Constants.EMPTY_STRING);
+                String currentPassword = Constants.EMPTY_STRING;
+                String newPassword = Constants.EMPTY_STRING;
+                if (infoUser.isChangePassword()) {
+                    currentPassword = Utils.toMD5(infoUser.getCurrentPassword());
+                    newPassword = Utils.toMD5(infoUser.getNewPassword());
+                }
+                map.put("old_pass", currentPassword);
+                map.put("new_pass", newPassword);
                 return map;
             }
         };

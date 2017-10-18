@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import jp.co.wssj.iungo.R;
@@ -43,6 +44,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     private View mRootView;
 
     private boolean mIsAttached;
+
+    private TextView mTextNoItem;
 
     @Override
     public Context getViewContext() {
@@ -86,6 +89,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         } else {
             mRootView = onCreateViewInternal(inflater, container);
         }
+        mTextNoItem = (TextView) mRootView.findViewById(R.id.textNoItem);
         Utils.setupUI(mRootView, mActivity);
         return mRootView;
     }
@@ -276,7 +280,15 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public void showTextNoItem(boolean isShow, String content) {
-        getActivityCallback().showTextNoItem(isShow, content);
+//        getActivityCallback().showTextNoItem(isShow, content);
+        if (mTextNoItem != null) {
+            if (isShow) {
+                mTextNoItem.setText(content);
+                mTextNoItem.setVisibility(View.VISIBLE);
+            } else {
+                mTextNoItem.setVisibility(View.GONE);
+            }
+        }
     }
 
     protected boolean isRetainState() {

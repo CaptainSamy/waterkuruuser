@@ -113,7 +113,9 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
             mAdapter.notifyDataSetChanged();
             showTextNoItem(false, null);
         } else {
-//            showTextNoItem(true, getString(R.string.no_conversation));
+            if (getUserVisibleHint()) {
+                showTextNoItem(true, getString(R.string.no_conversation));
+            }
         }
     }
 

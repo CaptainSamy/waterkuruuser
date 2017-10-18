@@ -106,7 +106,23 @@ class ChangePasswordPresenter extends FragmentPresenter<IChangePasswordView> {
         });
     }
 
+    public void validateInfoUser(final InfoUserResponse.InfoUser infoUser) {
+        getAuth().validateInfoUser(infoUser, new AuthModel.IOnValidate() {
+
+            @Override
+            public void onSuccess() {
+                onUploadImage(infoUser);
+            }
+
+            @Override
+            public void onFailure(String message) {
+                getView().onValidateFailure(message);
+            }
+        });
+    }
+
     public void onUploadImage(final InfoUserResponse.InfoUser infoUser) {
+        getView().showProgress();
         getAuth().uploadImageUser(infoUser, new AuthModel.IOnUploadImage() {
 
             @Override
@@ -123,7 +139,6 @@ class ChangePasswordPresenter extends FragmentPresenter<IChangePasswordView> {
 
     void onUpdateInfoUser(InfoUserResponse.InfoUser infoUser) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getView().showProgress();
         getAuth().onUpdateInfoUser(token, infoUser, new AuthModel.IOnUpdateInfoUserCallback() {
 
             @Override

@@ -6,6 +6,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -44,6 +45,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     private TextView mButtonRating, mButtonQuestionNaire;
 
     private NotificationMessage mNotificationMessage;
+
+    private ImageView mImageLike;
 
     DBManager mDatabase = DBManager.getInstance();
 
@@ -97,6 +100,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mButtonQuestionNaire = (TextView) rootView.findViewById(R.id.buttonQuestionNaire);
         mTextLike = (TextView) rootView.findViewById(R.id.tvLike);
         mTextUnlike = (TextView) rootView.findViewById(R.id.tvUnlike);
+        mImageLike = (ImageView) rootView.findViewById(R.id.ivLike);
 
     }
 
@@ -121,6 +125,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         });
         mTextLike.setOnClickListener(this);
         mTextUnlike.setOnClickListener(this);
+        mImageLike.setOnClickListener(this);
     }
 
     @Override
@@ -227,6 +232,14 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivLike:
+                int status = mTextLike.isShown() ? 1 : 0;
+                updateStatusLike(status);
+                if (mNotificationMessage != null) {
+                    mNotificationMessage.setIsLike(status);
+                    mDatabase.likePush(mNotificationMessage.getPushId(), 1);
+                }
+                break;
             case R.id.tvLike:
                 updateStatusLike(1);
                 if (mNotificationMessage != null) {
@@ -249,10 +262,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
             case 0:
                 mTextLike.setVisibility(View.VISIBLE);
                 mTextUnlike.setVisibility(View.GONE);
+                mImageLike.setImageDrawable(getResources().getDrawable(R.drawable.like_default));
                 break;
             case 1:
                 mTextLike.setVisibility(View.GONE);
                 mTextUnlike.setVisibility(View.VISIBLE);
+                mImageLike.setImageDrawable(getResources().getDrawable(R.drawable.like_choosen));
                 break;
         }
     }

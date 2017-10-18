@@ -58,14 +58,6 @@
             android:layout_below="@+id/line"
             android:fitsSystemWindows="true"/>
 
-        <TextView
-            android:id="@+id/textNoItem"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/navigation"
-            android:layout_below="@+id/line"
-            android:gravity="center"
-            android:visibility="gone"/>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
