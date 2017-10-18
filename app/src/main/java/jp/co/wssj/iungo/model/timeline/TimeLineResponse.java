@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.model.timeline;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.GsonSerializable;
@@ -97,7 +98,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
 
                 @SerializedName("self_like_id")
                 @Expose
-                private int statusLikeId;
+                private int myLikeId;
 
                 @SerializedName("manager_name")
                 @Expose
@@ -155,12 +156,12 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                     this.numberLike = numberLike;
                 }
 
-                public int getStatusLikeId() {
-                    return statusLikeId;
+                public int getMyLikeId() {
+                    return myLikeId;
                 }
 
-                public void setStatusLikeId(int statusLikeId) {
-                    this.statusLikeId = statusLikeId;
+                public void setMyLikeId(int myLikeId) {
+                    this.myLikeId = myLikeId;
                 }
 
                 public String getManagerName() {
@@ -176,11 +177,11 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
 
                 @SerializedName("count_like")
                 @Expose
-                private String countLike;
+                private int countLike;
 
                 @SerializedName("created")
                 @Expose
-                private String created;
+                private long created;
 
                 @SerializedName("id")
                 @Expose
@@ -206,11 +207,18 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 @Expose
                 private String timelineId;
 
-                public String getCountLike() {
+                public int getCountLike() {
                     return countLike;
                 }
 
-                public String getCreated() {
+                public void setCountLike(int countLike) {
+                    if (countLike < 0) {
+                        countLike = 1;
+                    }
+                    this.countLike = countLike;
+                }
+
+                public long getCreated() {
                     return created;
                 }
 
@@ -227,6 +235,9 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 }
 
                 public List<String> getListUserLike() {
+                    if (listUserLike == null) {
+                        listUserLike = new ArrayList<>();
+                    }
                     return listUserLike;
                 }
 

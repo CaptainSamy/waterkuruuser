@@ -28,6 +28,9 @@ public class LoginResponse extends ResponseData<LoginResponse.LoginData> {
         @SerializedName("reset_password_required")
         private boolean mIsRequireReset;
 
+        @SerializedName("img_user")
+        private String mImageUser;
+
         public String getUserName() {
             return mUserName;
         }
@@ -46,6 +49,10 @@ public class LoginResponse extends ResponseData<LoginResponse.LoginData> {
 
         public boolean isRequireResetPassword() {
             return mIsRequireReset;
+        }
+
+        public String getImageUser() {
+            return mImageUser;
         }
     }
 }

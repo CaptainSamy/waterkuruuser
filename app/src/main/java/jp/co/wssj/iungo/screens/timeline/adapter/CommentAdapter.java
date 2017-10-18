@@ -91,7 +91,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
                 }
                 mNumberLike.setText(String.valueOf(mComment.getNumberLike()));
                 onLikeComment(comments);
-                Utils.fillImage(getContext(), mComment.getImageStore(), mImageStore, R.drawable.icon_user);
+                Utils.fillImage(getContext(), mComment.getImageAvatar(), mImageStore, R.drawable.icon_user);
             }
             mLayoutLike.setOnClickListener(new View.OnClickListener() {
 

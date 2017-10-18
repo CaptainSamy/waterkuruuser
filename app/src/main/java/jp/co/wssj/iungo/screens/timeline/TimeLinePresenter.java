@@ -65,4 +65,8 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
         });
     }
 
+    public String getUserName() {
+        return getModel(SharedPreferencesModel.class).getUserName();
+    }
+
 }
