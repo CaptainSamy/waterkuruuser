@@ -3,7 +3,6 @@ package jp.co.wssj.iungo.screens.splash.dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
@@ -17,7 +16,6 @@ import jp.co.wssj.iungo.screens.IActivityCallback;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.MainActivity;
 import jp.co.wssj.iungo.screens.base.BaseDialog;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 
 /**
  * Created by Nguyen Huu Ta on 7/8/2017.
@@ -143,9 +141,7 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
                         ((MainActivity) mContext).finish();
                     }
                 } else {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-                    mActivityCallback.displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
+                    mActivityCallback.displayScreen(IMainView.FRAGMENT_TIMELINE, false, false);
                 }
                 break;
             case R.id.tvMaintain:
@@ -155,9 +151,7 @@ public class DialogAskUpdate extends BaseDialog<IDialogUpdateView, DialogUpdateP
                         ((MainActivity) mContext).finish();
                     }
                 } else if (mStatus.equals(STATUS_PREPARE)) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-                    mActivityCallback.displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
+                    mActivityCallback.displayScreen(IMainView.FRAGMENT_TIMELINE, false, false);
                 }
                 break;
 

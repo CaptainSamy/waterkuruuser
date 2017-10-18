@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.listcard;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +15,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.listcard.adapter.CardAdapter;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.utils.Constants;
@@ -26,7 +25,7 @@ import jp.co.wssj.iungo.widget.MarginItemDecoration;
  * Created by HieuPT on 6/1/2017.
  */
 
-public class ListCardFragmentDetail extends PagedFragment<IListCardDetailView, ListCardDetailPresenter> implements IListCardDetailView {
+public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, ListCardDetailPresenter> implements IListCardDetailView {
 
     public static final String KEY_CARD_NAME = "KEY_CARD_NAME";
 
@@ -74,8 +73,8 @@ public class ListCardFragmentDetail extends PagedFragment<IListCardDetailView, L
     }
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.title_screen_stamp);
+    public String getAppBarTitle() {
+        return getString(R.string.title_screen_stamp);
     }
 
     @Override

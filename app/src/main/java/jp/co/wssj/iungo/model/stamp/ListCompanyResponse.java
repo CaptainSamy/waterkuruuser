@@ -1,5 +1,8 @@
 package jp.co.wssj.iungo.model.stamp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -13,7 +16,7 @@ import jp.co.wssj.iungo.model.ResponseData;
 
 public class ListCompanyResponse extends ResponseData<ListCompanyResponse.ListCompanyData> {
 
-    public class ListCompanyData implements GsonSerializable {
+    public static class ListCompanyData implements GsonSerializable {
 
         @SerializedName("company")
         private List<CompanyData> mCompanies;
@@ -22,7 +25,7 @@ public class ListCompanyResponse extends ResponseData<ListCompanyResponse.ListCo
             return mCompanies;
         }
 
-        public class CompanyData implements GsonSerializable {
+        public static class CompanyData implements GsonSerializable, Parcelable {
 
             @SerializedName("service_id")
             private int mServiceId;
@@ -99,6 +102,51 @@ public class ListCompanyResponse extends ResponseData<ListCompanyResponse.ListCo
             public int getUnreadPush() {
                 return mUnreadPush;
             }
+
+            protected CompanyData(Parcel in) {
+                mServiceId = in.readInt();
+                mServiceName = in.readString();
+                mCompanyId = in.readInt();
+                mServiceCompanyId = in.readInt();
+                mName = in.readString();
+                mLogo = in.readString();
+                mCardName = in.readString();
+                mCardNumber = in.readInt();
+                mCardType = in.readInt();
+                mUnreadPush = in.readInt();
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeInt(mServiceId);
+                dest.writeString(mServiceName);
+                dest.writeInt(mCompanyId);
+                dest.writeInt(mServiceCompanyId);
+                dest.writeString(mName);
+                dest.writeString(mLogo);
+                dest.writeString(mCardName);
+                dest.writeInt(mCardNumber);
+                dest.writeInt(mCardType);
+                dest.writeInt(mUnreadPush);
+            }
+
+            public static final Parcelable.Creator<CompanyData> CREATOR = new Parcelable.Creator<CompanyData>() {
+
+                @Override
+                public CompanyData createFromParcel(Parcel in) {
+                    return new CompanyData(in);
+                }
+
+                @Override
+                public CompanyData[] newArray(int size) {
+                    return new CompanyData[size];
+                }
+            };
         }
     }
 }

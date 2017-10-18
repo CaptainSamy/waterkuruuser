@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.screens.changepassword;
 
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
@@ -11,7 +10,6 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.auth.InfoUserResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 
 /**
  * Created by Nguyen Huu Ta on 11/5/2017.
@@ -38,6 +36,11 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     @Override
     public String getAppBarTitle() {
         return getString(R.string.title_changer_password);
+    }
+
+    @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
     }
 
     @Override
@@ -104,9 +107,7 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
 
             @Override
             public void run() {
-                Bundle bundle = new Bundle();
-                bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_TIMELINE, true, false);
             }
         }, 1000);
     }

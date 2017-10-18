@@ -41,7 +41,6 @@ import java.util.Arrays;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
@@ -49,7 +48,8 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by Nguyen Huu Ta on 10/5/2017.
  */
 
-public class IntroductionFragment extends BaseFragment<IIntroductionView, IntroductionPresenter> implements IIntroductionView, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class IntroductionFragment extends BaseFragment<IIntroductionView, IntroductionPresenter>
+        implements IIntroductionView, View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "IntroductionFragment";
 
@@ -104,6 +104,11 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     protected boolean isRetainState() {
         return true;
+    }
+
+    @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
     }
 
     @Override
@@ -201,9 +206,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     public void displayHomeScreen() {
         getActivityCallback().clearBackStack();
-        Bundle bundle = new Bundle();
-        bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, false, false, bundle);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_TIMELINE, false, false);
     }
 
     /*

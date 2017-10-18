@@ -7,7 +7,7 @@ import jp.co.wssj.iungo.model.checkin.CheckInModel;
 import jp.co.wssj.iungo.model.checkin.CheckInStatusResponse;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.util.UtilsModel;
-import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.screens.switcher.SwitcherPresenter;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 import jp.co.wssj.iungo.utils.Constants;
 
@@ -15,7 +15,7 @@ import jp.co.wssj.iungo.utils.Constants;
  * Created by Nguyen Huu Ta on 20/6/2017.
  */
 
-class HomePresenter extends FragmentPresenter<IHomeView> {
+class HomePresenter extends SwitcherPresenter<IHomeView> {
 
     HomePresenter(IHomeView view) {
         super(view);

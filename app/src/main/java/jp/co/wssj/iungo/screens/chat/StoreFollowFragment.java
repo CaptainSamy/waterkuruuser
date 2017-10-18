@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.chat;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
@@ -13,7 +12,7 @@ import java.util.List;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.StoreFollowResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.chat.adapter.StoreFollowAdapter;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 
@@ -21,7 +20,10 @@ import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
  * Created by Nguyen Huu Ta on 26/6/2017.
  */
 
-public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFollowPresenter> implements IStoreFollowView, SwipeRefreshLayout.OnRefreshListener, PagedFragment.IOnPageSelectChangeListener {
+public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFollowPresenter>
+        implements IStoreFollowView, SwipeRefreshLayout.OnRefreshListener {
+
+    public static final String KEY_STORE_FOLLOW_LIST = "KEY_STORE_FOLLOW_LIST";
 
     private static final String TAG = "StoreFollowFragment";
 
@@ -32,6 +34,12 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
     private List<StoreFollowResponse.StoreChatData.StoreFollow> mStoreFollows;
 
     private StoreFollowAdapter mAdapter;
+
+    public static StoreFollowFragment newInstance(Bundle bundle) {
+        StoreFollowFragment fragment = new StoreFollowFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     protected String getLogTag() {
@@ -59,20 +67,19 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
     }
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.title_screen_store_follow);
+    public String getAppBarTitle() {
+        return getString(R.string.title_screen_store_follow);
     }
 
     @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_another;
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_STORE_FOLLOW;
     }
 
     @Override
     protected void initViews(View rootView) {
         mListViewStoreFollow = (ListView) rootView.findViewById(R.id.lvStoreFollow);
         mRefreshStoreFollow = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshStoreFollow);
-        setRefreshing(true);
     }
 
     @Override
@@ -91,15 +98,25 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
         });
 
         mRefreshStoreFollow.setOnRefreshListener(this);
-        addOnPageSelectChangeListener(this);
     }
 
     @Override
     protected void initData() {
-        mStoreFollows = new ArrayList<>();
-        mAdapter = new StoreFollowAdapter(getActivityContext(), mStoreFollows);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mStoreFollows = bundle.getParcelableArrayList(KEY_STORE_FOLLOW_LIST);
+        }
+        if (mStoreFollows == null) {
+            mStoreFollows = new ArrayList<>();
+            mAdapter = new StoreFollowAdapter(getActivityContext(), mStoreFollows);
+            setRefreshing(true);
+            getPresenter().getListStoreFollow();
+        } else if (mStoreFollows.isEmpty()) {
+            showTextNoItem(true, getString(R.string.no_conversation));
+        } else {
+            mAdapter = new StoreFollowAdapter(getActivityContext(), mStoreFollows);
+        }
         mListViewStoreFollow.setAdapter(mAdapter);
-        getPresenter().getListStoreFollow();
     }
 
     @Override
@@ -108,27 +125,13 @@ public class StoreFollowFragment extends PagedFragment<IStoreFollowView, StoreFo
         if (storeFollows != null && storeFollows.size() > 0) {
             if (mStoreFollows != null) {
                 mStoreFollows.clear();
+                mStoreFollows.addAll(storeFollows);
             }
-            mStoreFollows.addAll(storeFollows);
             mAdapter.notifyDataSetChanged();
             showTextNoItem(false, null);
         } else {
-            if (getUserVisibleHint()) {
-                showTextNoItem(true, getString(R.string.no_conversation));
-            }
-        }
-    }
-
-    @Override
-    public void onPageSelected() {
-        if (mStoreFollows.size() == 0) {
             showTextNoItem(true, getString(R.string.no_conversation));
         }
-    }
-
-    @Override
-    public void onPageUnselected() {
-        showTextNoItem(false, null);
     }
 
     @Override

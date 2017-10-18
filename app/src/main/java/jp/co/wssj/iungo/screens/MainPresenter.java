@@ -41,11 +41,11 @@ class MainPresenter extends BasePresenter<IMainView> {
         getView().goBack();
     }
 
-    void onLogout() {
+    void logout() {
         String token = getModel(SharedPreferencesModel.class).getToken();
         getModel(AuthModel.class).removeDeviceToken(token);
         getModel(SharedPreferencesModel.class).clearAll();
-        getView().onLogout();
+        getView().logout();
 
     }
 
@@ -57,8 +57,8 @@ class MainPresenter extends BasePresenter<IMainView> {
         getView().onCloseDrawableLayout(screenId, hasAnimation, addToBackStack, bundle, navigationId);
     }
 
-    void onBottomNavigationButtonClicked(int itemId) {
-        getView().setSelectedPage(itemId);
+    void onBottomNavigationButtonClicked(int screenId, Bundle bundle) {
+        getView().switchScreen(screenId, true, true, bundle);
     }
 
     void onDispatchFinishActivity() {
@@ -66,7 +66,7 @@ class MainPresenter extends BasePresenter<IMainView> {
     }
 
     void onEnableDrawerLayout() {
-        getView().onEnableDrawerLayout();
+        getView().enableDrawerLayout();
     }
 
     void clearData() {
@@ -74,7 +74,7 @@ class MainPresenter extends BasePresenter<IMainView> {
     }
 
     void onDisableDrawerLayout() {
-        getView().onDisableDrawerLayout();
+        getView().disableDrawerLayout();
     }
 
     public void getListPushNotificationUnRead(int page, int limit) {

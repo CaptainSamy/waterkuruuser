@@ -58,9 +58,27 @@ public interface IMainView extends IView {
 
     int FRAGMENT_COMMENT = 36;
 
-    int FRAGMENT_PRIMARY = 37;
+    int FRAGMENT_TIMELINE = 37;
 
     int FRAGMENT_PUSH_NOTIFICATION_PAGER = 38;
+
+    int FRAGMENT_LIST_SERVICE_COMPANY = 39;
+
+    int FRAGMENT_STORE_FOLLOW = 40;
+
+    int FRAGMENT_WAIT_STORE_CONFIRM = 41;
+
+    int FRAGMENT_MANAGE_STAMP = 42;
+
+    int FRAGMENT_SCANNER = 43;
+
+    int FRAGMENT_HOME = 44;
+
+    int FRAGMENT_CHAT_WRAPPER = 45;
+
+    int FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER = 46;
+
+    int FRAGMENT_PUSH_NOTIFICATION_PAGER_NAVIGATION = 47;
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
@@ -70,19 +88,17 @@ public interface IMainView extends IView {
 
     void clearBackStack();
 
-    void setSelectedPage(int itemId);
-
     void finishActivity();
 
     void onOpenDrawableLayout();
 
     void onCloseDrawableLayout(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, int navigationId);
 
-    void onEnableDrawerLayout();
+    void enableDrawerLayout();
 
-    void onDisableDrawerLayout();
+    void disableDrawerLayout();
 
-    void onLogout();
+    void logout();
 
     void showListPushNotificationUnRead(List<NotificationMessage> list, int page, int totalPage, int totalPushUnRead);
 
@@ -93,5 +109,4 @@ public interface IMainView extends IView {
     void onMappingUserStoreFastFailure(String message);
 
     void displayScanCodeScreen();
-
 }

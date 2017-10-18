@@ -1,32 +1,21 @@
 package jp.co.wssj.iungo.screens.home;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
 
-import jp.co.wssj.iungo.R;
-import jp.co.wssj.iungo.screens.base.IWrapperFragment;
-import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
+import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
 import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
+import jp.co.wssj.iungo.screens.switcher.SwitcherFragment;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
-import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by Nguyen Huu Ta on 20/6/2017.
  */
 
-public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
-        implements IHomeView, PagedFragment.IOnPageSelectChangeListener, IWrapperFragment {
+public class HomeFragment extends SwitcherFragment<IHomeView, HomePresenter>
+        implements IHomeView {
 
     private static final String TAG = "HomeFragment";
-
-    private PagedFragment mCurrentFragment;
-
-    private FragmentManager mFragmentManager;
 
     private ScannerFragment mScannerFragment;
 
@@ -41,26 +30,13 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
 //    }
 
     @Override
-    protected int getResourceLayout() {
-        return R.layout.fragment_home;
-    }
-
-    @Override
     protected boolean isRetainState() {
         return true;
     }
 
     @Override
-    public String getPageTitle(Context context) {
-        if (mCurrentFragment != null) {
-            return mCurrentFragment.getPageTitle(context);
-        }
-        return super.getPageTitle(context);
-    }
-
-    @Override
-    public void refresh() {
-        getPresenter().showFragment();
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_HOME;
     }
 
     @Override
@@ -74,69 +50,8 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
     }
 
     @Override
-    public void onAttachFragment(Fragment childFragment) {
-        Logger.d(getLogTag(), "#onAttachFragment");
-        if (childFragment instanceof PagedFragment) {
-            ((PagedFragment) childFragment).setPagerFragmentCallback(getPagerFragmentCallback());
-        }
-        if (childFragment instanceof IWrapperFragmentController) {
-            ((IWrapperFragmentController) childFragment).setWrapperFragment(this);
-        }
-    }
-
-    @Override
-    protected void initViews(View rootView) {
-        mFragmentManager = getChildFragmentManager();
-        if (getUserVisibleHint()) {
-            getPresenter().showFragment();
-        }
-    }
-
-    @Override
-    protected void initAction() {
-        addOnPageSelectChangeListener(this);
-    }
-
-    private void replaceFragment(PagedFragment fragment) {
-        if (fragment != null && mCurrentFragment != fragment) {
-            if (mCurrentFragment != null) {
-                mCurrentFragment.setUserVisibleHint(false);
-            }
-            mFragmentManager.beginTransaction()
-                    .replace(R.id.home_fragment_container, fragment)
-                    .commitAllowingStateLoss();
-            mCurrentFragment = fragment;
-            mCurrentFragment.setUserVisibleHint(getUserVisibleHint());
-            getActivityCallback().setAppBarTitle(fragment.getPageTitle(getActivityContext()));
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mCurrentFragment != null) {
-            mCurrentFragment.setUserVisibleHint(getUserVisibleHint());
-        }
-    }
-
-    @Override
-    public void onPageSelected() {
-        if (mCurrentFragment != null) {
-            mCurrentFragment.notifyPageSelected();
-        }
-    }
-
-    @Override
-    public void onPageUnselected() {
-        if (mCurrentFragment != null) {
-            mCurrentFragment.notifyPageUnselected();
-        }
-    }
-
-    @Override
     public void displayStampManagerScreen(Bundle bundle) {
-        ManageStampFragment fragment = ManageStampFragment.newInstance(bundle);
-        replaceFragment(fragment);
+        displayFragment(ManageStampFragment.newInstance(bundle));
     }
 
     @Override
@@ -144,17 +59,11 @@ public class HomeFragment extends PagedFragment<IHomeView, HomePresenter>
         if (mScannerFragment == null) {
             mScannerFragment = new ScannerFragment();
         }
-        replaceFragment(mScannerFragment);
+        displayFragment(mScannerFragment);
     }
 
     @Override
     public void displayWaitStoreConfirmScreen(Bundle bundle) {
-        WaitStoreConfirmFragment fragment = WaitStoreConfirmFragment.newInstance(bundle);
-        replaceFragment(fragment);
-    }
-
-    @Override
-    public void displayScreen(PagedFragment fragment) {
-        replaceFragment(fragment);
+        displayFragment(WaitStoreConfirmFragment.newInstance(bundle));
     }
 }

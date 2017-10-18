@@ -1,6 +1,5 @@
 package jp.co.wssj.iungo.screens.waitstoreconfirm;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -17,11 +16,6 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.checkin.CheckInStatusResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.base.IWrapperFragment;
-import jp.co.wssj.iungo.screens.base.IWrapperFragmentController;
-import jp.co.wssj.iungo.screens.base.PagedFragment;
-import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
-import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
@@ -31,8 +25,8 @@ import jp.co.wssj.iungo.widget.CircularProgressBar;
  * Created by HieuPT on 5/19/2017.
  */
 
-public class WaitStoreConfirmFragment extends PagedFragment<IWaitStoreConfirmView, WaitStoreConfirmPresenter>
-        implements IWaitStoreConfirmView, IWrapperFragmentController {
+public class WaitStoreConfirmFragment extends BaseFragment<IWaitStoreConfirmView, WaitStoreConfirmPresenter>
+        implements IWaitStoreConfirmView {
 
     private static final String TAG = "WaitStoreConfirmFragment";
 
@@ -72,8 +66,6 @@ public class WaitStoreConfirmFragment extends PagedFragment<IWaitStoreConfirmVie
 
     private boolean isAllowCheckIn;
 
-    private IWrapperFragment mWrapperFragment;
-
     public static WaitStoreConfirmFragment newInstance(Bundle args) {
         WaitStoreConfirmFragment fragment = new WaitStoreConfirmFragment();
         fragment.setArguments(args);
@@ -86,8 +78,13 @@ public class WaitStoreConfirmFragment extends PagedFragment<IWaitStoreConfirmVie
     }
 
     @Override
-    public String getPageTitle(Context context) {
-        return getString(context, R.string.title_waiting_store_confirm_checkin);
+    public String getAppBarTitle() {
+        return getString(R.string.title_waiting_store_confirm_checkin);
+    }
+
+    @Override
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_WAIT_STORE_CONFIRM;
     }
 
     @Override
@@ -177,15 +174,11 @@ public class WaitStoreConfirmFragment extends PagedFragment<IWaitStoreConfirmVie
                                 Bundle bundle = new Bundle();
                                 bundle.putString(KEY_STORE_NAME, mStoreName);
                                 bundle.putSerializable(KEY_SERVICE_NAME, mServiceName);
-                                if (mWrapperFragment != null) {
-                                    mWrapperFragment.displayScreen(ManageStampFragment.newInstance(bundle));
-                                }
+                                getActivityCallback().displayScreen(IMainView.FRAGMENT_MANAGE_STAMP, true, false, bundle);
                             }
                         }, 2500);
                     } else {
-                        if (mWrapperFragment != null) {
-                            mWrapperFragment.displayScreen(new ScannerFragment());
-                        }
+                        getActivityCallback().displayScreen(IMainView.FRAGMENT_SCANNER, true, false);
                     }
                 }
             }
@@ -254,10 +247,5 @@ public class WaitStoreConfirmFragment extends PagedFragment<IWaitStoreConfirmVie
 
     public void stopCheckingStatus() {
         mHandler.removeCallbacksAndMessages(null);
-    }
-
-    @Override
-    public void setWrapperFragment(IWrapperFragment fragment) {
-        mWrapperFragment = fragment;
     }
 }

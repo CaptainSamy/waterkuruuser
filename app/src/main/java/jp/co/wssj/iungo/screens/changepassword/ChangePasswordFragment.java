@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -45,7 +44,6 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.dialogchoosen.DialogChoose;
 import jp.co.wssj.iungo.screens.dialogphoto.PhotoDialog;
-import jp.co.wssj.iungo.screens.primary.PrimaryFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.ImmediateResultCameraModule;
 import jp.co.wssj.iungo.utils.Logger;
@@ -55,7 +53,8 @@ import jp.co.wssj.iungo.utils.Utils;
  * Created by Nguyen Huu Ta on 5/7/2017.
  */
 
-public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, ChangePasswordPresenter> implements AdapterView.OnItemSelectedListener, IChangePasswordView, View.OnClickListener, PhotoDialog.IOnDeleteButtonClickListener {
+public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, ChangePasswordPresenter>
+        implements AdapterView.OnItemSelectedListener, IChangePasswordView, View.OnClickListener, PhotoDialog.IOnDeleteButtonClickListener {
 
     private static final String TAG = "ChangePasswordFragment";
 
@@ -108,6 +107,11 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
     @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_change_password);
+    }
+
+    @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
     }
 
     @Override
@@ -239,9 +243,7 @@ public class ChangePasswordFragment extends BaseFragment<IChangePasswordView, Ch
 
             @Override
             public void run() {
-                Bundle bundle = new Bundle();
-                bundle.putInt(PrimaryFragment.KEY_SCREEN_ID, PrimaryFragment.SCREEN_TIMELINE);
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_PRIMARY, true, false, bundle);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_TIMELINE, true, false);
             }
         }, 1000);
     }

@@ -28,7 +28,8 @@ import jp.co.wssj.iungo.utils.Constants;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter> implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
+public class PushNotificationFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter>
+        implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "PushNotificationFragment";
 

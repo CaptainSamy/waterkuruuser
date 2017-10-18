@@ -33,6 +33,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     private static final String TAG = "BaseFragment";
 
+    protected static final String KEY_SET_GLOBAL = TAG + "_KEY_SET_GLOBAL";
+
     private IActivityCallback mActivityCallback;
 
     private P mPresenter;
@@ -196,7 +198,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     @Override
-    public final void showProgress() {
+    public void showProgress() {
         if (mProgressDialog != null && mPresenter.isViewAttached()) {
             if (getUserVisibleHint()) {
                 Logger.i(TAG, "#showProgress");
@@ -206,7 +208,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     @Override
-    public final void hideProgress() {
+    public void hideProgress() {
         if (mProgressDialog != null && mProgressDialog.isShowing() && mPresenter.isViewAttached()) {
             Logger.i(TAG, "#hideProgress");
             mProgressDialog.dismiss();
@@ -228,7 +230,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public boolean isDisplayBottomNavigationMenu() {
-        return false;
+        return true;
     }
 
     public boolean isEnableBottomNavigationMenu() {
@@ -252,7 +254,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public boolean isGlobal() {
-        return true;
+        Bundle bundle = getArguments();
+        return bundle == null || bundle.getBoolean(KEY_SET_GLOBAL, true);
     }
 
     public boolean isDisplayIconNotification() {

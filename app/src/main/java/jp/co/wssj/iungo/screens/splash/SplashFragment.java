@@ -41,6 +41,11 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     public boolean isDisplayActionBar() {
         return false;
     }
@@ -85,7 +90,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
                 dialogAskUpdate.showDialog();
             } else {
-                displayScreen(IMainView.FRAGMENT_PRIMARY);
+                displayScreen(IMainView.FRAGMENT_TIMELINE);
             }
         }
     }
