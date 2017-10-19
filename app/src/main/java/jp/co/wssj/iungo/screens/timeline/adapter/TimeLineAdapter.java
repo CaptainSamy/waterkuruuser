@@ -194,6 +194,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mLayoutComment.setOnClickListener(this);
             }
             Utils.fillImage(mContext, mTimeLine.getImageStore(), mImageStore, R.drawable.icon_user);
+            mLayoutLike.setOnClickListener(this);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
             if (TextUtils.isEmpty(mTimeLine.getMessages())) {
                 mContent.setVisibility(View.GONE);

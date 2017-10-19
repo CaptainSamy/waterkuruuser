@@ -30,17 +30,18 @@ import jp.co.wssj.iungo.utils.Utils;
 
 public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.ListComment> {
 
+    public static final int HIDE_IMAGE = 0;
+
+    public static final int SHOW_IMAGE = 1;
+
     private LayoutInflater mInflate;
 
     private CommentPresenter mTimelinePresenter;
-
-    private Context mContext;
 
     public CommentAdapter(@NonNull Context context, @NonNull List<CommentResponse.CommentData.ListComment> objects, CommentPresenter presenter) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
         mTimelinePresenter = presenter;
-        mContext = context;
     }
 
     @NonNull
@@ -58,6 +59,11 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
         return convertView;
     }
 
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
     public class CommentHolder {
 
         private TextView mContentComment, mTime, mLike, mLiked, mNumberLike;
@@ -68,7 +74,7 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
         private CircleImageView mImageStore;
 
-        CommentResponse.CommentData.ListComment.Comment mComment;
+        private CommentResponse.CommentData.ListComment.Comment mComment;
 
         public CommentHolder(View view) {
             mContentComment = (TextView) view.findViewById(R.id.tvContentComment);
@@ -90,48 +96,48 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
                     mTime.setText(Utils.distanceTimes(mComment.getCreated()));
                 }
                 mNumberLike.setText(String.valueOf(mComment.getNumberLike()));
-                onLikeComment(comments);
                 Utils.fillImage(getContext(), mComment.getImageAvatar(), mImageStore, R.drawable.icon_user);
-            }
-            mLayoutLike.setOnClickListener(new View.OnClickListener() {
+                fillLikeComment(comments);
+                mLayoutLike.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    if (comments != null) {
-                        final int isLike = comments.getStatusLike() == 0 ? 1 : 0;
-                        int statusLike = comments.getStatusLike();
-                        comments.setStatusLike(isLike);
-                        int numberLike;
-                        if (isLike == 1) {
-                            numberLike = comments.getComment().getNumberLike() + 1;
-                        } else {
-                            numberLike = comments.getComment().getNumberLike() - 1;
-                        }
-                        if (mComment != null) {
-                            mComment.setNumberLike(numberLike);
-                        }
-                        onLikeComment(comments);
-                        if (mTimelinePresenter != null) {
-                            mTimelinePresenter.likeComment(comments.getComment().getId(), 1, statusLike, isLike, new TimeLinePresenter.IOnLikeCallback() {
+                    @Override
+                    public void onClick(View v) {
+                        if (comments != null) {
+                            final int isLike = comments.getStatusLike() == 0 ? 1 : 0;
+                            int statusLike = comments.getStatusLike();
+                            comments.setStatusLike(isLike);
+                            int numberLike;
+                            if (isLike == 1) {
+                                numberLike = comments.getComment().getNumberLike() + 1;
+                            } else {
+                                numberLike = comments.getComment().getNumberLike() - 1;
+                            }
+                            if (mComment != null) {
+                                mComment.setNumberLike(numberLike);
+                            }
+                            fillLikeComment(comments);
+                            if (mTimelinePresenter != null) {
+                                mTimelinePresenter.likeComment(comments.getComment().getId(), 1, statusLike, isLike, new TimeLinePresenter.IOnLikeCallback() {
 
-                                @Override
-                                public void onLikeSuccess(String message) {
+                                    @Override
+                                    public void onLikeSuccess(String message) {
 
-                                }
+                                    }
 
-                                @Override
-                                public void onLikeFailure(String message) {
-                                    Toast.makeText(mContext, message, Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                    @Override
+                                    public void onLikeFailure(String message) {
+                                        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
 
         }
 
-        public void onLikeComment(CommentResponse.CommentData.ListComment comments) {
+        public void fillLikeComment(CommentResponse.CommentData.ListComment comments) {
             int numberLike = comments.getComment().getNumberLike();
             if (numberLike > 0) {
                 mLayoutNumberLike.setVisibility(View.VISIBLE);

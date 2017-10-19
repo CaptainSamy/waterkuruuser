@@ -79,21 +79,5 @@ public class TransitionDetailFragment extends Fragment {
                     }
                 })
                 .into(imageView);
-
-//        Picasso.with(getContext())
-//                .load(animalItem)
-//                .noFade()
-//                .into(imageView, new Callback() {
-//
-//                    @Override
-//                    public void onSuccess() {
-////                        startPostponedEnterTransition();
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-////                        startPostponedEnterTransition();
-//                    }
-//                });
     }
 }

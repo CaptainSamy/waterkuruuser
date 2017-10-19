@@ -280,7 +280,7 @@ public final class Utils {
             if (listFileName.length > 1) {
                 fileName = listFileName[0];
             }
-            return fileName + System.currentTimeMillis();
+            return fileName + System.currentTimeMillis()+".png";
         }
         return Constants.EMPTY_STRING;
     }
@@ -336,7 +336,6 @@ public final class Utils {
 
                         @Override
                         public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-                            Logger.d(TAG, "onResourceReady");
                             imageView.setImageDrawable(resource);
                         }
                     });

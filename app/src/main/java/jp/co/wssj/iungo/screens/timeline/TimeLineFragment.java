@@ -129,11 +129,14 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     public void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData) {
         setRefresh(false);
         if (timeLineData != null && timeLineData.getListTimeline().size() > 0) {
+            showTextNoItem(false, null);
             int page = timeLineData.getPage();
             mRecycleTimeLine.setTotalPage(timeLineData.getTotalPage());
             mRecycleTimeLine.setCurrentPage(page);
             List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
             mAdapter.refreshList(listTimeline, page);
+        } else {
+            showTextNoItem(true, getString(R.string.no_timeline));
         }
     }
 

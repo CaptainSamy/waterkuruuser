@@ -66,6 +66,8 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     private CommentAdapter mAdapterComment;
 
+    private ProgressBar mProgressBar;
+
     private List<CommentResponse.CommentData.ListComment> mListComment;
 
     private int mTimelineId;
@@ -158,7 +160,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         mProgressSend = (ProgressBar) rootView.findViewById(R.id.progressSend);
         mInputComment = (EditText) rootView.findViewById(R.id.etComment);
         mLayoutViewPager = (RelativeLayout) rootView.findViewById(R.id.layoutViewPager);
-
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         mIndicator.setFillColor(ContextCompat.getColor(getContext(), R.color.colorMain));
         mIndicator.setPageColor(ContextCompat.getColor(getContext(), R.color.white));
         mIndicator.setRadius(Utils.convertDpToPixel(getContext(), 4));
@@ -217,6 +219,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         }
         if (getArguments() != null) {
             mTimelineId = getArguments().getInt(KEY_TIME_LIKE_ID);
+            mProgressBar.setVisibility(View.VISIBLE);
             getPresenter().getListComment(mTimelineId);
         }
     }
@@ -235,7 +238,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     @Override
     public void onResume() {
         super.onResume();
-        mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
+//        mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
     }
 
     @Override
@@ -254,6 +257,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     @Override
     public void onGetListCommentSuccess(CommentResponse.CommentData commentData) {
+        mProgressBar.setVisibility(View.GONE);
         if (mListComment != null && commentData.getListComment().size() > 0) {
             mListComment.clear();
             mListComment.addAll(commentData.getListComment());
@@ -268,6 +272,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     @Override
     public void onGetListCommentFailure(String message) {
+        mProgressBar.setVisibility(View.GONE);
         showToast(message);
     }
 

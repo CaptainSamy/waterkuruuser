@@ -15,14 +15,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <jp.co.wssj.iungo.widget.CustomViewPager
                 android:id="@+id/vpPhotoTimeline"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/black"
-
                 />
 
             <jp.co.wssj.iungo.widget.CirclePageIndicator
@@ -43,7 +42,7 @@
             <ListView
                 android:id="@+id/lvComment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:stackFromBottom="true"
                 android:transcriptMode="normal"/>
 
@@ -53,6 +52,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 />
+
+            <ProgressBar
+                android:id="@id/progressBar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
         </RelativeLayout>
 
 

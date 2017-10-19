@@ -121,7 +121,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         if (bundle != null) {
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH, 0);
-
             if (mListNotification == null) {
                 mListNotification = new ArrayList<>();
                 mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
@@ -140,7 +139,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
-
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -218,11 +216,13 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
-        if (list != null) {
+        if (list != null && list.size() > 0) {
             mListNotification.addAll(list);
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
             mDatabase.insertPushStoreAnnounce(list, mServiceCompanyId);
+        } else {
+            showTextNoItem(true, getString(R.string.text_no_item_push_all));
         }
 
 

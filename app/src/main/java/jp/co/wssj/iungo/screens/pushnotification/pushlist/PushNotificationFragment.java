@@ -213,24 +213,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 statusSearchView(hasFocus);
             }
         });
-
-
-//        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-//
-//            @Override
-//            public void onEndOfListView() {
-//
-//                Logger.d(TAG, "page : " + mPage + " totalPage " + mTotalPage);
-//                if (mTotalPage != 0) {
-//                    if (mPage < mTotalPage) {
-//                        mRefreshLayout.setRefreshing(true);
-//                        getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
-//                    }
-//                } else {
-//                    getPresenter().getListPushNotification(mPage + 1, Constants.LIMIT);
-//                }
-//            }
-//        });
     }
 
     private void statusSearchView(boolean hasFocus) {
