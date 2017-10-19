@@ -175,7 +175,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (getItemViewType() == SHOW_IMAGE) {
                 mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
-                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mActivityCallback);
+                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback);
                 try {
                     mListUrlImage = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
@@ -190,6 +190,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 }
             } else {
                 mLayoutContainerImages.setVisibility(View.GONE);
+                mNumberComment.setOnClickListener(this);
                 mLayoutComment.setOnClickListener(this);
             }
             Utils.fillImage(mContext, mTimeLine.getImageStore(), mImageStore, R.drawable.icon_user);
@@ -200,7 +201,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mContent.setVisibility(View.VISIBLE);
                 mContent.setText(StringEscapeUtils.unescapeJava(mTimeLine.getMessages()));
             }
-            mLayoutLike.setOnClickListener(this);
             mReactionFacebook.setItemIconLikeClick(new ReactionView.IListenerClickIconLike() {
 
                 @Override
@@ -285,6 +285,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                         showIconLike();
                     }
                     break;
+                case R.id.tvNumberComment:
                 case R.id.layoutComment:
                     commentFragment();
                     break;
@@ -298,8 +299,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 bundle.putInt(CommentFragment.KEY_ITEM_POSITION, 0);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
                 mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, null);
-
-
             }
         }
 
@@ -434,7 +433,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     mImage1.setVisibility(View.VISIBLE);
                 }
                 mNumberLike.setText(String.valueOf(mTimeLine.getNumberLike()));
+            } else {
+                mNumberLike.setText(Constants.EMPTY_STRING);
+                mImage1.setVisibility(View.GONE);
+                mImage2.setVisibility(View.GONE);
+                mImage3.setVisibility(View.GONE);
             }
+
         }
 
     }

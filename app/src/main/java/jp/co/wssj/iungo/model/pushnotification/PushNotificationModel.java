@@ -191,8 +191,8 @@ public class PushNotificationModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void getListPushNotificationForServiceCompany(String token, int serviceCompanyId, int page, int limit, final IGetListPushForServiceCompanyCallback callback) {
-        Request request = APICreator.getListNotificationForServiceCompany(token, serviceCompanyId, page, limit, new Response.Listener<ListNotificationResponse>() {
+    public void getListPushNotificationForServiceCompany(String token, int serviceCompanyId, long pushId, final IGetListPushForServiceCompanyCallback callback) {
+        Request request = APICreator.getListNotificationForServiceCompany(token, serviceCompanyId, pushId, new Response.Listener<ListNotificationResponse>() {
 
             @Override
             public void onResponse(ListNotificationResponse response) {

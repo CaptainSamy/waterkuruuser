@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     private SearchView mInputSearch;
 
     private TextView mTextSearch;
+
+    private RelativeLayout mLayoutSearch;
 
     private boolean isExpandedSearchView;
 
@@ -107,9 +110,9 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
+        mLayoutSearch = (RelativeLayout) rootView.findViewById(R.id.layoutSearch);
         mInputSearch.clearFocus();
-        mListNotification = new ArrayList<>();
-        mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+
     }
 
     @Override
@@ -118,14 +121,17 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         if (bundle != null) {
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH, 0);
-            mListNotification.addAll(mDatabase.getListPush(type, mServiceCompanyId));
-            if (mListNotification.size() == 0) {
+
+            if (mListNotification == null) {
+                mListNotification = new ArrayList<>();
+                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+                mListNotification.addAll(mDatabase.getListPush(type, mServiceCompanyId));
+                long lastPushId = 0;
                 mRefreshLayout.setRefreshing(true);
-                getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
-            } else {
-                int page = mListNotification.size() / Constants.LIMIT;
-                mPage = page == 0 ? 1 : page;
-                mAdapter.setListPushTemp(mListNotification);
+                if (mListNotification.size() != 0) {
+                    lastPushId = mListNotification.get(0).getPushId();
+                }
+                getPresenter().getListPushNotification(mServiceCompanyId, lastPushId);
             }
             mListView.setAdapter(mAdapter);
         }
@@ -134,21 +140,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
-        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
-
-            @Override
-            public void onEndOfListView() {
-                if (mTotalPage != 0) {
-                    if (mPage < mTotalPage) {
-                        mRefreshLayout.setRefreshing(true);
-                        getPresenter().getListPushNotification(mServiceCompanyId, mPage + 1, Constants.LIMIT);
-                    }
-                } else {
-                    mRefreshLayout.setRefreshing(true);
-                    getPresenter().getListPushNotification(mServiceCompanyId, mPage + 1, Constants.LIMIT);
-                }
-            }
-        });
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -160,8 +151,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
-
-        mTextSearch.setOnClickListener(new View.OnClickListener() {
+        mLayoutSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -228,8 +218,6 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
-        mPage = page;
-        mTotalPage = totalPage;
         if (list != null) {
             mListNotification.addAll(list);
             mAdapter.setListPushTemp(mListNotification);

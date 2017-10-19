@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     private NotificationMessage mNotificationMessage;
 
     private ImageView mImageLike;
+
+    private LinearLayout mLayoutLike;
 
     DBManager mDatabase = DBManager.getInstance();
 
@@ -101,6 +104,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mTextLike = (TextView) rootView.findViewById(R.id.tvLike);
         mTextUnlike = (TextView) rootView.findViewById(R.id.tvUnlike);
         mImageLike = (ImageView) rootView.findViewById(R.id.ivLike);
+        mLayoutLike = (LinearLayout) rootView.findViewById(R.id.layoutLike);
 
     }
 
@@ -123,9 +127,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 startActivity(intent);
             }
         });
-        mTextLike.setOnClickListener(this);
-        mTextUnlike.setOnClickListener(this);
-        mImageLike.setOnClickListener(this);
+        mLayoutLike.setOnClickListener(this);
     }
 
     @Override
@@ -232,26 +234,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.ivLike:
+            case R.id.layoutLike:
                 int status = mTextLike.isShown() ? 1 : 0;
                 updateStatusLike(status);
                 if (mNotificationMessage != null) {
                     mNotificationMessage.setIsLike(status);
                     mDatabase.likePush(mNotificationMessage.getPushId(), 1);
-                }
-                break;
-            case R.id.tvLike:
-                updateStatusLike(1);
-                if (mNotificationMessage != null) {
-                    mNotificationMessage.setIsLike(1);
-                    mDatabase.likePush(mNotificationMessage.getPushId(), 1);
-                }
-                break;
-            case R.id.tvUnlike:
-                updateStatusLike(0);
-                if (mNotificationMessage != null) {
-                    mNotificationMessage.setIsLike(0);
-                    mDatabase.likePush(mNotificationMessage.getPushId(), 0);
                 }
                 break;
         }

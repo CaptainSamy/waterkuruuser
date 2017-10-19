@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     private SearchView mInputSearch;
 
     private TextView mTextSearch;
+
+    private RelativeLayout mLayoutSearch;
 
     private boolean isExpandedSearchView;
 
@@ -117,33 +120,37 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
+        mLayoutSearch = (RelativeLayout) rootView.findViewById(R.id.layoutSearch);
         mInputSearch.clearFocus();
-        mListNotification = new ArrayList<>();
-        mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-
     }
 
     @Override
     protected void initData() {
-        mInputSearch.setEnabled(false);
-        mRefreshLayout.setEnabled(false);
         Bundle bundle = getArguments();
         int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
-        mListNotification.addAll(mDatabase.getListPush(type, 0));
+
         switch (type) {
             case PushNotificationPageAdapter.TYPE_ALL_PUSH:
-                if (mListNotification.size() == 0) {
-                    mRefreshLayout.setRefreshing(true);
-                    getPresenter().getListPushNotification(mPushId);
-                } else {
-                    mPushId = mListNotification.get(0).getPushId();
+                if (mListNotification == null) {
+                    mListNotification = new ArrayList<>();
+                    mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+                    mListNotification.addAll(mDatabase.getListPush(type, 0));
+                    if (mListNotification.size() != 0) {
+                        mPushId = mListNotification.get(0).getPushId();
+                    }
                     getPresenter().getListPushNotification(mPushId);
                 }
                 break;
             case PushNotificationPageAdapter.TYPE_LIKED_PUSH:
-                mAdapter.setIsAllowOnLoadMore(false);
-                break;
             case PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH:
+                mRefreshLayout.setEnabled(false);
+                if (mListNotification == null) {
+                    mListNotification = new ArrayList<>();
+                    mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+                } else {
+                    mListNotification.clear();
+                }
+                mListNotification.addAll(mDatabase.getListPush(type, 0));
                 mAdapter.setIsAllowOnLoadMore(false);
                 break;
         }
@@ -164,7 +171,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
-        mTextSearch.setOnClickListener(new View.OnClickListener() {
+        mLayoutSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -236,7 +243,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onRefresh() {
-//        getPresenter().getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+        getPresenter().getListPushNotification(mPushId);
     }
 
     public void hideSwipeRefreshLayout() {

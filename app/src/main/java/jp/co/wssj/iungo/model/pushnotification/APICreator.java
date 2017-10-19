@@ -76,15 +76,14 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ListNotificationResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final int page, int limit,
+    static GsonRequest<ListNotificationResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final long pushId,
                                                                                       final Response.Listener<ListNotificationResponse> listener,
                                                                                       final Response.ErrorListener errorListener) {
-        String url = API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY + "?page=" + page + "&limit=" + limit;
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
         return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
-                url,
+                API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY,
                 ListNotificationResponse.class,
                 headers,
                 Constants.TIME_OUT_CUSTOM,
@@ -113,6 +112,7 @@ public class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
                 params.put("service_company_id", serviceCompanyId);
+                params.put("push_id", pushId);
                 return params;
             }
         };
