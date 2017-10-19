@@ -5,11 +5,13 @@
                                                android:id="@+id/activity_simple_two"
                                                android:layout_width="match_parent"
                                                android:layout_height="wrap_content"
-                                               android:gravity="center">
+                                               android:gravity="center"
+                                               app:layout_heightPercent="100%"
+                                               app:layout_widthPercent="100%">
 
     <ImageView
         android:id="@+id/animal_detail_image_view"
-        android:src="@drawable/image_choose"
+        android:src="@drawable/ic_add_image"
         app:layout_heightPercent="100%"
         app:layout_widthPercent="100%"
         tools:ignore="UnusedAttribute"/>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -32,7 +33,6 @@ import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.widget.CirclePageIndicator;
-import jp.co.wssj.iungo.widget.CustomViewPager;
 
 /**
  * Created by Nguyen Huu Ta on 21/9/2017.
@@ -48,7 +48,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     public static final String KEY_LIST_ITEMS = "list_items";
 
-    private CustomViewPager mViewPagePhoto;
+    private ViewPager mViewPagePhoto;
 
     private CirclePageIndicator mIndicator;
 
@@ -115,6 +115,11 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected ICommentView onCreateView() {
         return this;
     }
@@ -153,7 +158,7 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     @Override
     protected void initViews(View rootView) {
-        mViewPagePhoto = (CustomViewPager) rootView.findViewById(R.id.vpPhotoTimeline);
+        mViewPagePhoto = (ViewPager) rootView.findViewById(R.id.vpPhotoTimeline);
         mIndicator = (CirclePageIndicator) rootView.findViewById(R.id.indicator);
         mListViewComment = (ListView) rootView.findViewById(R.id.lvComment);
         mButtonSendComment = (ImageView) rootView.findViewById(R.id.tvSendComment);
@@ -265,7 +270,9 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
             mAdapterComment.notifyDataSetChanged();
             showTextNoItem(false, null);
         } else {
-            showTextNoItem(true, getString(R.string.no_comment));
+            if (isAdded()) {
+                showTextNoItem(true, getString(R.string.no_comment));
+            }
         }
 
     }

@@ -36,8 +36,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private SwipeRefreshLayout mRefreshLayout;
 
-    private TextView mTextNoItem;
-
     private PushNotificationAdapter mAdapter;
 
     private ListView mListView;
@@ -116,7 +114,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     protected void initViews(View rootView) {
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
-        mTextNoItem = (TextView) rootView.findViewById(R.id.textNoItem);
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
@@ -128,9 +125,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     protected void initData() {
         Bundle bundle = getArguments();
         int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
-
+        mRefreshLayout.setEnabled(false);
         switch (type) {
             case PushNotificationPageAdapter.TYPE_ALL_PUSH:
+                mRefreshLayout.setRefreshing(true);
                 if (mListNotification == null) {
                     mListNotification = new ArrayList<>();
                     mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
@@ -143,7 +141,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 break;
             case PushNotificationPageAdapter.TYPE_LIKED_PUSH:
             case PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH:
-                mRefreshLayout.setEnabled(false);
                 if (mListNotification == null) {
                     mListNotification = new ArrayList<>();
                     mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
@@ -153,6 +150,13 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 mListNotification.addAll(mDatabase.getListPush(type, 0));
                 mAdapter.setIsAllowOnLoadMore(false);
                 break;
+        }
+        if (!mRefreshLayout.isRefreshing()) {
+            if (mListNotification.size() == 0) {
+                showTextNoItem(true, getString(R.string.text_no_item_push_all));
+            } else {
+                showTextNoItem(true, null);
+            }
         }
         mAdapter.setListPushTemp(mListNotification);
         mListView.setAdapter(mAdapter);
@@ -244,7 +248,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         mTotalPage = totalPage;
         if (list != null && list.size() > 0) {
             mListView.setVisibility(View.VISIBLE);
-            mTextNoItem.setVisibility(View.GONE);
+            showTextNoItem(false, null);
             Bundle bundle = getArguments();
             int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
             if (type == PushNotificationPageAdapter.TYPE_ALL_PUSH) {
@@ -270,13 +274,11 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 }
                 if (listPushId != null && listPushId.size() > 0) {
                     getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
-                    //TODO update status read in database
                 }
             }
         } else {
             if (mListNotification != null && mListNotification.size() == 0) {
-                mListView.setVisibility(View.GONE);
-                mTextNoItem.setVisibility(View.VISIBLE);
+                showTextNoItem(true, getString(R.string.text_no_item_push_all));
             }
         }
     }

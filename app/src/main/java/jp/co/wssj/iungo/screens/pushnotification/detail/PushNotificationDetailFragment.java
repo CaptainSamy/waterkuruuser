@@ -5,11 +5,15 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +23,6 @@ import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.pushnotification.ContentPushResponse;
 import jp.co.wssj.iungo.model.pushnotification.QuestionNaireResponse;
 import jp.co.wssj.iungo.screens.IMainView;
-import jp.co.wssj.iungo.screens.QuestionNaireActivity;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.dialograting.DialogRating;
 import jp.co.wssj.iungo.utils.Constants;
@@ -43,7 +46,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
     private WebView mBody;
 
-    private TextView mButtonRating, mButtonQuestionNaire;
+    private TextView mButtonRating;
 
     private NotificationMessage mNotificationMessage;
 
@@ -100,7 +103,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         mBody = (WebView) rootView.findViewById(R.id.body_notification);
         mTime = (TextView) rootView.findViewById(R.id.time_notification);
         mButtonRating = (TextView) rootView.findViewById(R.id.buttonRating);
-        mButtonQuestionNaire = (TextView) rootView.findViewById(R.id.buttonQuestionNaire);
         mTextLike = (TextView) rootView.findViewById(R.id.tvLike);
         mTextUnlike = (TextView) rootView.findViewById(R.id.tvUnlike);
         mImageLike = (ImageView) rootView.findViewById(R.id.ivLike);
@@ -118,15 +120,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 showRating(true);
             }
         });
-        mButtonQuestionNaire.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivityContext(), QuestionNaireActivity.class);
-                intent.putExtra(QuestionNaireActivity.KEY_QUESTION_NAIRE, mCode);
-                startActivity(intent);
-            }
-        });
         mLayoutLike.setOnClickListener(this);
     }
 
@@ -135,7 +128,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         Bundle bundle = getArguments();
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
-
             boolean isFromActivity = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
             if (mNotificationMessage != null) {
                 if (mNotificationMessage.getStatusRead() != Constants.STATUS_READ) {
@@ -144,10 +136,12 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                     getPresenter().setListPushUnRead(list, Constants.STATUS_READ);
                 }
                 updateStatusLike(mNotificationMessage.isLike());
+
+                WebSettings webSettings = mBody.getSettings();
                 mTitle.setText(mNotificationMessage.getTitle().trim());
-                mBody.getSettings().setJavaScriptEnabled(true);
-                mBody.getSettings().setBuiltInZoomControls(true);
-                mBody.getSettings().setDisplayZoomControls(false);
+                webSettings.setJavaScriptEnabled(true);
+                webSettings.setBuiltInZoomControls(true);
+                webSettings.setDisplayZoomControls(false);
                 if (!TextUtils.isEmpty(mNotificationMessage.getAction())) {
                     switch (mNotificationMessage.getAction()) {
                         case Constants.PushNotification.TYPE_NOTIFICATION:
@@ -162,7 +156,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_QUESTION_NAIRE:
                             mButtonRating.setVisibility(View.GONE);
-                            mButtonQuestionNaire.setVisibility(View.VISIBLE);
                             getPresenter().getQuestionNaire(mNotificationMessage.getPushId());
                             break;
                         default:
@@ -173,13 +166,34 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 if (isFromActivity) {
                     getPresenter().getContentPush(mNotificationMessage.getPushId());
                 } else {
-                    mBody.loadDataWithBaseURL(null, mNotificationMessage.getMessage(), "text/html", "UTF-8", null);
+                    if (!TextUtils.equals(mNotificationMessage.getAction(), Constants.PushNotification.TYPE_QUESTION_NAIRE)) {
+                        mBody.loadDataWithBaseURL(null, mNotificationMessage.getMessage(), "text/html", "UTF-8", null);
+                    }
                 }
                 String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);
                 mTime.setText(time);
 
             }
         }
+    }
+
+    public String convertlink(String s) {
+        // separete input by spaces ( URLs don't have spaces )
+        String[] parts = s.split("\\s");
+        String link = Constants.EMPTY_STRING;
+        // Attempt to convert each item into an URL.
+        for (String item : parts)
+            try {
+                URL url = new URL(item);
+                // If possible then replace with anchor...
+                link = "<a href=\"" + url + "\">" + url + "</a> ";
+            } catch (MalformedURLException e) {
+                // If there was an URL that was not it!...
+                System.out.print(item + " ");
+                link = s;
+            }
+
+        return link;
     }
 
     public void showRating(boolean isShowRating) {
@@ -221,14 +235,15 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     @Override
     public void onGetQuestionNaireSuccess(QuestionNaireResponse response) {
         mCode = response.getData().getCode();
-        if (TextUtils.isEmpty(mCode)) {
-            mButtonQuestionNaire.setVisibility(View.GONE);
-        }
+
+        mBody.getSettings().setLoadWithOverviewMode(true);
+        mBody.getSettings().setUseWideViewPort(true);
+        mBody.setWebViewClient(new WebViewClient());
+        mBody.loadUrl(mCode);
     }
 
     @Override
     public void onGetQuestionNaireFailure() {
-        mButtonQuestionNaire.setVisibility(View.GONE);
     }
 
     @Override
@@ -239,7 +254,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 updateStatusLike(status);
                 if (mNotificationMessage != null) {
                     mNotificationMessage.setIsLike(status);
-                    mDatabase.likePush(mNotificationMessage.getPushId(), 1);
+                    mDatabase.likePush(mNotificationMessage.getPushId(), status);
                 }
                 break;
         }
