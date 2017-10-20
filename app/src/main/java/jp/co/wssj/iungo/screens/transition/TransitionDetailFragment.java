@@ -58,7 +58,7 @@ public class TransitionDetailFragment extends Fragment {
         String urlImage = getArguments().getString(EXTRA_ANIMAL_ITEM);
         String transitionName = getArguments().getString(EXTRA_TRANSITION_NAME);
         ImageView imageView = (ImageView) view.findViewById(R.id.animal_detail_image_view);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             imageView.setTransitionName(transitionName);
         }
         Glide.with(this)

@@ -4,13 +4,12 @@
                                                xmlns:tools="http://schemas.android.com/tools"
                                                android:id="@+id/activity_simple_two"
                                                android:layout_width="match_parent"
-                                               android:layout_height="wrap_content"
-                                               android:gravity="center"
-                                               app:layout_heightPercent="100%"
-                                               app:layout_widthPercent="100%">
+                                               android:layout_height="match_parent"
+                                               android:gravity="center">
 
     <ImageView
         android:id="@+id/animal_detail_image_view"
+        android:scaleType="fitCenter"
         android:src="@drawable/ic_add_image"
         app:layout_heightPercent="100%"
         app:layout_widthPercent="100%"

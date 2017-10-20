@@ -221,7 +221,7 @@
     <!--Chat Fragment-->
     <string name="title_screen_store_follow">チャット</string>
     <string name="title_screen_chat">チェット</string>
-    <string name="input_content_chat">メッセージを入力します…</string>
+    <string name="input_content_chat">メッセージを入力してください。</string>
     <string name="no_conversation">メッセージがありません。</string>
 
     <!--Comment fragment-->

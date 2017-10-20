@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,25 +173,6 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
 
             }
         }
-    }
-
-    public String convertlink(String s) {
-        // separete input by spaces ( URLs don't have spaces )
-        String[] parts = s.split("\\s");
-        String link = Constants.EMPTY_STRING;
-        // Attempt to convert each item into an URL.
-        for (String item : parts)
-            try {
-                URL url = new URL(item);
-                // If possible then replace with anchor...
-                link = "<a href=\"" + url + "\">" + url + "</a> ";
-            } catch (MalformedURLException e) {
-                // If there was an URL that was not it!...
-                System.out.print(item + " ");
-                link = s;
-            }
-
-        return link;
     }
 
     public void showRating(boolean isShowRating) {
