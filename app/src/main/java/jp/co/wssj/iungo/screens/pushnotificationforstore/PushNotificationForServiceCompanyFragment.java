@@ -131,6 +131,12 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
                     lastPushId = mListNotification.get(0).getPushId();
                 }
                 getPresenter().getListPushNotification(mServiceCompanyId, lastPushId);
+            } else {
+                if (mListNotification.size() == 0) {
+                    showTextNoItem(true, getString(R.string.text_no_item_push_all));
+                } else {
+                    showTextNoItem(false, null);
+                }
             }
             mListView.setAdapter(mAdapter);
         }
@@ -217,6 +223,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
         if (list != null && list.size() > 0) {
+            showTextNoItem(false, null);
             mListNotification.addAll(list);
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();

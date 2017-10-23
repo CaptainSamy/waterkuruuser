@@ -128,7 +128,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         mRefreshLayout.setEnabled(false);
         switch (type) {
             case PushNotificationPageAdapter.TYPE_ALL_PUSH:
-                mRefreshLayout.setRefreshing(true);
                 if (mListNotification == null) {
                     mListNotification = new ArrayList<>();
                     mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
@@ -136,6 +135,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                     if (mListNotification.size() != 0) {
                         mPushId = mListNotification.get(0).getPushId();
                     }
+                    mRefreshLayout.setRefreshing(true);
                     getPresenter().getListPushNotification(mPushId);
                 }
                 break;
