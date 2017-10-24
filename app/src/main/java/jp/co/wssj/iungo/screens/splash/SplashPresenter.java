@@ -12,6 +12,7 @@ import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.stamp.StampModel;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 5/6/2017.
@@ -39,6 +40,8 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
 
                 @Override
                 public void onLoginSuccess(LoginResponse.LoginData data) {
+                    getModel(SharedPreferencesModel.class).putName(data.getName());
+                    getModel(SharedPreferencesModel.class).putPassword(Utils.toMD5(data.getPassword()));
                     getModel(SharedPreferencesModel.class).putToken(data.getToken());
                     getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
                     getModel(SharedPreferencesModel.class).putUserName(data.getUserName());

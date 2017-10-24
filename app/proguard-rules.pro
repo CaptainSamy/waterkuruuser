@@ -65,3 +65,6 @@
 -dontwarn org.androidannotations.api.rest.**
 -dontwarn com.iarcuschin.simpleratingbar.**
 -keep class com.iarcuschin.simpleratingbar.** { *; }
+-keep class jp.co.wssj.iungo.widget.dialog.** {
+    *;
+}

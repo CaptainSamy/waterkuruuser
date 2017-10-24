@@ -25,6 +25,12 @@ public class LoginResponse extends ResponseData<LoginResponse.LoginData> {
         @SerializedName("expire_date")
         private long mExpireDate;
 
+        @SerializedName("password")
+        private String mPassword;
+
+        @SerializedName("name")
+        private String mName;
+
         @SerializedName("reset_password_required")
         private boolean mIsRequireReset;
 
@@ -53,6 +59,14 @@ public class LoginResponse extends ResponseData<LoginResponse.LoginData> {
 
         public String getImageUser() {
             return mImageUser;
+        }
+
+        public String getPassword() {
+            return mPassword;
+        }
+
+        public String getName() {
+            return mName;
         }
     }
 }

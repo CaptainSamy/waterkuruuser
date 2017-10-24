@@ -18,7 +18,7 @@ public final class Constants {
 
     public static final int TIME_DELAYS = 1000;
 
-    public static final int TIME_WAITING_SPLASH = 1000;
+    public static final int TIME_WAITING_SPLASH = 2000;
 
     public static final int TIME_DELAY_CLOSED_NAVIGATION_MENU = 100;
 
@@ -68,7 +68,7 @@ public final class Constants {
 
     public static final String[] mArrayAge = {"１０代", "２０代", "３０代", "４０代", "５０代", "６０代"};
 
-    public static final String KEY_GEN_AUTO_LOGIN = "18af1e44-6d3d-4989-82b7-34ae085d32ce";
+    public static final String KEY_GEN_AUTO_LOGIN = "1abcc71e-9864-4b6e-af84-144ec74aea6d";
 
     private Constants() {
     }

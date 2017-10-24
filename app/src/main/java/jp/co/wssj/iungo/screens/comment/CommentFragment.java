@@ -220,13 +220,11 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         if (mAdapterComment == null) {
             mListComment = new ArrayList<>();
             mAdapterComment = new CommentAdapter(getActivityContext(), mListComment, mPresenter);
-            mListViewComment.setAdapter(mAdapterComment);
-        }
-        if (getArguments() != null) {
             mTimelineId = getArguments().getInt(KEY_TIME_LIKE_ID);
             mProgressBar.setVisibility(View.VISIBLE);
             getPresenter().getListComment(mTimelineId);
         }
+        mListViewComment.setAdapter(mAdapterComment);
     }
 
     private Handler mHandle = new Handler();

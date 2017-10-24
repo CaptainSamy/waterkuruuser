@@ -17,4 +17,9 @@
     <dimen name="width_title">100dp</dimen>
     <dimen name="height_title">30dp</dimen>
     <dimen name="tab_layout_text_size">14sp</dimen>
+
+    <dimen name="spot_size">6dp</dimen>
+    <dimen name="title_margin">10dp</dimen>
+    <dimen name="progress_margin">24dp</dimen>
+    <dimen name="progress_width">250dp</dimen>
 </resources>

@@ -3,6 +3,7 @@ package jp.co.wssj.iungo.screens.splash;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Twitter;
@@ -16,6 +17,8 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.splash.dialog.DialogAskUpdate;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.widget.dialog.ProgressLayout;
+import jp.co.wssj.iungo.widget.dialog.SpotsDialog;
 
 /**
  * Created by Nguyen Huu Ta on 5/6/2017.
@@ -24,6 +27,8 @@ import jp.co.wssj.iungo.utils.Constants;
 public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> implements ISplashView {
 
     private static final String TAG = "SplashFragment";
+
+    private SpotsDialog mDialog;
 
     @Override
     protected String getLogTag() {
@@ -71,6 +76,13 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     }
 
     @Override
+    protected void initViews(View rootView) {
+        super.initViews(rootView);
+        ProgressLayout progressLayout = (ProgressLayout) rootView.findViewById(R.id.dmax_spots_progress);
+        mDialog = new SpotsDialog(getActivity(), progressLayout);
+    }
+
+    @Override
     protected void initData() {
         TwitterConfig config = new TwitterConfig.Builder(getActivityContext())
                 .logger(new DefaultLogger(Log.DEBUG))
@@ -79,6 +91,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 .build();
         Twitter.initialize(config);
         getPresenter().onCreate(BuildConfig.VERSION_CODE);
+
     }
 
     @Override
@@ -110,5 +123,11 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     @Override
     public void displayScreen(int fragmentId, Bundle bundle) {
         getActivityCallback().displayScreen(fragmentId, true, false, bundle);
+    }
+
+    @Override
+    public void onDestroyView() {
+        mDialog.onStop();
+        super.onDestroyView();
     }
 }

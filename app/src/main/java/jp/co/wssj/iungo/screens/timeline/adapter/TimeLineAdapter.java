@@ -206,25 +206,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                 @Override
                 public void onItemClick(int likeId) {
-                    //Status like
-//                    boolean isExitsLike = false;
-//                    if (likeId != mTimeLine.getMyLikeId()) {
-//                        if (mTimeLine.getMyLikeId() == 0) {
-//                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
-//                        } else {
-//                            isExitsLike = true;
-//                        }
-//                        mTimeLine.setMyLikeId(likeId);
-//                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
-//                            if (likeId == like.getLikeId()) {
-//                                isExitsLike = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!isExitsLike || mListLike.size() == 0) {
-//                            TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
-//                            mListLike.add(like);
-//                        }
                     if (likeId != 0) {
                         mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
                         mTimeLine.setMyLikeId(likeId);
