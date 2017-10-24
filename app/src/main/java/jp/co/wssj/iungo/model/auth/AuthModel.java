@@ -201,6 +201,34 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
     }
 
+    public void autoLogin(final ILoginCallback callback) {
+        Request loginRequest = APICreator.autoLogin(new Response.Listener<LoginResponse>() {
+
+            @Override
+            public void onResponse(LoginResponse response) {
+                Logger.d(TAG, "#autoLogin => onResponse");
+                if (response.isSuccess()) {
+                    callback.onLoginSuccess(response.getData());
+                } else {
+                    callback.onLoginFailure(new ErrorMessage(response.getMessage()));
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.d(TAG, "#autoLogin => onResponse");
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onLoginFailure(new ErrorMessage(errorResponse.getMessage()));
+                } else {
+                    callback.onLoginFailure(new ErrorMessage(getStringResource(R.string.network_error)));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
+    }
+
     public void registerAccount(String userId, String password, String name, String email, int age, int sex, int typeLogin, String token, final IRegisterCallback callback) {
         Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, age, sex, typeLogin, token, new Response.Listener<RegisterResponse>() {
 

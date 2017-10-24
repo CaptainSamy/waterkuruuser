@@ -14,6 +14,7 @@ import jp.co.wssj.iungo.model.BaseModel;
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.ResponseData;
+import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
@@ -82,11 +83,23 @@ public class PushNotificationModel extends BaseModel {
         Request request = APICreator.getListNotification(token, pushId, new Response.Listener<ListNotificationResponse>() {
 
             @Override
-            public void onResponse(ListNotificationResponse response) {
+            public void onResponse(final ListNotificationResponse response) {
                 if (response.isSuccess()) {
                     if (response.getData() != null && response.getData().getListPushNotification() != null) {
-                        List<NotificationMessage> listNotification = response.getData().getListPushNotification();
-                        callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
+                        final List<NotificationMessage> listNotification = response.getData().getListPushNotification();
+                        runOnWorkerThread(new IWorkerTask<Void>() {
+
+                            @Override
+                            public Void doWork() {
+                                DBManager.getInstance().insertPushNotification(listNotification);
+                                return null;
+                            }
+
+                            @Override
+                            public void onFinish(Void result) {
+                                callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
+                            }
+                        });
                     } else {
                         callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
                     }

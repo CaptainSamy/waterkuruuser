@@ -68,6 +68,8 @@ public final class Constants {
 
     public static final String[] mArrayAge = {"１０代", "２０代", "３０代", "４０代", "５０代", "６０代"};
 
+    public static final String KEY_GEN_AUTO_LOGIN = "18af1e44-6d3d-4989-82b7-34ae085d32ce";
+
     private Constants() {
     }
 

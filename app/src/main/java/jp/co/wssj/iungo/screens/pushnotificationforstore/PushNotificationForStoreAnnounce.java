@@ -29,10 +29,10 @@ import jp.co.wssj.iungo.utils.Constants;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPushNotificationForServiceCompany, PushNotificationForServiceCompanyPresenter>
-        implements IPushNotificationForServiceCompany, SwipeRefreshLayout.OnRefreshListener {
+public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotificationForStoreAnnounce, PushNotificationForStoreAnnouncePresenter>
+        implements IPushNotificationForStoreAnnounce, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "PushNotificationForServiceCompanyFragment";
+    private static final String TAG = "PushNotificationForStoreAnnounce";
 
     private SwipeRefreshLayout mRefreshLayout;
 
@@ -56,8 +56,8 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     private int mPage, mTotalPage;
 
-    public static PushNotificationForServiceCompanyFragment newInstance(Bundle args) {
-        PushNotificationForServiceCompanyFragment fragment = new PushNotificationForServiceCompanyFragment();
+    public static PushNotificationForStoreAnnounce newInstance(Bundle args) {
+        PushNotificationForStoreAnnounce fragment = new PushNotificationForStoreAnnounce();
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,8 +88,8 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
-    protected PushNotificationForServiceCompanyPresenter onCreatePresenter(IPushNotificationForServiceCompany view) {
-        return new PushNotificationForServiceCompanyPresenter(view);
+    protected PushNotificationForStoreAnnouncePresenter onCreatePresenter(IPushNotificationForStoreAnnounce view) {
+        return new PushNotificationForStoreAnnouncePresenter(view);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
-    protected IPushNotificationForServiceCompany onCreateView() {
+    protected IPushNotificationForStoreAnnounce onCreateView() {
         return this;
     }
 

@@ -25,7 +25,7 @@ import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
 import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageNavigationFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
-import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForStoreAnnounce;
 import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.qadetail.QADetailFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
@@ -127,7 +127,7 @@ public final class FragmentFactory {
                     fragment = new AboutFragment();
                     break;
                 case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
-                    fragment = PushNotificationForServiceCompanyFragment.newInstance(bundle);
+                    fragment = PushNotificationForStoreAnnounce.newInstance(bundle);
                     break;
                 case IMainView.FRAGMENT_QA_DETAIL:
                     fragment = QADetailFragment.newInstance(bundle);

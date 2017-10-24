@@ -15,11 +15,11 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationForServiceCompanyPresenter extends FragmentPresenter<IPushNotificationForServiceCompany> {
+public class PushNotificationForStoreAnnouncePresenter extends FragmentPresenter<IPushNotificationForStoreAnnounce> {
 
-    private static final String TAG = "PushNotificationForServiceCompanyPresenter";
+    private static final String TAG = "PushNotificationForStoreAnnouncePresenter";
 
-    protected PushNotificationForServiceCompanyPresenter(IPushNotificationForServiceCompany view) {
+    protected PushNotificationForStoreAnnouncePresenter(IPushNotificationForStoreAnnounce view) {
         super(view);
         registerModel(new SharedPreferencesModel(view.getViewContext()));
         registerModel(new PushNotificationModel(view.getViewContext()));

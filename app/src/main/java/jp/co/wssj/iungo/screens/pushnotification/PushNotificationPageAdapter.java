@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationFragment;
-import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForServiceCompanyFragment;
+import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForStoreAnnounce;
 import jp.co.wssj.iungo.utils.Constants;
 
 /**
@@ -49,7 +49,7 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
                     Bundle args = new Bundle();
                     args.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
                     args.putInt(ARG_TYPE_PUSH, TYPE_PUSH_ANNOUNCE);
-                    fragment = PushNotificationForServiceCompanyFragment.newInstance(args);
+                    fragment = PushNotificationForStoreAnnounce.newInstance(args);
                     break;
                 case 1:
                 case 2:
@@ -59,7 +59,7 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
                     fragment.setArguments(args1);
                     break;
                 default:
-                    fragment = PushNotificationForServiceCompanyFragment.newInstance(null);
+                    fragment = PushNotificationForStoreAnnounce.newInstance(null);
             }
 
         } else {

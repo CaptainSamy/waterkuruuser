@@ -262,9 +262,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
             }
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
-            mDatabase.insertPushNotification(list);
-
-
             if (list.size() > 0) {
                 List<Long> listPushId = new ArrayList<>();
                 for (NotificationMessage notificationMessage : list) {
