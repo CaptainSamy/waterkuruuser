@@ -54,8 +54,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
 
     DBManager mDatabase = DBManager.getInstance();
 
-    private int mPage, mTotalPage;
-
     public static PushNotificationForStoreAnnounce newInstance(Bundle args) {
         PushNotificationForStoreAnnounce fragment = new PushNotificationForStoreAnnounce();
         fragment.setArguments(args);
@@ -123,8 +121,8 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
             int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH, 0);
             if (mListNotification == null) {
                 mListNotification = new ArrayList<>();
-                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
                 mListNotification.addAll(mDatabase.getListPush(type, mServiceCompanyId));
+                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
                 long lastPushId = 0;
                 mRefreshLayout.setRefreshing(true);
                 if (mListNotification.size() != 0) {
@@ -138,6 +136,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
                     showTextNoItem(false, null);
                 }
             }
+            mAdapter.setListPushTemp(mListNotification);
             mListView.setAdapter(mAdapter);
         }
     }
@@ -223,13 +222,15 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         hideSwipeRefreshLayout();
         if (list != null && list.size() > 0) {
-            showTextNoItem(false, null);
             mListNotification.addAll(list);
             mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
             mDatabase.insertPushStoreAnnounce(list, mServiceCompanyId);
-        } else {
+        }
+        if (mListNotification.size() == 0) {
             showTextNoItem(true, getString(R.string.text_no_item_push_all));
+        } else {
+            showTextNoItem(false, null);
         }
 
 

@@ -238,14 +238,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         }
     }
 
-    private int mPage, mTotalPage;
-
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         mInputSearch.setEnabled(true);
         hideSwipeRefreshLayout();
-        mPage = page;
-        mTotalPage = totalPage;
         if (list != null && list.size() > 0) {
             mListView.setVisibility(View.VISIBLE);
             showTextNoItem(false, null);
