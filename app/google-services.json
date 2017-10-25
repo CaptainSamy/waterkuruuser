@@ -1,51 +1,51 @@
 {
   "project_info": {
-    "project_number": "610695143021",
-    "firebase_url": "https://iungo-8ea43.firebaseio.com",
-    "project_id": "iungo-8ea43",
-    "storage_bucket": "iungo-8ea43.appspot.com"
+    "project_number": "246286102862",
+    "firebase_url": "https://iungo-enterprise.firebaseio.com",
+    "project_id": "iungo-enterprise",
+    "storage_bucket": "iungo-enterprise.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:610695143021:android:c5de8b4ffcc4c8f1",
+        "mobilesdk_app_id": "1:246286102862:android:209a2e0f1df87f80",
         "android_client_info": {
-          "package_name": "jp.co.wssj.iungo"
+          "package_name": "jp.co.wssj.iungo.user"
         }
       },
       "oauth_client": [
         {
-          "client_id": "610695143021-o78cg0bcs4020p2rfpovcm3uaqp2cpqg.apps.googleusercontent.com",
+          "client_id": "246286102862-djmliq3d6nn5hqe51mip9gn8l4h22q0b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "jp.co.wssj.iungo",
-            "certificate_hash": "6c5ed4efc34cc6a9d182bbbe302cf917e2098bbb"
-          }
-        },
-        {
-          "client_id": "610695143021-sdp0dnro0ug1ip5jrlqciu2qstkc95mn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "jp.co.wssj.iungo",
-            "certificate_hash": "c115955b1ffddcd5644e1c73607081d9adaacf31"
-          }
-        },
-        {
-          "client_id": "610695143021-dnvgmn753ppdcmensiveq4m1vsjcpko4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "jp.co.wssj.iungo",
+            "package_name": "jp.co.wssj.iungo.user",
             "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
           }
         },
         {
-          "client_id": "610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com",
+          "client_id": "246286102862-j0vnqrbd5uuklu6q4n6lpcui48l553tl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.co.wssj.iungo.user",
+            "certificate_hash": "c115955b1ffddcd5644e1c73607081d9adaacf31"
+          }
+        },
+        {
+          "client_id": "246286102862-qbd0u9q5nmmi7ahdmuceolae6aeocd2g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.co.wssj.iungo.user",
+            "certificate_hash": "6c5ed4efc34cc6a9d182bbbe302cf917e2098bbb"
+          }
+        },
+        {
+          "client_id": "246286102862-cnpp47pmg5ksar696bsdlsnmdjqj88qt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB3cpTGZqrcodvGX3dB1qLqAfgUukl4ObI"
+          "current_key": "AIzaSyCl9pvxILtQwN7y5v6nmBNwzS_2Zu1c-Zk"
         }
       ],
       "services": {
@@ -56,14 +56,14 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com",
+              "client_id": "246286102862-cnpp47pmg5ksar696bsdlsnmdjqj88qt.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "610695143021-14m4rbtmc61oke4angb3bqlck87s49gq.apps.googleusercontent.com",
+              "client_id": "246286102862-7u79tcsgjre362h45abumhc0ocrleieh.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "jp.co.wssj.iungo"
+                "bundle_id": "jp.co.wssj.iungo.user"
               }
             }
           ]
