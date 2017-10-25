@@ -2,6 +2,7 @@ package jp.co.wssj.iungo.model.pushnotification;
 
 import android.content.Context;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -101,6 +102,7 @@ public class PushNotificationModel extends BaseModel {
                 callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
             }
         });
+        request.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySequence.getInstance().addRequest(request);
     }
 

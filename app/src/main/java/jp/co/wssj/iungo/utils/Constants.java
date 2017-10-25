@@ -18,7 +18,7 @@ public final class Constants {
 
     public static final int TIME_DELAYS = 1000;
 
-    public static final int TIME_WAITING_SPLASH = 1000;
+    public static final int TIME_WAITING_SPLASH = 2000;
 
     public static final int TIME_DELAY_CLOSED_NAVIGATION_MENU = 100;
 
