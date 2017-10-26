@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification.pushlist;
+package jp.co.wssj.iungo.screens.pushnotification.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -126,6 +126,14 @@ public class PushNotificationAdapter extends BaseAdapter {
 
     public void setIsAllowOnLoadMore(boolean isAllowOnLoadMore) {
         this.mIsAllowOnLoadMore = isAllowOnLoadMore;
+    }
+
+    public List<NotificationMessage> getListPush() {
+        return mListPush;
+    }
+
+    public void showListPushSearch() {
+
     }
 
     public void setListenerEndOfListView(IEndOfListView mCallback) {

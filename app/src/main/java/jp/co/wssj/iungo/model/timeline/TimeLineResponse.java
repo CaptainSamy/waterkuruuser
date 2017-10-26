@@ -17,26 +17,6 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
 
     public static class TimeLineData implements GsonSerializable {
 
-        @SerializedName("number_of_timeline_in_page")
-        @Expose
-        private int numberOfTimelineInPage;
-
-        @SerializedName("page")
-        @Expose
-        private int page;
-
-        @SerializedName("total_number_of_timeline")
-        @Expose
-        private int totalNumberOfTimeline;
-
-        @SerializedName("total_page")
-        @Expose
-        private int totalPage;
-
-        @SerializedName("limit")
-        @Expose
-        private String limit;
-
         @SerializedName("list_timeline")
         @Expose
         private List<ListTimeline> listTimeline = null;
@@ -259,26 +239,6 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                 return timeline;
             }
 
-        }
-
-        public int getNumberOfTimelineInPage() {
-            return numberOfTimelineInPage;
-        }
-
-        public int getPage() {
-            return page;
-        }
-
-        public int getTotalNumberOfTimeline() {
-            return totalNumberOfTimeline;
-        }
-
-        public int getTotalPage() {
-            return totalPage;
-        }
-
-        public String getLimit() {
-            return limit;
         }
 
         public List<ListTimeline> getListTimeline() {

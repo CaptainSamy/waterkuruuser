@@ -13,16 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
@@ -57,7 +53,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     private IActivityCallback mActivityCallback;
 
-    private Map<String, GlideDrawable> mImageMap = new HashMap<>();
+    private IEndOfTimeline mCallback;
 
     public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
         mListTimeLine = listTimeline;
@@ -97,6 +93,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         if (response != null) {
             holder.bind(getItemTimeLine(position), position);
         }
+
+        if (mCallback != null && position == (getItemCount() - 1)) {
+            mCallback.onEndOfTimeline();
+        }
     }
 
     @Override
@@ -110,7 +110,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     @Override
     public int getItemCount() {
+        if (mListTimeLine == null) return 0;
         return mListTimeLine.size();
+    }
+
+    public int getLastTimelineId() {
+        if (mListTimeLine != null && mListTimeLine.size() > 0)
+            return mListTimeLine.get(getItemCount() - 1).getTimeline().getId();
+        return 0;
     }
 
     public class TimeLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -424,5 +431,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         }
 
+    }
+
+    public interface IEndOfTimeline {
+
+        void onEndOfTimeline();
+    }
+
+    public void setListenerCallback(IEndOfTimeline mCallback) {
+        this.mCallback = mCallback;
     }
 }

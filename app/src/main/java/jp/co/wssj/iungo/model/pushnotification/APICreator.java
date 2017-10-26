@@ -24,6 +24,8 @@ public class APICreator {
 
     private static final String API_GET_LIST_NOTIFICATION = Constants.BASE_URL + "/api/client/users/get-notification-list-user";
 
+    private static final String API_GET_LIST_PUSH_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-questionnaire-list-user";
+
     private static final String API_GET_LIST_NOTIFICATION_FOR_SERVICE_COMPANY = Constants.BASE_URL + "/api/client/users/get-list-push-notification-by-service-company-id";
 
     private static final String API_GET_LIST_PUSH_UN_READ = Constants.BASE_URL + "/api/client/users/get-notification-list-user-unread";
@@ -36,7 +38,7 @@ public class APICreator {
 
     private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-code-to-survey";
 
-    static GsonRequest<ListNotificationResponse> getListNotification(final String token, final long pushId,
+    static GsonRequest<ListNotificationResponse> getListNotification(final String token, final long userPushId, final int isSearch, final String keySearch,
                                                                      final Response.Listener<ListNotificationResponse> listener,
                                                                      final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
@@ -70,7 +72,57 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("push_id", pushId);
+                map.put("last_user_push_id", userPushId);
+                map.put("limit", Constants.LIMIT);
+                if (isSearch == 1) {
+                    map.put("is_search", isSearch);
+                    map.put("text_search", keySearch);
+                }
+                return map;
+            }
+        };
+    }
+
+    static GsonRequest<ListNotificationResponse> getListPushQuestionNaire(final String token, final long userPushId, final int isSearch, final String keySearch,
+                                                                          final Response.Listener<ListNotificationResponse> listener,
+                                                                          final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
+                API_GET_LIST_PUSH_QUESTION_NAIRE,
+                ListNotificationResponse.class,
+                headers,
+                new Response.Listener<ListNotificationResponse>() {
+
+                    @Override
+                    public void onResponse(ListNotificationResponse response) {
+                        Logger.d(TAG, "#getListNotification -> onResponse ");
+                        if (listener != null) {
+                            listener.onResponse(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#getListNotification -> onErrorResponse");
+                        if (errorListener != null) {
+                            errorListener.onErrorResponse(error);
+                        }
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("last_user_push_id", userPushId);
+                map.put("limit", Constants.LIMIT);
+                if (isSearch == 1) {
+                    map.put("is_search", isSearch);
+                    map.put("text_search", keySearch);
+                }
                 return map;
             }
         };

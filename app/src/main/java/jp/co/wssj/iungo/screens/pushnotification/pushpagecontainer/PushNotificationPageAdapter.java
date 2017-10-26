@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification;
+package jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import jp.co.wssj.iungo.screens.pushnotification.pushlike.PushLikeFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationFragment;
+import jp.co.wssj.iungo.screens.pushnotification.pushquestionnaire.PushTypeQuestionNaireFragment;
 import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForStoreAnnounce;
 import jp.co.wssj.iungo.utils.Constants;
 
@@ -43,30 +45,25 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment;
-        if (mServiceCompanyId != 0) {
-            switch (position) {
-                case 0:
+        switch (position) {
+            case 0:
+                if (mServiceCompanyId != 0) {
                     Bundle args = new Bundle();
                     args.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
                     args.putInt(ARG_TYPE_PUSH, TYPE_PUSH_ANNOUNCE);
                     fragment = PushNotificationForStoreAnnounce.newInstance(args);
-                    break;
-                case 1:
-                case 2:
+                } else {
                     fragment = new PushNotificationFragment();
-                    Bundle args1 = new Bundle();
-                    args1.putInt(ARG_TYPE_PUSH, position);
-                    fragment.setArguments(args1);
-                    break;
-                default:
-                    fragment = PushNotificationForStoreAnnounce.newInstance(null);
-            }
-
-        } else {
-            fragment = new PushNotificationFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_TYPE_PUSH, position);
-            fragment.setArguments(args);
+                }
+                break;
+            case 1:
+                fragment = new PushTypeQuestionNaireFragment();
+                break;
+            case 2:
+                fragment = new PushLikeFragment();
+                break;
+            default:
+                fragment = PushNotificationForStoreAnnounce.newInstance(null);
         }
 
         return fragment;
