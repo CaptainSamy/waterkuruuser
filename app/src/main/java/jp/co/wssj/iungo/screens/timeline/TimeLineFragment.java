@@ -12,6 +12,8 @@ import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
+import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
 
 /**
@@ -19,7 +21,7 @@ import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
  */
 
 public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresenter>
-        implements ITimeLineView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+        implements ITimeLineView, View.OnClickListener, ILoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "TimeLineFragment";
 
@@ -28,6 +30,8 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     private SwipeRefreshLayout mRefreshLayout;
 
     private TimeLineAdapter mAdapter;
+
+    private int mIsPullDown = 0;
 
     @Override
     protected String getLogTag() {
@@ -87,6 +91,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     @Override
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
+        mRecycleTimeLine.setOnLoadMoreListener(this);
     }
 
     @Override
@@ -97,14 +102,6 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
             getPresenter().getTimeline(0);
         }
         mRecycleTimeLine.setAdapter(mAdapter);
-        mAdapter.setListenerCallback(new TimeLineAdapter.IEndOfTimeline() {
-
-            @Override
-            public void onEndOfTimeline() {
-                setRefresh(true);
-                getPresenter().getTimeline(mAdapter.getLastTimelineId());
-            }
-        });
     }
 
     @Override
@@ -119,7 +116,15 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     public void onRefresh() {
+        mIsPullDown = 1;
         getPresenter().getTimeline(0);
+    }
+
+    @Override
+    public void onLoadMore(int pageNumber) {
+        Logger.d(TAG, "onLoadMore " + pageNumber);
+        setRefresh(true);
+        getPresenter().getTimeline(mAdapter.getLastTimelineId());
     }
 
     @Override
@@ -127,8 +132,11 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
         setRefresh(false);
         if (timeLineData != null && timeLineData.getListTimeline().size() > 0) {
             showTextNoItem(false, null);
+            mRecycleTimeLine.setTotalPage(1);
+            mRecycleTimeLine.setCurrentPage(0);
             List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
-            mAdapter.refreshList(listTimeline, 1);
+            mAdapter.refreshList(listTimeline, mIsPullDown);
+            mIsPullDown = 0;
         } else {
             if (mAdapter.getItemCount() == 0)
                 showTextNoItem(true, getString(R.string.no_timeline));
