@@ -64,7 +64,7 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
                 map.put("last_timeline_id", timelineId);
-                map.put("limit_timeline", Constants.LIMIT);
+                map.put("limit_timeline", Constants.LIMIT_TIMELINE);
                 return map;
             }
         };
