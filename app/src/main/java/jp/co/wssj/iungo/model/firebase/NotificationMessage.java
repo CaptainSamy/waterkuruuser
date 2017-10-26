@@ -12,8 +12,14 @@ import jp.co.wssj.iungo.model.GsonSerializable;
 
 public class NotificationMessage implements GsonSerializable, Serializable {
 
+    @SerializedName("push_id")
+    private long mPustQuestionNaire;
+
     @SerializedName("id")
     private long mPushId;
+
+    @SerializedName("user_push_id")
+    private long mUserPushId;
 
     @SerializedName("title")
     private String mTitle;
@@ -152,5 +158,17 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     public void setStoreAnnounce(int storeAnnounce) {
         this.mStoreAnnounce = storeAnnounce;
+    }
+
+    public long getUserPushId() {
+        return mUserPushId;
+    }
+
+    public void setUserPushId(long userPushId) {
+        this.mUserPushId = userPushId;
+    }
+
+    public long getPustQuestionNaire() {
+        return mPustQuestionNaire;
     }
 }

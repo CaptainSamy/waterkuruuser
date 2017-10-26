@@ -126,14 +126,15 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
         Bundle bundle = getArguments();
         if (bundle != null) {
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
-            boolean isFromActivity = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
+            boolean isNeedRequestAPI = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
             if (mNotificationMessage != null) {
                 if (mNotificationMessage.getStatusRead() != Constants.STATUS_READ) {
                     List<Long> list = new ArrayList<>();
                     list.add(mNotificationMessage.getPushId());
                     getPresenter().setListPushUnRead(list, Constants.STATUS_READ);
                 }
-                updateStatusLike(mNotificationMessage.isLike());
+                int isLike = DBManager.getInstance().isExitsPush(mNotificationMessage.getPushId()) ? 1 : 0;
+                updateStatusLike(isLike);
 
                 WebSettings webSettings = mBody.getSettings();
                 mTitle.setText(mNotificationMessage.getTitle().trim());
@@ -154,21 +155,23 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                             break;
                         case Constants.PushNotification.TYPE_QUESTION_NAIRE:
                             mButtonRating.setVisibility(View.GONE);
-                            getPresenter().getQuestionNaire(mNotificationMessage.getPushId());
+                            isNeedRequestAPI = false;
+                            long pushId = mNotificationMessage.getPushId() == 0 ? mNotificationMessage.getPustQuestionNaire() : mNotificationMessage.getPushId();
+                            getPresenter().getQuestionNaire(pushId);
                             break;
                         default:
                             mButtonRating.setVisibility(View.GONE);
                             break;
                     }
                 }
-                if (isFromActivity) {
+                if (isNeedRequestAPI) {
                     getPresenter().getContentPush(mNotificationMessage.getPushId());
                 } else {
                     if (!TextUtils.equals(mNotificationMessage.getAction(), Constants.PushNotification.TYPE_QUESTION_NAIRE)) {
                         mBody.loadDataWithBaseURL(null, mNotificationMessage.getMessage(), "text/html", "UTF-8", null);
                     }
                 }
-                String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isFromActivity);
+                String time = Utils.convertLongToTime(mNotificationMessage.getPushTime(), isNeedRequestAPI);
                 mTime.setText(time);
 
             }
@@ -233,7 +236,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 updateStatusLike(status);
                 if (mNotificationMessage != null) {
                     mNotificationMessage.setIsLike(status);
-                    mDatabase.likePush(mNotificationMessage.getPushId(), status);
+                    mDatabase.insertPushNotification(mNotificationMessage);
                 }
                 break;
         }

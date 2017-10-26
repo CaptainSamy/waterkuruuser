@@ -34,14 +34,13 @@ final class APICreator {
     private APICreator() {
     }
 
-    static GsonRequest<TimeLineResponse> getTimeline(final String token, int page, final Response.Listener<TimeLineResponse> listener, final Response.ErrorListener errorListener) {
+    static GsonRequest<TimeLineResponse> getTimeline(final String token, final int timelineId, final Response.Listener<TimeLineResponse> listener, final Response.ErrorListener errorListener) {
 
-        String url = API_GET_TIME_LINE + "?page=" + page + "&limit=" + Constants.LIMIT;
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
-        return new GsonJsonRequest<>(Request.Method.GET,
-                url,
+        return new GsonJsonRequest<TimeLineResponse>(Request.Method.POST,
+                API_GET_TIME_LINE,
                 TimeLineResponse.class,
                 headers,
                 new Response.Listener<TimeLineResponse>() {
@@ -59,7 +58,16 @@ final class APICreator {
                         Logger.i(TAG, "#getTimeline => onErrorResponse");
                         errorListener.onErrorResponse(error);
                     }
-                });
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("last_timeline_id", timelineId);
+                map.put("limit_timeline", Constants.LIMIT);
+                return map;
+            }
+        };
     }
 
     static GsonRequest<CommentResponse> getListComment(final String token, final int timelineId, final Response.Listener<CommentResponse> listener, final Response.ErrorListener errorListener) {

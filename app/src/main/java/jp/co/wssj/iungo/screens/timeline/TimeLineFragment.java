@@ -12,9 +12,6 @@ import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
-import jp.co.wssj.iungo.utils.Constants;
-import jp.co.wssj.iungo.utils.Logger;
-import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
 
 /**
@@ -22,7 +19,7 @@ import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
  */
 
 public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresenter>
-        implements ITimeLineView, View.OnClickListener, ILoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+        implements ITimeLineView, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "TimeLineFragment";
 
@@ -90,7 +87,6 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     @Override
     protected void initAction() {
         mRefreshLayout.setOnRefreshListener(this);
-        mRecycleTimeLine.setOnLoadMoreListener(this);
     }
 
     @Override
@@ -98,9 +94,17 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
         if (mAdapter == null) {
             mAdapter = new TimeLineAdapter(new ArrayList<TimeLineResponse.TimeLineData.ListTimeline>(), getPresenter(), getActivityCallback());
             setRefresh(true);
-            getPresenter().getTimeline(Constants.INIT_PAGE);
+            getPresenter().getTimeline(0);
         }
         mRecycleTimeLine.setAdapter(mAdapter);
+        mAdapter.setListenerCallback(new TimeLineAdapter.IEndOfTimeline() {
+
+            @Override
+            public void onEndOfTimeline() {
+                setRefresh(true);
+                getPresenter().getTimeline(mAdapter.getLastTimelineId());
+            }
+        });
     }
 
     @Override
@@ -115,14 +119,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     public void onRefresh() {
-        getPresenter().getTimeline(Constants.INIT_PAGE);
-    }
-
-    @Override
-    public void onLoadMore(int pageNumber) {
-        Logger.d(TAG, "onLoadMore " + pageNumber);
-        setRefresh(true);
-        getPresenter().getTimeline(pageNumber);
+        getPresenter().getTimeline(0);
     }
 
     @Override
@@ -130,13 +127,11 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
         setRefresh(false);
         if (timeLineData != null && timeLineData.getListTimeline().size() > 0) {
             showTextNoItem(false, null);
-            int page = timeLineData.getPage();
-            mRecycleTimeLine.setTotalPage(timeLineData.getTotalPage());
-            mRecycleTimeLine.setCurrentPage(page);
             List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
-            mAdapter.refreshList(listTimeline, page);
+            mAdapter.refreshList(listTimeline, 1);
         } else {
-            showTextNoItem(true, getString(R.string.no_timeline));
+            if (mAdapter.getItemCount() == 0)
+                showTextNoItem(true, getString(R.string.no_timeline));
         }
     }
 

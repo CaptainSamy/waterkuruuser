@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification.pushlist;
+package jp.co.wssj.iungo.screens.pushnotification.pushquestionnaire;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,11 +26,11 @@ import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
- * Created by tuanle on 6/7/17.
+ * Created by Nguyen Huu Ta on 26/10/2017.
  */
 
-public class PushNotificationFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter>
-        implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener {
+public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestionNaireView, PushTypeQuestionNairePresenter>
+        implements IPushTypeQuestionNaireView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "PushNotificationFragment";
 
@@ -93,8 +93,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
-    protected PushNotificationListPresenter onCreatePresenter(IPushNotificationListView view) {
-        return new PushNotificationListPresenter(view);
+    protected PushTypeQuestionNairePresenter onCreatePresenter(IPushTypeQuestionNaireView view) {
+        return new PushTypeQuestionNairePresenter(view);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
-    protected IPushNotificationListView onCreateView() {
+    protected IPushTypeQuestionNaireView onCreateView() {
         return this;
     }
 
@@ -252,17 +252,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 }
                 mAdapter.setListPushTemp(mListNotification);
                 mAdapter.notifyDataSetChanged();
-                if (list.size() > 0) {
-                    List<Long> listPushId = new ArrayList<>();
-                    for (NotificationMessage notificationMessage : list) {
-                        if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
-                            listPushId.add(notificationMessage.getPushId());
-                        }
-                    }
-                    if (listPushId.size() > 0) {
-                        getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
-                    }
-                }
             } else {
                 if (mListNotification != null && mListNotification.size() == 0) {
                     showTextNoItem(true, getString(R.string.text_no_item_push_all));
