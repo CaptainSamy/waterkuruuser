@@ -146,6 +146,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
 
     @Override
     public void onGetTimelineFailure(String message) {
+        mRecycleTimeLine.notifyLoadComplete();
         setRefresh(false);
     }
 
