@@ -250,7 +250,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 if (list.size() > 0) {
                     List<Long> listPushId = new ArrayList<>();
                     for (NotificationMessage notificationMessage : list) {
-                        if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                        if (notificationMessage.getStatusRead() == 0) {
                             listPushId.add(notificationMessage.getPushId());
                         }
                     }

@@ -254,6 +254,18 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
                 } else {
                     mListNotification.addAll(list);
                 }
+                if (list.size() > 0) {
+                    List<Long> listPushId = new ArrayList<>();
+                    for (NotificationMessage notificationMessage : list) {
+                        if (notificationMessage.getStatusRead() == 0) {
+                            listPushId.add(notificationMessage.getPushId());
+                        }
+                    }
+                    if (listPushId.size() > 0) {
+                        getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
+                    }
+                }
+
                 mAdapter.setListPushTemp(mListNotification);
                 mAdapter.notifyDataSetChanged();
             } else {
