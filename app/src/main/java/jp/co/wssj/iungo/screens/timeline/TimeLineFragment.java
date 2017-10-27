@@ -12,7 +12,6 @@ import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
-import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
 
@@ -121,8 +120,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     }
 
     @Override
-    public void onLoadMore(int pageNumber) {
-        Logger.d(TAG, "onLoadMore " + pageNumber);
+    public void onLoadMore() {
         setRefresh(true);
         getPresenter().getTimeline(mAdapter.getLastTimelineId());
     }
@@ -130,10 +128,9 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     @Override
     public void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData) {
         setRefresh(false);
+        mRecycleTimeLine.notifyLoadComplete();
         if (timeLineData != null && timeLineData.getListTimeline().size() > 0) {
             showTextNoItem(false, null);
-            mRecycleTimeLine.setTotalPage(1);
-            mRecycleTimeLine.setCurrentPage(0);
             List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
             mAdapter.refreshList(listTimeline, mIsPullDown);
             mIsPullDown = 0;

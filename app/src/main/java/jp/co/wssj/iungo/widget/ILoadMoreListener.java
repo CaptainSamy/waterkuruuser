@@ -6,5 +6,5 @@ package jp.co.wssj.iungo.widget;
 
 public interface ILoadMoreListener {
 
-    void onLoadMore(int pageNumber);
+    void onLoadMore();
 }
