@@ -167,7 +167,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
             public boolean onQueryTextSubmit(String query) {
                 mIsSearch = true;
                 Logger.d(TAG, "onQueryTextSubmit");
-                mAdapter.filter(query);
+//                mAdapter.filter(query);
                 getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, 0, 1, query);
                 return false;
             }
@@ -230,10 +230,13 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
         if (mIsSearch) {
+            mListNotification.clear();
             if (list != null && list.size() > 0) {
-                getItemNew(list);
+                mListNotification.clear();
+                mListNotification.addAll(list);
                 mAdapter.notifyDataSetChanged();
             }
+            mAdapter.notifyDataSetChanged();
         } else {
             mInputSearch.setEnabled(true);
             hideSwipeRefreshLayout();
