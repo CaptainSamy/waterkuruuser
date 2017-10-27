@@ -50,8 +50,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private boolean isExpandedSearchView;
 
-    private long mPushUserIdLastPage;
-
     private boolean mIsSearch;
 
     private boolean mIsPullDownRequest;
@@ -129,15 +127,15 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
             mListNotification = new ArrayList<>();
             mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
             mRefreshLayout.setRefreshing(true);
-            getPresenter().getListPushNotification(mPushUserIdLastPage, 0, Constants.EMPTY_STRING);
+            getPresenter().getListPushNotification(0, 0, Constants.EMPTY_STRING);
         }
         mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
 
             @Override
             public void onEndOfListView() {
-                mPushUserIdLastPage = mListNotification.get(mListNotification.size() - 1).getUserPushId();
+                long pushUserIdLastPage = mListNotification.get(mListNotification.size() - 1).getUserPushId();
                 mRefreshLayout.setRefreshing(true);
-                getPresenter().getListPushNotification(mPushUserIdLastPage, 0, Constants.EMPTY_STRING);
+                getPresenter().getListPushNotification(pushUserIdLastPage, 0, Constants.EMPTY_STRING);
             }
         });
         mAdapter.setListPushTemp(mListNotification);
@@ -182,9 +180,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                     mAdapter.filter(newText);
                 }
                 statusSearchView(true);
-//                if (mAdapter != null) {
-//                    mAdapter.filter(newText);
-//                }
                 return false;
             }
         });

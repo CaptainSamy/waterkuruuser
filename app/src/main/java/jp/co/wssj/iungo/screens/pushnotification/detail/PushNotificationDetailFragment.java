@@ -156,7 +156,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                         case Constants.PushNotification.TYPE_QUESTION_NAIRE:
                             mButtonRating.setVisibility(View.GONE);
                             isNeedRequestAPI = false;
-                            long pushId = mNotificationMessage.getPushId() == 0 ? mNotificationMessage.getPustQuestionNaire() : mNotificationMessage.getPushId();
+                            long pushId = mNotificationMessage.getPushId();
                             getPresenter().getQuestionNaire(pushId);
                             break;
                         default:

@@ -57,10 +57,10 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
                 }
                 break;
             case 1:
-                fragment = new PushTypeQuestionNaireFragment();
+                fragment = new PushLikeFragment();
                 break;
             case 2:
-                fragment = new PushLikeFragment();
+                fragment = new PushTypeQuestionNaireFragment();
                 break;
             default:
                 fragment = PushNotificationForStoreAnnounce.newInstance(null);

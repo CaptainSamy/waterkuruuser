@@ -128,9 +128,9 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ListNotificationResponse> getListNotificationForServiceCompany(final String token, final int serviceCompanyId, final long pushId,
-                                                                                      final Response.Listener<ListNotificationResponse> listener,
-                                                                                      final Response.ErrorListener errorListener) {
+    static GsonRequest<ListNotificationResponse> getListNotificationForStoreAnnounce(final String token, final int serviceCompanyId, final long lastUserPushId,final int isSearch, final String keySearch,
+                                                                                     final Response.Listener<ListNotificationResponse> listener,
+                                                                                     final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
@@ -164,7 +164,12 @@ public class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
                 params.put("service_company_id", serviceCompanyId);
-                params.put("push_id", pushId);
+                params.put("last_user_push_id", lastUserPushId);
+                params.put("limit", Constants.LIMIT);
+                if (isSearch == 1) {
+                    params.put("is_search", isSearch);
+                    params.put("text_search", keySearch);
+                }
                 return params;
             }
         };
