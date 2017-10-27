@@ -53,8 +53,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     private IActivityCallback mActivityCallback;
 
-    private IEndOfTimeline mCallback;
-
     public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
         mListTimeLine = listTimeline;
         mPresenter = presenter;
@@ -92,10 +90,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         TimeLineResponse.TimeLineData.ListTimeline response = getItemTimeLine(position);
         if (response != null) {
             holder.bind(getItemTimeLine(position), position);
-        }
-
-        if (mCallback != null && position == (getItemCount() - 1)) {
-            mCallback.onEndOfTimeline();
         }
     }
 
@@ -452,12 +446,5 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     }
 
-    public interface IEndOfTimeline {
 
-        void onEndOfTimeline();
-    }
-
-    public void setListenerCallback(IEndOfTimeline mCallback) {
-        this.mCallback = mCallback;
-    }
 }

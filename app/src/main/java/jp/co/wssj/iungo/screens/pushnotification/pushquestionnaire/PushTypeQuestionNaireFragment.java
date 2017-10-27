@@ -129,7 +129,11 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
             mListNotification = new ArrayList<>();
             mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
             mRefreshLayout.setRefreshing(true);
-            getPresenter().getListPushNotification(mPushUserIdLastPage, 0, Constants.EMPTY_STRING);
+            getPresenter().getListPushQuestionNaire(mPushUserIdLastPage, 0, Constants.EMPTY_STRING);
+        } else {
+            if (mListNotification.size() == 0) {
+                showTextNoItem(true, getString(R.string.text_no_item_push_all));
+            }
         }
         mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
 
@@ -137,7 +141,7 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
             public void onEndOfListView() {
                 mPushUserIdLastPage = mListNotification.get(mListNotification.size() - 1).getUserPushId();
                 mRefreshLayout.setRefreshing(true);
-                getPresenter().getListPushNotification(mPushUserIdLastPage, 0, Constants.EMPTY_STRING);
+                getPresenter().getListPushQuestionNaire(mPushUserIdLastPage, 0, Constants.EMPTY_STRING);
             }
         });
         mAdapter.setListPushTemp(mListNotification);
@@ -171,7 +175,7 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
                 mIsSearch = true;
                 Logger.d(TAG, "onQueryTextSubmit");
                 mAdapter.filter(query);
-                getPresenter().getListPushNotification(0, 1, query);
+                getPresenter().getListPushQuestionNaire(0, 1, query);
                 return false;
             }
 
@@ -223,7 +227,7 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
     @Override
     public void onRefresh() {
         mIsPullDownRequest = true;
-        getPresenter().getListPushNotification(0, 0, Constants.EMPTY_STRING);
+        getPresenter().getListPushQuestionNaire(0, 0, Constants.EMPTY_STRING);
     }
 
     public void hideSwipeRefreshLayout() {
@@ -285,6 +289,10 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
     public void displayErrorMessage(ErrorMessage errorMessage) {
         mInputSearch.setEnabled(true);
         hideSwipeRefreshLayout();
+
+        if (mListNotification != null && mListNotification.size() == 0) {
+            showTextNoItem(true, getString(R.string.text_no_item_push_all));
+        }
         if (errorMessage != null && !TextUtils.isEmpty(errorMessage.getMessage()))
             Toast.makeText(getActivityContext(), errorMessage.getMessage(), Toast.LENGTH_SHORT).show();
     }

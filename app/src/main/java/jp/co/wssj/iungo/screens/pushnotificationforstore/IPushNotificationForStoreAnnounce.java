@@ -10,7 +10,7 @@ import jp.co.wssj.iungo.screens.base.IFragmentView;
  * Created by tuanle on 6/7/17.
  */
 
-public interface IPushNotificationForServiceCompany extends IFragmentView {
+public interface IPushNotificationForStoreAnnounce extends IFragmentView {
 
     void showListPushNotification(List<NotificationMessage> list, int page, int totalPage);
 

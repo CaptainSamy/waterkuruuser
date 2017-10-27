@@ -16,23 +16,22 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
-import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
+import jp.co.wssj.iungo.screens.pushnotification.adapter.PushNotificationAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
-import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationAdapter;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPushNotificationForServiceCompany, PushNotificationForServiceCompanyPresenter>
-        implements IPushNotificationForServiceCompany, SwipeRefreshLayout.OnRefreshListener {
+public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotificationForStoreAnnounce, PushNotificationForStoreAnnouncePresenter>
+        implements IPushNotificationForStoreAnnounce, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "PushNotificationForServiceCompanyFragment";
+    private static final String TAG = "PushNotificationForStoreAnnounce";
 
     private SwipeRefreshLayout mRefreshLayout;
 
@@ -52,12 +51,12 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     private boolean isExpandedSearchView;
 
-    DBManager mDatabase = DBManager.getInstance();
+    private boolean mIsSearch;
 
-    private int mPage, mTotalPage;
+    private boolean mIsPullDownRequest;
 
-    public static PushNotificationForServiceCompanyFragment newInstance(Bundle args) {
-        PushNotificationForServiceCompanyFragment fragment = new PushNotificationForServiceCompanyFragment();
+    public static PushNotificationForStoreAnnounce newInstance(Bundle args) {
+        PushNotificationForStoreAnnounce fragment = new PushNotificationForStoreAnnounce();
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,8 +87,8 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
-    protected PushNotificationForServiceCompanyPresenter onCreatePresenter(IPushNotificationForServiceCompany view) {
-        return new PushNotificationForServiceCompanyPresenter(view);
+    protected PushNotificationForStoreAnnouncePresenter onCreatePresenter(IPushNotificationForStoreAnnounce view) {
+        return new PushNotificationForStoreAnnouncePresenter(view);
     }
 
     @Override
@@ -98,14 +97,13 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
     }
 
     @Override
-    protected IPushNotificationForServiceCompany onCreateView() {
+    protected IPushNotificationForStoreAnnounce onCreateView() {
         return this;
     }
 
     @Override
     protected void initViews(View rootView) {
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-        mRefreshLayout.setEnabled(false);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
         mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
@@ -120,17 +118,11 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
         Bundle bundle = getArguments();
         if (bundle != null) {
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
-            int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH, 0);
             if (mListNotification == null) {
                 mListNotification = new ArrayList<>();
                 mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-                mListNotification.addAll(mDatabase.getListPush(type, mServiceCompanyId));
-                long lastPushId = 0;
                 mRefreshLayout.setRefreshing(true);
-                if (mListNotification.size() != 0) {
-                    lastPushId = mListNotification.get(0).getPushId();
-                }
-                getPresenter().getListPushNotification(mServiceCompanyId, lastPushId);
+                getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, 0, 0, Constants.EMPTY_STRING);
             } else {
                 if (mListNotification.size() == 0) {
                     showTextNoItem(true, getString(R.string.text_no_item_push_all));
@@ -138,6 +130,14 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
                     showTextNoItem(false, null);
                 }
             }
+            mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+                @Override
+                public void onEndOfListView() {
+                    long pushUserIdLastPage = mListNotification.get(mAdapter.getCount() - 1).getUserPushId();
+                    getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, pushUserIdLastPage, 0, Constants.EMPTY_STRING);
+                }
+            });
             mListView.setAdapter(mAdapter);
         }
     }
@@ -166,25 +166,31 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mIsSearch = true;
+                Logger.d(TAG, "onQueryTextSubmit");
+                mAdapter.filter(query);
+                getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, 0, 1, query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                statusSearchView(true);
-                if (mAdapter != null) {
+                Logger.d(TAG, "onQueryTextChange");
+                if (TextUtils.isEmpty(newText)) {
                     mAdapter.filter(newText);
                 }
+                statusSearchView(true);
                 return false;
             }
-
         });
         mInputSearch.setOnCloseListener(new SearchView.OnCloseListener() {
 
             @Override
             public boolean onClose() {
+                Logger.d(TAG, "onClose");
                 mTextSearch.setVisibility(View.VISIBLE);
                 isExpandedSearchView = false;
+                mIsSearch = false;
                 return false;
             }
         });
@@ -192,6 +198,7 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                Logger.d(TAG, "onFocusChange " + hasFocus);
                 if (hasFocus) {
                     isExpandedSearchView = hasFocus;
                 }
@@ -210,7 +217,8 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     @Override
     public void onRefresh() {
-//        getPresenter().getListPushNotification(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
+        mIsPullDownRequest = true;
+        getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, 0, 0, Constants.EMPTY_STRING);
     }
 
     public void hideSwipeRefreshLayout() {
@@ -221,18 +229,76 @@ public class PushNotificationForServiceCompanyFragment extends BaseFragment<IPus
 
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
-        hideSwipeRefreshLayout();
-        if (list != null && list.size() > 0) {
-            showTextNoItem(false, null);
-            mListNotification.addAll(list);
-            mAdapter.setListPushTemp(mListNotification);
-            mAdapter.notifyDataSetChanged();
-            mDatabase.insertPushStoreAnnounce(list, mServiceCompanyId);
+//        hideSwipeRefreshLayout();
+//        if (list != null && list.size() > 0) {
+//            showTextNoItem(false, null);
+//            mListNotification.addAll(list);
+//            mAdapter.setListPushTemp(mListNotification);
+//            mAdapter.notifyDataSetChanged();
+//        } else {
+//            if (mListNotification.size() == 0) {
+//                showTextNoItem(true, getString(R.string.text_no_item_push_all));
+//            } else {
+//                showTextNoItem(false, null);
+//            }
+//        }
+
+        if (mIsSearch) {
+            if (list != null && list.size() > 0) {
+                getItemNew(list);
+                mAdapter.notifyDataSetChanged();
+            }
         } else {
-            showTextNoItem(true, getString(R.string.text_no_item_push_all));
+            mInputSearch.setEnabled(true);
+            hideSwipeRefreshLayout();
+            if (list != null && list.size() > 0) {
+                mListView.setVisibility(View.VISIBLE);
+                showTextNoItem(false, null);
+                if (mIsPullDownRequest) {
+                    getItemNew(list);
+                } else {
+                    mListNotification.addAll(list);
+                }
+                mAdapter.setListPushTemp(mListNotification);
+                mAdapter.notifyDataSetChanged();
+                if (list.size() > 0) {
+                    List<Long> listPushId = new ArrayList<>();
+                    for (NotificationMessage notificationMessage : list) {
+                        if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                            listPushId.add(notificationMessage.getPushId());
+                        }
+                    }
+                    if (listPushId.size() > 0) {
+                        getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
+                    }
+                }
+            } else {
+                if (mListNotification != null && mListNotification.size() == 0) {
+                    showTextNoItem(true, getString(R.string.text_no_item_push_all));
+                }
+            }
         }
 
+    }
 
+    private void getItemNew(List<NotificationMessage> listNew) {
+        List<NotificationMessage> listResult = new ArrayList<>();
+        for (NotificationMessage newNotification : listNew) {
+            boolean isExits = false;
+            for (NotificationMessage notificationMessage : mListNotification) {
+                if (notificationMessage.getPushId() == newNotification.getPushId()) {
+                    isExits = true;
+                }
+            }
+            if (!isExits) {
+                listResult.add(newNotification);
+            }
+        }
+        if (listResult.size() > 0) {
+            mListNotification.addAll(0, listResult);
+        }
+
+        mIsPullDownRequest = false;
     }
 
     @Override

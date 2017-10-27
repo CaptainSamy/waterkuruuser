@@ -20,8 +20,8 @@ public class PushTypeQuestionNairePresenter extends FragmentPresenter<IPushTypeQ
         registerModel(new PushNotificationModel(view.getViewContext()));
     }
 
-    public void getListPushNotification(long userPushId, int isSearch, String keySearch) {
-        String token = "6899c690-0607-4a1f-9c2e-283c1e747cec";// getModel(SharedPreferencesModel.class).getToken();
+    public void getListPushQuestionNaire(long userPushId, int isSearch, String keySearch) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
         getModel(PushNotificationModel.class).getListPushQuestionNaire(token, userPushId, isSearch, keySearch, new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override

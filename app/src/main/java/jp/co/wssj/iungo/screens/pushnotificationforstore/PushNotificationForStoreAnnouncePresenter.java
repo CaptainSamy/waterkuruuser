@@ -15,19 +15,19 @@ import jp.co.wssj.iungo.utils.Logger;
  * Created by tuanle on 6/7/17.
  */
 
-public class PushNotificationForServiceCompanyPresenter extends FragmentPresenter<IPushNotificationForServiceCompany> {
+public class PushNotificationForStoreAnnouncePresenter extends FragmentPresenter<IPushNotificationForStoreAnnounce> {
 
-    private static final String TAG = "PushNotificationForServiceCompanyPresenter";
+    private static final String TAG = "PushNotificationForStoreAnnouncePresenter";
 
-    protected PushNotificationForServiceCompanyPresenter(IPushNotificationForServiceCompany view) {
+    protected PushNotificationForStoreAnnouncePresenter(IPushNotificationForStoreAnnounce view) {
         super(view);
         registerModel(new SharedPreferencesModel(view.getViewContext()));
         registerModel(new PushNotificationModel(view.getViewContext()));
     }
 
-    public void getListPushNotification(int serviceCompanyId, long pushId) {
+    public void getListPushNotificationForStoreAnnounce(int serviceCompanyId, long lastUserPushId, final int isSearch, final String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(PushNotificationModel.class).getListPushNotificationForServiceCompany(token, serviceCompanyId, pushId, new PushNotificationModel.IGetListPushForServiceCompanyCallback() {
+        getModel(PushNotificationModel.class).getListPushNotificationForStoreAnnounce(token, serviceCompanyId, lastUserPushId, isSearch, keySearch, new PushNotificationModel.IGetListPushForServiceCompanyCallback() {
 
             @Override
             public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {

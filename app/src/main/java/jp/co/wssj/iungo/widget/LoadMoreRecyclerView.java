@@ -18,6 +18,8 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     private boolean mIsLoading;
 
+    private boolean mEndOfData;
+
     private ILoadMoreListener mListener;
 
     public LoadMoreRecyclerView(Context context) {
@@ -40,7 +42,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
                     int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                     if (totalItemCount != 0 && lastVisibleItemPosition == totalItemCount - 1) {
                         Logger.d(TAG, "#end of recycle view");
-                        if (!mIsLoading) {
+                        if (!mIsLoading && !mEndOfData) {
                             mIsLoading = true;
                             if (mListener != null) {
                                 Logger.d(TAG, "#onLoadMore");
@@ -59,5 +61,9 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     public void notifyLoadComplete() {
         mIsLoading = false;
+    }
+
+    public void setEndOfData(boolean mEndOfData) {
+        this.mEndOfData = mEndOfData;
     }
 }

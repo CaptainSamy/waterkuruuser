@@ -135,8 +135,12 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
             mAdapter.refreshList(listTimeline, mIsPullDown);
             mIsPullDown = 0;
         } else {
-            if (mAdapter.getItemCount() == 0)
+            if (timeLineData != null && timeLineData.getListTimeline().size() == 0) {
+                mRecycleTimeLine.setEndOfData(true);
+            }
+            if (mAdapter.getItemCount() == 0) {
                 showTextNoItem(true, getString(R.string.no_timeline));
+            }
         }
     }
 
