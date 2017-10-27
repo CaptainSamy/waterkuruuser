@@ -1,5 +1,7 @@
 package jp.co.wssj.iungo.screens.pushnotification.pushquestionnaire;
 
+import android.text.TextUtils;
+
 import java.util.List;
 
 import jp.co.wssj.iungo.model.ErrorMessage;
@@ -34,5 +36,21 @@ public class PushTypeQuestionNairePresenter extends FragmentPresenter<IPushTypeQ
                 getView().displayErrorMessage(errorMessage);
             }
         });
+    }
+
+    public void setListPushUnRead(List<Long> pushId, int type) {
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        if (!TextUtils.isEmpty(token)) {
+            getModel(PushNotificationModel.class).setListPushUnRead(token, pushId, type, new PushNotificationModel.ISetListPushNotificationCallback() {
+
+                @Override
+                public void onSetListPushNotificationSuccess() {
+                }
+
+                @Override
+                public void onSetListPushNotificationFailure() {
+                }
+            });
+        }
     }
 }

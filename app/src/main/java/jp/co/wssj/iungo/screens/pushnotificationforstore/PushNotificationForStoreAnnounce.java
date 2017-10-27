@@ -110,7 +110,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
         mLayoutSearch = (RelativeLayout) rootView.findViewById(R.id.layoutSearch);
         mInputSearch.clearFocus();
-
     }
 
     @Override
@@ -209,7 +208,8 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
 
     private void statusSearchView(boolean hasFocus) {
         mTextSearch.setVisibility(isExpandedSearchView ? View.GONE : View.VISIBLE);
-        mRefreshLayout.setEnabled(!hasFocus);
+
+        mRefreshLayout.setEnabled(!isExpandedSearchView);
         if (mAdapter != null) {
             mAdapter.setIsAllowOnLoadMore(!hasFocus);
         }
@@ -229,20 +229,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
 
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
-//        hideSwipeRefreshLayout();
-//        if (list != null && list.size() > 0) {
-//            showTextNoItem(false, null);
-//            mListNotification.addAll(list);
-//            mAdapter.setListPushTemp(mListNotification);
-//            mAdapter.notifyDataSetChanged();
-//        } else {
-//            if (mListNotification.size() == 0) {
-//                showTextNoItem(true, getString(R.string.text_no_item_push_all));
-//            } else {
-//                showTextNoItem(false, null);
-//            }
-//        }
-
         if (mIsSearch) {
             if (list != null && list.size() > 0) {
                 getItemNew(list);
@@ -264,7 +250,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
                 if (list.size() > 0) {
                     List<Long> listPushId = new ArrayList<>();
                     for (NotificationMessage notificationMessage : list) {
-                        if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
+                        if (notificationMessage.getStatusRead() == 0) {
                             listPushId.add(notificationMessage.getPushId());
                         }
                     }
