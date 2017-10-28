@@ -168,7 +168,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
             public boolean onQueryTextSubmit(String query) {
                 mIsSearch = true;
                 Logger.d(TAG, "onQueryTextSubmit");
-                mAdapter.filter(query);
+//                mAdapter.filter(query);
+                mRefreshLayout.setRefreshing(true);
                 getPresenter().getListPushNotification(0, 1, query);
                 return false;
             }
@@ -229,14 +230,15 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
+        hideSwipeRefreshLayout();
         if (mIsSearch) {
+            mListNotification.clear();
             if (list != null && list.size() > 0) {
-                getItemNew(list);
-                mAdapter.notifyDataSetChanged();
+                mListNotification.addAll(list);
             }
+            mAdapter.notifyDataSetChanged();
         } else {
             mInputSearch.setEnabled(true);
-            hideSwipeRefreshLayout();
             if (list != null && list.size() > 0) {
                 mListView.setVisibility(View.VISIBLE);
                 showTextNoItem(false, null);
@@ -261,6 +263,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
             } else {
                 if (mListNotification != null && mListNotification.size() == 0) {
                     showTextNoItem(true, getString(R.string.text_no_item_push_all));
+                }
+
+                if (list != null && list.size() == 0) {
+                    mAdapter.setIsEndOfPage(true);
                 }
             }
         }

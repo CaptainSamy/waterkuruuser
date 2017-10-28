@@ -174,7 +174,7 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
             public boolean onQueryTextSubmit(String query) {
                 mIsSearch = true;
                 Logger.d(TAG, "onQueryTextSubmit");
-                mAdapter.filter(query);
+                mRefreshLayout.setRefreshing(true);
                 getPresenter().getListPushQuestionNaire(0, 1, query);
                 return false;
             }
@@ -186,9 +186,6 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
                     mAdapter.filter(newText);
                 }
                 statusSearchView(true);
-//                if (mAdapter != null) {
-//                    mAdapter.filter(newText);
-//                }
                 return false;
             }
         });
@@ -238,14 +235,15 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
 
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
+        hideSwipeRefreshLayout();
         if (mIsSearch) {
+            mListNotification.clear();
             if (list != null && list.size() > 0) {
-                getItemNew(list);
-                mAdapter.notifyDataSetChanged();
+                mListNotification.addAll(list);
             }
+            mAdapter.notifyDataSetChanged();
         } else {
             mInputSearch.setEnabled(true);
-            hideSwipeRefreshLayout();
             if (list != null && list.size() > 0) {
                 mListView.setVisibility(View.VISIBLE);
                 showTextNoItem(false, null);
@@ -271,6 +269,9 @@ public class PushTypeQuestionNaireFragment extends BaseFragment<IPushTypeQuestio
             } else {
                 if (mListNotification != null && mListNotification.size() == 0) {
                     showTextNoItem(true, getString(R.string.text_no_item_push_all));
+                }
+                if (list != null && list.size() == 0) {
+                    mAdapter.setIsEndOfPage(true);
                 }
             }
         }

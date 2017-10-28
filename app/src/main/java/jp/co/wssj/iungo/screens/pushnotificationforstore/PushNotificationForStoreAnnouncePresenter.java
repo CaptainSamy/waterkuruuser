@@ -9,6 +9,7 @@ import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
@@ -27,7 +28,7 @@ public class PushNotificationForStoreAnnouncePresenter extends FragmentPresenter
 
     public void getListPushNotificationForStoreAnnounce(int serviceCompanyId, long lastUserPushId, final int isSearch, final String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(PushNotificationModel.class).getListPushNotificationForStoreAnnounce(token, serviceCompanyId, lastUserPushId, isSearch, keySearch, new PushNotificationModel.IGetListPushForServiceCompanyCallback() {
+        getModel(PushNotificationModel.class).getListPushNotification(token, lastUserPushId, isSearch, keySearch, serviceCompanyId, Constants.TypePush.TYPE_PUSH_ANNOUNCE, new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override
             public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {

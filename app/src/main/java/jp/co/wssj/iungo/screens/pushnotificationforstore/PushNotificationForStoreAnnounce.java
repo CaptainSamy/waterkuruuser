@@ -109,7 +109,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
         mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
         mLayoutSearch = (RelativeLayout) rootView.findViewById(R.id.layoutSearch);
-        mInputSearch.clearFocus();
+
     }
 
     @Override
@@ -133,6 +133,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
 
                 @Override
                 public void onEndOfListView() {
+                    mRefreshLayout.setRefreshing(true);
                     long pushUserIdLastPage = mListNotification.get(mAdapter.getCount() - 1).getUserPushId();
                     getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, pushUserIdLastPage, 0, Constants.EMPTY_STRING);
                 }
@@ -167,7 +168,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
             public boolean onQueryTextSubmit(String query) {
                 mIsSearch = true;
                 Logger.d(TAG, "onQueryTextSubmit");
-//                mAdapter.filter(query);
+                mRefreshLayout.setRefreshing(true);
                 getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, 0, 1, query);
                 return false;
             }
@@ -208,7 +209,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
 
     private void statusSearchView(boolean hasFocus) {
         mTextSearch.setVisibility(isExpandedSearchView ? View.GONE : View.VISIBLE);
-
         mRefreshLayout.setEnabled(!isExpandedSearchView);
         if (mAdapter != null) {
             mAdapter.setIsAllowOnLoadMore(!hasFocus);
@@ -229,17 +229,15 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
 
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
+        hideSwipeRefreshLayout();
         if (mIsSearch) {
             mListNotification.clear();
             if (list != null && list.size() > 0) {
-                mListNotification.clear();
                 mListNotification.addAll(list);
-                mAdapter.notifyDataSetChanged();
             }
             mAdapter.notifyDataSetChanged();
         } else {
             mInputSearch.setEnabled(true);
-            hideSwipeRefreshLayout();
             if (list != null && list.size() > 0) {
                 mListView.setVisibility(View.VISIBLE);
                 showTextNoItem(false, null);
@@ -264,6 +262,9 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
             } else {
                 if (mListNotification != null && mListNotification.size() == 0) {
                     showTextNoItem(true, getString(R.string.text_no_item_push_all));
+                }
+                if (list != null && list.size() == 0) {
+                    mAdapter.setIsEndOfPage(true);
                 }
             }
         }
