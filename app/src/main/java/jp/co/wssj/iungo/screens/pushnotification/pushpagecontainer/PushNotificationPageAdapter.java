@@ -28,14 +28,6 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
 
     public static final String ARG_TYPE_PUSH = "arg_type_push_list";
 
-    public static final int TYPE_ALL_PUSH = 0;
-
-    public static final int TYPE_LIKED_PUSH = 1;
-
-    public static final int TYPE_QUESTION_NAIRE_PUSH = 2;
-
-    public static final int TYPE_PUSH_ANNOUNCE = 3;
-
     public PushNotificationPageAdapter(FragmentManager fm, Context context, int serviceCompanyId) {
         super(fm);
         mContext = context;
@@ -50,7 +42,7 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
                 if (mServiceCompanyId != 0) {
                     Bundle args = new Bundle();
                     args.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
-                    args.putInt(ARG_TYPE_PUSH, TYPE_PUSH_ANNOUNCE);
+                    args.putInt(ARG_TYPE_PUSH, Constants.TypePush.TYPE_PUSH_ANNOUNCE);
                     fragment = PushNotificationForStoreAnnounce.newInstance(args);
                 } else {
                     fragment = new PushNotificationFragment();
@@ -77,9 +69,9 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case TYPE_LIKED_PUSH:
+            case Constants.TypePush.TYPE_LIKED_PUSH:
                 return "お気に入り";
-            case TYPE_QUESTION_NAIRE_PUSH:
+            case Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH:
                 return "アンケート";
         }
         return "すべて";

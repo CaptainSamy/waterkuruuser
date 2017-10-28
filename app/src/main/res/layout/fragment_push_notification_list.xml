@@ -40,7 +40,6 @@
                 android:visibility="visible"/>
 
         </RelativeLayout>
-
     </RelativeLayout>
 
     <View

@@ -156,11 +156,11 @@ public class DBManager {
     public List<NotificationMessage> getListPush(int type, int serviceCompanyId) {
         List<NotificationMessage> listPush = new ArrayList<>();
         String sqlGetListPush;
-        if (type == PushNotificationPageAdapter.TYPE_LIKED_PUSH) {
+        if (type == Constants.TypePush.TYPE_LIKED_PUSH) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_LIKE + " = 1";
-        } else if (type == PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH) {
+        } else if (type == Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " = '" + Constants.PushNotification.TYPE_QUESTION_NAIRE + "'";
-        } else if (type == PushNotificationPageAdapter.TYPE_PUSH_ANNOUNCE) {
+        } else if (type == Constants.TypePush.TYPE_PUSH_ANNOUNCE) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE + " = " + serviceCompanyId;
         } else {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " ORDER BY " + DatabaseContract.PushNotification.COLUMN_PUSH_ID + " DESC";

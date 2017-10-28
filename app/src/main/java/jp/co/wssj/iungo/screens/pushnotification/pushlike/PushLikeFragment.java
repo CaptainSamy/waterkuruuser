@@ -20,7 +20,7 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.pushnotification.adapter.PushNotificationAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
-import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageAdapter;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
@@ -126,7 +126,7 @@ public class PushLikeFragment extends BaseFragment<IPushLikeView, PushLikePresen
         } else {
             mListNotification.clear();
         }
-        mListNotification.addAll(mDatabase.getListPush(PushNotificationPageAdapter.TYPE_LIKED_PUSH, 0));
+        mListNotification.addAll(mDatabase.getListPush(Constants.TypePush.TYPE_LIKED_PUSH, 0));
         mAdapter.setIsAllowOnLoadMore(false);
         mAdapter.setListPushTemp(mListNotification);
         mListView.setAdapter(mAdapter);

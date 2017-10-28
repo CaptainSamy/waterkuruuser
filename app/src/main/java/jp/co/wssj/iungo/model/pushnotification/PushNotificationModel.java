@@ -61,12 +61,12 @@ public class PushNotificationModel extends BaseModel {
         void onGetContentPushFailure(String message);
     }
 
-    public interface IGetListPushForServiceCompanyCallback {
-
-        void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage);
-
-        void onGetListPushNotificationFailure(ErrorMessage errorMessage);
-    }
+//    public interface IGetListPushForServiceCompanyCallback {
+//
+//        void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage);
+//
+//        void onGetListPushNotificationFailure(ErrorMessage errorMessage);
+//    }
 
     public interface IGetQuestionNaireCallback {
 
@@ -79,29 +79,14 @@ public class PushNotificationModel extends BaseModel {
         super(context);
     }
 
-    public void getListPushNotification(String token, long userPushId, int isSearch, String keySearch, final IGetListPushNotificationCallback callback) {
-        Request request = APICreator.getListNotification(token, userPushId, isSearch, keySearch, new Response.Listener<ListNotificationResponse>() {
+    public void getListPushNotification(String token, long userPushId, int isSearch, String keySearch, int serviceCompanyId, int typePush, final IGetListPushNotificationCallback callback) {
+        Request request = APICreator.getListNotification(token, userPushId, isSearch, keySearch, serviceCompanyId, typePush, new Response.Listener<ListNotificationResponse>() {
 
             @Override
             public void onResponse(final ListNotificationResponse response) {
                 if (response.isSuccess()) {
                     if (response.getData() != null && response.getData().getListPushNotification() != null) {
                         final List<NotificationMessage> listNotification = response.getData().getListPushNotification();
-//                        runOnWorkerThread(new IWorkerTask<Void>() {
-//
-//                            @Override
-//                            public Void doWork() {
-//                                DBManager.getInstance().insertPushNotification(listNotification);
-//                                Logger.d("bello", "finish insert");
-//                                return null;
-//                            }
-//
-//                            @Override
-//                            public void onFinish(Void result) {
-//                                Logger.d("bello", "callback insert");
-//                                callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
-//                            }
-//                        });
                         callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
                     } else {
                         callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
@@ -121,32 +106,57 @@ public class PushNotificationModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void getListPushQuestionNaire(String token, long userPushId, int isSearch, String keySearch, final IGetListPushNotificationCallback callback) {
-        Request request = APICreator.getListPushQuestionNaire(token, userPushId, isSearch, keySearch, new Response.Listener<ListNotificationResponse>() {
-
-            @Override
-            public void onResponse(final ListNotificationResponse response) {
-                if (response.isSuccess()) {
-                    if (response.getData() != null && response.getData().getListPushNotification() != null) {
-                        final List<NotificationMessage> pushQuestionNaireList = response.getData().getListPushNotification();
-                        callback.onGetListPushNotificationSuccess(pushQuestionNaireList, response.getData().getPage(), response.getData().getTotalPage());
-                    } else {
-                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
-                    }
-                } else {
-                    callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
-            }
-        });
-        request.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySequence.getInstance().addRequest(request);
-    }
+//    public void getListPushQuestionNaire(String token, long userPushId, int isSearch, String keySearch, final IGetListPushNotificationCallback callback) {
+//        Request request = APICreator.getListPushQuestionNaire(token, userPushId, isSearch, keySearch, new Response.Listener<ListNotificationResponse>() {
+//
+//            @Override
+//            public void onResponse(final ListNotificationResponse response) {
+//                if (response.isSuccess()) {
+//                    if (response.getData() != null && response.getData().getListPushNotification() != null) {
+//                        final List<NotificationMessage> pushQuestionNaireList = response.getData().getListPushNotification();
+//                        callback.onGetListPushNotificationSuccess(pushQuestionNaireList, response.getData().getPage(), response.getData().getTotalPage());
+//                    } else {
+//                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
+//                    }
+//                } else {
+//                    callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
+//            }
+//        });
+//        request.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        VolleySequence.getInstance().addRequest(request);
+//    }
+//    public void getListPushNotificationForStoreAnnounce(String token, int serviceCompanyId, long lastUserPushId, final int isSearch, final String keySearch, final IGetListPushForServiceCompanyCallback callback) {
+//        Request request = APICreator.getListNotificationForStoreAnnounce(token, serviceCompanyId, lastUserPushId, isSearch, keySearch, new Response.Listener<ListNotificationResponse>() {
+//
+//            @Override
+//            public void onResponse(ListNotificationResponse response) {
+//                if (response.isSuccess()) {
+//                    if (response.getData() != null && response.getData().getListPushNotification() != null) {
+//                        List<NotificationMessage> listNotification = response.getData().getListPushNotification();
+//                        callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
+//                    } else {
+//                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
+//                    }
+//                } else {
+//                    callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
+//            }
+//        });
+//        VolleySequence.getInstance().addRequest(request);
+//    }
 
     public void getListPushNotificationUnRead(String token, int page, int limit, final IGetListPushNotificationUnReadCallback callback) {
         final Request request = APICreator.getListPushUnRead(token, page, limit, new Response.Listener<ListNotificationResponse>() {
@@ -230,32 +240,6 @@ public class PushNotificationModel extends BaseModel {
                 } else {
                     callback.onGetContentPushFailure(getStringResource(R.string.failure));
                 }
-            }
-        });
-        VolleySequence.getInstance().addRequest(request);
-    }
-
-    public void getListPushNotificationForStoreAnnounce(String token, int serviceCompanyId, long lastUserPushId,final int isSearch, final String keySearch, final IGetListPushForServiceCompanyCallback callback) {
-        Request request = APICreator.getListNotificationForStoreAnnounce(token, serviceCompanyId, lastUserPushId,isSearch,keySearch, new Response.Listener<ListNotificationResponse>() {
-
-            @Override
-            public void onResponse(ListNotificationResponse response) {
-                if (response.isSuccess()) {
-                    if (response.getData() != null && response.getData().getListPushNotification() != null) {
-                        List<NotificationMessage> listNotification = response.getData().getListPushNotification();
-                        callback.onGetListPushNotificationSuccess(listNotification, response.getData().getPage(), response.getData().getTotalPage());
-                    } else {
-                        callback.onGetListPushNotificationSuccess(new ArrayList<NotificationMessage>(), 0, 0);
-                    }
-                } else {
-                    callback.onGetListPushNotificationFailure(new ErrorMessage(response.getMessage()));
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onGetListPushNotificationFailure(new ErrorMessage(getStringResource(R.string.network_error)));
             }
         });
         VolleySequence.getInstance().addRequest(request);

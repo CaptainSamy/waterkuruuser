@@ -138,6 +138,17 @@ public final class Constants {
         public static final String TYPE_STEP_PUSH = "type_step_push";
     }
 
+    public static final class TypePush {
+
+        public static final int TYPE_ALL_PUSH = 0;
+
+        public static final int TYPE_LIKED_PUSH = 1;
+
+        public static final int TYPE_QUESTION_NAIRE_PUSH = 2;
+
+        public static final int TYPE_PUSH_ANNOUNCE = 3;
+    }
+
     public static final class MemoConfig {
 
         public static final int NUMBER_LINE = 10;

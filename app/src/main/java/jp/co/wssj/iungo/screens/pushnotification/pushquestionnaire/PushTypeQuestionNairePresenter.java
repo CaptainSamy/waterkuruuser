@@ -9,6 +9,7 @@ import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by Nguyen Huu Ta on 26/10/2017.
@@ -24,7 +25,7 @@ public class PushTypeQuestionNairePresenter extends FragmentPresenter<IPushTypeQ
 
     public void getListPushQuestionNaire(long userPushId, int isSearch, String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(PushNotificationModel.class).getListPushQuestionNaire(token, userPushId, isSearch, keySearch, new PushNotificationModel.IGetListPushNotificationCallback() {
+        getModel(PushNotificationModel.class).getListPushNotification(token, userPushId, isSearch, keySearch, 0, Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH, new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override
             public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {
