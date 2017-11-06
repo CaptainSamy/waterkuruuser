@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
                 switch (notificationMessage.getAction()) {
                     case Constants.PushNotification.TYPE_TIME_LINE:
-                    case Constants.PushNotification.TYPE_STEP_PUSH:
+//                    case Constants.PushNotification.TYPE_STEP_PUSH:
                         switchScreen(FRAGMENT_TIMELINE, true, true, null);
                         break;
                     default:
