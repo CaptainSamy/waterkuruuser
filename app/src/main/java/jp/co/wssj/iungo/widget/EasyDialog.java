@@ -133,6 +133,7 @@ public class EasyDialog {
         llContent = (LinearLayout) dialogView.findViewById(R.id.llContent);
         mListView = (ListView) dialogView.findViewById(R.id.listView);
         mRefreshLayout = (SwipeRefreshLayout) dialogView.findViewById(R.id.refreshPush);
+        mRefreshLayout.setEnabled(false);
         mTextNoItem = (TextView) dialogView.findViewById(R.id.textNoItem);
         dialog = new Dialog(context, isFullScreen() ? android.R.style.Theme_Translucent_NoTitleBar_Fullscreen : android.R.style.Theme_Translucent_NoTitleBar);
         dialog.setContentView(dialogView);
