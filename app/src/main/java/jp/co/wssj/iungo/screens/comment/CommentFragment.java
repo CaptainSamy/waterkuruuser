@@ -27,6 +27,7 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.chat.dialog.DialogProfile;
 import jp.co.wssj.iungo.screens.timeline.adapter.CommentAdapter;
 import jp.co.wssj.iungo.screens.transition.TransitionAdapter;
 import jp.co.wssj.iungo.utils.Constants;
@@ -69,6 +70,8 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     private ProgressBar mProgressBar;
 
     private List<CommentResponse.CommentData.ListComment> mListComment;
+
+    private DialogProfile mDialogProfile;
 
     private int mTimelineId;
 
@@ -227,6 +230,21 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
             mProgressBar.setVisibility(View.VISIBLE);
             getPresenter().getListComment(mTimelineId);
         }
+        mAdapterComment.setOnClickAvatar(new CommentAdapter.IOnClickAvatar() {
+
+            @Override
+            public void onClick(int managerId) {
+                if (managerId != 0) {
+                    if (mDialogProfile == null) {
+                        mDialogProfile = new DialogProfile(getActivityContext(), managerId, getActivityCallback());
+                        mDialogProfile.show();
+                    } else {
+                        mDialogProfile.requestApi(managerId);
+                    }
+
+                }
+            }
+        });
     }
 
     private Handler mHandle = new Handler();

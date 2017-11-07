@@ -23,6 +23,8 @@ final class APICreator {
 
     private static final String API_GET_TIME_LINE = Constants.BASE_URL + "/api/client/users/get-list-timeline-by-user";
 
+    private static final String API_GET_TIME_LINE_DETAIL = Constants.BASE_URL + "/api/client/users/user-get-list-timeline-by-store-id";
+
     private static final String API_GET_LIST_COMMENT = Constants.BASE_URL + "/api/client/users/user-get-list-comment-by-timeline-id";
 
     private static final String API_ADD_COMMENT = Constants.BASE_URL + "/api/client/users/user-add-comment";
@@ -31,10 +33,12 @@ final class APICreator {
 
     private static final String API_LIKE_COMMENT = Constants.BASE_URL + "/api/client/users/user-like-comment";
 
+    private static final String API_PROFILE_STORE = Constants.BASE_URL + "/api/client/users/get-store-profile";
+
     private APICreator() {
     }
 
-    static GsonRequest<TimeLineResponse> getTimeline(final String token, final int timelineId, final Response.Listener<TimeLineResponse> listener, final Response.ErrorListener errorListener) {
+    static GsonRequest<TimeLineResponse> getTimeline(final String token, final int lastTimelineId, final Response.Listener<TimeLineResponse> listener, final Response.ErrorListener errorListener) {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -63,7 +67,44 @@ final class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
-                map.put("last_timeline_id", timelineId);
+                map.put("last_timeline_id", lastTimelineId);
+                map.put("limit_timeline", Constants.LIMIT_TIMELINE);
+                return map;
+            }
+        };
+    }
+
+    static GsonRequest<TimeLineResponse> getTimelineByStoreId(final String token, final int manageUserId, final int lastTimelineId, final Response.Listener<TimeLineResponse> listener, final Response.ErrorListener errorListener) {
+
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<TimeLineResponse>(Request.Method.POST,
+                API_GET_TIME_LINE_DETAIL,
+                TimeLineResponse.class,
+                headers,
+                new Response.Listener<TimeLineResponse>() {
+
+                    @Override
+                    public void onResponse(TimeLineResponse response) {
+                        Logger.i(TAG, "#getTimeline => onResponse");
+                        listener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.i(TAG, "#getTimeline => onErrorResponse");
+                        errorListener.onErrorResponse(error);
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("manager_id", manageUserId);
+                map.put("last_timeline_id", lastTimelineId);
                 map.put("limit_timeline", Constants.LIMIT_TIMELINE);
                 return map;
             }
@@ -213,5 +254,40 @@ final class APICreator {
         };
     }
 
+    static GsonRequest<ProfileResponse> getProfileStore(final String token, final int manageUserId, final Response.Listener<ProfileResponse> listener, final Response.ErrorListener errorListener) {
 
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        return new GsonJsonRequest<ProfileResponse>(Request.Method.POST,
+                API_PROFILE_STORE,
+                ProfileResponse.class,
+                headers,
+                new Response.Listener<ProfileResponse>() {
+
+                    @Override
+                    public void onResponse(ProfileResponse response) {
+                        Logger.i(TAG, "#getTimeline => onResponse");
+                        listener.onResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.i(TAG, "#getTimeline => onErrorResponse");
+                        errorListener.onErrorResponse(error);
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> map = new HashMap<>();
+                map.put("manager_id", manageUserId);
+                return map;
+            }
+        };
+    }
 }
+
+

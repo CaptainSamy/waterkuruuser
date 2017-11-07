@@ -23,6 +23,7 @@ import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.chat.adapter.ChatAdapter;
+import jp.co.wssj.iungo.screens.chat.dialog.DialogProfile;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
@@ -56,6 +57,8 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     private ChatAdapter mAdapter;
 
     private int mStoreId;
+
+    private DialogProfile mDialogProfile;
 
     public static ChatFragment newInstance(Bundle b) {
         ChatFragment fragment = new ChatFragment();
@@ -157,6 +160,16 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     protected void initData() {
         mListChat = new ArrayList<>();
         mAdapter = new ChatAdapter(getActivityContext(), mListChat);
+        mAdapter.setOnClickImageStore(new ChatAdapter.IClickImageStore() {
+
+            @Override
+            public void onClick(int managerId) {
+                if (mDialogProfile == null) {
+                    mDialogProfile = new DialogProfile(getActivityContext(), managerId, getActivityCallback());
+                }
+                mDialogProfile.show();
+            }
+        });
         mListViewChat.setAdapter(mAdapter);
         if (getArguments() != null) {
             mStoreId = getArguments().getInt(KEY_STORE_ID);

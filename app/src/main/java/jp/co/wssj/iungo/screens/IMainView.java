@@ -80,6 +80,10 @@ public interface IMainView extends IView {
 
     int FRAGMENT_PUSH_NOTIFICATION_PAGER_NAVIGATION = 47;
 
+    int FRAGMENT_TIMELINE_DETAIL = 48;
+
+    int FRAGMENT_PROFILE = 49;
+
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement);

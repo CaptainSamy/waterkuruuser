@@ -17,4 +17,7 @@
     <dimen name="width_title">100dp</dimen>
     <dimen name="height_title">30dp</dimen>
     <dimen name="tab_layout_text_size">14sp</dimen>
+
+    <dimen name="header_height">250dp</dimen>
+    <dimen name="header_logo_size">70dp</dimen>
 </resources>

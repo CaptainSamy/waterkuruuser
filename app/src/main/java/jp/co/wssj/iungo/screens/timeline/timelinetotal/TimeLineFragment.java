@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.timeline;
+package jp.co.wssj.iungo.screens.timeline.timelinetotal;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +11,8 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.TimeLineResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.timeline.ITimeLineView;
+import jp.co.wssj.iungo.screens.timeline.TimeLinePresenter;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineAdapter;
 import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
@@ -22,7 +24,7 @@ import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
 public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresenter>
         implements ITimeLineView, View.OnClickListener, ILoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String TAG = "TimeLineFragment";
+    private static final String TAG = "TimeLineDetailFragment";
 
     private LoadMoreRecyclerView mRecycleTimeLine;
 
@@ -97,6 +99,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     protected void initData() {
         if (mAdapter == null) {
             mAdapter = new TimeLineAdapter(new ArrayList<TimeLineResponse.TimeLineData.ListTimeline>(), getPresenter(), getActivityCallback());
+            mAdapter.setIsTimelineDetail(true);
             setRefresh(true);
             getPresenter().getTimeline(0);
         }

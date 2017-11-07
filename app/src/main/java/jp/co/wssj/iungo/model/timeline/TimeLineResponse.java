@@ -62,7 +62,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
 
                 @SerializedName("management_user_id")
                 @Expose
-                private String managementUserId;
+                private int managementUserId;
 
                 @SerializedName("messages")
                 @Expose
@@ -116,7 +116,7 @@ public class TimeLineResponse extends ResponseData<TimeLineResponse.TimeLineData
                     return keyGen;
                 }
 
-                public String getManagementUserId() {
+                public int getManagementUserId() {
                     return managementUserId;
                 }
 

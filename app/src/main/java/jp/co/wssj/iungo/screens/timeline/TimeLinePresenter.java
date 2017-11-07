@@ -13,7 +13,7 @@ import jp.co.wssj.iungo.utils.Constants;
 
 public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
 
-    protected TimeLinePresenter(ITimeLineView view) {
+    public TimeLinePresenter(ITimeLineView view) {
         super(view);
         registerModel(new TimelineModel(view.getViewContext()));
         registerModel(new SharedPreferencesModel(view.getViewContext()));
@@ -25,10 +25,27 @@ public class TimeLinePresenter extends FragmentPresenter<ITimeLineView> {
         return getModel(TimelineModel.class);
     }
 
-    public void getTimeline(int timelineId) {
+    public void getTimeline(int lastTimelineId) {
 
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel().getTimeLine(token, timelineId, new TimelineModel.OnGetTimelineCallback() {
+        getModel().getTimeLine(token, lastTimelineId, new TimelineModel.OnGetTimelineCallback() {
+
+            @Override
+            public void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData) {
+                getView().onGetTimelineSuccess(timeLineData);
+            }
+
+            @Override
+            public void onGetTimelineFailure(String message) {
+                getView().onGetTimelineFailure(message);
+            }
+        });
+    }
+
+    public void getTimelineDetail(int managerUserId, int lastTimelineId) {
+
+        String token = getModel(SharedPreferencesModel.class).getToken();
+        getModel().getTimeLineDetail(token, managerUserId, lastTimelineId, new TimelineModel.OnGetTimelineCallback() {
 
             @Override
             public void onGetTimelineSuccess(TimeLineResponse.TimeLineData timeLineData) {

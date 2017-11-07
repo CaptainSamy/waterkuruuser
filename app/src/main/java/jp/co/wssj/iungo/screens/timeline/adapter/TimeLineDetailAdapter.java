@@ -40,15 +40,15 @@ import jp.co.wssj.iungo.widget.likefacebook.ReactionView;
  * Created by Nguyen Huu Ta on 13/9/2017.
  */
 
-public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineHolder> {
+public class TimeLineDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final String TAG = "TimeLineAdapter";
 
+    private static final int TYPE_HEADER = 0;
+
+    private static final int TYPE_ITEM = 1;
+
     private boolean mIsTimelineDetail;
-
-    private static final int NOT_SHOW_IMAGE = 0;
-
-    private static final int SHOW_IMAGE = 1;
 
     private List<TimeLineResponse.TimeLineData.ListTimeline> mListTimeLine;
 
@@ -58,7 +58,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     private String mTextStoreName, mTextImageStore;
 
-    public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
+    private RecyclerView mRecyclerView;
+
+    public TimeLineDetailAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
         mListTimeLine = listTimeline;
         mPresenter = presenter;
         mActivityCallback = activityCallback;
@@ -83,28 +85,51 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     }
 
     @Override
-    public TimeLineHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_time_line, parent, false);
-        return new TimeLineHolder(context, view);
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mRecyclerView = recyclerView;
+    }
+
+    View header;
+
+    public View getHeader() {
+        return header;
     }
 
     @Override
-    public void onBindViewHolder(TimeLineHolder holder, int position) {
-        TimeLineResponse.TimeLineData.ListTimeline response = getItemTimeLine(position);
-        if (response != null) {
-            holder.bind(getItemTimeLine(position), position);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        if (viewType == TYPE_HEADER) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            if (header == null) {
+                header = inflater.inflate(R.layout.view_header_placeholder, parent, false);
+            }
+            return new HeaderHolder(context, header);
+        } else {
+
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View viewItem = inflater.inflate(R.layout.item_time_line, parent, false);
+            return new TimeLineHolder(context, viewItem);
+        }
+
+
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof TimeLineHolder) {
+            TimeLineResponse.TimeLineData.ListTimeline response = getItemTimeLine(position);
+            if (response != null) {
+                ((TimeLineHolder) holder).bind(getItemTimeLine(position - 1), position);
+            }
+        } else {
+
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        TimeLineResponse.TimeLineData.ListTimeline.Timeline timeline = getItemTimeLine(position).getTimeline();
-        if (timeline != null) {
-            return TextUtils.isEmpty(timeline.getImages()) ? NOT_SHOW_IMAGE : SHOW_IMAGE;
-        }
-        return NOT_SHOW_IMAGE;
+        return position == 0 ? TYPE_HEADER : TYPE_ITEM;
     }
 
     @Override
@@ -184,7 +209,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             }
             mStoreName.setText(mTextStoreName);
             showIconLike();
-            if (getItemViewType() == SHOW_IMAGE) {
+            if (!TextUtils.isEmpty(mTimeLine.getImages())) {
                 mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
                 ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback);
@@ -222,25 +247,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                 @Override
                 public void onItemClick(int likeId) {
-                    //Status like
-//                    boolean isExitsLike = false;
-//                    if (likeId != mTimeLine.getMyLikeId()) {
-//                        if (mTimeLine.getMyLikeId() == 0) {
-//                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
-//                        } else {
-//                            isExitsLike = true;
-//                        }
-//                        mTimeLine.setMyLikeId(likeId);
-//                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
-//                            if (likeId == like.getLikeId()) {
-//                                isExitsLike = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!isExitsLike || mListLike.size() == 0) {
-//                            TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
-//                            mListLike.add(like);
-//                        }
                     if (likeId != 0) {
                         mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
                         mTimeLine.setMyLikeId(likeId);
@@ -485,4 +491,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         this.mTextStoreName = mStoreName;
     }
 
+    public class HeaderHolder extends RecyclerView.ViewHolder {
+
+        public HeaderHolder(Context context, View itemView) {
+            super(itemView);
+
+        }
+
+    }
 }

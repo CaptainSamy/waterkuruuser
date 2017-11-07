@@ -32,6 +32,9 @@ public class HistoryChatResponse extends ResponseData<HistoryChatResponse.Histor
             @SerializedName("management_user_name")
             private String managerName;
 
+            @SerializedName("management_user_id")
+            private int managerId;
+
             @SerializedName("user_name")
             private String userName;
 
@@ -70,6 +73,10 @@ public class HistoryChatResponse extends ResponseData<HistoryChatResponse.Histor
 
             public String getImageStore() {
                 return mImageStore;
+            }
+
+            public int getManagerId() {
+                return managerId;
             }
         }
 

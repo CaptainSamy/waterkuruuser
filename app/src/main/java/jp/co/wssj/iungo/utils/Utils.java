@@ -58,7 +58,6 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
 
@@ -280,7 +279,7 @@ public final class Utils {
             if (listFileName.length > 1) {
                 fileName = listFileName[0];
             }
-            return fileName + System.currentTimeMillis()+".png";
+            return fileName + System.currentTimeMillis() + ".png";
         }
         return Constants.EMPTY_STRING;
     }
@@ -344,13 +343,13 @@ public final class Utils {
         }
     }
 
-    public static void fillImageRound(final Context context, String imgPath, final ImageView imageView) {
+    public static void fillImageQuantityOrigin(final Context context, String imgPath, final ImageView imageView, final int resIdError) {
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
                     .into(imageView);
         } else {
-            imageView.setImageResource(R.drawable.icon_user);
+            imageView.setImageResource(resIdError);
         }
     }
 
