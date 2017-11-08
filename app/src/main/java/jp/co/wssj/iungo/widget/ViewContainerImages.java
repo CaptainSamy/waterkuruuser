@@ -52,9 +52,12 @@ public class ViewContainerImages extends LinearLayout implements View.OnClickLis
 
     private int mTimelineId;
 
-    public ViewContainerImages(Context context, int timelineId, LinearLayout layoutComment, TextView numberComment, IActivityCallback activityCallback) {
+    private String mTextStoreName;
+
+    public ViewContainerImages(Context context, int timelineId, LinearLayout layoutComment, TextView numberComment, IActivityCallback activityCallback, String textStoreName) {
         super(context);
         mLayoutInflate = LayoutInflater.from(context);
+        mTextStoreName = textStoreName;
         mTimelineId = timelineId;
         mActivityCallback = activityCallback;
         setOrientation(VERTICAL);
@@ -277,6 +280,7 @@ public class ViewContainerImages extends LinearLayout implements View.OnClickLis
             Bundle bundle = new Bundle();
             bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimelineId);
             bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
+            bundle.putString(CommentFragment.KEY_STORE_NAME, mTextStoreName);
             bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
             mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, sharedView);
 

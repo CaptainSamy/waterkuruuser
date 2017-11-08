@@ -444,9 +444,9 @@ public class MainActivity extends AppCompatActivity
             Bundle b = intent.getExtras();
             if (b != null && !TextUtils.isEmpty(b.getString("push_id"))) {
                 NotificationMessage notificationMessage = getItemPush(b);
-                if (mDialogNotification != null) {
-                    mDialogNotification.addNotification(notificationMessage);
-                }
+//                if (mDialogNotification != null) {
+//                    mDialogNotification.addNotification(notificationMessage);
+//                }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);

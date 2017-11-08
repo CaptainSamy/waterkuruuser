@@ -45,6 +45,8 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     public static final String KEY_TIME_LIKE_ID = "timeline_id";
 
+    public static final String KEY_STORE_NAME = "store_name";
+
     public static final String KEY_ITEM_POSITION = "item_position";
 
     public static final String KEY_LIST_ITEMS = "list_items";
@@ -74,6 +76,8 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     private DialogProfile mDialogProfile;
 
     private int mTimelineId;
+
+    private String mStoreName;
 
     public static CommentFragment newInstance(Bundle b) {
         CommentFragment fragment = new CommentFragment();
@@ -227,6 +231,8 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         }
         if (getArguments() != null) {
             mTimelineId = getArguments().getInt(KEY_TIME_LIKE_ID);
+            mStoreName = getArguments().getString(KEY_STORE_NAME);
+            mAdapterComment.setStoreName(mStoreName);
             mProgressBar.setVisibility(View.VISIBLE);
             getPresenter().getListComment(mTimelineId);
         }

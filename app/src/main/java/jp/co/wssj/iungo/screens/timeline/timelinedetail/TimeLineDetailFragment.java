@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -23,6 +22,8 @@ import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.timeline.ITimeLineView;
 import jp.co.wssj.iungo.screens.timeline.TimeLinePresenter;
 import jp.co.wssj.iungo.screens.timeline.adapter.TimeLineDetailAdapter;
+import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.utils.Utils;
 import jp.co.wssj.iungo.widget.ILoadMoreListener;
 import jp.co.wssj.iungo.widget.KenBurnsView;
 import jp.co.wssj.iungo.widget.LoadMoreRecyclerView;
@@ -56,15 +57,15 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
 
     private int mMinHeaderTranslation;
 
-    private KenBurnsView mHeaderPicture;
+    private KenBurnsView mImageBackground;
 
-    private ImageView mHeaderLogo, ivLogin;
+    private ImageView mAvatar, ivLogin, mButtonBack;
 
-    private View mHeader;
+    private View mHeader, mLine;
 
     private AccelerateDecelerateInterpolator mSmoothInterpolator;
 
-    private TextView mTitleActionBar, tvActionBar;
+    private TextView mStoreName, titleActionBar;
 
     private RectF mRect1 = new RectF();
 
@@ -141,14 +142,14 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
         mSmoothInterpolator = new AccelerateDecelerateInterpolator();
         mHeaderHeight = getResources().getDimensionPixelSize(R.dimen.header_height);
         mHeader = rootView.findViewById(R.id.header);
-        mHeaderPicture = (KenBurnsView) rootView.findViewById(R.id.header_picture);
-        mHeaderPicture.setResourceIds(R.drawable.picture0);
-        mHeaderLogo = (ImageView) rootView.findViewById(R.id.header_logo);
-        mTitleActionBar = (TextView) rootView.findViewById(R.id.titleActionBar);
-        ivLogin = (ImageView) rootView.findViewById(R.id.ivLogin);
-        tvActionBar = (TextView) rootView.findViewById(R.id.tvActionBar);
+        mImageBackground = (KenBurnsView) rootView.findViewById(R.id.header_picture);
+        mAvatar = (ImageView) rootView.findViewById(R.id.header_logo);
+        mStoreName = (TextView) rootView.findViewById(R.id.titleActionBar);
+        ivLogin = (ImageView) rootView.findViewById(R.id.ivAvatarActionBar);
+        titleActionBar = (TextView) rootView.findViewById(R.id.tvActionBar);
         mLayoutActionBar = (RelativeLayout) rootView.findViewById(R.id.layoutActionBar);
-
+        mButtonBack = (ImageView) rootView.findViewById(R.id.ivBack);
+        mLine = rootView.findViewById(R.id.line);
         ViewTreeObserver viewTreeObserver = mLayoutActionBar.getViewTreeObserver();
         viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
@@ -159,6 +160,40 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
 
             }
         });
+    }
+
+    @Override
+    protected void initAction() {
+        mRecycleTimeLine.setOnLoadMoreListener(this);
+        mButtonBack.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                backToPreviousScreen();
+            }
+        });
+    }
+
+    @Override
+    protected void initData() {
+        Bundle args = getArguments();
+        if (args != null) {
+            mUserManagerId = args.getInt(KEY_USER_MANAGER_ID);
+            String urlImageStore = args.getString(KEY_IMAGE_STORE);
+            String stringStoreName = args.getString(KEY_STORE_NAME);
+            mStoreName.setText(stringStoreName);
+            titleActionBar.setText(stringStoreName);
+            Utils.fillImage(getActivityContext(), urlImageStore, mAvatar, R.drawable.icon_user);
+            mImageBackground.fillImage(urlImageStore);
+            if (mAdapter == null) {
+                mAdapter = new TimeLineDetailAdapter(new ArrayList<TimeLineResponse.TimeLineData.ListTimeline>(), getPresenter(), getActivityCallback());
+                setRefresh(true);
+                mAdapter.setImageStore(urlImageStore);
+                mAdapter.setStoreName(stringStoreName);
+                getPresenter().getTimelineDetail(mUserManagerId, 0);
+            }
+        }
+        mRecycleTimeLine.setAdapter(mAdapter);
     }
 
     private void setupListView() {
@@ -172,12 +207,28 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
                 int scrollY = getScrollY();
+                if (scrollY >= -mMinHeaderTranslation) {
+                    mLayoutActionBar.setBackgroundColor(getResources().getColor(R.color.colorBackground_Actionbar));
+                    mStoreName.setTextColor(getResources().getColor(R.color.colorMain));
+                    mImageBackground.setVisibility(View.INVISIBLE);
+                    if (!mLine.isShown()) {
+                        mLine.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    mImageBackground.setVisibility(View.VISIBLE);
+                    mStoreName.setVisibility(View.VISIBLE);
+                    mStoreName.setTextColor(getResources().getColor(R.color.white));
+                    mLayoutActionBar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    if (mLine.isShown()) {
+                        mLine.setVisibility(View.GONE);
+                    }
+                }
+                Logger.d(TAG, "onScrolled " + scrollY + " / " + Math.max(-scrollY, mMinHeaderTranslation));
                 mHeader.setTranslationY(Math.max(-scrollY, mMinHeaderTranslation));
                 float ratio = clamp(mHeader.getTranslationY() / mMinHeaderTranslation, 0.0f, 1.0f);
-                interpolate(mHeaderLogo, ivLogin, mSmoothInterpolator.getInterpolation(ratio));
-                interpolateTitleActionBar(mTitleActionBar, tvActionBar, mSmoothInterpolator.getInterpolation(ratio));
+                interpolate(mAvatar, ivLogin, mSmoothInterpolator.getInterpolation(ratio));
+                interpolateTitleActionBar(mStoreName, titleActionBar, mSmoothInterpolator.getInterpolation(ratio));
             }
         });
     }
@@ -240,29 +291,6 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
         }
 
         return -top + firstVisiblePosition * c.getHeight() + headerHeight;
-    }
-
-    @Override
-    protected void initAction() {
-        mRecycleTimeLine.setOnLoadMoreListener(this);
-    }
-
-    @Override
-    protected void initData() {
-        Bundle args = getArguments();
-        if (args != null) {
-            mUserManagerId = args.getInt(KEY_USER_MANAGER_ID);
-            String imageStore = args.getString(KEY_IMAGE_STORE);
-            String storeName = args.getString(KEY_STORE_NAME);
-            if (mAdapter == null) {
-                mAdapter = new TimeLineDetailAdapter(new ArrayList<TimeLineResponse.TimeLineData.ListTimeline>(), getPresenter(), getActivityCallback());
-                setRefresh(true);
-                mAdapter.setImageStore(imageStore);
-                mAdapter.setStoreName(storeName);
-                getPresenter().getTimelineDetail(mUserManagerId, 0);
-            }
-        }
-        mRecycleTimeLine.setAdapter(mAdapter);
     }
 
     @Override

@@ -154,8 +154,7 @@ public class DialogProfile extends BaseDialog<IDialogProfileView, DialogProfileP
                         });
             }
             Utils.fillImage(getContext(), profile.getLogo(), mAvatar, R.drawable.icon_user);
-            String text = " ajsdhfk jsdhf lka jshdlk jklajshdlfj asdjfhlajsdhfl jkhal lasjdhfljas ajhsdfg  ahjsdg asd kg akjsdhfg";
-            mDescription.setText(text);
+            mDescription.setText(profile.getDescription());
         }
     }
 

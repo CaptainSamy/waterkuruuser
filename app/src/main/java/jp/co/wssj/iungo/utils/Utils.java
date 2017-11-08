@@ -58,6 +58,7 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorResponse;
 import jp.co.wssj.iungo.model.stamp.ListCardResponse;
 
@@ -324,8 +325,14 @@ public final class Utils {
             Glide.with(context)
                     .load(imgPath)
                     .fitCenter()
+                    .placeholder(R.drawable.loading)
                     .override(convertDpToPixel(context, 50), convertDpToPixel(context, 50))
                     .into(new SimpleTarget<GlideDrawable>() {
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            imageView.setImageDrawable(placeholder);
+                        }
 
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
@@ -347,7 +354,24 @@ public final class Utils {
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
-                    .into(imageView);
+                    .placeholder(R.drawable.loading)
+                    .into(new SimpleTarget<GlideDrawable>() {
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            imageView.setImageDrawable(placeholder);
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            imageView.setImageResource(resIdError);
+                        }
+
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            imageView.setImageDrawable(resource);
+                        }
+                    });
         } else {
             imageView.setImageResource(resIdError);
         }

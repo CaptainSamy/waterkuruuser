@@ -153,7 +153,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     public void onRefresh() {
-        getPresenter().getHistoryChat(mStoreId);
+        getPresenter().getHistoryChat(mStoreId, 0);
     }
 
     @Override
@@ -176,14 +176,14 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
             String imageStore = getArguments().getString(KEY_IMAGE_STORE);
             mAdapter.setImageStore(imageStore);
             mRefreshListChat.setRefreshing(true);
-            getPresenter().getHistoryChat(mStoreId);
+            getPresenter().getHistoryChat(mStoreId, 0);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
+//        mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
     }
 
     private Handler mHandle = new Handler();
@@ -193,7 +193,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         @Override
         public void run() {
             mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
-            getPresenter().getHistoryChat(mStoreId);
+            getPresenter().getHistoryChat(mStoreId, 0);
         }
     };
 

@@ -187,7 +187,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (getItemViewType() == SHOW_IMAGE) {
                 mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
-                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback);
+                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback, mTextStoreName);
                 try {
                     mListUrlImage = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
@@ -222,25 +222,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                 @Override
                 public void onItemClick(int likeId) {
-                    //Status like
-//                    boolean isExitsLike = false;
-//                    if (likeId != mTimeLine.getMyLikeId()) {
-//                        if (mTimeLine.getMyLikeId() == 0) {
-//                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
-//                        } else {
-//                            isExitsLike = true;
-//                        }
-//                        mTimeLine.setMyLikeId(likeId);
-//                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
-//                            if (likeId == like.getLikeId()) {
-//                                isExitsLike = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!isExitsLike || mListLike.size() == 0) {
-//                            TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
-//                            mListLike.add(like);
-//                        }
                     if (likeId != 0) {
                         mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
                         mTimeLine.setMyLikeId(likeId);
@@ -326,6 +307,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (mActivityCallback != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
+                bundle.putString(CommentFragment.KEY_STORE_NAME, mTextStoreName);
                 bundle.putInt(CommentFragment.KEY_ITEM_POSITION, 0);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
                 mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, null);

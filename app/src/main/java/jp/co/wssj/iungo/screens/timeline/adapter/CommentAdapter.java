@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,8 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
     private CommentPresenter mTimelinePresenter;
 
     private IOnClickAvatar mOnClickAvatar;
+
+    private String mStoreName;
 
     public CommentAdapter(@NonNull Context context, @NonNull List<CommentResponse.CommentData.ListComment> objects, CommentPresenter presenter) {
         super(context, 0, objects);
@@ -89,7 +92,8 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
             if (comments != null) {
                 mComment = comments.getComment();
                 if (mComment != null) {
-                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + mComment.getUserName() + "</font></strong></body></html>" + " " + StringEscapeUtils.unescapeJava(mComment.getContent());
+                    String userName = TextUtils.isEmpty(mComment.getUserName()) ? mStoreName : mComment.getUserName();
+                    String content = "<html><body><strong><font color='#3f51b5' font-weight: bold>" + userName + "</font></strong></body></html>" + " " + StringEscapeUtils.unescapeJava(mComment.getContent());
                     mContentComment.setText(Html.fromHtml(content.replace("\n", "<br />")));
                     mTime.setText(Utils.distanceTimes(mComment.getCreated()));
                     mNumberLike.setText(String.valueOf(mComment.getNumberLike()));
@@ -173,5 +177,9 @@ public class CommentAdapter extends ArrayAdapter<CommentResponse.CommentData.Lis
 
     public void setOnClickAvatar(IOnClickAvatar mOnClickAvatar) {
         this.mOnClickAvatar = mOnClickAvatar;
+    }
+
+    public void setStoreName(String mStoreName) {
+        this.mStoreName = mStoreName;
     }
 }

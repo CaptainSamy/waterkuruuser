@@ -212,7 +212,7 @@ public class TimeLineDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if (!TextUtils.isEmpty(mTimeLine.getImages())) {
                 mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
-                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback);
+                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback, mTextStoreName);
                 try {
                     mListUrlImage = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
@@ -332,6 +332,7 @@ public class TimeLineDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             if (mActivityCallback != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
+                bundle.putString(CommentFragment.KEY_STORE_NAME, mTextStoreName);
                 bundle.putInt(CommentFragment.KEY_ITEM_POSITION, 0);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
                 mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, null);

@@ -28,6 +28,8 @@ public final class Constants {
 
     public static final int LIMIT_TIMELINE = 10;
 
+    public static final int LIMIT_CHAT = 5;
+
     public static final int DURATION_DIALOG_NOTIFICATION = 350;
 
     public static final int DELAY_TIME_TRANSFER_FRAGMENT = 200;
