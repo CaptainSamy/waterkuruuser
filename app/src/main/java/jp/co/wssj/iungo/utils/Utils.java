@@ -280,7 +280,7 @@ public final class Utils {
             if (listFileName.length > 1) {
                 fileName = listFileName[0];
             }
-            return fileName + System.currentTimeMillis()+".png";
+            return fileName + System.currentTimeMillis() + ".png";
         }
         return Constants.EMPTY_STRING;
     }
@@ -325,8 +325,14 @@ public final class Utils {
             Glide.with(context)
                     .load(imgPath)
                     .fitCenter()
+                    .placeholder(R.drawable.loading)
                     .override(convertDpToPixel(context, 50), convertDpToPixel(context, 50))
                     .into(new SimpleTarget<GlideDrawable>() {
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            imageView.setImageDrawable(placeholder);
+                        }
 
                         @Override
                         public void onLoadFailed(Exception e, Drawable errorDrawable) {
@@ -344,13 +350,30 @@ public final class Utils {
         }
     }
 
-    public static void fillImageRound(final Context context, String imgPath, final ImageView imageView) {
+    public static void fillImageQuantityOrigin(final Context context, String imgPath, final ImageView imageView, final int resIdError) {
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)
                     .load(imgPath)
-                    .into(imageView);
+                    .placeholder(R.drawable.loading)
+                    .into(new SimpleTarget<GlideDrawable>() {
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            imageView.setImageDrawable(placeholder);
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            imageView.setImageResource(resIdError);
+                        }
+
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            imageView.setImageDrawable(resource);
+                        }
+                    });
         } else {
-            imageView.setImageResource(R.drawable.icon_user);
+            imageView.setImageResource(resIdError);
         }
     }
 

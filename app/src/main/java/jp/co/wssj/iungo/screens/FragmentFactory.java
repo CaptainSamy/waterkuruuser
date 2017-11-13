@@ -22,6 +22,7 @@ import jp.co.wssj.iungo.screens.login.LoginFragment;
 import jp.co.wssj.iungo.screens.memomanager.MemoManagerFragment;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
 import jp.co.wssj.iungo.screens.polycy.PolicyFragment;
+import jp.co.wssj.iungo.screens.profile.ProfileStoreFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageNavigationFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
@@ -33,7 +34,8 @@ import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
 import jp.co.wssj.iungo.screens.splash.SplashFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
-import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
+import jp.co.wssj.iungo.screens.timeline.timelinedetail.TimeLineDetailFragment;
+import jp.co.wssj.iungo.screens.timeline.timelinetotal.TimeLineFragment;
 import jp.co.wssj.iungo.screens.waitstoreconfirm.WaitStoreConfirmFragment;
 
 /**
@@ -163,6 +165,13 @@ public final class FragmentFactory {
                     fragment = WaitStoreConfirmFragment.newInstance(bundle);
                     break;
                 case IMainView.FRAGMENT_PUSH_NOTIFICATION_LIST:
+                    break;
+                case IMainView.FRAGMENT_TIMELINE_DETAIL:
+                    fragment = TimeLineDetailFragment.newInstance(bundle);
+                    break;
+                case IMainView.FRAGMENT_PROFILE:
+                    fragment = ProfileStoreFragment.newInstance(bundle);
+                    break;
             }
         }
         if (fragment != null) {

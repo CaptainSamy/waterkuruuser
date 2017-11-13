@@ -19,9 +19,9 @@ public class ChatPresenter extends FragmentPresenter<IChatView> {
         registerModel(new SharedPreferencesModel(view.getViewContext()));
     }
 
-    public void getHistoryChat(int storeId) {
+    public void getHistoryChat(int storeId, int lastChatId) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(ChatModel.class).getHistoryChat(token, storeId, new ChatModel.OnGetHistoryChatCallback() {
+        getModel(ChatModel.class).getHistoryChat(token, storeId,lastChatId, new ChatModel.OnGetHistoryChatCallback() {
 
             @Override
             public void onGetHistoryChatSuccess(List<HistoryChatResponse.HistoryChatData.ChatData> history) {

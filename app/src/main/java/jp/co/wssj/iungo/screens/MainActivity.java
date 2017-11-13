@@ -39,7 +39,7 @@ import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.screens.pushobject.ObjectPush;
-import jp.co.wssj.iungo.screens.timeline.TimeLineFragment;
+import jp.co.wssj.iungo.screens.timeline.timelinetotal.TimeLineFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.FragmentBackStackManager;
 import jp.co.wssj.iungo.utils.Logger;
@@ -221,7 +221,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void displayErrorMessage(String message) {
-        mDialogNotification.getRefreshLayout().setRefreshing(false);
+        if (mDialogNotification != null && mDialogNotification.getRefreshLayout() != null)
+            mDialogNotification.getRefreshLayout().setRefreshing(false);
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
@@ -443,9 +444,9 @@ public class MainActivity extends AppCompatActivity
             Bundle b = intent.getExtras();
             if (b != null && !TextUtils.isEmpty(b.getString("push_id"))) {
                 NotificationMessage notificationMessage = getItemPush(b);
-                if (mDialogNotification != null) {
-                    mDialogNotification.addNotification(notificationMessage);
-                }
+//                if (mDialogNotification != null) {
+//                    mDialogNotification.addNotification(notificationMessage);
+//                }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);

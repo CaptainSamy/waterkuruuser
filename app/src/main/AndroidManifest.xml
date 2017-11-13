@@ -50,7 +50,7 @@
 
                 <data
                     android:host="checkin"
-                    android:scheme="iungo"/>
+                    android:scheme="iungoenterprise"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
