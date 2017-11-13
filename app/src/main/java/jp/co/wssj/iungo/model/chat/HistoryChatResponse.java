@@ -13,12 +13,12 @@ import jp.co.wssj.iungo.model.ResponseData;
 
 public class HistoryChatResponse extends ResponseData<HistoryChatResponse.HistoryChatData> {
 
-    public class HistoryChatData implements GsonSerializable {
+    public static class HistoryChatData implements GsonSerializable {
 
         @SerializedName("list_message")
         private List<ChatData> listChat;
 
-        public class ChatData implements GsonSerializable {
+        public static class ChatData implements GsonSerializable {
 
             @SerializedName("content")
             private String content;
@@ -41,18 +41,37 @@ public class HistoryChatResponse extends ResponseData<HistoryChatResponse.Histor
             @SerializedName("img_store")
             private String mImageStore;
 
+            @SerializedName("id")
+            private int id;
+
             private String date;
+
+            public int getId() {
+                return id;
+            }
 
             public String getContent() {
                 return content;
+            }
+
+            public void setContent(String content) {
+                this.content = content;
             }
 
             public long getTimeCreate() {
                 return timeCreate;
             }
 
+            public void setTimeCreate(long timeCreate) {
+                this.timeCreate = timeCreate;
+            }
+
             public boolean isUser() {
                 return isUser == 0;
+            }
+
+            public void setIsUser(int isUser) {
+                this.isUser = isUser;
             }
 
             public String getManagerName() {

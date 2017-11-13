@@ -84,7 +84,7 @@ public class APICreater {
                 Map<String, Object> map = new HashMap<>();
                 map.put("store_id", storeId);
                 map.put("last_chat_id", lastChatId);
-                map.put("limit", Constants.LIMIT_CHAT);
+                map.put("limit", Constants.LIMIT);
                 return map;
             }
         };

@@ -18,6 +18,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
+import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -81,6 +82,8 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
         } else {
             holderUser = (ChatDetailHolderUser) convertView.getTag();
         }
+
+        Logger.d("DaiKySy", position + "");
         holderUser.bind(chat, position);
         return convertView;
     }
@@ -143,5 +146,10 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
     public void setOnClickImageStore(IClickImageStore clickImageStore) {
         this.clickImageStore = clickImageStore;
+    }
+
+    public interface IListenerScroll {
+
+        void endOfListView();
     }
 }
