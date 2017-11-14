@@ -11,49 +11,6 @@
         android:background="@color/color_gray"
         />
 
-
-    <RelativeLayout
-        android:id="@+id/layoutActionBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:clickable="true">
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_centerVertical="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_back"/>
-
-        <ImageView
-            android:id="@+id/ivAvatarActionBar"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/ivBack"/>
-
-        <TextView
-            android:id="@+id/tvActionBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_toEndOf="@+id/ivAvatarActionBar"
-            android:text="@string/title_age"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:visibility="invisible"/>
-
-        <View
-            android:id="@+id/line"
-            android:layout_width="match_parent"
-            android:layout_height="0.5sp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorTextDisable"
-            android:visibility="gone"/>
-    </RelativeLayout>
-
     <FrameLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -88,5 +45,47 @@
             android:textSize="18sp"/>
     </FrameLayout>
 
+    <RelativeLayout
+        android:id="@+id/layoutActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_centerVertical="true"
+            android:padding="16dp"
+            android:src="@drawable/ic_back"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivAvatarActionBar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/ivBack"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:id="@+id/tvActionBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/ivAvatarActionBar"
+            android:text="@string/title_age"
+            android:textColor="@color/colorMain"
+            android:textSize="18sp"
+            android:visibility="invisible"/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5sp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorTextDisable"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
 </FrameLayout>
