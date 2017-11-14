@@ -316,7 +316,6 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
         setRefresh(false);
         mRecycleTimeLine.notifyLoadComplete();
         if (timeLineData != null && timeLineData.getListTimeline().size() > 0) {
-            showTextNoItem(false, null);
             List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline = timeLineData.getListTimeline();
             mAdapter.refreshList(listTimeline, mIsPullDown);
             mIsPullDown = 0;
@@ -324,9 +323,11 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
             if (timeLineData != null && timeLineData.getListTimeline().size() == 0) {
                 mRecycleTimeLine.setEndOfData(true);
             }
-            if (mAdapter.getItemCount() == 0) {
-                showTextNoItem(true, getString(R.string.no_timeline));
-            }
+        }
+        if (mAdapter.getItemCount() == 0) {
+            showTextNoItem(true, getString(R.string.no_timeline));
+        } else {
+            showTextNoItem(false, null);
         }
         setupListView();
     }
