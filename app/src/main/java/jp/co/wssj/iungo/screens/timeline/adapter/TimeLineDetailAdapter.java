@@ -106,24 +106,20 @@ public class TimeLineDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
             return new HeaderHolder(context, header);
         } else {
-
             LayoutInflater inflater = LayoutInflater.from(context);
             View viewItem = inflater.inflate(R.layout.item_time_line, parent, false);
             return new TimeLineHolder(context, viewItem);
         }
-
 
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TimeLineHolder) {
-            TimeLineResponse.TimeLineData.ListTimeline response = getItemTimeLine(position);
+            TimeLineResponse.TimeLineData.ListTimeline response = getItemTimeLine(position - 1);
             if (response != null) {
                 ((TimeLineHolder) holder).bind(getItemTimeLine(position - 1), position);
             }
-        } else {
-
         }
     }
 
@@ -134,13 +130,13 @@ public class TimeLineDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        if (mListTimeLine == null) return 0;
-        return mListTimeLine.size();
+        if (mListTimeLine == null) return 1;
+        return mListTimeLine.size() + 1;
     }
 
     public int getLastTimelineId() {
         if (mListTimeLine != null && mListTimeLine.size() > 0)
-            return mListTimeLine.get(getItemCount() - 1).getTimeline().getId();
+            return mListTimeLine.get(getItemCount() - 2).getTimeline().getId();
         return 0;
     }
 

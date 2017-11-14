@@ -59,7 +59,7 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
 
     private KenBurnsView mImageBackground;
 
-    private ImageView mAvatar, ivLogin, mButtonBack;
+    private ImageView mAvatar, ivAvatarActionBar, mButtonBack;
 
     private View mHeader, mLine;
 
@@ -145,7 +145,7 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
         mImageBackground = (KenBurnsView) rootView.findViewById(R.id.header_picture);
         mAvatar = (ImageView) rootView.findViewById(R.id.header_logo);
         mStoreName = (TextView) rootView.findViewById(R.id.titleActionBar);
-        ivLogin = (ImageView) rootView.findViewById(R.id.ivAvatarActionBar);
+        ivAvatarActionBar = (ImageView) rootView.findViewById(R.id.ivAvatarActionBar);
         titleActionBar = (TextView) rootView.findViewById(R.id.tvActionBar);
         mLayoutActionBar = (RelativeLayout) rootView.findViewById(R.id.layoutActionBar);
         mButtonBack = (ImageView) rootView.findViewById(R.id.ivBack);
@@ -184,6 +184,7 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
             mStoreName.setText(stringStoreName);
             titleActionBar.setText(stringStoreName);
             Utils.fillImage(getActivityContext(), urlImageStore, mAvatar, R.drawable.icon_user);
+            Utils.fillImage(getActivityContext(), urlImageStore, ivAvatarActionBar, R.drawable.icon_user);
             mImageBackground.fillImage(urlImageStore);
             if (mAdapter == null) {
                 mAdapter = new TimeLineDetailAdapter(new ArrayList<TimeLineResponse.TimeLineData.ListTimeline>(), getPresenter(), getActivityCallback());
@@ -210,16 +211,26 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
                 int scrollY = getScrollY();
                 if (scrollY >= -mMinHeaderTranslation) {
                     mLayoutActionBar.setBackgroundColor(getResources().getColor(R.color.colorBackground_Actionbar));
-                    mStoreName.setTextColor(getResources().getColor(R.color.colorMain));
+                    titleActionBar.setVisibility(View.VISIBLE);
+                    ivAvatarActionBar.setVisibility(View.VISIBLE);
+
                     mImageBackground.setVisibility(View.INVISIBLE);
+                    mStoreName.setVisibility(View.GONE);
+                    mAvatar.setVisibility(View.GONE);
+
                     if (!mLine.isShown()) {
                         mLine.setVisibility(View.VISIBLE);
                     }
                 } else {
+                    mLayoutActionBar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    titleActionBar.setVisibility(View.INVISIBLE);
+                    ivAvatarActionBar.setVisibility(View.INVISIBLE);
+
                     mImageBackground.setVisibility(View.VISIBLE);
                     mStoreName.setVisibility(View.VISIBLE);
-                    mStoreName.setTextColor(getResources().getColor(R.color.white));
-                    mLayoutActionBar.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    mAvatar.setVisibility(View.VISIBLE);
+
+
                     if (mLine.isShown()) {
                         mLine.setVisibility(View.GONE);
                     }
@@ -227,7 +238,7 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
                 Logger.d(TAG, "onScrolled " + scrollY + " / " + Math.max(-scrollY, mMinHeaderTranslation));
                 mHeader.setTranslationY(Math.max(-scrollY, mMinHeaderTranslation));
                 float ratio = clamp(mHeader.getTranslationY() / mMinHeaderTranslation, 0.0f, 1.0f);
-                interpolate(mAvatar, ivLogin, mSmoothInterpolator.getInterpolation(ratio));
+                interpolate(mAvatar, ivAvatarActionBar, mSmoothInterpolator.getInterpolation(ratio));
                 interpolateTitleActionBar(mStoreName, titleActionBar, mSmoothInterpolator.getInterpolation(ratio));
             }
         });
@@ -306,7 +317,9 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
     @Override
     public void onLoadMore() {
         setRefresh(true);
-        getPresenter().getTimelineDetail(mUserManagerId, mAdapter.getLastTimelineId());
+        if (mAdapter != null && mAdapter.getItemCount() > 1) {
+            getPresenter().getTimelineDetail(mUserManagerId, mAdapter.getLastTimelineId());
+        }
     }
 
     @Override
@@ -322,9 +335,9 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
             if (timeLineData != null && timeLineData.getListTimeline().size() == 0) {
                 mRecycleTimeLine.setEndOfData(true);
             }
-            if (mAdapter.getItemCount() == 0) {
-                showTextNoItem(true, getString(R.string.no_timeline));
-            }
+        }
+        if (mAdapter.getItemCount() == 0) {
+            showTextNoItem(true, getString(R.string.no_timeline));
         }
         setupListView();
     }
