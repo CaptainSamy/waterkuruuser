@@ -495,7 +495,7 @@ public class SwipyRefreshLayout extends ViewGroup {
      * @param colorRes Resource id of the color.
      */
     public void setProgressBackgroundColor(int colorRes) {
-        mCircleView.setBackgroundColor(colorRes);
+//        mCircleView.setBackgroundColor(colorRes);
         mProgress.setBackgroundColor(getResources().getColor(colorRes));
     }
 
