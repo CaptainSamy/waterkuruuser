@@ -1,7 +1,6 @@
 package jp.co.wssj.iungo.widget.swipyrefreshlayout;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,7 +10,6 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.support.v4.view.ViewCompat;
 import android.view.animation.Animation;
-import android.widget.ImageView;
 
 /**
  * Created by Nguyen Huu Ta on 13/11/2017.
@@ -96,15 +94,15 @@ public class CircleImageView extends android.support.v7.widget.AppCompatImageVie
         }
     }
 
-    /**
-     * Update the background color of the circle image view.
-     */
-    public void setBackgroundColor(int colorRes) {
-        if (getBackground() instanceof ShapeDrawable) {
-            final Resources res = getResources();
-            ((ShapeDrawable) getBackground()).getPaint().setColor(res.getColor(colorRes));
-        }
-    }
+//    /**
+//     * Update the background color of the circle image view.
+//     */
+//    public void setBackgroundColor(int colorRes) {
+//        if (getBackground() instanceof ShapeDrawable) {
+//            final Resources res = getResources();
+//            ((ShapeDrawable) getBackground()).getPaint().setColor(res.getColor(colorRes));
+//        }
+//    }
 
     private class OvalShadow extends OvalShape {
 
