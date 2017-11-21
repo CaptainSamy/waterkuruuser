@@ -1,10 +1,13 @@
 package jp.co.wssj.iungo.screens.splash;
 
+import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 
 import jp.co.wssj.iungo.model.ErrorMessage;
 import jp.co.wssj.iungo.model.auth.AuthModel;
 import jp.co.wssj.iungo.model.auth.CheckVersionAppResponse;
+import jp.co.wssj.iungo.model.auth.InitUserResponse;
 import jp.co.wssj.iungo.model.auth.LoginResponse;
 import jp.co.wssj.iungo.model.chat.ChatModel;
 import jp.co.wssj.iungo.model.firebase.FirebaseModel;
@@ -12,6 +15,7 @@ import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.stamp.StampModel;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -32,6 +36,35 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
     private SharedPreferencesModel getShareModel() {
         return getModel(SharedPreferencesModel.class);
     }
+    final Handler handler = new Handler();
+
+    public void getStatusUser(final int versionCode,final String token){
+        getModel(AuthModel.class).checkInitUser( token,new AuthModel.IOnGetInitUserCallback() {
+
+            @Override
+            public void onGetInitUserSuccess(InitUserResponse.InitUserData initUser) {
+                if (initUser != null && initUser.getStatus().equals("done")){
+                    Log.d("Splash","init done");
+
+                    switchScreen(versionCode,token);
+                }else {
+                    Log.d("Splash","Loading");
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                           getStatusUser(versionCode,token);
+                        }
+                    }, 1000);
+                }
+            }
+
+            @Override
+            public void onGetInitUserFailure(String message) {
+                Log.d("Splash","failure");
+                switchScreen(versionCode,token);
+            }
+        });
+    }
 
     public void onCreate(final int versionCode) {
         final String token = getShareModel().getToken();
@@ -49,7 +82,10 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
                     getModel(SharedPreferencesModel.class).putStatusLogin(true);
                     getModel(SharedPreferencesModel.class).putImageUser(data.getImageUser());
                     getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
-                    switchScreen(versionCode, token);
+                    
+
+                    getStatusUser(versionCode,data.getToken());
+                    //switchScreen(versionCode, token);
                 }
 
                 @Override

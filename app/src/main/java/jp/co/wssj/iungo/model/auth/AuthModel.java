@@ -113,6 +113,12 @@ public class AuthModel extends BaseModel {
 
         void onFailure(String message);
     }
+    public interface IOnGetInitUserCallback {
+
+        void onGetInitUserSuccess(InitUserResponse.InitUserData initUser);
+
+        void onGetInitUserFailure(String message);
+    }
 
     private static final String TAG = "AuthModel";
 
@@ -585,4 +591,31 @@ public class AuthModel extends BaseModel {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    public void checkInitUser(String token, final IOnGetInitUserCallback callback) {
+        Request resetPassword = APICreator.onCheckInitUser(token, new Response.Listener<InitUserResponse>() {
+
+            @Override
+            public void onResponse(InitUserResponse response) {
+                Logger.d(TAG, "#onCheckInitUser => onResponse");
+                if (response != null && response.isSuccess()) {
+                    callback.onGetInitUserSuccess(response.getData());
+                } else {
+                    callback.onGetInitUserFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Logger.d(TAG, "#onCheckInitUser => onErrorResponse");
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onGetInitUserFailure(errorResponse.getMessage());
+                } else {
+                    callback.onGetInitUserFailure(getStringResource(R.string.network_error));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(resetPassword);
+    }
 }
