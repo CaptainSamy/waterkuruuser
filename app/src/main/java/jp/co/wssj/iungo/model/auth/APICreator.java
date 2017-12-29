@@ -79,6 +79,7 @@ final class APICreator {
                 param.put("sex", sex);
                 param.put("type_login", typeLogin);
                 param.put("token", token);
+                param.put("app_id", Constants.APP_ID);
                 return param;
             }
 
@@ -120,6 +121,7 @@ final class APICreator {
                 Map<String, Object> params = new HashMap<>();
                 params.put("username", username);
                 params.put("password", password);
+                params.put("app_id", Constants.APP_ID);
                 return params;
             }
         };

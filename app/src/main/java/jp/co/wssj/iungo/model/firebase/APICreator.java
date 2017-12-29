@@ -58,6 +58,7 @@ public class APICreator {
                 Map<String, Object> params = new HashMap<>();
                 params.put("device_token", deviceToken);
                 params.put("device_id", deviceId);
+                params.put("app_id", Constants.APP_ID);
                 return params;
             }
         };
