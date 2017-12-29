@@ -24,7 +24,7 @@ android {
     }
     productFlavors {
         development {
-            applicationId "jp.co.ryugaku"
+            applicationId "jp.co.wssj.iungo"
             buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
             minSdkVersion 17
             targetSdkVersion 25
@@ -33,7 +33,7 @@ android {
             signingConfig signingConfigs.product
         }
         product {
-            applicationId "jp.co.ryugaku"
+            applicationId "jp.co.wssj.iungo"
             buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
@@ -95,7 +95,7 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-core:2.4.4'
     compile 'com.amazonaws:aws-android-sdk-s3:2.4.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
-    compile 'com.facebook.android:facebook-android-sdk:4.+'
+    compile 'com.facebook.android:facebook-android-sdk:4.28.0'
     compile 'com.twitter.sdk.android:twitter:3.0.0'
     compile 'com.twitter.sdk.android:twitter-mopub:3.0.0'
     compile 'com.android.support:multidex:1.0.1'
@@ -106,5 +106,6 @@ dependencies {
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'jp.co.recruit_mp:LightCalendarView:1.0.1'
 }
 apply plugin: 'com.google.gms.google-services'

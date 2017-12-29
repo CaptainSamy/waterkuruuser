@@ -125,6 +125,17 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
     protected void initData() {
         Bundle bundle = getArguments();
         if (bundle != null) {
+            //set
+//            if (bundle.getString("timeCalender")!=null) {
+//                mTitle.setText(bundle.getString("titleCalender"));
+//            }
+//            if (bundle.getString("timeCalender")!=null){
+//                String timeCalender = Utils.distanceTimes(Long.parseLong(bundle.getString("timeCalender")));
+//                mTime.setText(timeCalender);
+//            }
+//            if (bundle.getString("bodyCalender")!=null) {
+//                mBody.loadDataWithBaseURL(null, bundle.getString("bodyCalender"), "text/html", "UTF-8", null);
+//            }
             mNotificationMessage = (NotificationMessage) bundle.getSerializable(NOTIFICATION_ARG);
             boolean isNeedRequestAPI = bundle.getBoolean(FLAG_FROM_ACTIVITY, false);
             if (mNotificationMessage != null) {
@@ -175,6 +186,7 @@ public class PushNotificationDetailFragment extends BaseFragment<IPushNotificati
                 mTime.setText(time);
 
             }
+
         }
     }
 

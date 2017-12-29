@@ -1,51 +1,51 @@
 {
   "project_info": {
-    "project_number": "993002972286",
-    "firebase_url": "https://ryugaku-7e0f4.firebaseio.com",
-    "project_id": "ryugaku-7e0f4",
-    "storage_bucket": "ryugaku-7e0f4.appspot.com"
+    "project_number": "610695143021",
+    "firebase_url": "https://iungo-8ea43.firebaseio.com",
+    "project_id": "iungo-8ea43",
+    "storage_bucket": "iungo-8ea43.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993002972286:android:e59ccb3e6b881a1d",
+        "mobilesdk_app_id": "1:610695143021:android:c5de8b4ffcc4c8f1",
         "android_client_info": {
-          "package_name": "jp.co.ryugaku"
+          "package_name": "jp.co.wssj.iungo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "993002972286-ekma14djvfa18uiq6q2799353gn88lk5.apps.googleusercontent.com",
+          "client_id": "610695143021-o78cg0bcs4020p2rfpovcm3uaqp2cpqg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "jp.co.ryugaku",
-            "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
-          }
-        },
-        {
-          "client_id": "993002972286-f2d208mceiegq9dbeukphreh7gdef7ng.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "jp.co.ryugaku",
-            "certificate_hash": "c115955b1ffddcd5644e1c73607081d9adaacf31"
-          }
-        },
-        {
-          "client_id": "993002972286-06qb34o1pkm8ohguthrck1oo0fpn877r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "jp.co.ryugaku",
+            "package_name": "jp.co.wssj.iungo",
             "certificate_hash": "6c5ed4efc34cc6a9d182bbbe302cf917e2098bbb"
           }
         },
         {
-          "client_id": "993002972286-ml2lmqsmsvomc07f1e7sia0rc2u2rf48.apps.googleusercontent.com",
+          "client_id": "610695143021-sdp0dnro0ug1ip5jrlqciu2qstkc95mn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.co.wssj.iungo",
+            "certificate_hash": "c115955b1ffddcd5644e1c73607081d9adaacf31"
+          }
+        },
+        {
+          "client_id": "610695143021-dnvgmn753ppdcmensiveq4m1vsjcpko4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jp.co.wssj.iungo",
+            "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
+          }
+        },
+        {
+          "client_id": "610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDAIP-9tEgYavWVx_IqZ-34jBHVQm0qwos"
+          "current_key": "AIzaSyB3cpTGZqrcodvGX3dB1qLqAfgUukl4ObI"
         }
       ],
       "services": {
@@ -56,14 +56,14 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "993002972286-ml2lmqsmsvomc07f1e7sia0rc2u2rf48.apps.googleusercontent.com",
+              "client_id": "610695143021-kh9svl3nvsuh31pn6mt3elvv3tlfbmrm.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "993002972286-eavkdr0k1p9eue05909dkbd9atjk43k8.apps.googleusercontent.com",
+              "client_id": "610695143021-14m4rbtmc61oke4angb3bqlck87s49gq.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "jp.co.ryugaku"
+                "bundle_id": "jp.co.wssj.iungo"
               }
             }
           ]

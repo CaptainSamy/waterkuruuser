@@ -2,6 +2,8 @@ package jp.co.wssj.iungo.screens.pushnotification.pushlist;
 
 import android.text.TextUtils;
 
+import com.google.android.exoplayer.C;
+
 import java.util.List;
 
 import jp.co.wssj.iungo.model.ErrorMessage;
@@ -28,7 +30,7 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
 
     public void getListPushNotification(long userPushId, int isSearch, String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(PushNotificationModel.class).getListPushNotification(token, userPushId, isSearch, keySearch, 0, Constants.TypePush.TYPE_ALL_PUSH,
+        getModel(PushNotificationModel.class).getListPushNotification(token, userPushId, isSearch, keySearch, 0, Constants.TypePush.TYPE_ALL_PUSH, Constants.EMPTY_STRING,Constants.EMPTY_STRING,
                 new PushNotificationModel.IGetListPushNotificationCallback() {
 
                     @Override

@@ -5,10 +5,10 @@
             android:id="@+id/navigation_stamp"
             android:icon="@drawable/item_stamp"
             android:title="@string/title_bottom_stamp"/>
-        <!--<item-->
-        <!--android:id="@+id/navigation_home"-->
-        <!--android:icon="@drawable/dr_qr_code"-->
-        <!--android:title="@string/title_home"/>-->
+        <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/dr_qr_code"
+        android:title="@string/title_home"/>
 
         <item
             android:id="@+id/navigation_timeline"

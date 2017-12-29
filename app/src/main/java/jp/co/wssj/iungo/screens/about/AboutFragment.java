@@ -2,12 +2,14 @@ package jp.co.wssj.iungo.screens.about;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.pushnotificationforstore.PushNotificationForStoreAnnounce;
 
 /**
  * Created by Nguyen Huu Ta on 26/6/2017.
@@ -17,7 +19,13 @@ public class AboutFragment extends BaseFragment<IAboutView, AboutPresenter> impl
 
     private static String TAG = "AboutFragment";
 
-    private TextView mVersion;
+    private TextView mVersion, txtTest;
+
+    public static AboutFragment newInstance(Bundle args) {
+        AboutFragment fragment = new AboutFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected String getLogTag() {
@@ -57,11 +65,11 @@ public class AboutFragment extends BaseFragment<IAboutView, AboutPresenter> impl
     @Override
     protected void initViews(View rootView) {
         mVersion = (TextView) rootView.findViewById(R.id.version);
+        txtTest = (TextView) rootView.findViewById(R.id.txtScreenTest);
     }
 
     @Override
     protected void initData() {
-
         PackageInfo pInfo;
         try {
             pInfo = getActivityContext().getPackageManager().getPackageInfo(getActivityContext().getPackageName(), 0);
@@ -69,6 +77,10 @@ public class AboutFragment extends BaseFragment<IAboutView, AboutPresenter> impl
             mVersion.setText(getString(R.string.content_version, version));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+        }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            txtTest.setText(bundle.getString("name"));
         }
     }
 }

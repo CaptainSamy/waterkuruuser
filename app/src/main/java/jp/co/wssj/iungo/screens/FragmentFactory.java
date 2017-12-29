@@ -31,6 +31,8 @@ import jp.co.wssj.iungo.screens.qa.QAFragment;
 import jp.co.wssj.iungo.screens.qadetail.QADetailFragment;
 import jp.co.wssj.iungo.screens.registeraccount.RegisterAccountFragment;
 import jp.co.wssj.iungo.screens.resetpassword.ResetPasswordFragment;
+import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
+import jp.co.wssj.iungo.screens.screentest.ScreenTestFragment;
 import jp.co.wssj.iungo.screens.splash.SplashFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceFragment;
 import jp.co.wssj.iungo.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
@@ -126,7 +128,7 @@ public final class FragmentFactory {
                     fragment = new PolicyFragment();
                     break;
                 case IMainView.FRAGMENT_ABOUT:
-                    fragment = new AboutFragment();
+                    fragment = AboutFragment.newInstance(bundle);
                     break;
                 case IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY:
                     fragment = PushNotificationForStoreAnnounce.newInstance(bundle);
@@ -142,6 +144,9 @@ public final class FragmentFactory {
                     break;
                 case IMainView.FRAGMENT_TIMELINE:
                     fragment = new TimeLineFragment();
+                    break;
+                case IMainView.FRAGMENT_HOME:
+                    fragment = new ScannerFragment();
                     break;
                 case IMainView.FRAGMENT_CHAT_WRAPPER:
                     fragment = new ChatWrapperFragment();
@@ -171,6 +176,9 @@ public final class FragmentFactory {
                     break;
                 case IMainView.FRAGMENT_PROFILE:
                     fragment = ProfileStoreFragment.newInstance(bundle);
+                    break;
+                case IMainView.FRAGMENT_SCREEN_TEST:
+                    fragment = new ScreenTestFragment();
                     break;
             }
         }

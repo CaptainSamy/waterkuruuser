@@ -111,7 +111,6 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
             @Override
             public void receiveDetections(final Detector.Detections<Barcode> detections) {
                 mHandler.post(new Runnable() {
-
                     @Override
                     public void run() {
                         if (mCameraSource != null && mIsCameraStarted) {

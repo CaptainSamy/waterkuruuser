@@ -79,8 +79,8 @@ public class PushNotificationModel extends BaseModel {
         super(context);
     }
 
-    public void getListPushNotification(String token, long userPushId, int isSearch, String keySearch, int serviceCompanyId, int typePush, final IGetListPushNotificationCallback callback) {
-        Request request = APICreator.getListNotification(token, userPushId, isSearch, keySearch, serviceCompanyId, typePush, new Response.Listener<ListNotificationResponse>() {
+    public void getListPushNotification(String token, long userPushId, int isSearch, String keySearch, int serviceCompanyId, int typePush,String fromDate, String toDate, final IGetListPushNotificationCallback callback) {
+        Request request = APICreator.getListNotification(token, userPushId, isSearch, keySearch, serviceCompanyId, typePush,fromDate,toDate, new Response.Listener<ListNotificationResponse>() {
 
             @Override
             public void onResponse(final ListNotificationResponse response) {
@@ -105,6 +105,7 @@ public class PushNotificationModel extends BaseModel {
         request.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySequence.getInstance().addRequest(request);
     }
+
 
 //    public void getListPushQuestionNaire(String token, long userPushId, int isSearch, String keySearch, final IGetListPushNotificationCallback callback) {
 //        Request request = APICreator.getListPushQuestionNaire(token, userPushId, isSearch, keySearch, new Response.Listener<ListNotificationResponse>() {

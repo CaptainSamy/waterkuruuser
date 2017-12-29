@@ -1,7 +1,9 @@
 package jp.co.wssj.iungo.screens.home;
 
 import android.os.Bundle;
+import android.view.View;
 
+import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.checkin.ManageStampFragment;
 import jp.co.wssj.iungo.screens.scanner.ScannerFragment;
@@ -24,10 +26,10 @@ public class HomeFragment extends SwitcherFragment<IHomeView, HomePresenter>
         return TAG;
     }
 
-//    @Override
-//    public int getNavigationBottomId() {
-//        return R.id.navigation_home;
-//    }
+    @Override
+    public int getNavigationBottomId() {
+        return R.id.navigation_home;
+    }
 
     @Override
     protected boolean isRetainState() {
@@ -65,5 +67,11 @@ public class HomeFragment extends SwitcherFragment<IHomeView, HomePresenter>
     @Override
     public void displayWaitStoreConfirmScreen(Bundle bundle) {
         displayFragment(WaitStoreConfirmFragment.newInstance(bundle));
+    }
+
+    @Override
+    protected void initViews(View rootView) {
+        super.initViews(rootView);
+        displayScanQRCodeScreen();
     }
 }

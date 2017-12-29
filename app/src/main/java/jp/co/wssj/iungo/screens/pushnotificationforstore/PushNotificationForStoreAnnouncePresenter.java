@@ -28,7 +28,7 @@ public class PushNotificationForStoreAnnouncePresenter extends FragmentPresenter
 
     public void getListPushNotificationForStoreAnnounce(int serviceCompanyId, long lastUserPushId, final int isSearch, final String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(PushNotificationModel.class).getListPushNotification(token, lastUserPushId, isSearch, keySearch, serviceCompanyId, Constants.TypePush.TYPE_PUSH_ANNOUNCE, new PushNotificationModel.IGetListPushNotificationCallback() {
+        getModel(PushNotificationModel.class).getListPushNotification(token, lastUserPushId, isSearch, keySearch, serviceCompanyId, Constants.TypePush.TYPE_PUSH_ANNOUNCE,Constants.EMPTY_STRING,Constants.EMPTY_STRING,new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override
             public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {
