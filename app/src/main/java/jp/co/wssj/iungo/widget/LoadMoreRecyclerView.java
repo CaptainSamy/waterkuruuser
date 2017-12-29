@@ -18,7 +18,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
 
     private boolean mIsLoading;
 
-    private int mCurrentPage, mTotalPage;
+    private boolean mEndOfData;
 
     private ILoadMoreListener mListener;
 
@@ -41,11 +41,12 @@ public class LoadMoreRecyclerView extends RecyclerView {
                     int totalItemCount = layoutManager.getItemCount();
                     int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
                     if (totalItemCount != 0 && lastVisibleItemPosition == totalItemCount - 1) {
-                        if (mCurrentPage < mTotalPage && !mIsLoading) {
+                        Logger.d(TAG, "#end of recycle view");
+                        if (!mIsLoading && !mEndOfData) {
                             mIsLoading = true;
                             if (mListener != null) {
                                 Logger.d(TAG, "#onLoadMore");
-                                mListener.onLoadMore(mCurrentPage + 1);
+                                mListener.onLoadMore();
                             }
                         }
                     }
@@ -62,16 +63,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
         mIsLoading = false;
     }
 
-    public void setCurrentPage(int currentPage) {
-        mCurrentPage = currentPage;
-    }
-
-    public void setTotalPage(int totalPage) {
-        mTotalPage = totalPage;
-    }
-
-    public void resetState() {
-        mCurrentPage = 0;
-        mTotalPage = 0;
+    public void setEndOfData(boolean mEndOfData) {
+        this.mEndOfData = mEndOfData;
     }
 }

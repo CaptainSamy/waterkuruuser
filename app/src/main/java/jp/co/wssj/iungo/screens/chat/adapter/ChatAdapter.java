@@ -18,6 +18,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.chat.HistoryChatResponse;
+import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -35,6 +36,8 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
     private LayoutInflater mInflate;
 
     private String mUrlImageStore;
+
+    private IClickImageStore clickImageStore;
 
     public ChatAdapter(@NonNull Context context, @NonNull List<HistoryChatResponse.HistoryChatData.ChatData> objects) {
         super(context, 0, objects);
@@ -79,6 +82,8 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
         } else {
             holderUser = (ChatDetailHolderUser) convertView.getTag();
         }
+
+        Logger.d("DaiKySy", position + "");
         holderUser.bind(chat, position);
         return convertView;
     }
@@ -103,12 +108,21 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
             mImageStore = (CircleImageView) view.findViewById(R.id.imageStore);
         }
 
-        public void bind(HistoryChatResponse.HistoryChatData.ChatData chat, int position) {
+        public void bind(final HistoryChatResponse.HistoryChatData.ChatData chat, int position) {
 
             switch (getItemViewType(position)) {
                 case TYPE_STORE:
                     Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
                     break;
+            }
+            if (mImageStore != null && clickImageStore != null) {
+                mImageStore.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        clickImageStore.onClick(chat.getManagerId());
+                    }
+                });
             }
             if (TextUtils.isEmpty(chat.getDate())) {
                 mLayoutDate.setVisibility(View.GONE);
@@ -123,5 +137,19 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
     public void setImageStore(String imageStore) {
         this.mUrlImageStore = imageStore;
+    }
+
+    public interface IClickImageStore {
+
+        void onClick(int managerId);
+    }
+
+    public void setOnClickImageStore(IClickImageStore clickImageStore) {
+        this.clickImageStore = clickImageStore;
+    }
+
+    public interface IListenerScroll {
+
+        void endOfListView();
     }
 }

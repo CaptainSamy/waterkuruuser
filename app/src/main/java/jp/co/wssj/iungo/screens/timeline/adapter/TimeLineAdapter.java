@@ -13,16 +13,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
@@ -32,6 +28,7 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
 import jp.co.wssj.iungo.screens.phototimeline.PhotoTimelineDialog;
 import jp.co.wssj.iungo.screens.timeline.TimeLinePresenter;
+import jp.co.wssj.iungo.screens.timeline.timelinedetail.TimeLineDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
@@ -47,6 +44,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     public static final String TAG = "TimeLineAdapter";
 
+    private boolean mIsTimelineDetail;
+
     private static final int NOT_SHOW_IMAGE = 0;
 
     private static final int SHOW_IMAGE = 1;
@@ -57,7 +56,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     private IActivityCallback mActivityCallback;
 
-    private Map<String, GlideDrawable> mImageMap = new HashMap<>();
+    private String mTextStoreName, mTextImageStore;
 
     public TimeLineAdapter(List<TimeLineResponse.TimeLineData.ListTimeline> listTimeline, TimeLinePresenter presenter, IActivityCallback activityCallback) {
         mListTimeLine = listTimeline;
@@ -110,7 +109,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     @Override
     public int getItemCount() {
+        if (mListTimeLine == null) return 0;
         return mListTimeLine.size();
+    }
+
+    public int getLastTimelineId() {
+        if (mListTimeLine != null && mListTimeLine.size() > 0)
+            return mListTimeLine.get(getItemCount() - 1).getTimeline().getId();
+        return 0;
     }
 
     public class TimeLineHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -135,6 +141,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private TextView mNumberComment, mTime;
 
+        private LinearLayout mLayoutInfoUser;
+
         private TimeLineResponse.TimeLineData.ListTimeline.Timeline mTimeLine;
 
         private List<TimeLineResponse.TimeLineData.ListTimeline.Like> mListLike;
@@ -143,9 +151,10 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         private PhotoTimelineDialog mDialogPhoto;
 
-        public TimeLineHolder(Context context, View itemView) {
+        private TimeLineHolder(Context context, View itemView) {
             super(itemView);
             mContext = context;
+            mLayoutInfoUser = (LinearLayout) itemView.findViewById(R.id.layoutInfo);
             mImageStore = (CircleImageView) itemView.findViewById(R.id.ivStore);
             mTextLike = (TextView) itemView.findViewById(R.id.tvLike);
             mNumberComment = (TextView) itemView.findViewById(R.id.tvNumberComment);
@@ -164,18 +173,21 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mImage3 = (ImageView) itemView.findViewById(R.id.image3);
         }
 
-        public void bind(final TimeLineResponse.TimeLineData.ListTimeline listTimeline, final int position) {
+        private void bind(final TimeLineResponse.TimeLineData.ListTimeline listTimeline, final int position) {
             mTimeLine = listTimeline.getTimeline();
             mListLike = listTimeline.getLikes();
             if (mDialogPhoto == null) {
                 mDialogPhoto = new PhotoTimelineDialog(mContext);
             }
-            mStoreName.setText(mTimeLine.getManagerName());
+            if (!TextUtils.isEmpty(mTimeLine.getManagerName())) {
+                mTextStoreName = mTimeLine.getManagerName();
+            }
+            mStoreName.setText(mTextStoreName);
             showIconLike();
             if (getItemViewType() == SHOW_IMAGE) {
                 mLayoutContainerImages.setVisibility(View.VISIBLE);
                 mLayoutContainerImages.removeAllViews();
-                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback);
+                ViewContainerImages containerImages = new ViewContainerImages(mContext, mTimeLine.getId(), mLayoutComment, mNumberComment, mActivityCallback, mTextStoreName);
                 try {
                     mListUrlImage = new ArrayList<>();
                     JSONArray jsonArray = new JSONArray(mTimeLine.getImages());
@@ -193,8 +205,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 mNumberComment.setOnClickListener(this);
                 mLayoutComment.setOnClickListener(this);
             }
-            Utils.fillImage(mContext, mTimeLine.getImageStore(), mImageStore, R.drawable.icon_user);
+            if (!TextUtils.isEmpty(mTimeLine.getImageStore())) {
+                mTextImageStore = mTimeLine.getImageStore();
+            }
+            Utils.fillImage(mContext, mTextImageStore, mImageStore, R.drawable.icon_user);
             mLayoutLike.setOnClickListener(this);
+            mLayoutInfoUser.setOnClickListener(this);
             mTime.setText(Utils.distanceTimes(mTimeLine.getCreated()));
             if (TextUtils.isEmpty(mTimeLine.getMessages())) {
                 mContent.setVisibility(View.GONE);
@@ -206,25 +222,6 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
                 @Override
                 public void onItemClick(int likeId) {
-                    //Status like
-//                    boolean isExitsLike = false;
-//                    if (likeId != mTimeLine.getMyLikeId()) {
-//                        if (mTimeLine.getMyLikeId() == 0) {
-//                            mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
-//                        } else {
-//                            isExitsLike = true;
-//                        }
-//                        mTimeLine.setMyLikeId(likeId);
-//                        for (TimeLineResponse.TimeLineData.ListTimeline.Like like : mListLike) {
-//                            if (likeId == like.getLikeId()) {
-//                                isExitsLike = true;
-//                                break;
-//                            }
-//                        }
-//                        if (!isExitsLike || mListLike.size() == 0) {
-//                            TimeLineResponse.TimeLineData.ListTimeline.Like like = new TimeLineResponse.TimeLineData.ListTimeline.Like(likeId);
-//                            mListLike.add(like);
-//                        }
                     if (likeId != 0) {
                         mTimeLine.setNumberLike(mTimeLine.getNumberLike() + 1);
                         mTimeLine.setMyLikeId(likeId);
@@ -290,6 +287,19 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 case R.id.layoutComment:
                     commentFragment();
                     break;
+                case R.id.layoutInfo:
+                    Bundle bundle = new Bundle();
+                    if (mIsTimelineDetail) {
+                        bundle.putInt(TimeLineDetailFragment.KEY_USER_MANAGER_ID, mTimeLine.getManagementUserId());
+                        bundle.putString(TimeLineDetailFragment.KEY_IMAGE_STORE, mTimeLine.getImageStore());
+                        bundle.putString(TimeLineDetailFragment.KEY_STORE_NAME, mTimeLine.getManagerName());
+                        mActivityCallback.displayScreen(IMainView.FRAGMENT_TIMELINE_DETAIL, true, true, bundle);
+                    } else {
+                        bundle.putInt(TimeLineDetailFragment.KEY_USER_MANAGER_ID, mTimeLine.getManagementUserId());
+                        bundle.putString(TimeLineDetailFragment.KEY_STORE_NAME, mTextStoreName);
+                        mActivityCallback.displayScreen(IMainView.FRAGMENT_PROFILE, true, true, bundle);
+                    }
+                    break;
             }
         }
 
@@ -297,6 +307,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             if (mActivityCallback != null) {
                 Bundle bundle = new Bundle();
                 bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimeLine.getId());
+                bundle.putString(CommentFragment.KEY_STORE_NAME, mTextStoreName);
                 bundle.putInt(CommentFragment.KEY_ITEM_POSITION, 0);
                 bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
                 mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, null);
@@ -442,6 +453,18 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             }
 
         }
-
     }
+
+    public void setIsTimelineDetail(boolean mIsTimelineDetail) {
+        this.mIsTimelineDetail = mIsTimelineDetail;
+    }
+
+    public void setImageStore(String mImageStore) {
+        this.mTextImageStore = mImageStore;
+    }
+
+    public void setStoreName(String mStoreName) {
+        this.mTextStoreName = mStoreName;
+    }
+
 }

@@ -27,6 +27,7 @@ import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.timeline.CommentResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.chat.dialog.DialogProfile;
 import jp.co.wssj.iungo.screens.timeline.adapter.CommentAdapter;
 import jp.co.wssj.iungo.screens.transition.TransitionAdapter;
 import jp.co.wssj.iungo.utils.Constants;
@@ -43,6 +44,8 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
     private static final String TAG = "CommentFragment";
 
     public static final String KEY_TIME_LIKE_ID = "timeline_id";
+
+    public static final String KEY_STORE_NAME = "store_name";
 
     public static final String KEY_ITEM_POSITION = "item_position";
 
@@ -70,7 +73,11 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
 
     private List<CommentResponse.CommentData.ListComment> mListComment;
 
+    private DialogProfile mDialogProfile;
+
     private int mTimelineId;
+
+    private String mStoreName;
 
     public static CommentFragment newInstance(Bundle b) {
         CommentFragment fragment = new CommentFragment();
@@ -224,9 +231,26 @@ public class CommentFragment extends BaseFragment<ICommentView, CommentPresenter
         }
         if (getArguments() != null) {
             mTimelineId = getArguments().getInt(KEY_TIME_LIKE_ID);
+            mStoreName = getArguments().getString(KEY_STORE_NAME);
+            mAdapterComment.setStoreName(mStoreName);
             mProgressBar.setVisibility(View.VISIBLE);
             getPresenter().getListComment(mTimelineId);
         }
+        mAdapterComment.setOnClickAvatar(new CommentAdapter.IOnClickAvatar() {
+
+            @Override
+            public void onClick(int managerId) {
+                if (managerId != 0) {
+                    if (mDialogProfile == null) {
+                        mDialogProfile = new DialogProfile(getActivityContext(), managerId, getActivityCallback());
+                        mDialogProfile.show();
+                    } else {
+                        mDialogProfile.requestApi(managerId);
+                    }
+
+                }
+            }
+        });
     }
 
     private Handler mHandle = new Handler();

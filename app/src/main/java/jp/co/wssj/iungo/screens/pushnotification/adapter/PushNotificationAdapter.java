@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification.pushlist;
+package jp.co.wssj.iungo.screens.pushnotification.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -16,6 +16,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -31,6 +32,8 @@ public class PushNotificationAdapter extends BaseAdapter {
     private IEndOfListView mCallback;
 
     private boolean mIsAllowOnLoadMore = true;
+
+    private boolean mIsEndOfPage;
 
     public PushNotificationAdapter(Context context, List<NotificationMessage> objects) {
         mContext = context;
@@ -67,7 +70,7 @@ public class PushNotificationAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.fillDataToView(mContext, getItem(position));
-        if (position == (getCount() - 1) && mCallback != null && mIsAllowOnLoadMore) {
+        if (position == (getCount() - 1) && mCallback != null && mIsAllowOnLoadMore && !mIsEndOfPage && getCount() >= Constants.LIMIT) {
             mCallback.onEndOfListView();
         }
         return convertView;
@@ -128,7 +131,19 @@ public class PushNotificationAdapter extends BaseAdapter {
         this.mIsAllowOnLoadMore = isAllowOnLoadMore;
     }
 
+    public List<NotificationMessage> getListPush() {
+        return mListPush;
+    }
+
+    public void showListPushSearch() {
+
+    }
+
     public void setListenerEndOfListView(IEndOfListView mCallback) {
         this.mCallback = mCallback;
+    }
+
+    public void setIsEndOfPage(boolean mIsEndOfPage) {
+        this.mIsEndOfPage = mIsEndOfPage;
     }
 }

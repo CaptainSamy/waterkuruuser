@@ -53,7 +53,7 @@ public class APICreater {
                 });
     }
 
-    static GsonRequest<HistoryChatResponse> getHistoryChat(final String token, final int storeId, final Response.Listener<HistoryChatResponse> listener, final Response.ErrorListener errorListener) {
+    static GsonRequest<HistoryChatResponse> getHistoryChat(final String token, final int storeId, final int lastChatId, final Response.Listener<HistoryChatResponse> listener, final Response.ErrorListener errorListener) {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
@@ -83,6 +83,8 @@ public class APICreater {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> map = new HashMap<>();
                 map.put("store_id", storeId);
+                map.put("last_chat_id", lastChatId);
+                map.put("limit", Constants.LIMIT);
                 return map;
             }
         };

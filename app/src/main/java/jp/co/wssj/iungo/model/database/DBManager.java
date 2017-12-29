@@ -11,8 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
+import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageAdapter;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by Nguyen Huu Ta on 16/10/2017.
@@ -52,6 +53,7 @@ public class DBManager {
     * */
 
     public void insertPushNotification(List<NotificationMessage> listPush) {
+        Logger.d("bello", "start insert");
         if (listPush != null && listPush.size() > 0) {
             for (NotificationMessage notificationMessage : listPush) {
                 if (!isExitsPush(notificationMessage.getPushId())) {
@@ -66,8 +68,32 @@ public class DBManager {
                     values.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, notificationMessage.getStoreAnnounce());
                     values.put(DatabaseContract.PushNotification.COLUMN_STATUS_READ, notificationMessage.getStatusRead());
                     mDatabaseWrite.insert(DatabaseContract.PushNotification.TABLE_NAME, null, values);
+                } else {
+                    Logger.d("bello", "exist");
                 }
             }
+        }
+        Logger.d("bello", "end insert");
+    }
+
+    public void insertPushNotification(NotificationMessage notificationMessage) {
+        Logger.d("bello", "start insert");
+        if (!isExitsPush(notificationMessage.getPushId())) {
+            ContentValues values = new ContentValues();
+            values.put(DatabaseContract.PushNotification.COLUMN_PUSH_ID, notificationMessage.getPushId());
+            values.put(DatabaseContract.PushNotification.COLUMN_PUSH_TIME, notificationMessage.getPushTime());
+            values.put(DatabaseContract.PushNotification.COLUMN_TITLE_PUSH, notificationMessage.getTitle());
+            values.put(DatabaseContract.PushNotification.COLUMN_CONTENT_PUSH, notificationMessage.getMessage());
+            values.put(DatabaseContract.PushNotification.COLUMN_ACTION_PUSH, notificationMessage.getAction());
+            values.put(DatabaseContract.PushNotification.COLUMN_IMAGE_STORE, notificationMessage.getLogo());
+            values.put(DatabaseContract.PushNotification.COLUMN_LIKE, notificationMessage.isLike());
+            values.put(DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE, notificationMessage.getStoreAnnounce());
+            values.put(DatabaseContract.PushNotification.COLUMN_STATUS_READ, notificationMessage.getStatusRead());
+            mDatabaseWrite.insert(DatabaseContract.PushNotification.TABLE_NAME, null, values);
+        } else {
+            String whereClause = DatabaseContract.PushNotification.COLUMN_PUSH_ID + " =? ";
+            String[] whereArgs = new String[]{String.valueOf(notificationMessage.getPushId())};
+            mDatabaseWrite.delete(DatabaseContract.PushNotification.TABLE_NAME, whereClause, whereArgs);
         }
     }
 
@@ -130,14 +156,14 @@ public class DBManager {
     public List<NotificationMessage> getListPush(int type, int serviceCompanyId) {
         List<NotificationMessage> listPush = new ArrayList<>();
         String sqlGetListPush;
-        if (type == PushNotificationPageAdapter.TYPE_LIKED_PUSH) {
+        if (type == Constants.TypePush.TYPE_LIKED_PUSH) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_LIKE + " = 1";
-        } else if (type == PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH) {
+        } else if (type == Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_ACTION_PUSH + " = '" + Constants.PushNotification.TYPE_QUESTION_NAIRE + "'";
-        } else if (type == PushNotificationPageAdapter.TYPE_PUSH_ANNOUNCE) {
+        } else if (type == Constants.TypePush.TYPE_PUSH_ANNOUNCE) {
             sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " WHERE " + DatabaseContract.PushNotification.COLUMN_STORE_ANNOUNCE + " = " + serviceCompanyId;
         } else {
-            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME;
+            sqlGetListPush = "SELECT * FROM " + DatabaseContract.PushNotification.TABLE_NAME + " ORDER BY " + DatabaseContract.PushNotification.COLUMN_PUSH_ID + " DESC";
         }
         Cursor cursorSearchPush = mDatabaseRead.rawQuery(sqlGetListPush, null);
         while (cursorSearchPush.moveToNext()) {

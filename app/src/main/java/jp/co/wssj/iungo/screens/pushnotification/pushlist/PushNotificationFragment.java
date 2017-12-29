@@ -17,13 +17,13 @@ import java.util.List;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
-import jp.co.wssj.iungo.model.database.DBManager;
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageAdapter;
+import jp.co.wssj.iungo.screens.pushnotification.adapter.PushNotificationAdapter;
 import jp.co.wssj.iungo.screens.pushnotification.detail.PushNotificationDetailFragment;
 import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -50,9 +50,9 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private boolean isExpandedSearchView;
 
-    private long mPushId;
+    private boolean mIsSearch;
 
-    DBManager mDatabase = DBManager.getInstance();
+    private boolean mIsPullDownRequest;
 
     @Override
     protected String getLogTag() {
@@ -123,41 +123,21 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     protected void initData() {
-        Bundle bundle = getArguments();
-        int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
-        mRefreshLayout.setEnabled(false);
-        switch (type) {
-            case PushNotificationPageAdapter.TYPE_ALL_PUSH:
-                if (mListNotification == null) {
-                    mListNotification = new ArrayList<>();
-                    mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-                    mListNotification.addAll(mDatabase.getListPush(type, 0));
-                    if (mListNotification.size() != 0) {
-                        mPushId = mListNotification.get(0).getPushId();
-                    }
-                    mRefreshLayout.setRefreshing(true);
-                    getPresenter().getListPushNotification(mPushId);
-                }
-                break;
-            case PushNotificationPageAdapter.TYPE_LIKED_PUSH:
-            case PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH:
-                if (mListNotification == null) {
-                    mListNotification = new ArrayList<>();
-                    mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-                } else {
-                    mListNotification.clear();
-                }
-                mListNotification.addAll(mDatabase.getListPush(type, 0));
-                mAdapter.setIsAllowOnLoadMore(false);
-                break;
+        if (mListNotification == null) {
+            mListNotification = new ArrayList<>();
+            mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+            mRefreshLayout.setRefreshing(true);
+            getPresenter().getListPushNotification(0, 0, Constants.EMPTY_STRING);
         }
-        if (!mRefreshLayout.isRefreshing()) {
-            if (mListNotification.size() == 0) {
-                showTextNoItem(true, getString(R.string.text_no_item_push_all));
-            } else {
-                showTextNoItem(true, null);
+        mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
+
+            @Override
+            public void onEndOfListView() {
+                long pushUserIdLastPage = mListNotification.get(mListNotification.size() - 1).getUserPushId();
+                mRefreshLayout.setRefreshing(true);
+                getPresenter().getListPushNotification(pushUserIdLastPage, 0, Constants.EMPTY_STRING);
             }
-        }
+        });
         mAdapter.setListPushTemp(mListNotification);
         mListView.setAdapter(mAdapter);
     }
@@ -186,15 +166,21 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                mIsSearch = true;
+                Logger.d(TAG, "onQueryTextSubmit");
+//                mAdapter.filter(query);
+                mRefreshLayout.setRefreshing(true);
+                getPresenter().getListPushNotification(0, 1, query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                statusSearchView(true);
-                if (mAdapter != null) {
+                Logger.d(TAG, "onQueryTextChange");
+                if (TextUtils.isEmpty(newText)) {
                     mAdapter.filter(newText);
                 }
+                statusSearchView(true);
                 return false;
             }
         });
@@ -202,8 +188,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
             @Override
             public boolean onClose() {
+                Logger.d(TAG, "onClose");
                 mTextSearch.setVisibility(View.VISIBLE);
                 isExpandedSearchView = false;
+                mIsSearch = false;
                 return false;
             }
         });
@@ -211,6 +199,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+                Logger.d(TAG, "onFocusChange " + hasFocus);
                 if (hasFocus) {
                     isExpandedSearchView = hasFocus;
                 }
@@ -229,7 +218,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onRefresh() {
-        getPresenter().getListPushNotification(mPushId);
+        mIsPullDownRequest = true;
+        getPresenter().getListPushNotification(0, 0, Constants.EMPTY_STRING);
     }
 
     public void hideSwipeRefreshLayout() {
@@ -238,52 +228,72 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         }
     }
 
-    private int mPage, mTotalPage;
-
     @Override
     public void showListPushNotification(List<NotificationMessage> list, final int page, final int totalPage) {
-        mInputSearch.setEnabled(true);
         hideSwipeRefreshLayout();
-        mPage = page;
-        mTotalPage = totalPage;
-        if (list != null && list.size() > 0) {
-            mListView.setVisibility(View.VISIBLE);
-            showTextNoItem(false, null);
-            Bundle bundle = getArguments();
-            int type = bundle.getInt(PushNotificationPageAdapter.ARG_TYPE_PUSH);
-            if (type == PushNotificationPageAdapter.TYPE_ALL_PUSH) {
+        if (mIsSearch) {
+            mListNotification.clear();
+            if (list != null && list.size() > 0) {
                 mListNotification.addAll(list);
-            } else if (type == PushNotificationPageAdapter.TYPE_QUESTION_NAIRE_PUSH) {
-                for (NotificationMessage item : list) {
-                    if (Constants.PushNotification.TYPE_QUESTION_NAIRE.equals(item.getAction())) {
-                        mListNotification.add(item);
-                    }
-                }
             }
-            mAdapter.setListPushTemp(mListNotification);
             mAdapter.notifyDataSetChanged();
-            mDatabase.insertPushNotification(list);
-
-
-            if (list.size() > 0) {
-                List<Long> listPushId = new ArrayList<>();
-                for (NotificationMessage notificationMessage : list) {
-                    if (notificationMessage.getStatusRead() != Constants.STATUS_VIEW && notificationMessage.getStatusRead() != Constants.STATUS_READ) {
-                        listPushId.add(notificationMessage.getPushId());
+        } else {
+            mInputSearch.setEnabled(true);
+            if (list != null && list.size() > 0) {
+                mListView.setVisibility(View.VISIBLE);
+                showTextNoItem(false, null);
+                if (mIsPullDownRequest) {
+                    getItemNew(list);
+                } else {
+                    mListNotification.addAll(list);
+                }
+                mAdapter.setListPushTemp(mListNotification);
+                mAdapter.notifyDataSetChanged();
+                if (list.size() > 0) {
+                    List<Long> listPushId = new ArrayList<>();
+                    for (NotificationMessage notificationMessage : list) {
+                        if (notificationMessage.getStatusRead() == 0) {
+                            listPushId.add(notificationMessage.getPushId());
+                        }
+                    }
+                    if (listPushId.size() > 0) {
+                        getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
                     }
                 }
-                if (listPushId != null && listPushId.size() > 0) {
-                    getPresenter().setListPushUnRead(listPushId, Constants.STATUS_VIEW);
+            } else {
+                if (mListNotification != null && mListNotification.size() == 0) {
+                    showTextNoItem(true, getString(R.string.text_no_item_push_all));
                 }
-            }
-        } else {
-            if (mListNotification != null && mListNotification.size() == 0) {
-                showTextNoItem(true, getString(R.string.text_no_item_push_all));
+
+                if (list != null && list.size() == 0) {
+                    mAdapter.setIsEndOfPage(true);
+                }
             }
         }
     }
 
+    private void getItemNew(List<NotificationMessage> listNew) {
+        List<NotificationMessage> listResult = new ArrayList<>();
+        for (NotificationMessage newNotification : listNew) {
+            boolean isExits = false;
+            for (NotificationMessage notificationMessage : mListNotification) {
+                if (notificationMessage.getPushId() == newNotification.getPushId()) {
+                    isExits = true;
+                }
+            }
+            if (!isExits) {
+                listResult.add(newNotification);
+            }
+        }
+        if (listResult.size() > 0) {
+            mListNotification.addAll(0, listResult);
+        }
+
+        mIsPullDownRequest = false;
+    }
+
     @Override
+
     public void displayErrorMessage(ErrorMessage errorMessage) {
         mInputSearch.setEnabled(true);
         hideSwipeRefreshLayout();

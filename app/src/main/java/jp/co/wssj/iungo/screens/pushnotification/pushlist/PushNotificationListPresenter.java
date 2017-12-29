@@ -9,6 +9,7 @@ import jp.co.wssj.iungo.model.firebase.NotificationMessage;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.model.pushnotification.PushNotificationModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 
 /**
@@ -25,21 +26,21 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
         registerModel(new PushNotificationModel(view.getViewContext()));
     }
 
-    public void getListPushNotification(long pushId) {
+    public void getListPushNotification(long userPushId, int isSearch, String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        Logger.d(TAG, "getListPushNotification");
-        getModel(PushNotificationModel.class).getListPushNotification(token, pushId, new PushNotificationModel.IGetListPushNotificationCallback() {
+        getModel(PushNotificationModel.class).getListPushNotification(token, userPushId, isSearch, keySearch, 0, Constants.TypePush.TYPE_ALL_PUSH,
+                new PushNotificationModel.IGetListPushNotificationCallback() {
 
-            @Override
-            public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {
-                getView().showListPushNotification(list, page, totalPage);
-            }
+                    @Override
+                    public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {
+                        getView().showListPushNotification(list, page, totalPage);
+                    }
 
-            @Override
-            public void onGetListPushNotificationFailure(ErrorMessage errorMessage) {
-                getView().displayErrorMessage(errorMessage);
-            }
-        });
+                    @Override
+                    public void onGetListPushNotificationFailure(ErrorMessage errorMessage) {
+                        getView().displayErrorMessage(errorMessage);
+                    }
+                });
     }
 
     public void setListPushUnRead(List<Long> pushId, int type) {

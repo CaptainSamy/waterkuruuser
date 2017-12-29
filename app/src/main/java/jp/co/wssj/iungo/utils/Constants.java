@@ -18,13 +18,17 @@ public final class Constants {
 
     public static final int TIME_DELAYS = 1000;
 
-    public static final int TIME_WAITING_SPLASH = 1000;
+    public static final int TIME_WAITING_SPLASH = 2000;
 
     public static final int TIME_DELAY_CLOSED_NAVIGATION_MENU = 100;
 
     public static final int INIT_PAGE = 1;
 
     public static final int LIMIT = 20;
+
+    public static final int LIMIT_TIMELINE = 10;
+
+    public static final int LIMIT_CHAT = 5;
 
     public static final int DURATION_DIALOG_NOTIFICATION = 350;
 
@@ -136,6 +140,17 @@ public final class Constants {
         public static final String TYPE_TIME_LINE = "type_timeline";
 
         public static final String TYPE_STEP_PUSH = "type_step_push";
+    }
+
+    public static final class TypePush {
+
+        public static final int TYPE_ALL_PUSH = 0;
+
+        public static final int TYPE_LIKED_PUSH = 1;
+
+        public static final int TYPE_QUESTION_NAIRE_PUSH = 2;
+
+        public static final int TYPE_PUSH_ANNOUNCE = 3;
     }
 
     public static final class MemoConfig {

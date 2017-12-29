@@ -11,7 +11,7 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
 import jp.co.wssj.iungo.screens.listservicecompany.ListServiceCompanyFragment;
 import jp.co.wssj.iungo.screens.note.UserMemoFragment;
-import jp.co.wssj.iungo.screens.pushnotification.PushNotificationPageFragment;
+import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageFragment;
 import jp.co.wssj.iungo.screens.switcher.SwitcherFragment;
 import jp.co.wssj.iungo.utils.Constants;
 

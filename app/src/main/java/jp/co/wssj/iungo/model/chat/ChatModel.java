@@ -72,8 +72,8 @@ public class ChatModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void getHistoryChat(String token, int storeId, final OnGetHistoryChatCallback callback) {
-        final Request request = APICreater.getHistoryChat(token, storeId, new Response.Listener<HistoryChatResponse>() {
+    public void getHistoryChat(String token, int storeId, int lastChatId,final OnGetHistoryChatCallback callback) {
+        final Request request = APICreater.getHistoryChat(token, storeId,lastChatId, new Response.Listener<HistoryChatResponse>() {
 
             @Override
             public void onResponse(HistoryChatResponse response) {

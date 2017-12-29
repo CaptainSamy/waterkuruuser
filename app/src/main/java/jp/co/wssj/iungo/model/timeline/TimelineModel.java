@@ -48,12 +48,46 @@ public class TimelineModel extends BaseModel {
         void onAddCommentFailure(String message);
     }
 
+    public interface IGetProfileCallback {
+
+        void getProfileSuccess(ProfileResponse.Profile profile);
+
+        void getProfileFailure(String message);
+    }
+
     public TimelineModel(@NonNull Context context) {
         super(context);
     }
 
-    public void getTimeLine(String token,int page, final OnGetTimelineCallback callback) {
-        final Request request = APICreator.getTimeline(token,page, new Response.Listener<TimeLineResponse>() {
+    public void getTimeLine(String token, int lastTimelineId, final OnGetTimelineCallback callback) {
+        final Request request = APICreator.getTimeline(token, lastTimelineId, new Response.Listener<TimeLineResponse>() {
+
+            @Override
+            public void onResponse(TimeLineResponse response) {
+                if (response.isSuccess() && response.getData() != null) {
+                    TimeLineResponse.TimeLineData data = response.getData();
+                    callback.onGetTimelineSuccess(data);
+                } else {
+                    callback.onGetTimelineFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.onGetTimelineFailure(errorResponse.getMessage());
+                } else {
+                    callback.onGetTimelineFailure(getStringResource(R.string.network_error));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
+
+    public void getTimeLineDetail(String token, int managerUserId, int lastTimelineId, final OnGetTimelineCallback callback) {
+        final Request request = APICreator.getTimelineByStoreId(token, managerUserId, lastTimelineId, new Response.Listener<TimeLineResponse>() {
 
             @Override
             public void onResponse(TimeLineResponse response) {
@@ -184,5 +218,30 @@ public class TimelineModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
+    public void getProfileStore(final String token, final int manageUserId, final IGetProfileCallback callback) {
+        final Request request = APICreator.getProfileStore(token, manageUserId, new Response.Listener<ProfileResponse>() {
+
+            @Override
+            public void onResponse(ProfileResponse response) {
+                if (response.isSuccess()) {
+                    callback.getProfileSuccess(response.getData());
+                } else {
+                    callback.getProfileFailure(response.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
+                if (errorResponse != null) {
+                    callback.getProfileFailure(errorResponse.getMessage());
+                } else {
+                    callback.getProfileFailure(getStringResource(R.string.network_error));
+                }
+            }
+        });
+        VolleySequence.getInstance().addRequest(request);
+    }
 
 }
