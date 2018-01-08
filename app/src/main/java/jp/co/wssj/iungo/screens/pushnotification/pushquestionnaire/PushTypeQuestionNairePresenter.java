@@ -25,7 +25,8 @@ public class PushTypeQuestionNairePresenter extends FragmentPresenter<IPushTypeQ
 
     public void getListPushQuestionNaire(long userPushId, int isSearch, String keySearch) {
         String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(PushNotificationModel.class).getListPushNotification(token, userPushId, isSearch, keySearch, 0, Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH, new PushNotificationModel.IGetListPushNotificationCallback() {
+
+        getModel(PushNotificationModel.class).getListPushNotification(token, userPushId, isSearch, keySearch, 0, Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH,Constants.EMPTY_STRING,Constants.EMPTY_STRING, new PushNotificationModel.IGetListPushNotificationCallback() {
 
             @Override
             public void onGetListPushNotificationSuccess(List<NotificationMessage> list, int page, int totalPage) {

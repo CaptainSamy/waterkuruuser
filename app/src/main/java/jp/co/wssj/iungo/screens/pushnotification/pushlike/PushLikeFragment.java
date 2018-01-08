@@ -185,7 +185,6 @@ public class PushLikeFragment extends BaseFragment<IPushLikeView, PushLikePresen
             }
         });
         mInputSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 Logger.d(TAG, "onFocusChange " + hasFocus);

@@ -38,7 +38,7 @@ public class APICreator {
 
     private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-code-to-survey";
 
-    static GsonRequest<ListNotificationResponse> getListNotification(final String token, final long userPushId, final int isSearch, final String keySearch, final int serviceCompanyId, final int typePush,
+    static GsonRequest<ListNotificationResponse> getListNotification(final String token, final long userPushId, final int isSearch, final String keySearch, final int serviceCompanyId, final int typePush, final String fromDate, final String toDate,
                                                                      final Response.Listener<ListNotificationResponse> listener,
                                                                      final Response.ErrorListener errorListener) {
 
@@ -103,6 +103,8 @@ public class APICreator {
                     map.put("is_search", isSearch);
                     map.put("text_search", keySearch);
                 }
+                map.put("fromdate", fromDate);
+                map.put("todate", toDate);
                 return map;
             }
         };

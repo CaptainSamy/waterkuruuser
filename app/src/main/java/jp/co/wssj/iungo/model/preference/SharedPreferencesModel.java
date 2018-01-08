@@ -27,6 +27,8 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_USER_NAME = "user_name";
 
+    private static final String KEY_NAME = "name";
+
     private static final String KEY_IMAGE_USER = "image_user";
 
     private static final String KEY_EMAIL = "email";
@@ -137,6 +139,12 @@ public class SharedPreferencesModel extends BaseModel {
         }
     }
 
+    public void putName(String name) {
+        if (!TextUtils.isEmpty(name)) {
+            mSharedPreference.put(KEY_NAME, name);
+        }
+    }
+
     public String getPassword() {
         return mSharedPreference.getString(KEY_PASSWORD);
     }
@@ -175,6 +183,10 @@ public class SharedPreferencesModel extends BaseModel {
 
     public String getImageUser() {
         return mSharedPreference.getString(KEY_IMAGE_USER);
+    }
+
+    public String getName() {
+        return mSharedPreference.getString(KEY_NAME);
     }
 
     public void clearSession() {

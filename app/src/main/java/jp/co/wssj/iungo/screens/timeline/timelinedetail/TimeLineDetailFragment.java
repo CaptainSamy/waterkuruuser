@@ -338,6 +338,8 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
         }
         if (mAdapter.getItemCount() == 0) {
             showTextNoItem(true, getString(R.string.no_timeline));
+        } else {
+            showTextNoItem(false, null);
         }
         setupListView();
     }

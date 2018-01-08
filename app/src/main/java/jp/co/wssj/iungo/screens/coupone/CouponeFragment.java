@@ -12,6 +12,14 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.profile.ProfileStoreFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageAdapter;
+import android.view.View;
+
+import jp.co.wssj.iungo.R;
+import jp.co.wssj.iungo.screens.IMainView;
+import jp.co.wssj.iungo.screens.base.BaseFragment;
+import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.screens.calender.CalenderPresenter;
+import jp.co.wssj.iungo.screens.calender.ICalenderView;
 
 /**
  * Created by thang on 12/29/2017.
@@ -24,6 +32,7 @@ public class CouponeFragment extends BaseFragment<ICouponeView, CouponePresenter
     private SegmentTabLayout mTabLayout;
     private ViewPager mViewPager;
     private CouponeAdapter mcouponeAdapter;
+
 
     @Override
     protected String getLogTag() {
@@ -66,10 +75,12 @@ public class CouponeFragment extends BaseFragment<ICouponeView, CouponePresenter
         super.initViews(rootView);
         mViewPager = (ViewPager) rootView.findViewById(R.id.push_pager);
         mTabLayout = (SegmentTabLayout) rootView.findViewById(R.id.tablayout);
+
     }
 
     @Override
     protected void initData() {
+
         mcouponeAdapter = new CouponeAdapter(getChildFragmentManager(), getActivityContext());
         mTabLayout.setTabData(mTitles);
         mViewPager.setAdapter(mcouponeAdapter);
@@ -107,6 +118,5 @@ public class CouponeFragment extends BaseFragment<ICouponeView, CouponePresenter
             }
         });
     }
-
 
 }

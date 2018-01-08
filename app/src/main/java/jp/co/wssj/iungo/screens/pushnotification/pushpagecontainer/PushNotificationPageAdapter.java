@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import jp.co.wssj.iungo.screens.calender.CalenderFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushlike.PushLikeFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushlist.PushNotificationFragment;
 import jp.co.wssj.iungo.screens.pushnotification.pushquestionnaire.PushTypeQuestionNaireFragment;
@@ -19,7 +20,6 @@ import jp.co.wssj.iungo.utils.Constants;
 public class PushNotificationPageAdapter extends FragmentPagerAdapter {
 
     private Context mContext;
-
     /*
     * true : push store anouce
     * false : push normal
@@ -49,9 +49,12 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
                 }
                 break;
             case 1:
-                fragment = new PushLikeFragment();
+                fragment = new CalenderFragment();
                 break;
             case 2:
+                fragment = new PushLikeFragment();
+                break;
+            case 3:
                 fragment = new PushTypeQuestionNaireFragment();
                 break;
             default:
@@ -73,6 +76,7 @@ public class PushNotificationPageAdapter extends FragmentPagerAdapter {
                 return "お気に入り";
             case Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH:
                 return "アンケート";
+
         }
         return "すべて";
     }

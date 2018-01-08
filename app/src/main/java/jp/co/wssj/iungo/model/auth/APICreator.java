@@ -27,6 +27,8 @@ final class APICreator {
 
     private static final String LOGIN_URL_AWS = Constants.BASE_URL + "/api/client/users/login";
 
+    private static final String AUTO_LOGIN = Constants.BASE_URL + "/api/client/users/register_anonymous_user";
+
     private static final String RESET_PASSWORD_URL = Constants.BASE_URL + "/api/client/users/send-email-contain-reset-password-code";
 
     private static final String CHANGE_PASSWORD_BY_CODE_URL = Constants.BASE_URL + "/api/client/users/change-password-by-code";
@@ -37,6 +39,7 @@ final class APICreator {
 
     private static final String CHECK_VERSION_APP = Constants.BASE_URL + "/api/client/users/check-version-app-and-server-user";
 
+    private static final String ON_CHECK_INIT_USER = Constants.BASE_URL + "/api/client/users/check-init-user-done";
     private static final String ON_GET_INFO_USER = Constants.BASE_URL + "/api/client/users/get-info-user";
 
     private static final String ON_SET_INFO_USER = Constants.BASE_URL + "/api/client/users/set-info-user";
@@ -122,6 +125,45 @@ final class APICreator {
                 params.put("username", username);
                 params.put("password", password);
                 params.put("app_id", Constants.APP_ID);
+                return params;
+            }
+        };
+    }
+
+    static GsonRequest<LoginResponse> autoLogin(final Response.Listener<LoginResponse> listener,
+                                                final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Content-Type", "application/json");
+        return new GsonJsonRequest<LoginResponse>(Request.Method.POST,
+                AUTO_LOGIN,
+                LoginResponse.class,
+                headers,
+                new Response.Listener<LoginResponse>() {
+
+                    @Override
+                    public void onResponse(LoginResponse response) {
+                        Logger.d(TAG, "#autoLogin -> onResponse");
+                        if (listener != null) {
+                            listener.onResponse(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Logger.d(TAG, "#autoLogin -> onErrorResponse");
+                        if (errorListener != null) {
+                            errorListener.onErrorResponse(error);
+                        }
+                    }
+                }) {
+
+            @Override
+            protected Map<String, Object> getBodyParams() {
+                Map<String, Object> params = new HashMap<>();
+                params.put("store_key_gen", Constants.KEY_GEN_AUTO_LOGIN);
                 return params;
             }
         };
@@ -289,7 +331,7 @@ final class APICreator {
     }
 
     static GsonRequest<InfoUserResponse> onGetInfoUser(String token, final Response.Listener<InfoUserResponse> responseListener,
-                                                       final Response.ErrorListener errorListener) {
+                                                         final Response.ErrorListener errorListener) {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);
@@ -335,6 +377,21 @@ final class APICreator {
                 map.put("new_pass", newPassword);
                 return map;
             }
+        };
+    }
+    static GsonRequest<InitUserResponse> onCheckInitUser(String token, final Response.Listener<InitUserResponse> responseListener,
+                                                       final Response.ErrorListener errorListener) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Accept", "application/json");
+        headers.put("Authorization", token);
+        ResponseListener<InitUserResponse> listener = new ResponseListener<>(TAG, "onCheckInitUser", responseListener, errorListener);
+        return new GsonJsonRequest<InitUserResponse>(Request.Method.GET,
+                ON_CHECK_INIT_USER,
+                InitUserResponse.class,
+                headers,
+                listener,
+                listener) {
+
         };
     }
 

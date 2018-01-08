@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 import jp.co.wssj.iungo.model.firebase.NotificationMessage;
-import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageAdapter;
 import jp.co.wssj.iungo.utils.Constants;
 import jp.co.wssj.iungo.utils.Logger;
 

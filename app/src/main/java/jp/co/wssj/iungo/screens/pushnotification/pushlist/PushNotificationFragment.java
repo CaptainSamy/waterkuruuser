@@ -124,10 +124,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     protected void initData() {
         if (mListNotification == null) {
-                mListNotification = new ArrayList<>();
-                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-                mRefreshLayout.setRefreshing(true);
-                getPresenter().getListPushNotification(0, 0, Constants.EMPTY_STRING);
+            mListNotification = new ArrayList<>();
+            mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+            mRefreshLayout.setRefreshing(true);
+            getPresenter().getListPushNotification(0, 0, Constants.EMPTY_STRING);
         }
         mAdapter.setListenerEndOfListView(new PushNotificationAdapter.IEndOfListView() {
 

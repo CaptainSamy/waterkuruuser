@@ -1,10 +1,15 @@
 package jp.co.wssj.iungo.model.firebase;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import jp.co.wssj.iungo.model.GsonSerializable;
+import jp.co.wssj.iungo.utils.Constants;
 
 /**
  * Created by tuanle on 6/1/17.
@@ -29,6 +34,30 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     @SerializedName("logo")
     private String mLogo;
+
+
+    private int day;
+
+    public int getDay() {
+        if (mPushTime != 0) {
+            String dateFormat = "dd/MM/yy";
+            String dateConvert = new SimpleDateFormat(dateFormat).format(new Date(mPushTime));
+            if (!TextUtils.isEmpty(dateConvert)) {
+                String[] date = dateConvert.split("/");
+                if (date != null && date.length > 0) {
+                    day = Integer.parseInt(date[0]);
+                }
+
+            }
+            return day;
+        }
+
+        return 0;
+    }
+
+    public void setDay(int dateContert) {
+        this.day = dateContert;
+    }
 
     private boolean mIsSound;
 

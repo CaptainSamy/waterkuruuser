@@ -22,7 +22,7 @@ public class PushNotificationPageFragment extends BaseFragment<IPushNotification
 
     private PushNotificationPageAdapter mAdapter;
 
-    private String[] mTitles = {"すべて", "お気に入り", "アンケート"};
+    private String[] mTitles = {"すべて","カレンダー", "お気に入り", "アンケート"};
 
     private SegmentTabLayout mTabLayout;
 

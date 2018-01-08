@@ -76,7 +76,7 @@ public class PushNotificationAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
 
         private TextView mTitle, mTime;
 
@@ -142,7 +142,6 @@ public class PushNotificationAdapter extends BaseAdapter {
     public void setListenerEndOfListView(IEndOfListView mCallback) {
         this.mCallback = mCallback;
     }
-
     public void setIsEndOfPage(boolean mIsEndOfPage) {
         this.mIsEndOfPage = mIsEndOfPage;
     }
