@@ -276,7 +276,9 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_stamp:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, null);
                     return true;
-//                case R.id.navigation_home:
+                case R.id.navigation_home:
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_COUPONE,null);
+                    return true;
                 case R.id.navigation_another:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_WRAPPER, null);
                     return true;

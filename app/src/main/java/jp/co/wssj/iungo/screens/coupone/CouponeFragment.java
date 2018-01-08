@@ -1,4 +1,4 @@
-package jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer;
+package jp.co.wssj.iungo.screens.coupone;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -10,56 +10,55 @@ import com.flyco.tablayout.listener.OnTabSelectListener;
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
-import jp.co.wssj.iungo.utils.Constants;
+import jp.co.wssj.iungo.screens.profile.ProfileStoreFragment;
+import jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer.PushNotificationPageAdapter;
 
 /**
- * Created by tuanle on 10/16/17.
+ * Created by thang on 12/29/2017.
  */
 
-public class PushNotificationPageFragment extends BaseFragment<IPushNotificationPageView, PushNotificationPagePresenter> implements IPushNotificationPageView {
+public class CouponeFragment extends BaseFragment<ICouponeView, CouponePresenter> implements ICouponeView {
 
-    private ViewPager mViewPager;
-
-    private PushNotificationPageAdapter mAdapter;
-
-    private String[] mTitles = {"すべて", "お気に入り", "アンケート"};
-
+    private static String TAG = "CouponeFragment";
+    private String[] mTitles = {"未利用", "利用済み"};
     private SegmentTabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private CouponeAdapter mcouponeAdapter;
 
-    public static PushNotificationPageFragment newInstance(Bundle args) {
-        PushNotificationPageFragment fragment = new PushNotificationPageFragment();
+    @Override
+    protected String getLogTag() {
+        return TAG;
+    }
+
+    @Override
+    public int getFragmentId() {
+        return IMainView.FRAGMENT_COUPONE;
+    }
+
+        public static CouponeFragment newInstance(Bundle args) {
+        CouponeFragment fragment = new CouponeFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public String getAppBarTitle() {
-        return getString(R.string.title_push_notification_list);
-    }
-
-    @Override
-    protected String getLogTag() {
-        return "PushNotificationPageFragment";
-    }
-
-    @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_PUSH_NOTIFICATION_PAGER;
-    }
-
-    @Override
     protected int getResourceLayout() {
-        return R.layout.fragment_push_pager;
+        return R.layout.fragment_coupone;
     }
 
     @Override
-    protected PushNotificationPagePresenter onCreatePresenter(IPushNotificationPageView view) {
-        return new PushNotificationPagePresenter(view);
+    protected CouponePresenter onCreatePresenter(ICouponeView view) {
+        return new CouponePresenter(view);
     }
 
     @Override
-    protected IPushNotificationPageView onCreateView() {
+    protected ICouponeView onCreateView() {
         return this;
+    }
+
+    @Override
+    public String getAppBarTitle() {
+        return "クーポン";
     }
 
     @Override
@@ -71,15 +70,10 @@ public class PushNotificationPageFragment extends BaseFragment<IPushNotification
 
     @Override
     protected void initData() {
-        int serviceCompanyId = 0;
-        if (getArguments() != null) {
-            serviceCompanyId = getArguments().getInt(Constants.KEY_SERVICE_COMPANY_ID, 0);
-        }
-        mAdapter = new PushNotificationPageAdapter(getChildFragmentManager(), getActivityContext(), serviceCompanyId);
+        mcouponeAdapter = new CouponeAdapter(getChildFragmentManager(), getActivityContext());
         mTabLayout.setTabData(mTitles);
-        mViewPager.setAdapter(mAdapter);
-}
-
+        mViewPager.setAdapter(mcouponeAdapter);
+    }
     @Override
     protected void initAction() {
         super.initAction();
@@ -113,4 +107,6 @@ public class PushNotificationPageFragment extends BaseFragment<IPushNotification
             }
         });
     }
+
+
 }

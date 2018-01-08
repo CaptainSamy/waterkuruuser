@@ -12,6 +12,9 @@ import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
 import jp.co.wssj.iungo.screens.chatwrapper.ChatWrapperFragment;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
 import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
+import jp.co.wssj.iungo.screens.coupone.CouponeFragment;
+import jp.co.wssj.iungo.screens.coupone.detailunused.UnusedDetailCouponeFragment;
+import jp.co.wssj.iungo.screens.coupone.detailused.UsedDetailCouponeFragment;
 import jp.co.wssj.iungo.screens.howtouse.HowToUserFragment;
 import jp.co.wssj.iungo.screens.introduction.IntroductionFragment;
 import jp.co.wssj.iungo.screens.listcard.ListCardFragmentDetail;
@@ -171,6 +174,15 @@ public final class FragmentFactory {
                     break;
                 case IMainView.FRAGMENT_PROFILE:
                     fragment = ProfileStoreFragment.newInstance(bundle);
+                    break;
+                case IMainView.FRAGMENT_COUPONE:
+                    fragment = CouponeFragment.newInstance(bundle);
+                    break;
+                case IMainView.FRAGMENT_USED_DETAIL_COUPONE:
+                    fragment= UsedDetailCouponeFragment.newInstance(bundle);
+                    break;
+                case IMainView.FRAGMENT_UNUSED_DETAIL_COUPONE:
+                    fragment= UnusedDetailCouponeFragment.newInstance(bundle);
                     break;
             }
         }

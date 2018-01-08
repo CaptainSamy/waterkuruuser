@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_margin="2dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/imgAvatar"
+        android:layout_margin="5dp"
+        android:layout_width="82dp"
+        android:layout_height="82dp" />
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+           <LinearLayout
+               android:orientation="vertical"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+               <TextView
+                   android:id="@+id/txtNameCoupone"
+                   android:textColor="#f000"
+                   android:textStyle="bold"
+                   android:text="Name Coupone"
+                   android:layout_width="150dp"
+                   android:layout_height="wrap_content" />
+               <TextView
+                   android:id="@+id/txtNickName"
+                   android:text="Nick name"
+                   android:layout_width="120dp"
+                   android:layout_height="wrap_content" />
+           </LinearLayout>
+
+            <LinearLayout
+                android:gravity="end"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/txtExpiryDate"
+                    android:text="2017-12-30"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/txtDay"
+                    android:text="30 ngày"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/txtTypeCoupone"
+            android:textColor="#ff0000"
+            android:text="Type Coupone"
+            android:layout_width="100dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</LinearLayout>
+</LinearLayout>

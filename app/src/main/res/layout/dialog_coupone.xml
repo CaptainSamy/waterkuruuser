@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="このクーポンの利用回数は一回のみです。担当者を見せてから利用ボタンを押してください。"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:padding="10dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="利用しない" />
+        <Button
+            android:padding="10dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="利用" />
+
+    </LinearLayout>
+</LinearLayout>

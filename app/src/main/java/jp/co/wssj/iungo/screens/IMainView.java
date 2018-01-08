@@ -84,6 +84,16 @@ public interface IMainView extends IView {
 
     int FRAGMENT_PROFILE = 49;
 
+    int FRAGMENT_COUPONE=50;
+
+    int FRAGMENT_USED_COUPONE=51;
+
+    int FRAGMENT_UNUSED_COUPONE=52;
+
+    int FRAGMENT_USED_DETAIL_COUPONE=53;
+
+    int FRAGMENT_UNUSED_DETAIL_COUPONE=54;
+
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement);
