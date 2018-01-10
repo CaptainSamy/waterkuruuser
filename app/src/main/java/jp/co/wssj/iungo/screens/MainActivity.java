@@ -278,7 +278,8 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, null);
                     return true;
                 case R.id.navigation_home:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_HOME, null);
+              //      mPresenter.onBottomNavigationButtonClicked(FRAGMENT_HOME, null);
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_COUPONE,null);
                     return true;
                 case R.id.navigation_another:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_WRAPPER, null);
@@ -312,9 +313,9 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_POLICY, true, true, null, menuId);
                     return true;
                 case R.id.menu_version:
-                  //  mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_ABOUT, true, true, null, menuId);
-                    Log.d("click","click button version");
-                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_SCREEN_TEST,true,true,null,menuId);
+                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_ABOUT, true, true, null, menuId);
+//                    Log.d("click","click button version");
+//                    mPresenter.onCloseDrawableLayout(IMainView.FRAGMENT_SCREEN_TEST,true,true,null,menuId);
                     return true;
                 case R.id.menu_logout:
                     mDrawerLayout.closeDrawer(GravityCompat.END);

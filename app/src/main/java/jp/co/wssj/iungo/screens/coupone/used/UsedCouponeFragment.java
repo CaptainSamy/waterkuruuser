@@ -39,7 +39,7 @@ public class UsedCouponeFragment extends BaseFragment<IUsedCouponeView, UsedCoup
 
     @Override
     public int getFragmentId() {
-        return IMainView.FRAGMENT_USED_COUPONE;
+        return IMainView.FRAGMENT_COUPONE;
     }
 
     public static UsedCouponeFragment newInstance(Bundle args) {

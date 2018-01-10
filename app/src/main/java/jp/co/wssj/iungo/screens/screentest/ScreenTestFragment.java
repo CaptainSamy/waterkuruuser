@@ -99,9 +99,9 @@ public class ScreenTestFragment extends BaseFragment<IScreenTestView, ScreenTest
                 break;
             case R.id.buttonSendScreenTest:
 //                getActivityCallback().displayScreen(IMainView.FRAGMENT_ABOUT, true, true);
-                Bundle bundle = new Bundle();
-                bundle.putString("name", "Thắng");
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_ABOUT, true, true, bundle);
+//                Bundle bundle = new Bundle();
+//                bundle.putString("name", "Thắng");
+//                getActivityCallback().displayScreen(IMainView.FRAGMENT_ABOUT, true, true, bundle);
                 break;
         }
     }

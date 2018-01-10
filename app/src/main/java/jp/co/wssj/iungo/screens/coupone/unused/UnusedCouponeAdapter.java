@@ -9,14 +9,19 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.annotations.Until;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.coupone.Coupone;
+import jp.co.wssj.iungo.utils.Logger;
+import jp.co.wssj.iungo.utils.Utils;
 
 /**
  * Created by thang on 1/4/2018.
@@ -69,20 +74,19 @@ public class UnusedCouponeAdapter extends BaseAdapter {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateFormatted = formatter.format(date);
 
-
         Date dateCurrent = new Date();
-        long currentDate=dateCurrent.getTime();
+        long currentDate = dateCurrent.getTime();
+        Logger.d("ngayhientai", currentDate + "");
+        Logger.d("ngayEnd", arrayCoupone.get(position).getTimeEndCoupon() + "");
 
-        Date dateXX = new Date(arrayCoupone.get(position).getTimeEndCoupon()-currentDate);
-        SimpleDateFormat formatterXX = new SimpleDateFormat("dd");
-        String dateFormattedXX = formatterXX.format(dateXX);
-
-
+        long dayxx = (arrayCoupone.get(position).getTimeEndCoupon() - currentDate);
+        long day = (arrayCoupone.get(position).getTimeEndCoupon() - currentDate) / 86400000;
+        Logger.d("ngay", arrayCoupone.get(position).getTimeEndCoupon() + " " +TimeUnit.DAYS.convert(dayxx, TimeUnit.MILLISECONDS));
         txtNameCoupone.setText(arrayCoupone.get(position).getNameCoupon());
         txtNickName.setText(arrayCoupone.get(position).getStoreName());
         txtTypeCoupone.setText(arrayCoupone.get(position).getTypeCouponName());
         txtExpiryDate.setText(dateFormatted);
-        txtDay.setText("後"+dateFormattedXX+"日");
+        txtDay.setText("後" + (TimeUnit.DAYS.convert(dayxx, TimeUnit.MILLISECONDS)+1) + "日");
         Picasso.with(myContext).load(arrayCoupone.get(position).getStoreImg()).into(imgAvater);
 
         return convertView;

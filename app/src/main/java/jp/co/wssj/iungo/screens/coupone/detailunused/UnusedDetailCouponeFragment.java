@@ -78,7 +78,6 @@ public class UnusedDetailCouponeFragment extends BaseFragment<IUnusedDetailCoupo
             @Override
             public void onClick(View v) {
                 // TODO: 1/5/2018 request api use coupone
-                //              showDialog();
                 showAlertDialog();
             }
         });
@@ -86,21 +85,18 @@ public class UnusedDetailCouponeFragment extends BaseFragment<IUnusedDetailCoupo
 
     public void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivityContext());
-        builder.setTitle("クーポン");
         builder.setMessage("このクーポンの利用回数は一回のみです。担当者を見せてから利用ボタンを押してください");
         builder.setCancelable(false);
-        builder.setPositiveButton("利用しない", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("利用", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                getPresenter().useCoupon(couponeID, isUseAgian);
+            }
+        });
+        builder.setNegativeButton("利用しない", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
-            }
-        });
-        builder.setNegativeButton("利用", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                getPresenter().useCoupon(couponeID,isUseAgian);
-
-
             }
         });
         AlertDialog alertDialog = builder.create();
@@ -109,10 +105,16 @@ public class UnusedDetailCouponeFragment extends BaseFragment<IUnusedDetailCoupo
     }
 
     public void showDialog() {
-//        dialog = new Dialog(getActivityContext());
-//        dialog.setTitle("クーポン");
-//        dialog.setContentView(R.layout.dialog_coupone);
-//        dialog.show();
+        dialog = new Dialog(getActivityContext());
+        dialog.setContentView(R.layout.dialog_coupone);
+        dialog.findViewById(R.id.buttonOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                btnUse.setVisibility(View.GONE);
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -158,9 +160,11 @@ public class UnusedDetailCouponeFragment extends BaseFragment<IUnusedDetailCoupo
 
     @Override
     public void useCoupone(Boolean kq) {
-        Logger.d("thangdd",kq+"");
-
-    //    backToPreviousScreen();
+        Logger.d("thangdd", kq + "");
+        //    backToPreviousScreen();
+        if (kq == true) {
+            showDialog();
+        }
     }
 
     @Override

@@ -85,7 +85,7 @@ public class Coupone implements GsonSerializable, Serializable {
     }
 
     public long getTimeEndCoupon() {
-        return timeEndCoupon;
+        return timeEndCoupon- 9 * 60 * 60 * 1000;
     }
 
     public void setTimeEndCoupon(long timeEndCoupon) {

@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.model.ErrorMessage;
@@ -38,7 +39,7 @@ public class UnusedCouponeFragment extends BaseFragment<IUnusedCouponeView, Unus
 
     @Override
     public int getFragmentId() {
-        return IMainView.FRAGMENT_UNUSED_COUPONE;
+        return IMainView.FRAGMENT_COUPONE;
     }
 
     public static UnusedCouponeFragment newInstance(Bundle args) {
@@ -94,18 +95,19 @@ public class UnusedCouponeFragment extends BaseFragment<IUnusedCouponeView, Unus
                 bundle.putInt("isUseAgainUn",arrayCoupones.get(position).getIsUseAgain());
 
                 Date date = new Date(arrayCoupones.get(position).getTimeEndCoupon());
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-dd-MM");
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 String dateFormatted = formatter.format(date);
 
                 Date dateCurrent = new Date();
                 long currentDate=dateCurrent.getTime();
 
-                Date dateXX = new Date(arrayCoupones.get(position).getTimeEndCoupon()-currentDate);
-                SimpleDateFormat formatterXX = new SimpleDateFormat("dd");
-                String dateFormattedXX = formatterXX.format(dateXX);
+//                Date dateXX = new Date(arrayCoupones.get(position).getTimeEndCoupon()-currentDate);
+//                SimpleDateFormat formatterXX = new SimpleDateFormat("dd");
+//                String dateFormattedXX = formatterXX.format(dateXX);
 
+                long dayxx=  arrayCoupones.get(position).getTimeEndCoupon()-currentDate;
                 bundle.putString("ExpiryDateUn",dateFormatted);
-                bundle.putString("DayUn","後"+dateFormattedXX+"日");
+                bundle.putString("DayUn","後"+ (TimeUnit.DAYS.convert(dayxx, TimeUnit.MILLISECONDS)+1)+"日");
 
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_UNUSED_DETAIL_COUPONE, false, true,bundle);
 
@@ -131,6 +133,9 @@ public class UnusedCouponeFragment extends BaseFragment<IUnusedCouponeView, Unus
         } else {
             txtNone.setVisibility(View.VISIBLE);
         }
+//        for (int i=0;i>list.size();i++){
+//            list.get(i).getTimeEndCoupon();
+//        }
     }
 
     @Override

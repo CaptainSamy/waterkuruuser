@@ -20,16 +20,19 @@ public class UsedCouponePresenter extends FragmentPresenter<IUsedCouponeView> {
     }
 
     public void getListCoupon(int lastCouponId, int limit, int isUsed) {
+        getView().showProgress();
         String token = getModel(SharedPreferencesModel.class).getToken();
         getModel(CouponeModel.class).getListCoupone(token, lastCouponId, limit, isUsed,
                 new CouponeModel.IGetListCouponeResponseCallback() {
                     @Override
                     public void onGetListCouponeResponseSuccess(List<Coupone> list) {
                         getView().showListCoupone(list);
+                        getView().hideProgress();
                     }
                     @Override
                     public void onGetListCouponeResponseFailure(ErrorMessage errorMessage) {
                         getView().displayErrorMessage(errorMessage);
+                        getView().hideProgress();
                     }
                 });
     }

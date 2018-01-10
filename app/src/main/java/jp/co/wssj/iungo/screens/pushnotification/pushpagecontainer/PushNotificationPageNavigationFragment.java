@@ -2,6 +2,7 @@ package jp.co.wssj.iungo.screens.pushnotification.pushpagecontainer;
 
 import android.os.Bundle;
 
+import jp.co.wssj.iungo.R;
 import jp.co.wssj.iungo.screens.IMainView;
 
 /**
@@ -15,6 +16,10 @@ public class PushNotificationPageNavigationFragment extends PushNotificationPage
         fragment.setArguments(args);
         return fragment;
     }
+//    @Override
+//    public String getAppBarTitle() {
+//        return getString(R.string.title_push_notification_list);
+//    }
 
     @Override
     public int getFragmentId() {

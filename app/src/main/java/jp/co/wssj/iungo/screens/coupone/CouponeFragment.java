@@ -80,7 +80,6 @@ public class CouponeFragment extends BaseFragment<ICouponeView, CouponePresenter
 
     @Override
     protected void initData() {
-
         mcouponeAdapter = new CouponeAdapter(getChildFragmentManager(), getActivityContext());
         mTabLayout.setTabData(mTitles);
         mViewPager.setAdapter(mcouponeAdapter);

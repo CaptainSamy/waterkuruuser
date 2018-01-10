@@ -9,27 +9,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="このクーポンの利用回数は一回のみです。担当者を見せてから利用ボタンを押してください。"
+        android:text="ご利用ありがとうございます"
         android:textSize="16sp"
         android:textStyle="bold" />
 
     <LinearLayout
         android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/buttonOk"
             android:padding="10dp"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="利用しない" />
-        <Button
-            android:padding="10dp"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="利用" />
+            android:text="OK" />
 
     </LinearLayout>
 </LinearLayout>

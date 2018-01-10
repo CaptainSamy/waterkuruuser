@@ -188,6 +188,7 @@ public final class FragmentFactory {
                     break;
                 case IMainView.FRAGMENT_UNUSED_DETAIL_COUPONE:
                     fragment= UnusedDetailCouponeFragment.newInstance(bundle);
+                    break;
                 case IMainView.FRAGMENT_SCREEN_TEST:
                     fragment = new ScreenTestFragment();
                     break;

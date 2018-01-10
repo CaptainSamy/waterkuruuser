@@ -56,14 +56,12 @@ public class UsedCouponeAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) myContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.item_coupone, null);
-
         final TextView txtNameCoupone = (TextView) convertView.findViewById(R.id.txtNameCoupone);
         TextView txtNickName = (TextView) convertView.findViewById(R.id.txtNickName);
         final TextView txtTypeCoupone = (TextView) convertView.findViewById(R.id.txtTypeCoupone);
         TextView txtExpiryDate = (TextView) convertView.findViewById(R.id.txtExpiryDate);
         TextView txtDay = (TextView) convertView.findViewById(R.id.txtDay);
         ImageView imgAvater = (ImageView) convertView.findViewById(R.id.imgAvatar);
-
 
         txtNameCoupone.setMaxLines(1);
         txtNameCoupone.setOnClickListener(new View.OnClickListener() {
@@ -81,10 +79,12 @@ public class UsedCouponeAdapter extends BaseAdapter {
         txtNameCoupone.setText(arrayCoupone.get(position).getNameCoupon());
         txtNickName.setText(arrayCoupone.get(position).getStoreName());
         txtTypeCoupone.setText(arrayCoupone.get(position).getTypeCouponName());
+
         txtExpiryDate.setText(dateFormatted);
 
         Date dateCurrent = new Date();
         long currentDate = dateCurrent.getTime();
+
 
         if (arrayCoupone.get(position).getIsUse() == 1) {
             txtDay.setText("期限切れ");
