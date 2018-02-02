@@ -36,7 +36,7 @@ import jp.co.wssj.iungo.widget.swipyrefreshlayout.SwipyRefreshLayoutDirection;
 
 public class ConversationsFragment extends BaseFragment<IConversationsView, ConversationsPresenter> implements IConversationsView {
     private static String TAG = "ConversationsFragment";
-  // private SwipyRefreshLayout mRefreshListChat;
+    // private SwipyRefreshLayout mRefreshListChat;
     private ListView mListViewChat;
     private EditText mInputChat;
     private ImageView mButtonSend;
@@ -52,8 +52,8 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
     private DatabaseReference myDatabaseReference;
     private ConversationsAdapter conversationsAdapter;
     private List<MessagesFirebase> listMessagesFirebase;
-    private String dateText;
-    private String time;
+//    private String dateText;
+//    private String time;
 
     @Override
     protected String getLogTag() {
@@ -117,6 +117,7 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
             idUser = getArguments().getLong(KEY_USER_ID);
             Logger.d("thangss", idStore + " " + nameStore + " " + imageStore + " " + idUser);
         }
+
         myDatabaseReference.child("Chat").child("Groups").child("group_user_" + idUser + "_" + idStore).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -135,8 +136,8 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
                     if (!TextUtils.isEmpty(content) && created != 0) {
                         Date date = new Date(created);
                         SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
-                        dateText = df2.format(date);
-                        time = date.getHours() + ":" + date.getMinutes();
+                        String dateText = df2.format(date);
+                        String time = date.getHours() + ":" + date.getMinutes();
 
                         messagesFirebase = new MessagesFirebase(content, dateText, time);
                         listMessagesFirebase.add(messagesFirebase);
@@ -171,9 +172,15 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
                     query.child("is_store").setValue(true);
                     query.child("type").setValue(0);
 
-                    MessagesFirebase messagesFirebase = new MessagesFirebase(mInputChat.getText().toString(), dateText,time);
+                    Date date = new Date(System.currentTimeMillis());
+                    SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy");
+                    String dateText = df2.format(date);
+                    String time = date.getHours() + ":" + date.getMinutes();
+
+                    MessagesFirebase messagesFirebase = new MessagesFirebase(mInputChat.getText().toString(), dateText, time);
                     listMessagesFirebase.add(messagesFirebase);
                     conversationsAdapter.notifyDataSetChanged();
+
                     mInputChat.setText("");
                 }
             }

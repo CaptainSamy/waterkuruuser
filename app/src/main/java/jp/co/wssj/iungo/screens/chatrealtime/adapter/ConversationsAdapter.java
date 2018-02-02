@@ -75,7 +75,12 @@ public class ConversationsAdapter extends BaseAdapter {
             TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
             tvContent.setText(messagesFirebase.getContent());
         }
-
+//        TextView  tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+//        tvDate.setText(arrayMessagesFirebase.get(position).getCreated());
+//        TextView tvTime = (TextView) convertView.findViewById(R.id.tvTime);
+//        tvTime.setText(arrayMessagesFirebase.get(position).getTime());
+//        TextView tvContent = (TextView) convertView.findViewById(R.id.tvContent);
+//        tvContent.setText(arrayMessagesFirebase.get(position).getContent());
         return convertView;
     }
 }
