@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--<jp.co.wssj.iungo.widget.swipyrefreshlayout.SwipyRefreshLayout-->
+        <!--android:id="@+id/refreshHistoryChat"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/line"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--app:srl_direction="both">-->
+
+        <ListView
+            android:layout_above="@+id/line"
+            android:visibility="visible"
+            android:id="@+id/lvStoreFollow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:paddingBottom="15dp"
+            android:stackFromBottom="true"
+            android:transcriptMode="normal"/>
+
+    <!--</jp.co.wssj.iungo.widget.swipyrefreshlayout.SwipyRefreshLayout>-->
+
+    <TextView
+        android:id="@+id/textNoItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/refreshHistoryChat"
+        android:layout_alignTop="@id/refreshHistoryChat"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:layout_above="@+id/layoutInput"
+        android:background="@color/colorTextMain"/>
+
+    <LinearLayout
+        android:id="@+id/layoutInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="@string/input_content_chat"
+            android:maxLines="5"
+            android:paddingBottom="14dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="14dp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingRight="6dp">
+            <ImageView
+                android:id="@+id/tvSendChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_send"
+                android:textColor="@color/black"/>
+
+            <ProgressBar
+                android:id="@+id/progressSendChat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/tvSendChat"
+                android:layout_alignTop="@+id/tvSendChat"
+                android:layout_centerInParent="true"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -9,6 +9,8 @@ import jp.co.wssj.iungo.screens.changepassword.ChangePasswordByCodeFragment;
 import jp.co.wssj.iungo.screens.changepassword.ChangePasswordFragment;
 import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
+import jp.co.wssj.iungo.screens.chatrealtime.chatdeatail.ChatRealTimeFragment;
+import jp.co.wssj.iungo.screens.chatrealtime.conversations.ConversationsFragment;
 import jp.co.wssj.iungo.screens.chatwrapper.ChatWrapperFragment;
 import jp.co.wssj.iungo.screens.comment.CommentFragment;
 import jp.co.wssj.iungo.screens.contact.ContactUsFragment;
@@ -191,6 +193,12 @@ public final class FragmentFactory {
                     break;
                 case IMainView.FRAGMENT_SCREEN_TEST:
                     fragment = new ScreenTestFragment();
+                    break;
+                case IMainView.FRAGMENT_CHAT_REALTIME:
+                    fragment = ChatRealTimeFragment.newInstance(bundle);
+                    break;
+                case IMainView.FRAGMENT_CONVERSATION:
+                    fragment= ConversationsFragment.newInstance(bundle);
                     break;
             }
         }

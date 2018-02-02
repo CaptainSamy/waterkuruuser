@@ -7,6 +7,7 @@ import jp.co.wssj.iungo.model.checkin.CheckInModel;
 import jp.co.wssj.iungo.model.firebase.FirebaseModel;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.base.FragmentPresenter;
+import jp.co.wssj.iungo.utils.Logger;
 import jp.co.wssj.iungo.utils.Utils;
 
 /**
@@ -40,10 +41,10 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
         getView().showProgress();
         final String encryptPassword = Utils.toMD5(password);
         getAuthModel().loginAWS(userId, encryptPassword, new AuthModel.ILoginCallback() {
-
             @Override
             public void onLoginSuccess(LoginResponse.LoginData data) {
                 getModel(SharedPreferencesModel.class).putUserId(userId);
+                Logger.d("userId",userId);
                 getModel(SharedPreferencesModel.class).putPassword(encryptPassword);
                 getModel(SharedPreferencesModel.class).putToken(data.getToken());
                 getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
@@ -57,7 +58,6 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
                 } else {
                     getView().displayHomeScreen();
                 }
-
             }
 
             @Override

@@ -282,7 +282,8 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_COUPONE,null);
                     return true;
                 case R.id.navigation_another:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_WRAPPER, null);
+//                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_WRAPPER, null);
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_REALTIME,null);
                     return true;
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);

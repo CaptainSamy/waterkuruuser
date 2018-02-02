@@ -15,6 +15,8 @@ import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.base.BaseFragment;
 import jp.co.wssj.iungo.screens.chat.adapter.StoreFollowAdapter;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
+import jp.co.wssj.iungo.screens.chatrealtime.chatdeatail.ChatRealTimeFragment;
+import jp.co.wssj.iungo.utils.Logger;
 
 /**
  * Created by Nguyen Huu Ta on 26/6/2017.
@@ -90,10 +92,16 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle bundle = new Bundle();
                 StoreFollowResponse.StoreChatData.StoreFollow store = (StoreFollowResponse.StoreChatData.StoreFollow) parent.getItemAtPosition(position);
-                bundle.putInt(ChatFragment.KEY_STORE_ID, store.getId());
-                bundle.putString(ChatFragment.KEY_STORE_NAME, store.getStoreName());
-                bundle.putString(ChatFragment.KEY_IMAGE_STORE, store.getImageStore());
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
+//                bundle.putInt(ChatFragment.KEY_STORE_ID, store.getId());
+//                bundle.putString(ChatFragment.KEY_STORE_NAME, store.getStoreName());
+//                bundle.putString(ChatFragment.KEY_IMAGE_STORE, store.getImageStore());
+//                getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
+                Logger.d("keystore1",store.getId()+"");
+                bundle.putInt(ChatRealTimeFragment.KEY_STORE_ID, store.getId());
+                bundle.putString(ChatRealTimeFragment.KEY_STORE_NAME, store.getStoreName());
+                bundle.putString(ChatRealTimeFragment.KEY_IMAGE_STORE, store.getImageStore());
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT_REALTIME, true, true, bundle);
+
             }
         });
 
@@ -118,7 +126,6 @@ public class StoreFollowFragment extends BaseFragment<IStoreFollowView, StoreFol
         }
         mListViewStoreFollow.setAdapter(mAdapter);
     }
-
     @Override
     public void onGetListStoreFollowSuccess(List<StoreFollowResponse.StoreChatData.StoreFollow> storeFollows) {
         setRefreshing(false);

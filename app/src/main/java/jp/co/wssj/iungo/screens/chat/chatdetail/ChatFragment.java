@@ -10,9 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-
 import org.apache.commons.lang.StringEscapeUtils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -97,6 +95,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         String storeName = getString(R.string.title_screen_chat);
         if (getArguments() != null) {
             storeName = getArguments().getString(KEY_STORE_NAME);
+
         }
         return storeName;
     }
@@ -177,7 +176,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         mListChat = new ArrayList<>();
         mAdapter = new ChatAdapter(getActivityContext(), mListChat);
         mAdapter.setOnClickImageStore(new ChatAdapter.IClickImageStore() {
-
             @Override
             public void onClick(int managerId) {
                 if (mDialogProfile == null) {
@@ -199,7 +197,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     @Override
     public void onResume() {
         super.onResume();
-//        mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
+
     }
 
     private Handler mHandle = new Handler();
@@ -235,7 +233,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private void sortListChat(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
         String date = Constants.EMPTY_STRING;
-
         for (HistoryChatResponse.HistoryChatData.ChatData chatData : history) {
             if (TextUtils.isEmpty(date)) {
                 date = Utils.formatDate(chatData.getTimeCreate(), "MM/dd/yyyy");

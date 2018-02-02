@@ -7,10 +7,6 @@ import jp.co.wssj.iungo.model.chat.StoreFollowResponse;
 import jp.co.wssj.iungo.model.preference.SharedPreferencesModel;
 import jp.co.wssj.iungo.screens.switcher.SwitcherPresenter;
 
-/**
- * Created by HieuPT on 10/17/2017.
- */
-
 public class ChatWrapperPresenter extends SwitcherPresenter<IChatWrapperView> {
 
     protected ChatWrapperPresenter(IChatWrapperView view) {
@@ -23,7 +19,6 @@ public class ChatWrapperPresenter extends SwitcherPresenter<IChatWrapperView> {
         String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
         getModel(ChatModel.class).getListStoreFollow(token, new ChatModel.OnGetListStoreFollowCallback() {
-
             @Override
             public void onGetListStoreFollowSuccess(List<StoreFollowResponse.StoreChatData.StoreFollow> storeFollows) {
                 getView().hideProgress();

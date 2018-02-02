@@ -109,7 +109,6 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
         }
 
         public void bind(final HistoryChatResponse.HistoryChatData.ChatData chat, int position) {
-
             switch (getItemViewType(position)) {
                 case TYPE_STORE:
                     Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
@@ -149,7 +148,6 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
     }
 
     public interface IListenerScroll {
-
         void endOfListView();
     }
 }

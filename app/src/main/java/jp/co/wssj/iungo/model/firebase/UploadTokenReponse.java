@@ -9,6 +9,5 @@ import jp.co.wssj.iungo.model.ResponseData;
 
 public class UploadTokenReponse extends ResponseData<UploadTokenReponse.DataUploadToken> {
     class DataUploadToken implements GsonSerializable {
-
     }
 }

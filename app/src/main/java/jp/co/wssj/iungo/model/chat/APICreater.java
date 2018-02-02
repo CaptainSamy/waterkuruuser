@@ -54,7 +54,6 @@ public class APICreater {
     }
 
     static GsonRequest<HistoryChatResponse> getHistoryChat(final String token, final int storeId, final int lastChatId, final Response.Listener<HistoryChatResponse> listener, final Response.ErrorListener errorListener) {
-
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Authorization", token);

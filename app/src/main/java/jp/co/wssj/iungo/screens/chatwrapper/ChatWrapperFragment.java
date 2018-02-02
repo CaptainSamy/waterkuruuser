@@ -10,11 +10,10 @@ import jp.co.wssj.iungo.model.chat.StoreFollowResponse;
 import jp.co.wssj.iungo.screens.IMainView;
 import jp.co.wssj.iungo.screens.chat.StoreFollowFragment;
 import jp.co.wssj.iungo.screens.chat.chatdetail.ChatFragment;
+import jp.co.wssj.iungo.screens.chatrealtime.chatdeatail.ChatRealTimeFragment;
 import jp.co.wssj.iungo.screens.switcher.SwitcherFragment;
+import jp.co.wssj.iungo.utils.Logger;
 
-/**
- * Created by HieuPT on 10/17/2017.
- */
 
 public class ChatWrapperFragment extends SwitcherFragment<IChatWrapperView, ChatWrapperPresenter> implements IChatWrapperView {
 
@@ -69,14 +68,22 @@ public class ChatWrapperFragment extends SwitcherFragment<IChatWrapperView, Chat
     @Override
     public void displayChatScreen(StoreFollowResponse.StoreChatData.StoreFollow storeFollow) {
         Bundle bundle = new Bundle(createBaseBundle());
-        bundle.putInt(ChatFragment.KEY_STORE_ID, storeFollow.getId());
-        bundle.putString(ChatFragment.KEY_STORE_NAME, storeFollow.getStoreName());
-        bundle.putString(ChatFragment.KEY_IMAGE_STORE, storeFollow.getImageStore());
-        displayFragment(ChatFragment.newInstance(bundle));
+//        bundle.putInt(ChatFragment.KEY_STORE_ID, storeFollow.getId());
+//        bundle.putString(ChatFragment.KEY_STORE_NAME, storeFollow.getStoreName());
+//        bundle.putString(ChatFragment.KEY_IMAGE_STORE, storeFollow.getImageStore());
+//        displayFragment(ChatFragment.newInstance(bundle));
+        bundle.putInt(ChatRealTimeFragment.KEY_STORE_ID, storeFollow.getId());
+        bundle.putString(ChatRealTimeFragment.KEY_STORE_NAME, storeFollow.getStoreName());
+        bundle.putString(ChatRealTimeFragment.KEY_IMAGE_STORE, storeFollow.getImageStore());
+        displayFragment(ChatRealTimeFragment.newInstance(bundle));
     }
 
     @Override
     public void displayStoreFollowScreen(List<StoreFollowResponse.StoreChatData.StoreFollow> storeFollowList) {
+        Logger.d("thangChat", storeFollowList.size() + "");
+//        for (int i=0;i<storeFollowList.size();i++){
+//            Logger.d("thangChat", storeFollowList.get(i).getId()+ "");
+//        }
         Bundle bundle = new Bundle(createBaseBundle());
         if (storeFollowList != null) {
             bundle.putParcelableArrayList(StoreFollowFragment.KEY_STORE_FOLLOW_LIST, new ArrayList<>(storeFollowList));
