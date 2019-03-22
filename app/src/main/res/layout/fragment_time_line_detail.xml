@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <jp.co.wssj.iungo.widget.LoadMoreRecyclerView
+    <wssj.co.jp.olioa.widget.LoadMoreRecyclerView
         android:id="@+id/rcTimeLine"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/header_height">
 
-        <jp.co.wssj.iungo.widget.KenBurnsView
+        <wssj.co.jp.olioa.widget.KenBurnsView
             android:id="@+id/header_picture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

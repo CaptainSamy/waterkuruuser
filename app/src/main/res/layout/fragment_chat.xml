@@ -4,7 +4,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <jp.co.wssj.iungo.widget.swipyrefreshlayout.SwipyRefreshLayout
+    <wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayout
         android:id="@+id/refreshHistoryChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:stackFromBottom="true"
             android:transcriptMode="normal"/>
 
-    </jp.co.wssj.iungo.widget.swipyrefreshlayout.SwipyRefreshLayout>
+    </wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayout>
 
     <TextView
         android:id="@+id/textNoItem"

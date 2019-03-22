@@ -4,7 +4,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4sp">
 
-    <jp.co.wssj.iungo.widget.ImageRoundCorners
+    <wssj.co.jp.olioa.widget.ImageRoundCorners
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

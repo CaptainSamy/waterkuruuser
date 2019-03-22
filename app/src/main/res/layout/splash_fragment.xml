@@ -13,7 +13,7 @@
         android:src="@drawable/splash_no_login"
         android:visibility="visible"/>
 
-    <jp.co.wssj.iungo.widget.dialog.ProgressLayout
+    <wssj.co.jp.olioa.widget.dialog.ProgressLayout
         android:id="@+id/dmax_spots_progress"
         android:layout_width="@dimen/progress_width"
         android:layout_height="wrap_content"

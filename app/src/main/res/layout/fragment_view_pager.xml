@@ -30,7 +30,7 @@
             android:background="@color/colorMain"/>
     </RelativeLayout>
 
-    <jp.co.wssj.iungo.widget.NonSwipeableViewPager
+    <wssj.co.jp.olioa.widget.NonSwipeableViewPager
         android:id="@+id/manager_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

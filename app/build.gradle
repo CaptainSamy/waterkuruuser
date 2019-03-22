@@ -8,8 +8,8 @@ repositories {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
     defaultConfig {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -22,10 +22,11 @@ android {
             keyPassword 'VN201501'
         }
     }
+    //https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev
     productFlavors {
         development {
-            applicationId "jp.co.wssj.iungo.user"
-            buildConfigField "String", "HOST", "\"https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev\""
+            applicationId "wssj.co.jp.olioa"
+            buildConfigField "String", "HOST", "\"http://133.130.73.227:8745/olioa/\""
             minSdkVersion 17
             targetSdkVersion 25
             versionCode 24
@@ -33,7 +34,7 @@ android {
             signingConfig signingConfigs.product
         }
         product {
-            applicationId "jp.co.wssj.iungo.user"
+            applicationId "wssj.co.jp.olioa"
             buildConfigField "String", "HOST", "\"https://8asg0ig2sk.execute-api.ap-northeast-1.amazonaws.com/prod\""
             minSdkVersion 17
             targetSdkVersion 25
@@ -82,7 +83,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.github.bumptech.glide:glide:3.8.0'
     compile 'com.github.yalantis:ucrop:2.2.1'
-    compile "com.google.android.gms:play-services-location:10.2.6"
+    compile 'com.google.android.gms:play-services-location:10.2.6'
     compile 'com.github.esafirm.android-image-picker:imagepicker:1.7.2@aar'
     compile 'com.google.android.gms:play-services-vision:10.2.6'
     compile 'com.google.android.gms:play-services-auth:10.2.6'
@@ -106,8 +107,8 @@ dependencies {
     compile 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'jp.co.recruit_mp:LightCalendarView:1.0.1'
     compile 'com.google.firebase:firebase-database:10.2.6'
+    compile 'com.squareup.retrofit2:retrofit:2.5.0'
 }
 apply plugin: 'com.google.gms.google-services'

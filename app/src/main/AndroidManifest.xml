@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="jp.co.wssj.iungo">
+          package="wssj.co.jp.olioa">
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -17,7 +16,7 @@
         android:required="true"/>
 
     <application
-        android:name="jp.co.wssj.iungo.App"
+        android:name="wssj.co.jp.olioa.App"
         android:allowBackup="true"
         android:icon="@mipmap/icon_app"
         android:label="@string/app_name"
@@ -29,7 +28,7 @@
             android:value="barcode"/>
 
         <!--<activity-->
-        <!--android:name="jp.co.wssj.iungo.screens.StartActivity"-->
+        <!--android:name="wssj.co.jp.olioa.screens.StartActivity"-->
         <!--android:screenOrientation="portrait"-->
         <!--android:windowSoftInputMode="adjustNothing">-->
         <!--<intent-filter>-->
@@ -38,7 +37,7 @@
         <!--</intent-filter>-->
         <!--</activity>-->
         <activity
-            android:name="jp.co.wssj.iungo.screens.MainActivity"
+            android:name="wssj.co.jp.olioa.screens.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing">
@@ -59,7 +58,7 @@
         </activity>
 
         <activity
-            android:name="jp.co.wssj.iungo.screens.QuestionNaireActivity"
+            android:name=".screens.QuestionNaireActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing">
         </activity>
@@ -76,13 +75,13 @@
             />
 
         <service
-            android:name="jp.co.wssj.iungo.firebase.FirebaseIDService">
+            android:name=".firebase.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name="jp.co.wssj.iungo.firebase.FirebaseMsgService">
+            android:name=".firebase.FirebaseMsgService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
