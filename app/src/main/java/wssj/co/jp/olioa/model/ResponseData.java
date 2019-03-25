@@ -17,8 +17,11 @@ public class ResponseData<T extends GsonSerializable> implements GsonSerializabl
     @SerializedName("data")
     private T mData;
 
+    @SerializedName("result")
+    private String result;
+
     public boolean isSuccess() {
-        return mIsSuccess;
+        return mIsSuccess || result.equalsIgnoreCase("ok");
     }
 
     public String getMessage() {

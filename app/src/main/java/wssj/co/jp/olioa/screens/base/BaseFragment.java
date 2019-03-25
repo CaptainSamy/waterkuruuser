@@ -251,7 +251,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return ContextCompat.getColor(getActivityContext(), R.color.colorBackground_Actionbar);
     }
 
-    public boolean isDisplayNavigationButton() {
+    public boolean isDisplayBackButton() {
         return true;
     }
 

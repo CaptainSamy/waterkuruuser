@@ -153,9 +153,9 @@ public class MainActivity extends AppCompatActivity
 
                         @Override
                         public void onItemClick(NotificationMessage message) {
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
-                            switchScreen(FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
+//                            switchScreen(FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
                         }
 
                         @Override
@@ -280,14 +280,11 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_stamp:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, null);
                     return true;
-//                case R.id.navigation_home:
-//                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_COUPONE, null);
-//                    return true;
-                case R.id.navigation_another:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_REALTIME, null);
-                    return true;
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
+                    return true;
+                case R.id.navigation_another:
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_REALTIME, null);
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
@@ -567,7 +564,7 @@ public class MainActivity extends AppCompatActivity
                     mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
                 }
                 mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
-                boolean isShowNavigationButton = fragment.isDisplayNavigationButton();
+                boolean isShowNavigationButton = fragment.isDisplayBackButton();
                 if (isShowNavigationButton) {
                     mToolbar.setNavigationIcon(R.drawable.ic_back);
                 } else {

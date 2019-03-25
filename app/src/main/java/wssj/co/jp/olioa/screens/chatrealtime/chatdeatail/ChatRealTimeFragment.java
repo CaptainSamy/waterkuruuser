@@ -73,8 +73,8 @@ public class ChatRealTimeFragment extends BaseFragment<IChatRealTimeView, ChatRe
     }
 
     @Override
-    public boolean isDisplayExtraNavigationButton() {
-        return super.isDisplayExtraNavigationButton();
+    public boolean isDisplayBackButton() {
+        return false;
     }
 
     @Override

@@ -38,7 +38,7 @@ public class ChatWrapperFragment extends SwitcherFragment<IChatWrapperView, Chat
     }
 
     @Override
-    public boolean isDisplayNavigationButton() {
+    public boolean isDisplayBackButton() {
         return false;
     }
 

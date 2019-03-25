@@ -35,7 +35,7 @@ public class ListServiceCompanyWrapperFragment extends SwitcherFragment<IListSer
     }
 
     @Override
-    public boolean isDisplayNavigationButton() {
+    public boolean isDisplayBackButton() {
         return false;
     }
 

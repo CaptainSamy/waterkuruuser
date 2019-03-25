@@ -20,7 +20,7 @@ public class APICreator {
 
     private static final String TAG = "Firebase.ApiCreator";
 
-    private static final String API_UPLOAD_DEVICE_TOKEN = Constants.BASE_URL + "/api/client/users/save-device-token";
+    private static final String API_UPLOAD_DEVICE_TOKEN = Constants.BASE_URL + "api/add-firebase-token";
 
     static GsonRequest<UploadTokenReponse> getUploadDeviceTokenRequest(final String token,
                                                                        final String deviceToken, final String deviceId, final Response.Listener<UploadTokenReponse> listener,
@@ -56,9 +56,9 @@ public class APICreator {
             @Override
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
-                params.put("device_token", deviceToken);
-                params.put("device_id", deviceId);
-                params.put("app_id", Constants.APP_ID);
+                params.put("token", deviceToken);
+                params.put("uuid", deviceId);
+                params.put("device_info", "Android");
                 return params;
             }
         };

@@ -50,6 +50,7 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
                 APIService.getInstance().addAuthorizationHeader(token);
                 getModel(SharedPreferencesModel.class).putToken(token);
                 getModel(SharedPreferencesModel.class).putExpireDate(accessToken.getExpired());
+                getModel(FirebaseModel.class).uploadDeviceToken(token, null);
                 getView().displayHomeScreen();
             }
 

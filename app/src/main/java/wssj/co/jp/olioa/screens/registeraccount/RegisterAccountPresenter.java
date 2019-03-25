@@ -58,7 +58,7 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> {
                 getModel(SharedPreferencesModel.class).putUserName(userName);
                 getModel(SharedPreferencesModel.class).putPassword(password);
                 getModel(SharedPreferencesModel.class).putEmail(email);
-                 //getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
+                getModel(FirebaseModel.class).uploadDeviceToken(token, null);
                 getView().onRegisterSuccess();
             }
 

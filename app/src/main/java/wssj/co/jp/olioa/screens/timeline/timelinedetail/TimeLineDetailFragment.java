@@ -111,7 +111,7 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
     }
 
     @Override
-    public boolean isDisplayNavigationButton() {
+    public boolean isDisplayBackButton() {
         return true;
     }
 

@@ -1,6 +1,5 @@
 package wssj.co.jp.olioa.screens.pushnotification.pushlist;
 
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,12 +12,10 @@ import java.util.List;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.ErrorMessage;
 import wssj.co.jp.olioa.model.entities.PushNotification;
-import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
-import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.widget.ILoadMoreListView;
 import wssj.co.jp.olioa.widget.LoadMoreListView;
 
@@ -106,10 +103,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+//                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
+//                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
     }

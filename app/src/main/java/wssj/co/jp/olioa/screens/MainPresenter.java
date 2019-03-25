@@ -57,7 +57,7 @@ class MainPresenter extends BasePresenter<IMainView> {
     }
 
     void onBottomNavigationButtonClicked(int screenId, Bundle bundle) {
-        getView().switchScreen(screenId, true, true, bundle);
+        getView().switchScreen(screenId, false, true, bundle);
     }
 
     void onDispatchFinishActivity() {
