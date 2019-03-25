@@ -59,11 +59,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
-    public int getNavigationMenuId() {
-        return R.id.menu_push_notification;
-    }
-
-    @Override
     protected PushNotificationListPresenter onCreatePresenter(IPushNotificationListView view) {
         return new PushNotificationListPresenter(view);
     }
@@ -71,11 +66,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     protected IPushNotificationListView onCreateView() {
         return this;
-    }
-
-    @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
     }
 
     @Override

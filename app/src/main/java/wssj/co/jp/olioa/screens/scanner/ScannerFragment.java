@@ -18,6 +18,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.io.IOException;
 
 import wssj.co.jp.olioa.R;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
+import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
@@ -28,7 +30,7 @@ import wssj.co.jp.olioa.screens.scanner.dialog.ConfirmCheckInDialog;
  */
 
 public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter>
-        implements IScannerView, ConfirmCheckInDialog.IListenerDismissDialog {
+        implements IScannerView {
 
     private static final String TAG = "ScannerFragment";
 
@@ -84,6 +86,11 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected String getLogTag() {
         return TAG;
     }
@@ -111,12 +118,14 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
             @Override
             public void receiveDetections(final Detector.Detections<Barcode> detections) {
                 mHandler.post(new Runnable() {
+
                     @Override
                     public void run() {
                         if (mCameraSource != null && mIsCameraStarted) {
                             SparseArray<Barcode> barCodes = detections.getDetectedItems();
                             if (barCodes.size() > 0) {
-                                getPresenter().verifyCode(barCodes.valueAt(0));
+                                String value = barCodes.valueAt(0).displayValue;
+                                getPresenter().checkInCode(value);
                             }
                         }
                     }
@@ -142,17 +151,49 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     }
 
     @Override
-
-    public void displayConfirmDialog(String qrCode) {
-        if (mDialog == null) {
-            mDialog = new ConfirmCheckInDialog(getActivityContext(), getActivityCallback(), this);
+    public void checkInSuccess(StoreInfo storeInfo) {
+        if (storeInfo == null) {
+            showLog("checkInSuccess failure");
+            startCamera();
+            return;
         }
-        mDialog.showDialog(qrCode);
+        if (mDialog == null) {
+            mDialog = new ConfirmCheckInDialog(getActivityContext(), new ConfirmCheckInDialog.IListenerDismissDialog() {
+
+                @Override
+                public void onConfirm(String code) {
+                    getPresenter().onConfirm(code);
+                }
+
+                @Override
+                public void onDismissDialog() {
+                    startCamera();
+                }
+            });
+        }
+        mDialog.initData(storeInfo);
+        mDialog.show();
+
     }
 
     @Override
-    public void onDismissDialog() {
-        attemptStartCamera();
+    public void onConfirmSuccess(Integer id) {
+        showDialog(getString(R.string.check_in_success));
+    }
+
+    @Override
+    public void showDialog(String message) {
+        DialogMessage dialogMessage = new DialogMessage(getActivityContext(), new DialogMessage.IOnClickListener() {
+
+            @Override
+            public void buttonYesClick() {
+                backToPreviousScreen();
+            }
+        });
+        dialogMessage.setTitle(getString(R.string.title_dialog_check_in));
+        dialogMessage.initData(message, getString(R.string.dialog_button_ok));
+        dialogMessage.show();
+
     }
 
     @Override

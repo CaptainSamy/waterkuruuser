@@ -1,7 +1,5 @@
 package wssj.co.jp.olioa.screens.scanner.dialog;
 
-import wssj.co.jp.olioa.model.checkin.ConfirmCheckInResponse;
-import wssj.co.jp.olioa.model.checkin.InfoStoreResponse;
 import wssj.co.jp.olioa.screens.base.IDialogView;
 
 /**
@@ -10,11 +8,4 @@ import wssj.co.jp.olioa.screens.base.IDialogView;
 
 interface IConfirmCheckInView extends IDialogView {
 
-    void onGetInfoStoreSuccess(InfoStoreResponse.InfoStoreData data);
-
-    void onGetInfoStoreFailure(String message);
-
-    void displayWaitStoreConfirmScreen(ConfirmCheckInResponse.SessionData data);
-
-    void onConfirmFailure(String message);
 }

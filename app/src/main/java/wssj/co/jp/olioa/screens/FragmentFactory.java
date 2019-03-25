@@ -204,6 +204,9 @@ public final class FragmentFactory {
                 case IMainView.FRAGMENT_PUSH_NOTIFICATION:
                     fragment = new PushNotificationFragment();
                     break;
+                case IMainView.FRAGMENT_SCANNER:
+                    fragment = new ScannerFragment();
+                    break;
             }
         }
         if (fragment != null) {

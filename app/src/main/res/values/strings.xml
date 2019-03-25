@@ -238,5 +238,9 @@
     <string name="number_rest_image">+ %1$s</string>
     <string name="no_timeline">タイムラインがありません。</string>
 
+    <!--OLIOA-->
+    <string name="check_in_success">ともだちになりました</string>
+    <string name="title_dialog_check_in">通知</string>
+
 
 </resources>

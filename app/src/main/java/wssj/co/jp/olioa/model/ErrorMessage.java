@@ -10,24 +10,22 @@ import wssj.co.jp.olioa.utils.Constants;
 
 public class ErrorMessage {
 
-    private final int mCode;
+    @SerializedName("error_code")
+    private String mCode;
+
     @SerializedName("message")
     private final String mMessage;
 
     public ErrorMessage(String message) {
-        this(0, message);
+        this("", message);
     }
 
-    public ErrorMessage(int code) {
-        this(code, null);
-    }
-
-    public ErrorMessage(int code, String message) {
+    public ErrorMessage(String code, String message) {
         mCode = code;
         mMessage = message != null ? message : Constants.EMPTY_STRING;
     }
 
-    public int getCode() {
+    public String getCode() {
         return mCode;
     }
 

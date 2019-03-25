@@ -11,6 +11,8 @@ import wssj.co.jp.olioa.model.BaseModel;
 import wssj.co.jp.olioa.model.ErrorMessage;
 import wssj.co.jp.olioa.model.ErrorResponse;
 import wssj.co.jp.olioa.model.ResponseData;
+import wssj.co.jp.olioa.model.baseapi.APICallback;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.pushobject.MappingUserStoreResponse;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.Logger;
@@ -217,5 +219,13 @@ public class CheckInModel extends BaseModel {
         if (qrCode != null && qrCode.startsWith(Constants.PREFIX_QR_STORE)) {
             callback.onVerified();
         }
+    }
+
+    public void checkIn(String code, APICallback<StoreInfo> callback) {
+        getApi().checkIn(new CheckInBody(code)).getAsyncResponse(callback);
+    }
+
+    public void userConfirm(String code, APICallback<Integer> callback) {
+        getApi().userConfirmCheckIn(new CheckInBody(code)).getAsyncResponse(callback);
     }
 }

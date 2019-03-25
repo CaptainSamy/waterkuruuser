@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.screens.IActivityCallback;
+import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
@@ -229,6 +230,16 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void showDialog(String message) {
+        DialogMessage dialogMessage = new DialogMessage(getActivityContext(), null);
+        dialogMessage.show();
+    }
+
+    public void showLog(String message) {
+        Logger.d(getLogTag(), message);
     }
 
     public boolean isDisplayBottomNavigationMenu() {

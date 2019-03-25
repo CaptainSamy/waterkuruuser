@@ -56,6 +56,7 @@ public class CenterTitleToolbar extends Toolbar {
         mIconNotification = (ImageView) findViewById(R.id.iconNotification);
         mCountNotification = (TextView) findViewById(R.id.countNotification);
         mLayoutNotification = (RelativeLayout) findViewById(R.id.layoutNotification);
+        mLayoutNotification.setVisibility(GONE);
         setTitle(Constants.EMPTY_STRING);
     }
 
@@ -73,7 +74,7 @@ public class CenterTitleToolbar extends Toolbar {
     }
 
     public void setShowIconNotificationButton(boolean isShown) {
-        mLayoutNotification.setVisibility(isShown ? VISIBLE : GONE);
+        mLayoutNotification.setVisibility(GONE);
     }
 
     public boolean isExtraNavigationButtonShown() {

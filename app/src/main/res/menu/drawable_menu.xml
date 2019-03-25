@@ -11,14 +11,6 @@
             android:title="@string/title_bottom_another"/>
     </group>
     <group
-        android:id="@+id/navigation_menu1"
-        android:checkableBehavior="single">
-        <item
-            android:id="@id/menu_push_notification"
-            android:icon="@drawable/notification"
-            android:title="@string/title_push_notification_list"/>
-    </group>
-    <group
         android:id="@+id/navigation_menu2"
         android:checkableBehavior="single">
         <item
@@ -78,6 +70,13 @@
             android:id="@id/menu_version"
             android:icon="@drawable/version"
             android:title="@string/menu_version"/>
+    </group>
+    <group
+        android:id="@+id/navigation_menu11"
+        android:checkableBehavior="single">
+        <item
+            android:id="@id/menu_scan"
+            android:title="Scan Code"/>
     </group>
     <group
         android:id="@+id/navigation_menu9"

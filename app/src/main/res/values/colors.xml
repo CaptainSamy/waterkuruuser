@@ -55,6 +55,7 @@
     <color name="start_color_chat_store">#dfdfdf</color>
     <color name="end_color_chat_store">#bebebe</color>
     <color name="color_number_image">#8da3a3a3</color>
+    <color name="color_text_blue">#3498db</color>
 
 
 </resources>

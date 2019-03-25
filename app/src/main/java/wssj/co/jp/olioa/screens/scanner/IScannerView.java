@@ -1,5 +1,6 @@
 package wssj.co.jp.olioa.screens.scanner;
 
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 /**
@@ -8,7 +9,9 @@ import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 interface IScannerView extends IFragmentView {
 
-    void displayConfirmDialog(String qrCode);
+    void checkInSuccess(StoreInfo storeInfo);
+
+    void onConfirmSuccess(Integer id);
 
     void startCamera();
 

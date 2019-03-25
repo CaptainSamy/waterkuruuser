@@ -11,13 +11,11 @@ import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationModel;
 import wssj.co.jp.olioa.model.util.UtilsModel;
+import wssj.co.jp.olioa.screens.base.BasePresenter;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.screens.pushobject.MappingUserStoreResponse;
 import wssj.co.jp.olioa.screens.pushobject.ObjectPush;
 import wssj.co.jp.olioa.utils.Constants;
-import wssj.co.jp.olioa.model.baseapi.APICallback;
-import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
-import wssj.co.jp.olioa.screens.base.BasePresenter;
 
 class MainPresenter extends BasePresenter<IMainView> {
 
@@ -77,18 +75,18 @@ class MainPresenter extends BasePresenter<IMainView> {
     }
 
     public void getListPushNotification(int page, int limit) {
-        getModel(PushNotificationModel.class).getListPushNotification(page, new APICallback<PushNotificationResponse>() {
-
-            @Override
-            public void onSuccess(PushNotificationResponse response) {
-                getView().showListPushNotification(response);
-            }
-
-            @Override
-            public void onFailure(String errorMessage) {
-                getView().showToast(errorMessage);
-            }
-        });
+//        getModel(PushNotificationModel.class).getListPushNotification(page, new APICallback<PushNotificationResponse>() {
+//
+//            @Override
+//            public void onSuccess(PushNotificationResponse response) {
+//                getView().showListPushNotification(response);
+//            }
+//
+//            @Override
+//            public void onFailure(String errorMessage) {
+//                getView().showToast(errorMessage);
+//            }
+//        });
     }
 
     public void mappingUserWithStoreFast(String code) {

@@ -3,7 +3,7 @@
     <group android:id="@+id/navigation_bottom_group">
         <item
             android:id="@+id/navigation_stamp"
-            android:icon="@drawable/item_stamp"
+            android:icon="@drawable/dr_notification"
             android:title="@string/title_bottom_stamp" />
 
         <item

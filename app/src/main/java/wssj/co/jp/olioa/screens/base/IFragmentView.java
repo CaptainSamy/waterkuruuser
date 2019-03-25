@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 public interface IFragmentView extends IView {
 
+    void showDialog(String message);
+
     void showProgress();
 
     void hideProgress();

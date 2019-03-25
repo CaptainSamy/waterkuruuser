@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -32,7 +31,6 @@ import java.util.List;
 import io.fabric.sdk.android.Fabric;
 import wssj.co.jp.olioa.App;
 import wssj.co.jp.olioa.BuildConfig;
-import wssj.co.jp.olioa.DialogNotification;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.model.entities.PushNotification;
@@ -42,7 +40,6 @@ import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.screens.pushobject.ObjectPush;
-import wssj.co.jp.olioa.screens.timeline.timelinetotal.TimeLineFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.FragmentBackStackManager;
 import wssj.co.jp.olioa.utils.Logger;
@@ -77,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentBackStackManager mFragmentBackStackManager;
 
-    private DialogNotification mDialogNotification;
+//    private DialogNotification mDialogNotification;
 
     boolean isRequestFirstNotification = true;
 
@@ -142,30 +139,27 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(mToolbar);
         imageNotification = (ImageView) findViewById(R.id.iconTest);
 
-        ViewTreeObserver vto = imageNotification.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                if (mDialogNotification == null) {
-                    mDialogNotification = new DialogNotification(MainActivity.this, imageNotification, MainActivity.this);
-                    mDialogNotification.setmCallback(new DialogNotification.IOnItemClick() {
-
-                        @Override
-                        public void onItemClick(NotificationMessage message) {
-//                            Bundle bundle = new Bundle();
-//                            bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
-//                            switchScreen(FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
-                        }
-
-                        @Override
-                        public void onRefresh() {
-                            mPresenter.getListPushNotification(0, Constants.LIMIT);
-                        }
-                    });
-                }
-            }
-        });
+//        ViewTreeObserver vto = imageNotification.getViewTreeObserver();
+//        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//
+//            @Override
+//            public void onGlobalLayout() {
+//                if (mDialogNotification == null) {
+//                    mDialogNotification = new DialogNotification(MainActivity.this, imageNotification, MainActivity.this);
+//                    mDialogNotification.setmCallback(new DialogNotification.IOnItemClick() {
+//
+//                        @Override
+//                        public void onItemClick(NotificationMessage message) {
+//                        }
+//
+//                        @Override
+//                        public void onRefresh() {
+//                            mPresenter.getListPushNotification(0, Constants.LIMIT);
+//                        }
+//                    });
+//                }
+//            }
+//        });
     }
 
     private void initAction() {
@@ -192,25 +186,12 @@ public class MainActivity extends AppCompatActivity
                 mPresenter.onOpenDrawableLayout();
             }
         });
-
-        mToolbar.setIconNotificationClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mDialogNotification != null) {
-                    mDialogNotification.show();
-                }
-            }
-        });
     }
 
     @Override
     public void showListPushNotification(PushNotificationResponse response) {
         List<PushNotification> list = response.getListPushNotification();
         int totalPage = response.getTotalPage();
-        if (mDialogNotification != null) {
-            mDialogNotification.addListNotification(list, totalPage);
-        }
     }
 
     @Override
@@ -225,8 +206,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void displayErrorMessage(String message) {
-        if (mDialogNotification != null && mDialogNotification.getRefreshLayout() != null)
-            mDialogNotification.getRefreshLayout().setRefreshing(false);
         if (!TextUtils.isEmpty(message)) {
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
@@ -278,7 +257,7 @@ public class MainActivity extends AppCompatActivity
             int menuId = item.getItemId();
             switch (menuId) {
                 case R.id.navigation_stamp:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, null);
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_PUSH_NOTIFICATION, null);
                     return true;
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
@@ -313,6 +292,9 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 case R.id.menu_version:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_ABOUT, true, true, null, menuId);
+                    return true;
+                case R.id.menu_scan:
+                    mPresenter.onCloseDrawableLayout(FRAGMENT_SCANNER, true, true, null, menuId);
                     return true;
                 case R.id.menu_logout:
                     mDrawerLayout.closeDrawer(GravityCompat.END);
@@ -447,9 +429,6 @@ public class MainActivity extends AppCompatActivity
             Bundle b = intent.getExtras();
             if (b != null && !TextUtils.isEmpty(b.getString("push_id"))) {
                 NotificationMessage notificationMessage = getItemPush(b);
-//                if (mDialogNotification != null) {
-//                    mDialogNotification.addNotification(notificationMessage);
-//                }
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
                 bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
@@ -534,9 +513,6 @@ public class MainActivity extends AppCompatActivity
         FragmentFactory.destroy();
         clearBackStack();
         displayScreen(FRAGMENT_INTRODUCTION_SCREEN, true, false);
-        if (mDialogNotification != null) {
-            mDialogNotification.clearData();
-        }
         isRequestFirstNotification = true;
         mToolbar.setNumberNotificationUnRead(0);
         mTextUserName.setText(Constants.EMPTY_STRING);
@@ -546,10 +522,10 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-            if (fragment instanceof TimeLineFragment && isRequestFirstNotification) {
-                isRequestFirstNotification = false;
-                mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
-            }
+//            if (fragment instanceof TimeLineFragment && isRequestFirstNotification) {
+//                isRequestFirstNotification = false;
+//                mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+//            }
             disablePushUpView();
             if (fragment.isGlobal()) {
                 if (fragment.isEnableDrawableLayout()) {

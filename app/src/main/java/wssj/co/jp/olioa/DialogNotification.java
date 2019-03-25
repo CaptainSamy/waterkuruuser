@@ -123,7 +123,9 @@ public class DialogNotification implements SwipeRefreshLayout.OnRefreshListener 
 
     public void show() {
         mEasyDialog.show();
-        mPushNotificationAdapter.notifyDataSetChanged();
+        if (mPushNotificationAdapter != null) {
+            mPushNotificationAdapter.notifyDataSetChanged();
+        }
     }
 
     public SwipeRefreshLayout getRefreshLayout() {

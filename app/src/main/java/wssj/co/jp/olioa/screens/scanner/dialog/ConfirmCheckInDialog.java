@@ -1,26 +1,17 @@
 package wssj.co.jp.olioa.screens.scanner.dialog;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.model.checkin.ConfirmCheckInResponse;
-import wssj.co.jp.olioa.model.checkin.InfoStoreResponse;
-import wssj.co.jp.olioa.utils.Constants;
-import wssj.co.jp.olioa.utils.Utils;
-import wssj.co.jp.olioa.screens.IActivityCallback;
-import wssj.co.jp.olioa.screens.IMainView;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.base.BaseDialog;
-import wssj.co.jp.olioa.screens.waitstoreconfirm.WaitStoreConfirmFragment;
+import wssj.co.jp.olioa.utils.Utils;
 
 /**
  * Created by HieuPT on 5/17/2017.
@@ -38,17 +29,12 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
 
     private ProgressBar mProgressBar;
 
-    private final IActivityCallback mActivityCallback;
-
-    private String mCode;
-
-    private String mStoreName;
-
     private IListenerDismissDialog mCallbackDismissDialog;
 
-    public ConfirmCheckInDialog(@NonNull Context context, IActivityCallback activityCallback, IListenerDismissDialog dismissDialog) {
+    private String code;
+
+    public ConfirmCheckInDialog(@NonNull Context context, IListenerDismissDialog dismissDialog) {
         super(context, R.style.DialogTheme);
-        mActivityCallback = activityCallback;
         mCallbackDismissDialog = dismissDialog;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setCancelable(false);
@@ -70,38 +56,10 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
         mCancelButton.setOnClickListener(this);
     }
 
-    public void showDialog(String code) {
-        if (!isShowing()) {
-            mCode = code;
-            mOkButton.setEnabled(false);
-            if (!TextUtils.isEmpty(mCode)) {
-                getPresenter().getInfoStoreByCode(mCode);
-            }
-            show();
-        }
-    }
-
-    @Override
-    public void onGetInfoStoreSuccess(InfoStoreResponse.InfoStoreData data) {
-        mOkButton.setEnabled(true);
-        if (data != null) {
-            mStoreName = data.getStoreName();
-            mStoreNameTextView.setText(mStoreName);
-            Utils.fillImage(getContext(), data.getLogoCompany(), mImageLogoCompany, R.drawable.logo_app);
-            showView();
-        }
-    }
-
-    @Override
-    public void onGetInfoStoreFailure(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        mCancelButton.callOnClick();
-    }
-
-    private void showView() {
-        mProgressBar.setVisibility(View.GONE);
-        mImageLogoCompany.setVisibility(View.VISIBLE);
-        mStoreNameTextView.setVisibility(View.VISIBLE);
+    public void initData(StoreInfo storeInfo) {
+        this.code = storeInfo.getCheckInCode();
+        mStoreNameTextView.setText(storeInfo.getName());
+        Utils.fillImage(getViewContext(), storeInfo.getLogo(), mImageLogoCompany, R.drawable.image_choose);
     }
 
     @Override
@@ -118,44 +76,19 @@ public class ConfirmCheckInDialog extends BaseDialog<IConfirmCheckInView, Confir
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tvCheckIn:
-                showProgress();
-                getPresenter().onOkButtonClicked(mCode);
+                dismissDialogView();
+                mCallbackDismissDialog.onConfirm(code);
                 break;
             case R.id.tvCancelCheckIn:
-                getPresenter().onCancelButtonClicked();
+                dismissDialogView();
                 mCallbackDismissDialog.onDismissDialog();
                 break;
         }
     }
 
-    @Override
-    public void displayWaitStoreConfirmScreen(ConfirmCheckInResponse.SessionData data) {
-        Log.d(TAG, "displayWaitStoreConfirmScreen");
-        hideProgress();
-        if (mActivityCallback != null && data != null) {
-            Bundle bundle = new Bundle();
-            if (data.getCardType() == 3) {
-                bundle.putInt(Constants.KEY_SERVICE_COMPANY_ID, data.getServiceCompanyId());
-                mActivityCallback.displayScreen(IMainView.FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY, true, false, bundle);
-            } else {
-                bundle.putString(WaitStoreConfirmFragment.KEY_STATUS_CHECK_IN, data.getStatus());
-                bundle.putString(WaitStoreConfirmFragment.KEY_STORE_NAME, mStoreName);
-                bundle.putString(WaitStoreConfirmFragment.KEY_SERVICE_NAME, data.getServiceName());
-                bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_PEOPLE, data.getNumberPeople());
-                bundle.putLong(WaitStoreConfirmFragment.KEY_TIME_WAITING, data.getTimeWaiting());
-                bundle.putInt(WaitStoreConfirmFragment.KEY_NUMBER_SESSION, data.getNumberSession());
-                mActivityCallback.displayScreen(IMainView.FRAGMENT_WAIT_STORE_CONFIRM, true, false, bundle);
-            }
-        }
-    }
-
-    @Override
-    public void onConfirmFailure(String message) {
-        hideProgress();
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-    }
-
     public interface IListenerDismissDialog {
+
+        void onConfirm(String code);
 
         void onDismissDialog();
     }
