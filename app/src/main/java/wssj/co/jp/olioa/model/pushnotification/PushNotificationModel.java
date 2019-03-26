@@ -73,8 +73,8 @@ public class PushNotificationModel extends BaseModel {
         super(context);
     }
 
-    public void getListPushNotification(int page, APICallback<PushNotificationResponse> callback) {
-        getApi().getPush(page).getAsyncResponse(callback);
+    public void getListPushNotification(int storeId, int page, APICallback<PushNotificationResponse> callback) {
+        getApi().getPush(storeId, page).getAsyncResponse(callback);
     }
 
     public void getListPushNotification(String token, long userPushId, int isSearch, String keySearch, int serviceCompanyId, int typePush, String fromDate, String toDate, final IGetListPushNotificationCallback callback) {

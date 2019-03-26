@@ -1,5 +1,7 @@
 package wssj.co.jp.olioa.model.baseapi;
 
+import java.util.List;
+
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -20,8 +22,11 @@ public interface IAppAPI {
     @POST("auth/login-user")
     APICall<AccessToken> loginUser(@Body User params);
 
+    @GET("api/get-store-checked-in")
+    APICall<List<StoreInfo>> getStoreCheckedIn(@Query("page") int page);
+
     @GET("api/get-push")
-    APICall<PushNotificationResponse> getPush(@Query("page") int page);
+    APICall<PushNotificationResponse> getPush(@Query("storeId") int storeId, @Query("page") int page);
 
     @POST("api/user-check-in")
     APICall<StoreInfo> checkIn(@Body CheckInBody checkInBody);

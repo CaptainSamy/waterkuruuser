@@ -1,82 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/white"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <wssj.co.jp.olioa.widget.LoadMoreListView
+            android:id="@+id/list_push_notification"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/textNoItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackground_Actionbar"
+        android:layout_centerInParent="true"
         android:gravity="center"
-        android:padding="4dp">
-
-        <RelativeLayout
-            android:id="@+id/layoutSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_search_view"
-            android:gravity="center">
-
-            <android.support.v7.widget.SearchView
-                android:id="@+id/inputSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="35dp"
-                android:queryBackground="@android:color/transparent"
-                app:defaultQueryHint="@string/search"
-                app:queryBackground="@android:color/transparent"/>
-
-            <TextView
-                android:id="@+id/tvSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="-8dp"
-                android:layout_toEndOf="@+id/inputSearch"
-                android:text="@string/search"
-                android:textSize="14sp"
-                android:visibility="visible"/>
-
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/tool_bar"
-        android:background="@color/colorTextDisable"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textNoItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:text="@string/text_no_item_push_all"
-            android:visibility="gone"/>
-
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <wssj.co.jp.olioa.widget.LoadMoreListView
-                android:id="@+id/list_push_notification"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+        android:text="@string/text_no_item_push_all"
+        android:visibility="gone"/>
+</RelativeLayout>

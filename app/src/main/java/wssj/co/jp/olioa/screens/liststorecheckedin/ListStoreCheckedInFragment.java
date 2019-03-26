@@ -1,61 +1,34 @@
 package wssj.co.jp.olioa.screens.liststorecheckedin;
 
-import android.Manifest;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.view.LayoutInflater;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.model.stamp.ListStoreCheckedResponse;
-import wssj.co.jp.olioa.screens.liststorecheckedin.adapter.ListStoreCheckedInAdapter;
-import wssj.co.jp.olioa.utils.Constants;
-import wssj.co.jp.olioa.utils.Logger;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.liststorecheckedin.adapter.ListStoreCheckedInAdapter;
+import wssj.co.jp.olioa.screens.pushnotification.pushlist.PushNotificationFragment;
 
 /**
  * Created by Nguyen Huu Ta on 12/6/2017.
  */
 
-public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedInView, ListStoreCheckedInPresenter> implements IListStoreCheckedInView, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedInView, ListStoreCheckedInPresenter> implements IListStoreCheckedInView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "ListStoreCheckedInFragment";
 
-    private TextView mTitleListView;
+    SwipeRefreshLayout mRefreshLayout;
 
     private ListView mListStoreCheckedIn;
 
     private ListStoreCheckedInAdapter mAdapter;
-
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-
-    private GoogleApiClient mGoogleApiClient;
-
-    private LocationRequest mLocationRequest;
-
-    private double currentLatitude;
-
-    private double currentLongitude;
-
-    private int mServiceCompanyId;
 
     public static ListStoreCheckedInFragment newInstance(Bundle args) {
         ListStoreCheckedInFragment fragment = new ListStoreCheckedInFragment();
@@ -71,6 +44,11 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
     @Override
     public String getAppBarTitle() {
         return getString(R.string.title_screen_list_store_checked_in);
+    }
+
+    @Override
+    public boolean isDisplayBackButton() {
+        return false;
     }
 
     @Override
@@ -94,141 +72,48 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
     }
 
     @Override
-    protected void initViews(View rootView) {
-        super.initViews(rootView);
-        mListStoreCheckedIn = (ListView) rootView.findViewById(R.id.lvListStoreCheckedIn);
-        View view = LayoutInflater.from(getActivityContext()).inflate(R.layout.header_list_store_checked, null);
-        mTitleListView = (TextView) view.findViewById(R.id.titleListStoreChecked);
-        mListStoreCheckedIn.addHeaderView(view);
+    protected void initViews(View view) {
+        super.initViews(view);
+        mRefreshLayout = view.findViewById(R.id.refreshLayout);
+        mListStoreCheckedIn = (ListView) view.findViewById(R.id.lvListStoreCheckedIn);
     }
 
     @Override
     protected void initAction() {
-        super.initAction();
+        mRefreshLayout.setOnRefreshListener(this);
+        mListStoreCheckedIn.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                StoreInfo storeInfo = (StoreInfo) parent.getItemAtPosition(position);
+                Bundle bundle = new Bundle();
+                bundle.putInt(PushNotificationFragment.ARG_STORE_ID, storeInfo.getId());
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION, true, true, bundle);
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
-            getPresenter().checkAccessLocationPermission();
-        }
-    }
-
-    public void initGoogleAPI() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivityContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
-        mLocationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-        mGoogleApiClient.connect();
-    }
-
-    @Override
-
-    public void onAllowAccessLocation() {
-        initGoogleAPI();
-    }
-
-    @Override
-    public void onRequestLocationPermission() {
-        requestPermissions(new String[]{
-                Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
-        }, mServiceCompanyId);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (permissions.length > 0 && requestCode == mServiceCompanyId) {
-            boolean isGranted = true;
-            for (int permissionGrantResult : grantResults) {
-                isGranted = permissionGrantResult == PackageManager.PERMISSION_GRANTED;
-                if (!isGranted) {
-                    break;
-                }
-            }
-            if (isGranted) {
-                initGoogleAPI();
-            } else {
-                getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
-            }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Logger.d(TAG, "#onConnected " + bundle);
-        if (ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (location != null) {
-                currentLatitude = location.getLatitude();
-                currentLongitude = location.getLongitude();
-            }
-            getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Logger.d(TAG, "#onConnectionSuspended " + i);
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Logger.d(TAG, "#onConnectionFailed");
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
-            }
-        }
-        getPresenter().getListStoreCheckedIn(mServiceCompanyId, currentLatitude, currentLongitude);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Logger.d(TAG, "#onLocationChanged");
-        currentLatitude = location.getLatitude();
-        currentLongitude = location.getLongitude();
-    }
-
-    @Override
-    public void onGetListStoreCheckedInSuccess(List<ListStoreCheckedResponse.StoreCheckedIn> listStores) {
-        mAdapter = new ListStoreCheckedInAdapter(getActivityContext(), listStores);
+        mAdapter = new ListStoreCheckedInAdapter(getActivityContext(), new ArrayList<StoreInfo>());
         mListStoreCheckedIn.setAdapter(mAdapter);
+        getPresenter().getListStoreCheckedIn();
+    }
+
+    @Override
+    public void onGetListStoreCheckedInSuccess(List<StoreInfo> listStores) {
+        mAdapter.setListStore(listStores);
     }
 
     @Override
     public void onGetListStoreCheckedInFailure(String message) {
         showToast(message);
+    }
+
+    @Override
+    public void onRefresh() {
+        mRefreshLayout.setRefreshing(false);
+        getPresenter().getListStoreCheckedIn();
     }
 }

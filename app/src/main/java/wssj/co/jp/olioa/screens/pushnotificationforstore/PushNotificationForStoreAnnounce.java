@@ -2,13 +2,10 @@ package wssj.co.jp.olioa.screens.pushnotificationforstore;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,7 +19,6 @@ import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.utils.Constants;
-import wssj.co.jp.olioa.utils.Logger;
 
 /**
  * Created by tuanle on 6/7/17.
@@ -42,12 +38,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
     private List<NotificationMessage> mListNotification;
 
     private int mServiceCompanyId;
-
-    private SearchView mInputSearch;
-
-    private TextView mTextSearch;
-
-    private RelativeLayout mLayoutSearch;
 
     private boolean isExpandedSearchView;
 
@@ -105,11 +95,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
     protected void initViews(View rootView) {
         mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
-        mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
-        mInputSearch.setMaxWidth(Integer.MAX_VALUE);
-        mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
-        mLayoutSearch = (RelativeLayout) rootView.findViewById(R.id.layoutSearch);
-
     }
 
     @Override
@@ -155,64 +140,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
-        mLayoutSearch.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mInputSearch.setIconified(false);
-            }
-        });
-        mInputSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                mIsSearch = true;
-                Logger.d(TAG, "onQueryTextSubmit");
-                mRefreshLayout.setRefreshing(true);
-                getPresenter().getListPushNotificationForStoreAnnounce(mServiceCompanyId, 0, 1, query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Logger.d(TAG, "onQueryTextChange");
-                if (TextUtils.isEmpty(newText)) {
-                    mAdapter.filter(newText);
-                }
-                statusSearchView(true);
-                return false;
-            }
-        });
-        mInputSearch.setOnCloseListener(new SearchView.OnCloseListener() {
-
-            @Override
-            public boolean onClose() {
-                Logger.d(TAG, "onClose");
-                mTextSearch.setVisibility(View.VISIBLE);
-                isExpandedSearchView = false;
-                mIsSearch = false;
-                return false;
-            }
-        });
-        mInputSearch.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Logger.d(TAG, "onFocusChange " + hasFocus);
-                if (hasFocus) {
-                    isExpandedSearchView = hasFocus;
-                }
-                statusSearchView(hasFocus);
-            }
-        });
-    }
-
-    private void statusSearchView(boolean hasFocus) {
-        mTextSearch.setVisibility(isExpandedSearchView ? View.GONE : View.VISIBLE);
-        mRefreshLayout.setEnabled(!isExpandedSearchView);
-        if (mAdapter != null) {
-            mAdapter.setIsAllowOnLoadMore(!hasFocus);
-        }
     }
 
     @Override
@@ -237,7 +164,6 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
             }
             mAdapter.notifyDataSetChanged();
         } else {
-            mInputSearch.setEnabled(true);
             if (list != null && list.size() > 0) {
                 mListView.setVisibility(View.VISIBLE);
                 showTextNoItem(false, null);
@@ -246,7 +172,7 @@ public class PushNotificationForStoreAnnounce extends BaseFragment<IPushNotifica
                 } else {
                     mListNotification.addAll(list);
                 }
-               // mAdapter.setListPushTemp(mListNotification);
+                // mAdapter.setListPushTemp(mListNotification);
                 mAdapter.notifyDataSetChanged();
                 if (list.size() > 0) {
                     List<Long> listPushId = new ArrayList<>();

@@ -57,5 +57,7 @@
     <color name="color_number_image">#8da3a3a3</color>
     <color name="color_text_blue">#3498db</color>
 
+    <color name="color_line">#BDBDBD</color>
+
 
 </resources>

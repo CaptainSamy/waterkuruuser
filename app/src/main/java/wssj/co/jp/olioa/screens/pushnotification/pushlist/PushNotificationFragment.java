@@ -1,9 +1,11 @@
 package wssj.co.jp.olioa.screens.pushnotification.pushlist;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,15 +30,26 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private static final String TAG = "PushNotificationFragment";
 
+    public static final String ARG_STORE_ID = "storeID";
+
     private SwipeRefreshLayout mRefreshLayout;
 
     private PushNotificationAdapter mAdapter;
 
     private LoadMoreListView mListView;
 
+    private TextView mTextNoItem;
+
     private List<PushNotification> mListNotification;
 
-    private boolean isExpandedSearchView;
+    private int storeId;
+
+    public static PushNotificationFragment newInstance(Bundle args) {
+
+        PushNotificationFragment fragment = new PushNotificationFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected String getLogTag() {
@@ -64,25 +77,36 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected IPushNotificationListView onCreateView() {
         return this;
     }
 
     @Override
     protected void initViews(View rootView) {
-        mRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+        mRefreshLayout = rootView.findViewById(R.id.refresh_layout);
         mListView = rootView.findViewById(R.id.list_push_notification);
+        mTextNoItem = rootView.findViewById(R.id.textNoItem);
     }
 
     @Override
     protected void initData() {
-        if (mListNotification == null) {
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            storeId = bundle.getInt(ARG_STORE_ID);
             mListNotification = new ArrayList<>();
             mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-            getPresenter().getListPushNotification(0);
+            getPresenter().getListPushNotification(storeId, 0);
+            mAdapter.setListPushTemp(mListNotification);
+            mListView.setAdapter(mAdapter);
+        } else {
+            backToPreviousScreen();
         }
-        mAdapter.setListPushTemp(mListNotification);
-        mListView.setAdapter(mAdapter);
     }
 
     @Override
@@ -104,7 +128,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     public void onRefresh() {
         mRefreshLayout.setRefreshing(false);
-        getPresenter().getListPushNotification(0);
+        getPresenter().getListPushNotification(storeId, 0);
     }
 
     @Override
@@ -126,6 +150,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                 }
             }
         }
+        mTextNoItem.setVisibility(mListNotification.size() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -137,6 +162,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onLoadMore(int page) {
-        getPresenter().getListPushNotification(page);
+        getPresenter().getListPushNotification(storeId, page);
     }
 }

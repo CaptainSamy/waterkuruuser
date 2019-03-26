@@ -6,6 +6,8 @@ package wssj.co.jp.olioa.model.entities;
 
 public class StoreInfo {
 
+    private int id;
+
     private int serviceCompanyId;
 
     private String name;
@@ -13,6 +15,10 @@ public class StoreInfo {
     private String logo;
 
     private String checkInCode;
+
+    public int getId() {
+        return id;
+    }
 
     public int getServiceCompanyId() {
         return serviceCompanyId;

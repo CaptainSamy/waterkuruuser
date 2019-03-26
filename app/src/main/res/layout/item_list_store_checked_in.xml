@@ -1,150 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingBottom="20dp"
-    >
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:paddingBottom="5dp"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:paddingTop="5dp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layerType="software"
-        android:src="@drawable/dotted_line"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/logoStore"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        app:civ_border_color="@color/color_line"
+        app:civ_border_width="1sp"/>
+
 
     <TextView
-        android:id="@+id/tvCardName"
+        android:id="@+id/storeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:gravity="center"
-        android:textColor="@color/store_name_in_list_store_checked_in"
-        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="4dp"
+        android:text="123"
+        android:textColor="@color/black"
         android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/tvAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:layout_marginTop="4dp"
-        android:gravity="center"
-        android:textColor="@color/colorText"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/colorTextDisable"/>
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TableRow>
-
-            <TextView
-                style="@style/styleTextDetailStore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_waiting"/>
-
-            <TextView
-                android:id="@+id/tvTimeWaiting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorText"
-                />
-        </TableRow>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorTextDisable"/>
-
-        <TableRow>
-
-            <TextView
-                style="@style/styleTextDetailStore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/people_waiting"/>
-
-            <TextView
-                android:id="@+id/tvPeopleWaiting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorText"
-                />
-        </TableRow>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorTextDisable"/>
-
-        <TableRow>
-
-            <TextView
-                style="@style/styleTextDetailStore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/number_used_service"/>
-
-            <TextView
-                android:id="@+id/tvNumberUsedService"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorText"
-                />
-        </TableRow>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/colorTextDisable"/>
-
-        <TableRow>
-
-            <TextView
-                style="@style/styleTextDetailStore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/time_last_used_service"/>
-
-            <TextView
-                android:id="@+id/tvTimeLastUsedService"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorText"
-                />
-        </TableRow>
-
-    </TableLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/colorTextDisable"/>
-
-    <TextView
-        android:id="@+id/tvMap"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_red_button"
-        android:gravity="center"
-        android:padding="15dp"
-        android:text="地図表示"
-        android:textColor="@color/white"/>
 </LinearLayout>

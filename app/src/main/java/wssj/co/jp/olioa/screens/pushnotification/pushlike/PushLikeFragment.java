@@ -111,10 +111,7 @@ public class PushLikeFragment extends BaseFragment<IPushLikeView, PushLikePresen
         mResfeshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh_layout);
         mResfeshLayout.setEnabled(false);
         mListView = (ListView) rootView.findViewById(R.id.list_push_notification);
-        mInputSearch = (SearchView) rootView.findViewById(R.id.inputSearch);
         mInputSearch.setMaxWidth(Integer.MAX_VALUE);
-        mTextSearch = (TextView) rootView.findViewById(R.id.tvSearch);
-        mLayoutSearch = (RelativeLayout) rootView.findViewById(R.id.layoutSearch);
         mInputSearch.clearFocus();
     }
 

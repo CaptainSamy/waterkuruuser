@@ -116,7 +116,7 @@ public final class FragmentFactory {
                     fragment = PushNotificationDetailFragment.newInstance(bundle);
                     break;
                 case IMainView.FRAGMENT_LIST_STORE_CHECKED_IN:
-                    fragment = ListStoreCheckedInFragment.newInstance(bundle);
+                    fragment = new ListStoreCheckedInFragment();
                     break;
                 case IMainView.FRAGMENT_HOW_TO_USE:
                     fragment = new HowToUserFragment();
@@ -202,7 +202,7 @@ public final class FragmentFactory {
                     fragment = ConversationsFragment.newInstance(bundle);
                     break;
                 case IMainView.FRAGMENT_PUSH_NOTIFICATION:
-                    fragment = new PushNotificationFragment();
+                    fragment = PushNotificationFragment.newInstance(bundle);
                     break;
                 case IMainView.FRAGMENT_SCANNER:
                     fragment = new ScannerFragment();

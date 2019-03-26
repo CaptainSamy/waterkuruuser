@@ -2,7 +2,7 @@ package wssj.co.jp.olioa.screens.liststorecheckedin;
 
 import java.util.List;
 
-import wssj.co.jp.olioa.model.stamp.ListStoreCheckedResponse;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 /**
@@ -11,11 +11,8 @@ import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 public interface IListStoreCheckedInView extends IFragmentView {
 
-    void onGetListStoreCheckedInSuccess(List<ListStoreCheckedResponse.StoreCheckedIn> listStores);
+    void onGetListStoreCheckedInSuccess(List<StoreInfo> listStores);
 
     void onGetListStoreCheckedInFailure(String message);
 
-    void onAllowAccessLocation();
-
-    void onRequestLocationPermission();
 }

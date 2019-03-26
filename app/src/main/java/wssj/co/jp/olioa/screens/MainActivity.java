@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity
             int menuId = item.getItemId();
             switch (menuId) {
                 case R.id.navigation_stamp:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_PUSH_NOTIFICATION, null);
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHECKED_IN, null);
                     return true;
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity
                              boolean addToBackStack, Bundle bundle) {
         boolean retain;
         switch (screenId) {
-            case FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER:
+            case FRAGMENT_LIST_STORE_CHECKED_IN:
             case FRAGMENT_CHAT_WRAPPER:
             case FRAGMENT_TIMELINE:
             case FRAGMENT_HOME:
@@ -386,37 +386,39 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack) {
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                displayScreen(screenId, hasAnimation, addToBackStack, null);
-            }
-        }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
+        displayScreen(screenId, hasAnimation, addToBackStack, null);
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                displayScreen(screenId, hasAnimation, addToBackStack, null);
+//            }
+//        }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
     }
 
     @Override
     public void displayScreen(final int screenId, final boolean hasAnimation,
                               final boolean addToBackStack, final Bundle bundle) {
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                switchScreen(screenId, hasAnimation, addToBackStack, bundle);
-            }
-        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
+        switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                switchScreen(screenId, hasAnimation, addToBackStack, bundle);
+//            }
+//        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
     }
 
     @Override
     public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack, final Bundle bundle, final View sharedElement) {
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
-            }
-        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
+        switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
+//        new Handler().postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
+//            }
+//        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
     }
 
     @Override
@@ -522,10 +524,6 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentResumed(BaseFragment fragment) {
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
-//            if (fragment instanceof TimeLineFragment && isRequestFirstNotification) {
-//                isRequestFirstNotification = false;
-//                mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
-//            }
             disablePushUpView();
             if (fragment.isGlobal()) {
                 if (fragment.isEnableDrawableLayout()) {

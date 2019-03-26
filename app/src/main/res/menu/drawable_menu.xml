@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <group
+        android:id="@+id/navigation_menu11"
+        android:checkableBehavior="single">
+        <item
+            android:id="@id/menu_scan"
+            android:title="Scan Code"
+            android:icon="@drawable/icon_qr_code"/>
+    </group>
     <group
         android:id="@+id/navigation_menu"
         android:checkableBehavior="single"
@@ -70,13 +77,6 @@
             android:id="@id/menu_version"
             android:icon="@drawable/version"
             android:title="@string/menu_version"/>
-    </group>
-    <group
-        android:id="@+id/navigation_menu11"
-        android:checkableBehavior="single">
-        <item
-            android:id="@id/menu_scan"
-            android:title="Scan Code"/>
     </group>
     <group
         android:id="@+id/navigation_menu9"

@@ -16,6 +16,8 @@ import wssj.co.jp.olioa.model.BaseModel;
 import wssj.co.jp.olioa.model.ErrorMessage;
 import wssj.co.jp.olioa.model.ErrorResponse;
 import wssj.co.jp.olioa.model.ResponseData;
+import wssj.co.jp.olioa.model.baseapi.APICallback;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
 import wssj.co.jp.olioa.utils.VolleySequence;
@@ -37,7 +39,7 @@ public class StampModel extends BaseModel {
 
     public interface IGetListCardResponse {
 
-        void onSuccess(List<ListCardResponse.ListCardData.CardData> cards, int page, int totalPage, int numberStampInCard,String explain);
+        void onSuccess(List<ListCardResponse.ListCardData.CardData> cards, int page, int totalPage, int numberStampInCard, String explain);
 
         void onFailure(ErrorMessage errorMessage);
     }
@@ -131,36 +133,8 @@ public class StampModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void getListStoreCheckedIn(String token, int serviceCompanyId, final double latitude, final double longitude, final IGetListStoreCheckedResponse callback) {
-
-        final Request request = APICreator.getListStoreCheckedIn(token, serviceCompanyId, latitude, longitude,
-                new Response.Listener<ListStoreCheckedResponse>() {
-
-                    @Override
-                    public void onResponse(ListStoreCheckedResponse response) {
-                        Logger.d(TAG, "#getListStoreCheckedIn => onResponse ");
-                        if (response.isSuccess() && response.getData() != null) {
-                            ListStoreCheckedResponse.ListStoreData data = response.getData();
-                            callback.onSuccess(data);
-                        } else {
-                            callback.onFailure(new ErrorMessage(response.getMessage()));
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getListStoreCheckedIn => onErrorResponse");
-                        ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                        if (errorResponse != null) {
-                            callback.onFailure(new ErrorMessage(errorResponse.getMessage()));
-                        } else {
-                            callback.onFailure(new ErrorMessage(getStringResource(R.string.network_error)));
-                        }
-                    }
-                });
-        VolleySequence.getInstance().addRequest(request);
+    public void getListStoreCheckedIn(int page, APICallback<List<StoreInfo>> callback) {
+        getApi().getStoreCheckedIn(page).getAsyncResponse(callback);
 
     }
 
