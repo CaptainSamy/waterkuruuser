@@ -1,14 +1,11 @@
 package wssj.co.jp.olioa.screens.splash;
 
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.model.auth.CheckVersionAppResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
-import wssj.co.jp.olioa.screens.splash.dialog.DialogAskUpdate;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.widget.dialog.ProgressLayout;
 import wssj.co.jp.olioa.widget.dialog.SpotsDialog;
@@ -77,27 +74,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     @Override
     protected void initData() {
-//        TwitterConfig config = new TwitterConfig.Builder(getActivityContext())
-//                .logger(new DefaultLogger(Log.DEBUG))
-//                .twitterAuthConfig(new TwitterAuthConfig(Constants.Introduction.TWITTER_KEY, Constants.Introduction.TWITTER_SECRET))
-//                .debug(true)
-//                .build();
-//        Twitter.initialize(config);
         getPresenter().onCreate();
-    }
-
-    @Override
-    public void showDialog(CheckVersionAppResponse.CheckVersionAppData response) {
-        if (response != null && response.getServerInfo() != null) {
-            String status = response.getServerInfo().getStatus();
-            boolean isShowDialog = status.equals(DialogAskUpdate.STATUS_RUNNING) && !response.isHasUpdate();
-            if (!isShowDialog) {
-                DialogAskUpdate dialogAskUpdate = new DialogAskUpdate(getActivityContext(), response, getActivityCallback());
-                dialogAskUpdate.showDialog();
-            } else {
-                displayScreen(IMainView.FRAGMENT_TIMELINE);
-            }
-        }
     }
 
     @Override
@@ -109,11 +86,6 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
                 getActivityCallback().displayScreen(fragmentId, true, false);
             }
         }, Constants.TIME_WAITING_SPLASH);
-    }
-
-    @Override
-    public void displayScreen(int fragmentId, Bundle bundle) {
-        getActivityCallback().displayScreen(fragmentId, true, false, bundle);
     }
 
     @Override

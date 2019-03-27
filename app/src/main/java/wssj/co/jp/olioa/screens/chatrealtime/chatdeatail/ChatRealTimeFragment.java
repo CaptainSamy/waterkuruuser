@@ -73,6 +73,11 @@ public class ChatRealTimeFragment extends BaseFragment<IChatRealTimeView, ChatRe
     }
 
     @Override
+    public int getNavigationBottomId() {
+        return R.id.navigation_chat;
+    }
+
+    @Override
     public boolean isDisplayBackButton() {
         return false;
     }

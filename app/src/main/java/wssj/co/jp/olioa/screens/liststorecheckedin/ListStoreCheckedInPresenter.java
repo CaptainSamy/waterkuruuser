@@ -22,6 +22,11 @@ public class ListStoreCheckedInPresenter extends FragmentPresenter<IListStoreChe
         registerModel(new UtilsModel(view.getViewContext()));
     }
 
+    @Override
+    protected void onGetDataAgain() {
+        getListStoreCheckedIn();
+    }
+
     public void getListStoreCheckedIn() {
         getView().showProgress();
         getModel(StampModel.class).getListStoreCheckedIn(0, new APICallback<List<StoreInfo>>() {

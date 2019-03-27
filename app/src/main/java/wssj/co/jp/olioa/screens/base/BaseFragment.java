@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.screens.IActivityCallback;
+import wssj.co.jp.olioa.screens.MainActivity;
 import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.Logger;
@@ -51,6 +52,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     private boolean mIsAttached;
 
     private TextView mTextNoItem;
+
+    private boolean isReloadData = false;
 
     @Override
     public Context getViewContext() {
@@ -137,6 +140,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         Logger.i(TAG, "#onResume: " + getInternalLogTag());
         super.onResume();
         mPresenter.onFragmentResume();
+        if (isReloadData) {
+            isReloadData = false;
+            mPresenter.onGetDataAgain();
+        }
     }
 
     @Override
@@ -235,6 +242,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     @Override
     public void showDialog(String message) {
         DialogMessage dialogMessage = new DialogMessage(getActivityContext(), null);
+        dialogMessage.initData(message, getString(getViewContext(), R.string.success));
         dialogMessage.show();
     }
 
@@ -266,11 +274,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return true;
     }
 
-    public boolean isGlobal() {
-        Bundle bundle = getArguments();
-        return bundle == null || bundle.getBoolean(KEY_SET_GLOBAL, true);
-    }
-
     public boolean isDisplayIconNotification() {
         return true;
     }
@@ -284,10 +287,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public int getNavigationBottomId() {
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            return bundle.getInt(KEY_SET_BOTTOM_NAVIGATION_ID, 0);
-        }
         return 0;
     }
 
@@ -312,7 +311,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     protected boolean isRetainState() {
-        return false;
+        return true;
     }
 
     protected Context getActivityContext() {
@@ -372,5 +371,16 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
                 getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             }
         }
+    }
+
+    public void setReloadData(boolean reloadData) {
+        isReloadData = reloadData;
+    }
+
+    public MainActivity getMainActivity() {
+        if (mActivity != null && mActivity instanceof MainActivity) {
+            return (MainActivity) mActivity;
+        }
+        return null;
     }
 }

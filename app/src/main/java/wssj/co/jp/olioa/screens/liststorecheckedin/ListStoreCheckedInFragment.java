@@ -57,6 +57,11 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
     }
 
     @Override
+    public int getNavigationBottomId() {
+        return R.id.navigation_list_store;
+    }
+
+    @Override
     protected int getResourceLayout() {
         return R.layout.fragment_list_store_checked_in;
     }

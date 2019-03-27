@@ -3,7 +3,6 @@ package wssj.co.jp.olioa.screens;
 import android.os.Bundle;
 import android.view.View;
 
-import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.base.IView;
 
 public interface IMainView extends IView {
@@ -50,8 +49,6 @@ public interface IMainView extends IView {
 
     int FRAGMENT_TERM_OF_SERVICE = 25;
 
-    int FRAGMENT_NOTIFICATION_FOR_SERVICE_COMPANY = 26;
-
     int FRAGMENT_QA_DETAIL = 27;
 
     int FRAGMENT_CHAT = 29;
@@ -59,10 +56,6 @@ public interface IMainView extends IView {
     int FRAGMENT_COMMENT = 36;
 
     int FRAGMENT_TIMELINE = 37;
-
-    int FRAGMENT_PUSH_NOTIFICATION_PAGER = 38;
-
-    int FRAGMENT_LIST_SERVICE_COMPANY = 39;
 
     int FRAGMENT_STORE_FOLLOW = 40;
 
@@ -75,10 +68,6 @@ public interface IMainView extends IView {
     int FRAGMENT_HOME = 44;
 
     int FRAGMENT_CHAT_WRAPPER = 45;
-
-    int FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER = 46;
-
-    int FRAGMENT_PUSH_NOTIFICATION_PAGER_NAVIGATION = 47;
 
     int FRAGMENT_TIMELINE_DETAIL = 48;
 
@@ -118,15 +107,9 @@ public interface IMainView extends IView {
 
     void logout();
 
-    void showListPushNotification(PushNotificationResponse response);
-
     void showToast(String message);
 
     void displayErrorMessage(String message);
-
-    void onMappingUserStoreFastSuccess();
-
-    void onMappingUserStoreFastFailure(String message);
 
     void displayScanCodeScreen();
 }

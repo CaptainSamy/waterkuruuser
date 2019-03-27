@@ -182,11 +182,18 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     }
 
     @Override
-    public void showDialog(String message) {
+    public void showDialog(final String message) {
         DialogMessage dialogMessage = new DialogMessage(getActivityContext(), new DialogMessage.IOnClickListener() {
 
             @Override
             public void buttonYesClick() {
+                String success = getString(R.string.check_in_success);
+//                if (success.equals(message)) {
+//                    if (getMainActivity() != null) {
+//                        getMainActivity().onReloadData(IMainView.FRAGMENT_LIST_STORE_CHECKED_IN);
+//                    }
+//                }
+                getMainActivity().onReloadData(IMainView.FRAGMENT_LIST_STORE_CHECKED_IN);
                 backToPreviousScreen();
             }
         });

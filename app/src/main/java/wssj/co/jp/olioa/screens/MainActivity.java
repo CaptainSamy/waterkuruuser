@@ -24,22 +24,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
-
-import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
 import wssj.co.jp.olioa.App;
 import wssj.co.jp.olioa.BuildConfig;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.database.DBManager;
-import wssj.co.jp.olioa.model.entities.PushNotification;
-import wssj.co.jp.olioa.model.firebase.NotificationMessage;
-import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.chatrealtime.chatdeatail.ChatRealTimeFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
+import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreCheckedInFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
-import wssj.co.jp.olioa.screens.pushobject.ObjectPush;
+import wssj.co.jp.olioa.screens.timeline.timelinetotal.TimeLineFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.FragmentBackStackManager;
 import wssj.co.jp.olioa.utils.Logger;
@@ -47,10 +43,9 @@ import wssj.co.jp.olioa.utils.ReflectionUtils;
 import wssj.co.jp.olioa.utils.VolleySequence;
 import wssj.co.jp.olioa.widget.CenterTitleToolbar;
 import wssj.co.jp.olioa.widget.EnhancedBottomNavigationView;
-import wssj.co.jp.olioa.widget.ILoadMoreListView;
 
 public class MainActivity extends AppCompatActivity
-        implements IMainView, IActivityCallback, BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener, ILoadMoreListView {
+        implements IMainView, IActivityCallback, BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 
     public static final String ACTION_LOGOUT = BuildConfig.APPLICATION_ID + ".LOGOUT";
 
@@ -74,8 +69,6 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentBackStackManager mFragmentBackStackManager;
 
-//    private DialogNotification mDialogNotification;
-
     boolean isRequestFirstNotification = true;
 
     private TextView mTextUserName;
@@ -83,6 +76,12 @@ public class MainActivity extends AppCompatActivity
     private LogoutReceiver mLogoutReceiver;
 
     private boolean mIsAppStart;
+
+    private ListStoreCheckedInFragment mListStoreCheckInFragment;
+
+    private TimeLineFragment mTimelinFragment;
+
+    private ChatRealTimeFragment mChatFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,9 +96,9 @@ public class MainActivity extends AppCompatActivity
         App.getInstance().setActivity(this);
         mPresenter = new MainPresenter(this);
         setupFragmentBackStackManager();
+        mPresenter.displaySplashScreen();
         initView();
         initAction();
-        checkStartNotification(getIntent());
         Fabric.with(this, new Crashlytics());
         DBManager.getInstance().init(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "broadcastReceiver");
-            mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
+            // mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
         }
     };
 
@@ -138,28 +137,6 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
         imageNotification = (ImageView) findViewById(R.id.iconTest);
-
-//        ViewTreeObserver vto = imageNotification.getViewTreeObserver();
-//        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//
-//            @Override
-//            public void onGlobalLayout() {
-//                if (mDialogNotification == null) {
-//                    mDialogNotification = new DialogNotification(MainActivity.this, imageNotification, MainActivity.this);
-//                    mDialogNotification.setmCallback(new DialogNotification.IOnItemClick() {
-//
-//                        @Override
-//                        public void onItemClick(NotificationMessage message) {
-//                        }
-//
-//                        @Override
-//                        public void onRefresh() {
-//                            mPresenter.getListPushNotification(0, Constants.LIMIT);
-//                        }
-//                    });
-//                }
-//            }
-//        });
     }
 
     private void initAction() {
@@ -186,17 +163,6 @@ public class MainActivity extends AppCompatActivity
                 mPresenter.onOpenDrawableLayout();
             }
         });
-    }
-
-    @Override
-    public void showListPushNotification(PushNotificationResponse response) {
-        List<PushNotification> list = response.getListPushNotification();
-        int totalPage = response.getTotalPage();
-    }
-
-    @Override
-    public void onLoadMore(int page) {
-        mPresenter.getListPushNotification(page, Constants.LIMIT);
     }
 
     @Override
@@ -256,13 +222,13 @@ public class MainActivity extends AppCompatActivity
         if (mCurrentFragment != null) {
             int menuId = item.getItemId();
             switch (menuId) {
-                case R.id.navigation_stamp:
+                case R.id.navigation_list_store:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHECKED_IN, null);
                     return true;
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
                     return true;
-                case R.id.navigation_another:
+                case R.id.navigation_chat:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_REALTIME, null);
                     return true;
                 case R.id.menu_memo:
@@ -346,19 +312,28 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void switchScreen(int screenId, boolean hasAnimation,
                              boolean addToBackStack, Bundle bundle) {
-        boolean retain;
+
         switch (screenId) {
             case FRAGMENT_LIST_STORE_CHECKED_IN:
-            case FRAGMENT_CHAT_WRAPPER:
+                if (mListStoreCheckInFragment == null) {
+                    mListStoreCheckInFragment = new ListStoreCheckedInFragment();
+                }
+                replaceFragment(mListStoreCheckInFragment, hasAnimation, addToBackStack);
+                return;
             case FRAGMENT_TIMELINE:
-            case FRAGMENT_HOME:
-                retain = true;
-                break;
-            default:
-                retain = false;
-                break;
+                if (mTimelinFragment == null) {
+                    mTimelinFragment = new TimeLineFragment();
+                }
+                replaceFragment(mTimelinFragment, hasAnimation, addToBackStack);
+                return;
+            case FRAGMENT_CHAT_REALTIME:
+                if (mChatFragment == null) {
+                    mChatFragment = ChatRealTimeFragment.newInstance(bundle);
+                }
+                replaceFragment(mChatFragment, hasAnimation, addToBackStack);
+                return;
         }
-        replaceFragment(FragmentFactory.getFragment(screenId, bundle, retain), hasAnimation, addToBackStack);
+        replaceFragment(FragmentFactory.getFragment(screenId, bundle), hasAnimation, addToBackStack);
     }
 
     @Override
@@ -387,117 +362,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack) {
         displayScreen(screenId, hasAnimation, addToBackStack, null);
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                displayScreen(screenId, hasAnimation, addToBackStack, null);
-//            }
-//        }, Constants.DELAY_TIME_TRANSFER_FRAGMENT);
     }
 
     @Override
     public void displayScreen(final int screenId, final boolean hasAnimation,
                               final boolean addToBackStack, final Bundle bundle) {
         switchScreen(screenId, hasAnimation, addToBackStack, bundle);
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                switchScreen(screenId, hasAnimation, addToBackStack, bundle);
-//            }
-//        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
     }
 
     @Override
     public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack, final Bundle bundle, final View sharedElement) {
         switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
-//        new Handler().postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
-//            }
-//        }, Constants.TIME_DELAY_CLOSED_NAVIGATION_MENU);
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        checkStartNotification(intent);
-    }
-
-    private void checkStartNotification(Intent intent) {
-        if (intent != null) {
-            Bundle b = intent.getExtras();
-            if (b != null && !TextUtils.isEmpty(b.getString("push_id"))) {
-                NotificationMessage notificationMessage = getItemPush(b);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, notificationMessage);
-                bundle.putBoolean(PushNotificationDetailFragment.FLAG_FROM_ACTIVITY, true);
-                switch (notificationMessage.getAction()) {
-                    case Constants.PushNotification.TYPE_TIME_LINE:
-                        switchScreen(FRAGMENT_TIMELINE, true, true, null);
-                        break;
-                    default:
-                        switchScreen(FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
-                }
-
-            } else if (intent.getScheme() != null && intent.getScheme().equals("iungoenterprise")) {
-                final String storeCode = intent.getData().getQueryParameter("code");
-                if (storeCode.contains(Constants.KEY_FAST)) {
-                    String code = storeCode.replace(Constants.KEY_FAST, Constants.EMPTY_STRING);
-                    mPresenter.mappingUserWithStoreFast(code);
-                } else {
-                    ObjectPush objectPush = new ObjectPush(storeCode);
-                    Gson gson = new Gson();
-                    String json = gson.toJson(objectPush);
-                    mPresenter.savePush(json);
-                    if (mPresenter.isLogin()) {
-                        mPresenter.mappingUserWithStore();
-                    } else {
-                        switchScreen(FRAGMENT_INTRODUCTION_SCREEN, true, true, null);
-                    }
-                }
-            } else if (!mIsAppStart) {
-                mPresenter.displaySplashScreen();
-            }
-        }
-    }
-
-    public NotificationMessage getItemPush(Bundle b) {
-        String pushId = b.getString("push_id");
-        String title = b.getString("title");
-        String content = b.getString("body");
-        String action = b.getString("type");
-        int stampId = 0;
-        if (!TextUtils.isEmpty(action)) {
-            String[] splitAction = action.split(Constants.SPLIT);
-            if (splitAction != null) {
-                action = splitAction[0];
-                if (splitAction.length == 2) {
-                    try {
-                        stampId = Integer.parseInt(splitAction[1]);
-                    } catch (NumberFormatException e) {
-                        Logger.d(TAG, "NumberFormatException");
-                    }
-                }
-            }
-        }
-        return new NotificationMessage(Long.parseLong(pushId), title, content, action, stampId);
-    }
-
-    @Override
-    public void onMappingUserStoreFastSuccess() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(BaseFragment.KEY_SET_BOTTOM_NAVIGATION_ID, R.id.navigation_stamp);
-        bundle.putBoolean(FragmentFactory.KEY_NEED_OVERRIDE_RETAIN_GLOBAL, true);
-        bundle.putBoolean(FragmentFactory.KEY_VALUE_OVERRIDE_RETAIN_GLOBAL, false);
-        switchScreen(FRAGMENT_LIST_SERVICE_COMPANY_WRAPPER, true, true, bundle);
-    }
-
-    @Override
-    public void onMappingUserStoreFastFailure(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -525,36 +400,34 @@ public class MainActivity extends AppCompatActivity
         Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
             disablePushUpView();
-            if (fragment.isGlobal()) {
-                if (fragment.isEnableDrawableLayout()) {
-                    mPresenter.onEnableDrawerLayout();
-                } else {
-                    mPresenter.onDisableDrawerLayout();
-                }
-                mCurrentFragment = fragment;
-                mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
-                int navigationBottomId = fragment.getNavigationBottomId();
-                if (navigationBottomId != 0) {
-                    mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
-                }
-                mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
-                boolean isShowNavigationButton = fragment.isDisplayBackButton();
-                if (isShowNavigationButton) {
-                    mToolbar.setNavigationIcon(R.drawable.ic_back);
-                } else {
-                    mToolbar.setNavigationIcon(null);
-                }
-                mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
-                mToolbar.setShowIconNotificationButton(fragment.isDisplayIconNotification());
-                mToolbar.setTitleActionBar(fragment.getAppBarTitle());
-                mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
-                int actionBarColor = fragment.getActionBarColor();
-                mToolbar.setBackgroundColor(actionBarColor);
-                if (fragment.getNavigationMenuId() == 0) {
-                    mNavigationView.setCheckedItem(R.id.menu_visible);
-                } else {
-                    mNavigationView.setCheckedItem(fragment.getNavigationMenuId());
-                }
+            if (fragment.isEnableDrawableLayout()) {
+                mPresenter.onEnableDrawerLayout();
+            } else {
+                mPresenter.onDisableDrawerLayout();
+            }
+            mCurrentFragment = fragment;
+            mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
+            int navigationBottomId = fragment.getNavigationBottomId();
+            if (navigationBottomId != 0) {
+                mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
+            }
+            mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
+            boolean isShowNavigationButton = fragment.isDisplayBackButton();
+            if (isShowNavigationButton) {
+                mToolbar.setNavigationIcon(R.drawable.ic_back);
+            } else {
+                mToolbar.setNavigationIcon(null);
+            }
+            mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
+            mToolbar.setShowIconNotificationButton(fragment.isDisplayIconNotification());
+            mToolbar.setTitleActionBar(fragment.getAppBarTitle());
+            mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
+            int actionBarColor = fragment.getActionBarColor();
+            mToolbar.setBackgroundColor(actionBarColor);
+            if (fragment.getNavigationMenuId() == 0) {
+                mNavigationView.setCheckedItem(R.id.menu_visible);
+            } else {
+                mNavigationView.setCheckedItem(fragment.getNavigationMenuId());
             }
         }
     }
@@ -594,6 +467,16 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mLogoutReceiver);
 
+    }
+
+    public void onReloadData(int fragmentId) {
+        switch (fragmentId) {
+            case IMainView.FRAGMENT_LIST_STORE_CHECKED_IN:
+                if (mListStoreCheckInFragment != null) {
+                    mListStoreCheckInFragment.setReloadData(true);
+                }
+                break;
+        }
     }
 
     private class LogoutReceiver extends BroadcastReceiver {

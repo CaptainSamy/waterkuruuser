@@ -241,6 +241,6 @@ public class ManageStampFragment extends BaseFragment<IManageStampView, ManageSt
 
     @Override
     public void displayMyStampScreen() {
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_SERVICE_COMPANY, true, true);
+//        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_SERVICE_COMPANY, true, true);
     }
 }

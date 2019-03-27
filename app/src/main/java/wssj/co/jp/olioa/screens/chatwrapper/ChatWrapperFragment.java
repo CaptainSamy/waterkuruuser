@@ -50,7 +50,7 @@ public class ChatWrapperFragment extends SwitcherFragment<IChatWrapperView, Chat
 
     @Override
     public int getNavigationBottomId() {
-        return R.id.navigation_another;
+        return R.id.navigation_chat;
     }
 
     @Override
