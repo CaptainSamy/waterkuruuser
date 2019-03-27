@@ -253,34 +253,6 @@ public class AuthModel extends BaseModel {
         user.setSex(sex);
         user.setType(1);
         getApi().registerUser(user).getAsyncResponse(callback);
-
-
-//        Request registerRequest = APICreator.getRegisterAWSRequest(userId, password, name, email, age, sex, typeLogin, token, new Response.Listener<RegisterResponse>() {
-//
-//            @Override
-//            public void onResponse(RegisterResponse response) {
-//                Logger.d(TAG, "#register onResponse ");
-//                if (response.isSuccess()) {
-//                    callback.onRegisterSuccess(response.getData(), response.getMessage());
-//                } else {
-//                    ErrorMessage errorMessage = new ErrorMessage(response.getMessage());
-//                    callback.onRegisterFailure(errorMessage);
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Logger.d(TAG, "#register onErrorResponse");
-//                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-//                if (errorResponse != null) {
-//                    callback.onRegisterFailure(new ErrorMessage(errorResponse.getMessage()));
-//                } else {
-//                    callback.onRegisterFailure(new ErrorMessage(getStringResource(R.string.network_error)));
-//                }
-//            }
-//        });
-//        VolleySequence.getInstance().addRequest(registerRequest);
     }
 
     public void validateResetPassword(String userId, IOnResetPasswordCallback callback) {

@@ -9,7 +9,6 @@ import wssj.co.jp.olioa.model.entities.AccessToken;
 import wssj.co.jp.olioa.model.firebase.FirebaseModel;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.screens.base.FragmentPresenter;
-import wssj.co.jp.olioa.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
@@ -40,7 +39,6 @@ class LoginPresenter extends FragmentPresenter<ILoginView> implements AuthModel.
     @Override
     public void validateSuccess(final String userId, final String password) {
         getView().showProgress();
-        final String encryptPassword = Utils.toMD5(password);
         getAuthModel().loginUser(userId, password, new APICallback<AccessToken>() {
 
             @Override

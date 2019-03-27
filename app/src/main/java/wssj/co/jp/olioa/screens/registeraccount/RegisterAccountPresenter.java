@@ -8,7 +8,6 @@ import wssj.co.jp.olioa.model.entities.AccessToken;
 import wssj.co.jp.olioa.model.firebase.FirebaseModel;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.screens.base.FragmentPresenter;
-import wssj.co.jp.olioa.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 10/5/2017.
@@ -32,9 +31,8 @@ class RegisterAccountPresenter extends FragmentPresenter<IRegisterAccountView> {
 
             @Override
             public void validateSuccess(String userName, String password, String name, String email, int age, int sex) {
-                String md5Password = Utils.toMD5(password);
-                onRegisterAccount(userName, md5Password, name, email, age, sex);
-
+//                String md5Password = Utils.toMD5(password);
+                onRegisterAccount(userName, password, name, email, age, sex);
             }
 
             @Override

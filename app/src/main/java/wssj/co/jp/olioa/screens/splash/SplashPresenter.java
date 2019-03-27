@@ -33,7 +33,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
     public void onCreate() {
         final String token = getShareModel().getToken();
         if (TextUtils.isEmpty(token)) {
-            getView().displayScreen(IMainView.FRAGMENT_LOGIN);
+            getView().displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN);
         } else {
             APIService.getInstance().addAuthorizationHeader(token);
             getView().displayScreen(IMainView.FRAGMENT_TIMELINE);

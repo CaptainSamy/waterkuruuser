@@ -2,22 +2,16 @@ package wssj.co.jp.olioa.screens.splash;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-
-import com.twitter.sdk.android.core.DefaultLogger;
-import com.twitter.sdk.android.core.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-import com.twitter.sdk.android.core.TwitterConfig;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.auth.CheckVersionAppResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.splash.dialog.DialogAskUpdate;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.widget.dialog.ProgressLayout;
 import wssj.co.jp.olioa.widget.dialog.SpotsDialog;
-import wssj.co.jp.olioa.screens.splash.dialog.DialogAskUpdate;
 
 /**
  * Created by Nguyen Huu Ta on 5/6/2017.
@@ -83,12 +77,12 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     @Override
     protected void initData() {
-        TwitterConfig config = new TwitterConfig.Builder(getActivityContext())
-                .logger(new DefaultLogger(Log.DEBUG))
-                .twitterAuthConfig(new TwitterAuthConfig(Constants.Introduction.TWITTER_KEY, Constants.Introduction.TWITTER_SECRET))
-                .debug(true)
-                .build();
-        Twitter.initialize(config);
+//        TwitterConfig config = new TwitterConfig.Builder(getActivityContext())
+//                .logger(new DefaultLogger(Log.DEBUG))
+//                .twitterAuthConfig(new TwitterAuthConfig(Constants.Introduction.TWITTER_KEY, Constants.Introduction.TWITTER_SECRET))
+//                .debug(true)
+//                .build();
+//        Twitter.initialize(config);
         getPresenter().onCreate();
     }
 
