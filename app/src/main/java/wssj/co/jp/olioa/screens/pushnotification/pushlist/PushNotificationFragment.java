@@ -32,6 +32,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     public static final String ARG_STORE_ID = "storeID";
 
+    public static final String ARG_IMAGE = "storeImage";
+
     private SwipeRefreshLayout mRefreshLayout;
 
     private PushNotificationAdapter mAdapter;
@@ -43,6 +45,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     private List<PushNotification> mListNotification;
 
     private int storeId;
+
+    private String logoStore;
 
     public static PushNotificationFragment newInstance(Bundle args) {
 
@@ -99,8 +103,9 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         Bundle bundle = getArguments();
         if (bundle != null) {
             storeId = bundle.getInt(ARG_STORE_ID);
+            logoStore = bundle.getString(ARG_IMAGE);
             mListNotification = new ArrayList<>();
-            mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+            mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification, logoStore);
             getPresenter().getListPushNotification(storeId, 0);
             mAdapter.setListPushTemp(mListNotification);
             mListView.setAdapter(mAdapter);

@@ -88,6 +88,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
                 StoreInfo storeInfo = (StoreInfo) parent.getItemAtPosition(position);
                 Bundle bundle = new Bundle();
                 bundle.putInt(PushNotificationFragment.ARG_STORE_ID, storeInfo.getId());
+                bundle.putString(PushNotificationFragment.ARG_IMAGE, storeInfo.getLogo());
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION, true, true, bundle);
             }
         });

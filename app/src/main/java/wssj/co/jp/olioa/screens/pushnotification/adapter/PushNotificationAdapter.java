@@ -35,9 +35,12 @@ public class PushNotificationAdapter extends BaseAdapter {
 
     private boolean mIsEndOfPage;
 
-    public PushNotificationAdapter(Context context, List<PushNotification> objects) {
+    private String logoStore;
+
+    public PushNotificationAdapter(Context context, List<PushNotification> objects, String logoStore) {
         mContext = context;
         mListPush = objects;
+        this.logoStore = logoStore;
         mListPushTemp = new ArrayList<>();
     }
 
@@ -69,7 +72,7 @@ public class PushNotificationAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.fillDataToView(mContext, getItem(position));
+        viewHolder.fillDataToView(mContext, getItem(position), logoStore);
         if (position == (getCount() - 1) && mCallback != null && mIsAllowOnLoadMore && !mIsEndOfPage && getCount() >= Constants.LIMIT) {
             mCallback.onEndOfListView();
         }
@@ -88,9 +91,9 @@ public class PushNotificationAdapter extends BaseAdapter {
             mImageCompany = (CircleImageView) root.findViewById(R.id.iconNotification);
         }
 
-        void fillDataToView(final Context context, final PushNotification notificationMessage) {
+        void fillDataToView(final Context context, final PushNotification notificationMessage, String logoStore) {
             mTitle.setText(notificationMessage.getTitle());
-            Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany, R.drawable.logo_app);
+            Utils.fillImage(context, logoStore, mImageCompany, R.drawable.logo_app);
             long timeSendPush = notificationMessage.getSendTime();
             if (timeSendPush != 0) {
                 String time = Utils.distanceTimes(timeSendPush);
