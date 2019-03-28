@@ -1,5 +1,8 @@
 package wssj.co.jp.olioa.model.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -8,7 +11,7 @@ import java.io.Serializable;
  * Created by tuanle on 6/1/17.
  */
 
-public class PushNotification implements Serializable {
+public class PushNotification implements Serializable, Parcelable {
 
     @SerializedName("id")
     private int mId;
@@ -48,6 +51,32 @@ public class PushNotification implements Serializable {
         mStatus = status;
         mShortDesc = shortDesc;
     }
+
+    protected PushNotification(Parcel in) {
+        mId = in.readInt();
+        mManagerUserId = in.readInt();
+        mTitle = in.readString();
+        mShortDesc = in.readString();
+        mBody = in.readString();
+        mSound = in.readString();
+        mBadge = in.readString();
+        mSendTime = in.readLong();
+        mStatus = in.readInt();
+        logo = in.readString();
+    }
+
+    public static final Creator<PushNotification> CREATOR = new Creator<PushNotification>() {
+
+        @Override
+        public PushNotification createFromParcel(Parcel in) {
+            return new PushNotification(in);
+        }
+
+        @Override
+        public PushNotification[] newArray(int size) {
+            return new PushNotification[size];
+        }
+    };
 
     public void setManagerUserId(int mManagerUserId) {
         this.mManagerUserId = mManagerUserId;
@@ -95,5 +124,24 @@ public class PushNotification implements Serializable {
 
     public String getLogo() {
         return logo;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeInt(mManagerUserId);
+        dest.writeString(mTitle);
+        dest.writeString(mShortDesc);
+        dest.writeString(mBody);
+        dest.writeString(mSound);
+        dest.writeString(mBadge);
+        dest.writeLong(mSendTime);
+        dest.writeInt(mStatus);
+        dest.writeString(logo);
     }
 }

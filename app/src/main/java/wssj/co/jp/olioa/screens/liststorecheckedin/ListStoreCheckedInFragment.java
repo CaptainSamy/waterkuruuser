@@ -90,6 +90,7 @@ public class ListStoreCheckedInFragment extends BaseFragment<IListStoreCheckedIn
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showLog("#setOnItemClickListener");
                 StoreInfo storeInfo = (StoreInfo) parent.getItemAtPosition(position);
                 Bundle bundle = new Bundle();
                 bundle.putInt(PushNotificationFragment.ARG_STORE_ID, storeInfo.getId());

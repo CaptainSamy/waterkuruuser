@@ -318,18 +318,21 @@ public class MainActivity extends AppCompatActivity
                 if (mListStoreCheckInFragment == null) {
                     mListStoreCheckInFragment = new ListStoreCheckedInFragment();
                 }
+                clearBackStack();
                 replaceFragment(mListStoreCheckInFragment, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_TIMELINE:
                 if (mTimelinFragment == null) {
                     mTimelinFragment = new TimeLineFragment();
                 }
+                clearBackStack();
                 replaceFragment(mTimelinFragment, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_CHAT_REALTIME:
                 if (mChatFragment == null) {
                     mChatFragment = ChatRealTimeFragment.newInstance(bundle);
                 }
+                clearBackStack();
                 replaceFragment(mChatFragment, hasAnimation, addToBackStack);
                 return;
         }
@@ -422,8 +425,7 @@ public class MainActivity extends AppCompatActivity
             mToolbar.setShowIconNotificationButton(fragment.isDisplayIconNotification());
             mToolbar.setTitleActionBar(fragment.getAppBarTitle());
             mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
-            int actionBarColor = fragment.getActionBarColor();
-            mToolbar.setBackgroundColor(actionBarColor);
+            mToolbar.setBackgroundColor(fragment.getActionBarColor());
             if (fragment.getNavigationMenuId() == 0) {
                 mNavigationView.setCheckedItem(R.id.menu_visible);
             } else {

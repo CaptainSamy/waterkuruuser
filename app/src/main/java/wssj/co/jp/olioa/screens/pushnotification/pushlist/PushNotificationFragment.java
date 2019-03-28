@@ -18,6 +18,7 @@ import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
+import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.widget.ILoadMoreListView;
 import wssj.co.jp.olioa.widget.LoadMoreListView;
 
@@ -45,8 +46,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     private List<PushNotification> mListNotification;
 
     private int storeId;
-
-    private String logoStore;
 
     public static PushNotificationFragment newInstance(Bundle args) {
 
@@ -81,11 +80,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
-    public boolean isDisplayBottomNavigationMenu() {
-        return false;
-    }
-
-    @Override
     protected IPushNotificationListView onCreateView() {
         return this;
     }
@@ -103,7 +97,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         Bundle bundle = getArguments();
         if (bundle != null) {
             storeId = bundle.getInt(ARG_STORE_ID);
-            logoStore = bundle.getString(ARG_IMAGE);
+            String logoStore = bundle.getString(ARG_IMAGE);
             mListNotification = new ArrayList<>();
             mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification, logoStore);
             getPresenter().getListPushNotification(storeId, 0);
@@ -122,10 +116,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
-//                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+                PushNotification message = (PushNotification) parent.getAdapter().getItem(position);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });
     }

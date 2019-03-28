@@ -35,9 +35,9 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public static final String KEY_SET_BOTTOM_NAVIGATION_ID = "KEY_SET_BOTTOM_NAVIGATION_ID";
 
-    private static final String TAG = "BaseFragment";
+    private String TAG = "BaseFragment";
 
-    protected static final String KEY_SET_GLOBAL = TAG + "_KEY_SET_GLOBAL";
+    protected static final String KEY_SET_GLOBAL = "BaseFragment" + "_KEY_SET_GLOBAL";
 
     private IActivityCallback mActivityCallback;
 
@@ -62,7 +62,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     @Override
     public void onAttach(Activity activity) {
-        Logger.i(TAG, "#onAttach: " + getInternalLogTag());
+        TAG = getLogTag();
+        Logger.i(TAG, "#onAttach" + getInternalLogTag());
         super.onAttach(activity);
         if (activity instanceof IActivityCallback) {
             mActivity = activity;
@@ -77,7 +78,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Logger.i(TAG, "#onCreate: " + getInternalLogTag());
+        Logger.i(TAG, "#onCreate" + getInternalLogTag());
         super.onCreate(savedInstanceState);
         mPresenter.onFragmentCreate();
     }
@@ -85,7 +86,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     @Nullable
     @Override
     public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Logger.i(TAG, "#onCreateView: " + getInternalLogTag());
+        Logger.i(TAG, "#onCreateView" + getInternalLogTag());
         mPresenter.onFragmentCreateView();
         mActivityCallback.onFragmentResumed(this);
         mProgressDialog = new ProgressDialog(mActivity);
@@ -116,28 +117,28 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Logger.i(TAG, "#onViewCreated: " + getInternalLogTag());
+        Logger.i(TAG, "#onViewCreated" + getInternalLogTag());
         super.onViewCreated(view, savedInstanceState);
         mPresenter.onFragmentViewCreated();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Logger.i(TAG, "#onActivityCreated: " + getInternalLogTag());
+        Logger.i(TAG, "#onActivityCreated" + getInternalLogTag());
         super.onActivityCreated(savedInstanceState);
         mPresenter.onActivityCreated();
     }
 
     @Override
     public void onStart() {
-        Logger.i(TAG, "#onStart: " + getInternalLogTag());
+        Logger.i(TAG, "#onStart" + getInternalLogTag());
         super.onStart();
         mPresenter.onFragmentStart();
     }
 
     @Override
     public void onResume() {
-        Logger.i(TAG, "#onResume: " + getInternalLogTag());
+        Logger.i(TAG, "#onResume" + getInternalLogTag());
         super.onResume();
         mPresenter.onFragmentResume();
         if (isReloadData) {
@@ -148,7 +149,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     @Override
     public void onPause() {
-        Logger.i(TAG, "#onPause: " + getInternalLogTag());
+        Logger.i(TAG, "#onPause" + getInternalLogTag());
         super.onPause();
         InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -164,28 +165,28 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     @Override
     public void onStop() {
-        Logger.i(TAG, "#onStop: " + getInternalLogTag());
+        Logger.i(TAG, "#onStop" + getInternalLogTag());
         super.onStop();
         mPresenter.onFragmentStop();
     }
 
     @Override
     public void onDestroyView() {
-        Logger.i(TAG, "#onDestroyView: " + getInternalLogTag());
+        Logger.i(TAG, "#onDestroyView" + getInternalLogTag());
         super.onDestroyView();
         mPresenter.onFragmentDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        Logger.i(TAG, "#onDestroy: " + getInternalLogTag());
+        Logger.i(TAG, "#onDestroy" + getInternalLogTag());
         super.onDestroy();
         mPresenter.onFragmentDestroy();
     }
 
     @Override
     public void onDetach() {
-        Logger.i(TAG, "#onDetach: " + getInternalLogTag());
+        Logger.i(TAG, "#onDetach" + getInternalLogTag());
         super.onDetach();
         mIsAttached = false;
         mPresenter.onFragmentDetach();
@@ -211,7 +212,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     public void showProgress() {
         if (mProgressDialog != null && mPresenter.isViewAttached()) {
             if (getUserVisibleHint()) {
-                Logger.i(TAG, "#showProgress");
+                Logger.i(getLogTag(), "#showProgress");
                 mProgressDialog.show();
             }
         }
@@ -345,8 +346,9 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     private String getInternalLogTag() {
-        String tag = getLogTag();
-        return tag != null ? tag : getClass().getSimpleName();
+//        String tag = getLogTag();
+//        return tag != null ? tag : getClass().getSimpleName();
+        return "";
     }
 
     protected abstract String getLogTag();
