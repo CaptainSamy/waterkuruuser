@@ -113,7 +113,7 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     public void onGetListStoreCheckedInSuccess(List<StoreInfo> listStores) {
         mAdapter.setListStore(listStores);
     }
-\
+
     @Override
     public void onGetListStoreCheckedInFailure(String message) {
         showToast(message);
