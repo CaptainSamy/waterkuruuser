@@ -143,7 +143,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         mPresenter.onFragmentResume();
         if (isReloadData) {
             isReloadData = false;
-            mPresenter.onGetDataAgain();
+            onGetDataAgain();
         }
     }
 
@@ -338,6 +338,10 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     protected void initData() {
+    }
+
+    protected void onGetDataAgain() {
+
     }
 
     @SuppressWarnings("unchecked")

@@ -37,10 +37,6 @@ public abstract class FragmentPresenter<V extends IFragmentView> extends BasePre
     protected void onFragmentResume() {
     }
 
-    protected void onGetDataAgain() {
-
-    }
-
     protected void onFragmentPause() {
     }
 

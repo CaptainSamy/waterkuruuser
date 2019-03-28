@@ -218,7 +218,7 @@
     <string name="dialog_button_ok">はい</string>
     <string name="dialog_button_late">あとでアップデートする</string>
 
-    <!--Chat Fragment-->
+    <!--ChatMessage Fragment-->
     <string name="title_screen_store_follow">チャット</string>
     <string name="title_screen_chat">チェット</string>
     <string name="input_content_chat">メッセージを入力してください。</string>

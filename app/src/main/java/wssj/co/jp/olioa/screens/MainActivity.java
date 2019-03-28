@@ -31,9 +31,9 @@ import wssj.co.jp.olioa.BuildConfig;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
-import wssj.co.jp.olioa.screens.chatrealtime.chatdeatail.ChatRealTimeFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
-import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreCheckedInFragment;
+import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
+import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.screens.timeline.timelinetotal.TimeLineFragment;
 import wssj.co.jp.olioa.utils.Constants;
@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = "MainActivity";
 
     private EnhancedBottomNavigationView mBottomNavigationView;
+
+    private View mLineBottom;
 
     private BaseFragment mCurrentFragment;
 
@@ -77,11 +79,11 @@ public class MainActivity extends AppCompatActivity
 
     private boolean mIsAppStart;
 
-    private ListStoreCheckedInFragment mListStoreCheckInFragment;
+    private ListStorePushFragment mListStorePushFragment;
 
-    private TimeLineFragment mTimelinFragment;
+    private TimeLineFragment mTimelineFragment;
 
-    private ChatRealTimeFragment mChatFragment;
+    private ListStoreChatFragment mListStoreChatFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +131,7 @@ public class MainActivity extends AppCompatActivity
         mTextUserName = (TextView) header.findViewById(R.id.textUserName);
         mNavigationView.setItemIconTintList(null);
         mBottomNavigationView = (EnhancedBottomNavigationView) findViewById(R.id.navigation);
+        mLineBottom = findViewById(R.id.lineBelow);
         mBottomNavigationView.setItemIconTintList(null);
         ReflectionUtils.setBottomNavigationViewShiftingMode(mBottomNavigationView, false);
         mToolbar = (CenterTitleToolbar) findViewById(R.id.tool_bar);
@@ -222,14 +225,14 @@ public class MainActivity extends AppCompatActivity
         if (mCurrentFragment != null) {
             int menuId = item.getItemId();
             switch (menuId) {
-                case R.id.navigation_list_store:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHECKED_IN, null);
+                case R.id.navigation_push:
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_PUSH, null);
                     return true;
                 case R.id.navigation_timeline:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
                     return true;
                 case R.id.navigation_chat:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_CHAT_REALTIME, null);
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHAT, null);
                     return true;
                 case R.id.menu_memo:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
@@ -314,26 +317,26 @@ public class MainActivity extends AppCompatActivity
                              boolean addToBackStack, Bundle bundle) {
 
         switch (screenId) {
-            case FRAGMENT_LIST_STORE_CHECKED_IN:
-                if (mListStoreCheckInFragment == null) {
-                    mListStoreCheckInFragment = new ListStoreCheckedInFragment();
+            case FRAGMENT_LIST_STORE_PUSH:
+                if (mListStorePushFragment == null) {
+                    mListStorePushFragment = new ListStorePushFragment();
                 }
                 clearBackStack();
-                replaceFragment(mListStoreCheckInFragment, hasAnimation, addToBackStack);
+                replaceFragment(mListStorePushFragment, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_TIMELINE:
-                if (mTimelinFragment == null) {
-                    mTimelinFragment = new TimeLineFragment();
+                if (mTimelineFragment == null) {
+                    mTimelineFragment = new TimeLineFragment();
                 }
                 clearBackStack();
-                replaceFragment(mTimelinFragment, hasAnimation, addToBackStack);
+                replaceFragment(mTimelineFragment, hasAnimation, addToBackStack);
                 return;
-            case FRAGMENT_CHAT_REALTIME:
-                if (mChatFragment == null) {
-                    mChatFragment = ChatRealTimeFragment.newInstance(bundle);
+            case FRAGMENT_LIST_STORE_CHAT:
+                if (mListStoreChatFragment == null) {
+                    mListStoreChatFragment = new ListStoreChatFragment();
                 }
                 clearBackStack();
-                replaceFragment(mChatFragment, hasAnimation, addToBackStack);
+                replaceFragment(mListStoreChatFragment, hasAnimation, addToBackStack);
                 return;
         }
         replaceFragment(FragmentFactory.getFragment(screenId, bundle), hasAnimation, addToBackStack);
@@ -409,7 +412,9 @@ public class MainActivity extends AppCompatActivity
                 mPresenter.onDisableDrawerLayout();
             }
             mCurrentFragment = fragment;
-            mBottomNavigationView.setVisibility(fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE);
+            int isShowBottom = fragment.isDisplayBottomNavigationMenu() ? View.VISIBLE : View.GONE;
+            mBottomNavigationView.setVisibility(isShowBottom);
+            mLineBottom.setVisibility(isShowBottom);
             int navigationBottomId = fragment.getNavigationBottomId();
             if (navigationBottomId != 0) {
                 mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
@@ -473,9 +478,9 @@ public class MainActivity extends AppCompatActivity
 
     public void onReloadData(int fragmentId) {
         switch (fragmentId) {
-            case IMainView.FRAGMENT_LIST_STORE_CHECKED_IN:
-                if (mListStoreCheckInFragment != null) {
-                    mListStoreCheckInFragment.setReloadData(true);
+            case IMainView.FRAGMENT_LIST_STORE_PUSH:
+                if (mListStorePushFragment != null) {
+                    mListStorePushFragment.setReloadData(true);
                 }
                 break;
         }

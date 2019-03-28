@@ -14,16 +14,18 @@ import android.widget.ProgressBar;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.model.chat.HistoryChatResponse;
+import wssj.co.jp.olioa.model.chat.ChatMessage;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.chat.adapter.ChatAdapter;
 import wssj.co.jp.olioa.screens.chat.dialog.DialogProfile;
+import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
 import wssj.co.jp.olioa.utils.Constants;
+import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
 import wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayout;
@@ -37,12 +39,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private static String TAG = "ChatFragment";
 
-    public static final String KEY_STORE_ID = "store_id";
-
-    public static final String KEY_STORE_NAME = "store_name";
-
-    public static final String KEY_IMAGE_STORE = "image_store";
-
     private SwipyRefreshLayout mRefreshListChat;
 
     private ListView mListViewChat;
@@ -53,13 +49,15 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private ProgressBar mProgressSendChat;
 
-    private List<HistoryChatResponse.HistoryChatData.ChatData> mListChat;
+    private List<ChatMessage> mListChat;
 
     private ChatAdapter mAdapter;
 
-    private int mStoreId;
-
     private DialogProfile mDialogProfile;
+
+    private StoreInfo storeInfo;
+
+    private String lastTime;
 
     public static ChatFragment newInstance(Bundle b) {
         ChatFragment fragment = new ChatFragment();
@@ -88,6 +86,11 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
+    public boolean isDisplayBottomNavigationMenu() {
+        return false;
+    }
+
+    @Override
     protected IChatView onCreateView() {
         return this;
     }
@@ -96,8 +99,9 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     public String getAppBarTitle() {
         String storeName = getString(R.string.title_screen_chat);
         if (getArguments() != null) {
-            storeName = getArguments().getString(KEY_STORE_NAME);
-
+            storeInfo = getArguments().getParcelable(ListStoreChatFragment.ARG_STORE_INFO);
+            if (storeInfo != null && !TextUtils.isEmpty(storeInfo.getName()))
+                storeName = storeInfo.getName();
         }
         return storeName;
     }
@@ -111,8 +115,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         mButtonSend = (ImageView) rootView.findViewById(R.id.tvSendChat);
         mProgressSendChat = (ProgressBar) rootView.findViewById(R.id.progressSendChat);
     }
-
-    private String dateOld = Constants.EMPTY_STRING;
 
     private String mContent = Constants.EMPTY_STRING;
 
@@ -149,7 +151,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                 if (!TextUtils.isEmpty(mContent)) {
                     mProgressSendChat.setVisibility(View.VISIBLE);
                     mButtonSend.setVisibility(View.GONE);
-                    getPresenter().sendChat(mStoreId, StringEscapeUtils.escapeJava(mContent));
+                    getPresenter().sendChat(storeInfo.getId(), StringEscapeUtils.escapeJava(mContent));
                 }
                 Utils.hideSoftKeyboard(getActivity());
             }
@@ -161,23 +163,11 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     private boolean isOnRefresh;
 
     @Override
-    public void onRefresh(SwipyRefreshLayoutDirection direction) {
-        if (direction != SwipyRefreshLayoutDirection.TOP) {
-            isOnRefresh = true;
-            getPresenter().getHistoryChat(mStoreId, 0);
-        } else {
-            if (mListChat != null && mListChat.size() > 0) {
-                int lastId = mListChat.get(0).getId();
-                getPresenter().getHistoryChat(mStoreId, lastId);
-            }
-        }
-    }
-
-    @Override
     protected void initData() {
         mListChat = new ArrayList<>();
         mAdapter = new ChatAdapter(getActivityContext(), mListChat);
         mAdapter.setOnClickImageStore(new ChatAdapter.IClickImageStore() {
+
             @Override
             public void onClick(int managerId) {
                 if (mDialogProfile == null) {
@@ -187,19 +177,28 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
             }
         });
         mListViewChat.setAdapter(mAdapter);
-        if (getArguments() != null) {
-            mStoreId = getArguments().getInt(KEY_STORE_ID);
-            String imageStore = getArguments().getString(KEY_IMAGE_STORE);
-            mAdapter.setImageStore(imageStore);
-            mRefreshListChat.setRefreshing(true);
-            getPresenter().getHistoryChat(mStoreId, 0);
-        }
+        mAdapter.setImageStore(storeInfo.getLogo());
+        mRefreshListChat.setRefreshing(true);
+        getPresenter().getHistoryChat(storeInfo.getId(), 0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+    }
+
+    @Override
+    public void onRefresh(SwipyRefreshLayoutDirection direction) {
+        if (direction != SwipyRefreshLayoutDirection.TOP) {
+            isOnRefresh = true;
+            getPresenter().getHistoryChat(storeInfo.getId(), 0);
+        } else {
+            if (mListChat != null && mListChat.size() > 0) {
+                long lastId = mListChat.get(0).getId();
+                getPresenter().getHistoryChat(storeInfo.getId(), (int) lastId);
+            }
+        }
     }
 
     private Handler mHandle = new Handler();
@@ -209,50 +208,49 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         @Override
         public void run() {
             mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
-            getPresenter().getHistoryChat(mStoreId, 0);
+            //getPresenter().getHistoryChat(mStoreId, 0);
         }
     };
 
     @Override
-    public void onGetHistoryChatSuccess(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
+    public void onGetHistoryChatSuccess(List<ChatMessage> history) {
         mRefreshListChat.setRefreshing(false);
         if (history != null && history.size() > 0) {
             if (isOnRefresh) {
                 isOnRefresh = false;
                 mListChat.clear();
             }
-            Collections.reverse(history);
             sortListChat(history);
             mListChat.addAll(0, history);
             mAdapter.notifyDataSetChanged();
         }
         if (mAdapter.getCount() == 0) {
             showTextNoItem(true, getString(R.string.no_conversation));
-        }else {
+        } else {
             showTextNoItem(false, null);
         }
     }
 
-    private void sortListChat(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
-        String date = Constants.EMPTY_STRING;
-        for (HistoryChatResponse.HistoryChatData.ChatData chatData : history) {
-            if (TextUtils.isEmpty(date)) {
-                date = Utils.formatDate(chatData.getTimeCreate(), "MM/dd/yyyy");
-                chatData.setDate(date);
+    private void sortListChat(List<ChatMessage> history) {
+        lastTime = Constants.EMPTY_STRING;
+        for (ChatMessage chatData : history) {
+            if (TextUtils.isEmpty(lastTime)) {
+                lastTime = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatData.getCreated());
+                chatData.setDate(lastTime);
             } else {
-                String dateTemp = Utils.formatDate(chatData.getTimeCreate(), "MM/dd/yyyy");
-                if (!TextUtils.equals(date, dateTemp)) {
-                    date = dateTemp;
+                String dateTemp = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatData.getCreated());
+                if (!TextUtils.equals(lastTime, dateTemp)) {
+                    lastTime = dateTemp;
                     chatData.setDate(dateTemp);
                 }
             }
         }
 
         if (mListChat != null) {
-            for (HistoryChatResponse.HistoryChatData.ChatData chat : mListChat) {
+            for (ChatMessage chat : mListChat) {
                 if (!TextUtils.isEmpty(chat.getDate())) {
-                    dateOld = chat.getDate();
-                    if (TextUtils.equals(date, dateOld)) {
+                    String dateOld = chat.getDate();
+                    if (TextUtils.equals(lastTime, dateOld)) {
                         chat.setDate(null);
                     }
                     break;
@@ -262,26 +260,24 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
-    public void onGetHistoryChatFailure(String message) {
-        isOnRefresh = false;
-        mRefreshListChat.setRefreshing(false);
-        if (mListChat.size() == 0) {
-            showToast(message);
-        }
-    }
-
-    @Override
-    public void onSendChatSuccess() {
+    public void onSendChatSuccess(ChatMessage chatMessage) {
         mInputChat.setText(Constants.EMPTY_STRING);
         mProgressSendChat.setVisibility(View.GONE);
         mButtonSend.setVisibility(View.VISIBLE);
-        onRefresh(SwipyRefreshLayoutDirection.BOTTOM);
+        String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
+        if (!lastTime.equals(time)) {
+            lastTime = time;
+            chatMessage.setDate(time);
+        }
+        mListChat.add(chatMessage);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onSendChatFailure(String message) {
         mProgressSendChat.setVisibility(View.GONE);
         mButtonSend.setVisibility(View.VISIBLE);
+        showToast(message);
     }
 
     private void scrollEndOfListView() {

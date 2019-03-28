@@ -73,16 +73,6 @@ public class ChatRealTimeFragment extends BaseFragment<IChatRealTimeView, ChatRe
     }
 
     @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_chat;
-    }
-
-    @Override
-    public boolean isDisplayBackButton() {
-        return false;
-    }
-
-    @Override
     protected ChatRealTimePresenter onCreatePresenter(IChatRealTimeView view) {
         return new ChatRealTimePresenter(view);
     }
@@ -145,7 +135,7 @@ public class ChatRealTimeFragment extends BaseFragment<IChatRealTimeView, ChatRe
     }
 
     private void getStoreFollow(final long id) {
-        myDatabaseReference.child("Chat").child("Conversations").child("user_" + id).addListenerForSingleValueEvent(new ValueEventListener() {
+        myDatabaseReference.child("ChatMessage").child("Conversations").child("user_" + id).addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

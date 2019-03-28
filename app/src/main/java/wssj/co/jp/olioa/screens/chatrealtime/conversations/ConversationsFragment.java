@@ -114,7 +114,7 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
             Logger.d("thangss", idStore + " " + nameStore + " " + imageStore + " " + idUser);
         }
 
-        myDatabaseReference.child("Chat").child("Groups").child("group_user_" + idUser + "_" + idStore).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+        myDatabaseReference.child("ChatMessage").child("Groups").child("group_user_" + idUser + "_" + idStore).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Logger.d("datasnap", dataSnapshot.toString());
@@ -159,7 +159,7 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
             @Override
             public void onClick(View v) {
                 if (idUser != 0 && !TextUtils.isEmpty(idStore)) {
-                    DatabaseReference query = myDatabaseReference.child("Chat").child("Groups").child("group_user_" + idUser + "_" + idStore).child("messages").push();
+                    DatabaseReference query = myDatabaseReference.child("ChatMessage").child("Groups").child("group_user_" + idUser + "_" + idStore).child("messages").push();
                     query.child("content").setValue(mInputChat.getText().toString());
                     query.child("created").setValue(System.currentTimeMillis());
                     query.child("deleted").setValue(false);

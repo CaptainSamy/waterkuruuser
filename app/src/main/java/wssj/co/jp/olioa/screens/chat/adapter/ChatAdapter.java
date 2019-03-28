@@ -17,7 +17,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.model.chat.HistoryChatResponse;
+import wssj.co.jp.olioa.model.chat.ChatMessage;
+import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
 
@@ -25,7 +26,7 @@ import wssj.co.jp.olioa.utils.Utils;
  * Created by Nguyen Huu Ta on 12/9/2017.
  */
 
-public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatData.ChatData> {
+public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
     private static final int TYPE_USER = 0;
 
@@ -39,7 +40,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
     private IClickImageStore clickImageStore;
 
-    public ChatAdapter(@NonNull Context context, @NonNull List<HistoryChatResponse.HistoryChatData.ChatData> objects) {
+    public ChatAdapter(@NonNull Context context, @NonNull List<ChatMessage> objects) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
     }
@@ -51,7 +52,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
     @Override
     public int getItemViewType(int position) {
-        HistoryChatResponse.HistoryChatData.ChatData chat = getItem(position);
+        ChatMessage chat = getItem(position);
         if (chat != null) {
             return chat.isUser() ? TYPE_USER : TYPE_STORE;
         }
@@ -61,7 +62,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        HistoryChatResponse.HistoryChatData.ChatData chat = getItem(position);
+        ChatMessage chat = getItem(position);
         ChatDetailHolderUser holderUser;
         int layoutResource;
         switch (getItemViewType(position)) {
@@ -108,7 +109,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
             mImageStore = (CircleImageView) view.findViewById(R.id.imageStore);
         }
 
-        public void bind(final HistoryChatResponse.HistoryChatData.ChatData chat, int position) {
+        public void bind(final ChatMessage chat, int position) {
             switch (getItemViewType(position)) {
                 case TYPE_STORE:
                     Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
@@ -119,7 +120,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
 
                     @Override
                     public void onClick(View v) {
-                        clickImageStore.onClick(chat.getManagerId());
+                        clickImageStore.onClick(chat.getToId());
                     }
                 });
             }
@@ -130,7 +131,8 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
                 mDate.setText(chat.getDate());
             }
             mContent.setText(StringEscapeUtils.unescapeJava(chat.getContent()));
-            mTime.setText(Utils.formatDate(chat.getTimeCreate(), "HH:mm"));
+            String time = DateConvert.formatToString(DateConvert.TIME_FORMAT, chat.getCreated());
+            mTime.setText(time);
         }
     }
 
@@ -148,6 +150,7 @@ public class ChatAdapter extends ArrayAdapter<HistoryChatResponse.HistoryChatDat
     }
 
     public interface IListenerScroll {
+
         void endOfListView();
     }
 }

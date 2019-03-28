@@ -190,10 +190,10 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
                 String success = getString(R.string.check_in_success);
 //                if (success.equals(message)) {
 //                    if (getMainActivity() != null) {
-//                        getMainActivity().onReloadData(IMainView.FRAGMENT_LIST_STORE_CHECKED_IN);
+//                        getMainActivity().onReloadData(IMainView.FRAGMENT_LIST_STORE_PUSH);
 //                    }
 //                }
-                getMainActivity().onReloadData(IMainView.FRAGMENT_LIST_STORE_CHECKED_IN);
+                getMainActivity().onReloadData(IMainView.FRAGMENT_LIST_STORE_PUSH);
                 backToPreviousScreen();
             }
         });

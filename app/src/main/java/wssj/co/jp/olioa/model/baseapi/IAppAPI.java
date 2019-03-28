@@ -6,6 +6,8 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import wssj.co.jp.olioa.model.chat.ChatMessage;
+import wssj.co.jp.olioa.model.chat.MessageBody;
 import wssj.co.jp.olioa.model.checkin.CheckInBody;
 import wssj.co.jp.olioa.model.entities.AccessToken;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
@@ -23,7 +25,7 @@ public interface IAppAPI {
     APICall<AccessToken> loginUser(@Body User params);
 
     @GET("api/get-store-checked-in")
-    APICall<List<StoreInfo>> getStoreCheckedIn(@Query("page") int page);
+    APICall<List<StoreInfo>> getStoreCheckedIn(@Query("type") int type, @Query("page") int page);
 
     @GET("api/get-push")
     APICall<PushNotificationResponse> getPush(@Query("storeId") int storeId, @Query("page") int page);
@@ -34,5 +36,10 @@ public interface IAppAPI {
     @POST("api/user-confirm-check-in")
     APICall<Integer> userConfirmCheckIn(@Body CheckInBody checkInBody);
 
+    @GET("chat/get-message")
+    APICall<List<ChatMessage>> getHistoryChat(@Query("with_id") int storeId, @Query("max_id") int lastChatId);
+
+    @POST("chat/insert-message")
+    APICall<ChatMessage> sendChat(@Body MessageBody chatUser);
 
 }

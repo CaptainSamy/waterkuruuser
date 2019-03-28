@@ -133,8 +133,8 @@ public class StampModel extends BaseModel {
         VolleySequence.getInstance().addRequest(request);
     }
 
-    public void getListStoreCheckedIn(int page, APICallback<List<StoreInfo>> callback) {
-        getApi().getStoreCheckedIn(page).getAsyncResponse(callback);
+    public void getListStoreCheckedIn(int type, int page, APICallback<List<StoreInfo>> callback) {
+        getApi().getStoreCheckedIn(type, page).getAsyncResponse(callback);
 
     }
 

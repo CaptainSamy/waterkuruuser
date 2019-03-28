@@ -14,9 +14,11 @@ import java.util.List;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.ErrorMessage;
 import wssj.co.jp.olioa.model.entities.PushNotification;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.widget.ILoadMoreListView;
@@ -31,10 +33,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private static final String TAG = "PushNotificationFragment";
 
-    public static final String ARG_STORE_ID = "storeID";
-
-    public static final String ARG_IMAGE = "storeImage";
-
     private SwipeRefreshLayout mRefreshLayout;
 
     private PushNotificationAdapter mAdapter;
@@ -45,7 +43,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private List<PushNotification> mListNotification;
 
-    private int storeId;
+    private StoreInfo storeInfo;
 
     public static PushNotificationFragment newInstance(Bundle args) {
 
@@ -96,13 +94,14 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            storeId = bundle.getInt(ARG_STORE_ID);
-            String logoStore = bundle.getString(ARG_IMAGE);
-            mListNotification = new ArrayList<>();
-            mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification, logoStore);
-            getPresenter().getListPushNotification(storeId, 0);
-            mAdapter.setListPushTemp(mListNotification);
-            mListView.setAdapter(mAdapter);
+            storeInfo = bundle.getParcelable(ListStorePushFragment.ARG_STORE_INFO);
+            if (storeInfo != null) {
+                mListNotification = new ArrayList<>();
+                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification, storeInfo.getLogo());
+                getPresenter().getListPushNotification(storeInfo.getId(), 0);
+                mAdapter.setListPushTemp(mListNotification);
+                mListView.setAdapter(mAdapter);
+            }
         } else {
             backToPreviousScreen();
         }
@@ -127,7 +126,9 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     public void onRefresh() {
         mRefreshLayout.setRefreshing(false);
-        getPresenter().getListPushNotification(storeId, 0);
+        if (storeInfo != null) {
+            getPresenter().getListPushNotification(storeInfo.getId(), 0);
+        }
     }
 
     @Override
@@ -161,6 +162,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onLoadMore(int page) {
-        getPresenter().getListPushNotification(storeId, page);
+        getPresenter().getListPushNotification(storeInfo.getId(), page);
     }
 }

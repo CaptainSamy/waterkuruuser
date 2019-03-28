@@ -2,7 +2,7 @@ package wssj.co.jp.olioa.screens.chat.chatdetail;
 
 import java.util.List;
 
-import wssj.co.jp.olioa.model.chat.HistoryChatResponse;
+import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 /**
@@ -11,11 +11,9 @@ import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 public interface IChatView extends IFragmentView {
 
-    void onGetHistoryChatSuccess(List<HistoryChatResponse.HistoryChatData.ChatData> history);
+    void onGetHistoryChatSuccess(List<ChatMessage> history);
 
-    void onGetHistoryChatFailure(String message);
-
-    void onSendChatSuccess();
+    void onSendChatSuccess(ChatMessage chatMessage);
 
     void onSendChatFailure(String message);
 }

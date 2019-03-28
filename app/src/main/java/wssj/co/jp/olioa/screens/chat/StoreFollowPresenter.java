@@ -1,9 +1,6 @@
 package wssj.co.jp.olioa.screens.chat;
 
-import java.util.List;
-
 import wssj.co.jp.olioa.model.chat.ChatModel;
-import wssj.co.jp.olioa.model.chat.StoreFollowResponse;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.screens.base.FragmentPresenter;
 
@@ -22,20 +19,20 @@ public class StoreFollowPresenter extends FragmentPresenter<IStoreFollowView> {
     public void getListStoreFollow() {
         String token = getModel(SharedPreferencesModel.class).getToken();
         getView().showProgress();
-        getModel(ChatModel.class).getListStoreFollow(token, new ChatModel.OnGetListStoreFollowCallback() {
-
-            @Override
-            public void onGetListStoreFollowSuccess(List<StoreFollowResponse.StoreChatData.StoreFollow> storeFollows) {
-                getView().hideProgress();
-                getView().onGetListStoreFollowSuccess(storeFollows);
-            }
-
-            @Override
-            public void onGetListStoreFollowFailure(String message) {
-                getView().hideProgress();
-                getView().onGetListStoreFollowFailure(message);
-            }
-        });
+//        getModel(ChatModel.class).getListStoreFollow(token, new ChatModel.OnGetListStoreFollowCallback() {
+//
+//            @Override
+//            public void onGetListStoreFollowSuccess(List<StoreFollowResponse.StoreChatData.StoreFollow> storeFollows) {
+//                getView().hideProgress();
+//                getView().onGetListStoreFollowSuccess(storeFollows);
+//            }
+//
+//            @Override
+//            public void onGetListStoreFollowFailure(String message) {
+//                getView().hideProgress();
+//                getView().onGetListStoreFollowFailure(message);
+//            }
+//        });
 
     }
 }

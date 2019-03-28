@@ -2,8 +2,9 @@ package wssj.co.jp.olioa.screens.chat.chatdetail;
 
 import java.util.List;
 
+import wssj.co.jp.olioa.model.baseapi.APICallback;
+import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.chat.ChatModel;
-import wssj.co.jp.olioa.model.chat.HistoryChatResponse;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.screens.base.FragmentPresenter;
 
@@ -20,33 +21,34 @@ public class ChatPresenter extends FragmentPresenter<IChatView> {
     }
 
     public void getHistoryChat(int storeId, int lastChatId) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(ChatModel.class).getHistoryChat(token, storeId,lastChatId, new ChatModel.OnGetHistoryChatCallback() {
+        getView().showProgress();
+        getModel(ChatModel.class).getHistoryChat(storeId, lastChatId, new APICallback<List<ChatMessage>>() {
 
             @Override
-            public void onGetHistoryChatSuccess(List<HistoryChatResponse.HistoryChatData.ChatData> history) {
-                getView().onGetHistoryChatSuccess(history);
+            public void onSuccess(List<ChatMessage> chatMessageResponses) {
+                getView().hideProgress();
+                getView().onGetHistoryChatSuccess(chatMessageResponses);
             }
 
             @Override
-            public void onGetHistoryChatFailure(String message) {
-                getView().onGetHistoryChatFailure(message);
+            public void onFailure(String errorMessage) {
+                getView().hideProgress();
+                getView().showDialog(errorMessage);
             }
         });
     }
 
     public void sendChat(int storeId, String content) {
-        String token = getModel(SharedPreferencesModel.class).getToken();
-        getModel(ChatModel.class).sendChat(token, storeId, content, new ChatModel.OnSendChatCallback() {
+        getModel(ChatModel.class).sendChat(storeId, content, new APICallback<ChatMessage>() {
 
             @Override
-            public void onSendChatSuccess() {
-                getView().onSendChatSuccess();
+            public void onSuccess(ChatMessage chatMessage) {
+                getView().onSendChatSuccess(chatMessage);
             }
 
             @Override
-            public void onSendChatFailure(String message) {
-                getView().onSendChatFailure(message);
+            public void onFailure(String errorMessage) {
+                getView().onSendChatFailure(errorMessage);
             }
         });
     }

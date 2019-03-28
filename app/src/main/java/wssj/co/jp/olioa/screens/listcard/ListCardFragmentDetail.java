@@ -164,7 +164,7 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
                 public void onClick(View v) {
                     Bundle dataListStore = new Bundle();
                     dataListStore.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
-                    getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHECKED_IN, true, true, dataListStore);
+                    getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, true, true, dataListStore);
                 }
             });
         }

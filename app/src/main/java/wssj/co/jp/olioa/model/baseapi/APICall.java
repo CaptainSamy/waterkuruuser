@@ -6,13 +6,11 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
-
-import wssj.co.jp.olioa.App;
-import wssj.co.jp.olioa.utils.Logger;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import wssj.co.jp.olioa.App;
+import wssj.co.jp.olioa.utils.Logger;
 
 public class APICall<Data> extends APIResponse<Data> {
 
@@ -51,7 +49,7 @@ public class APICall<Data> extends APIResponse<Data> {
                                 Gson gson = new Gson();
                                 APIResponse apiResponse = gson.fromJson(json, APIResponse.class);
                                 message = apiResponse.getError().getMessage();
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                             if (code == 404) {

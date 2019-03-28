@@ -19,7 +19,7 @@ import wssj.co.jp.olioa.utils.Logger;
 
 public class APICreater {
 
-    private static final String TAG = "Chat.APICreator";
+    private static final String TAG = "ChatMessage.APICreator";
 
     private static final String API_GET_LIST_STORE_FOLLOW = Constants.BASE_URL + "/api/client/users/get-list-store-following";
 
