@@ -176,7 +176,7 @@
     <string name="question_naire">アンケート</string>
     <string name="search">Search</string>
     <!--List store checked in-->
-    <string name="title_screen_list_store_checked_in">店舗状態確認</string>
+    <string name="title_screen_list_store_checked_in">お友達一覧</string>
     <string name="title_list_store_checked_in">最新ご利用のお店舗を表示</string>
     <string name="time_waiting">現在のお待ち時間</string>
     <string name="people_waiting">現在のお待ち人</string>
