@@ -110,7 +110,7 @@
     <string name="title_info_store">店の情報</string>
     <string name="title_address_store">住所 :</string>
     <string name="title_store_name">店名称 :</string>
-    <string name="button_check_in">チェックイン</string>
+    <string name="button_check_in">友達にする</string>
     <string name="button_cancel_check_in">キャンセル</string>
 
     <!--Note Fragment-->
