@@ -15,7 +15,7 @@ public class PushNotificationResponse {
     @SerializedName("maxPage")
     private int mTotalPage;
 
-    @SerializedName("listPush")
+    @SerializedName("list")
     private List<PushNotification> mList;
 
     public int getTotalPage() {
