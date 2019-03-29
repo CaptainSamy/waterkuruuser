@@ -149,8 +149,4 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         this.clickImageStore = clickImageStore;
     }
 
-    public interface IListenerScroll {
-
-        void endOfListView();
-    }
 }

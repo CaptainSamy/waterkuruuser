@@ -1,7 +1,6 @@
 package wssj.co.jp.olioa.screens.chat.chatdetail;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -201,17 +200,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         }
     }
 
-    private Handler mHandle = new Handler();
-
-    private Runnable mRunAble = new Runnable() {
-
-        @Override
-        public void run() {
-            mHandle.postDelayed(mRunAble, Constants.TIME_DELAY_GET_LIST_CHAT);
-            //getPresenter().getHistoryChat(mStoreId, 0);
-        }
-    };
-
     @Override
     public void onGetHistoryChatSuccess(List<ChatMessage> history) {
         mRefreshListChat.setRefreshing(false);
@@ -280,20 +268,9 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         showToast(message);
     }
 
-    private void scrollEndOfListView() {
-        mListViewChat.post(new Runnable() {
-
-            @Override
-            public void run() {
-                mListViewChat.setSelection(mAdapter.getCount() - 1);
-            }
-        });
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         Logger.d(TAG, "removeCallbacks ");
-        mHandle.removeCallbacks(mRunAble);
     }
 }
