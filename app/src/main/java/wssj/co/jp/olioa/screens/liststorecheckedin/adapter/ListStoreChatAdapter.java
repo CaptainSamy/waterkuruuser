@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.util.List;
 
 import wssj.co.jp.olioa.R;
@@ -98,7 +100,7 @@ public class ListStoreChatAdapter extends BaseAdapter {
             if (store != null) {
                 mStoreName.setText(store.getName());
                 if (!TextUtils.isEmpty(store.getLastMessage())) {
-                    mLastMessage.setText(store.getLastMessage());
+                    mLastMessage.setText(StringEscapeUtils.unescapeJava(store.getLastMessage()));
                 } else {
                     mLastMessage.setText(Constants.EMPTY_STRING);
                 }

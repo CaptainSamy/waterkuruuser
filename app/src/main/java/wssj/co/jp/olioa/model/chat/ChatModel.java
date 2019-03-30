@@ -24,7 +24,7 @@ public class ChatModel extends BaseModel {
         void onGetListStoreFollowFailure(String message);
     }
 
-    public void getHistoryChat(int storeId, int lastChatId, APICallback<List<ChatMessage>> callback) {
+    public void getHistoryChat(int storeId, long lastChatId, APICallback<List<ChatMessage>> callback) {
         getApi().getHistoryChat(storeId, lastChatId).getAsyncResponse(callback);
     }
 

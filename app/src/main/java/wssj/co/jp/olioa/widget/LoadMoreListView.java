@@ -2,6 +2,7 @@ package wssj.co.jp.olioa.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -15,7 +16,9 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
     private int mCurrentPage, mTotalPage;
 
-    private ILoadMoreListView mListener;
+    private ILoadMoreListener mListener;
+
+    private ILoadMoreTopListener mListenerTop;
 
     public LoadMoreListView(Context context) {
         this(context, null);
@@ -30,12 +33,20 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         setOnScrollListener(this);
     }
 
-    public void setOnLoadMoreListener(ILoadMoreListView listener) {
+    public void setOnLoadMoreListener(ILoadMoreListener listener) {
         mListener = listener;
+    }
+
+    public void setOnLoadListenerTop(ILoadMoreTopListener mListenerTop) {
+        this.mListenerTop = mListenerTop;
     }
 
     public void notifyLoadComplete() {
         mIsLoading = false;
+    }
+
+    public void stopLoadMore() {
+        mIsLoading = true;
     }
 
     @Override
@@ -49,18 +60,37 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
     public void setTotalPage(int totalPage) {
         mTotalPage = totalPage;
-    }
-
-    public void resetState() {
         mCurrentPage = 0;
-        mTotalPage = 0;
     }
 
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (totalItemCount != 0 && firstVisibleItem + visibleItemCount == totalItemCount) {
-            if (mCurrentPage < (mTotalPage - 1) && !mIsLoading) {
-                if (mListener != null) {
+        if (mListenerTop != null) {
+            if (totalItemCount > 0) {
+                if (firstVisibleItem == 0) {
+                    View v = this.getChildAt(0);
+                    int offset = (v == null) ? 0 : v.getTop();
+                    if (offset == 0) {
+                        if (!mIsLoading && mListenerTop != null) {
+                            mIsLoading = true;
+                            mListenerTop.onLoadMoreTop(mCurrentPage);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+//        else if (totalItemCount - visibleItemCount == firstVisibleItem) {
+//            View v = this.getChildAt(totalItemCount - 1);
+//            int offset = (v == null) ? 0 : v.getTop();
+//            if (offset == 0) {
+//                System.out.println("BOTTOM");
+//                return;
+//            }
+//        }
+        if (mListener != null) {
+            if (totalItemCount != 0 && firstVisibleItem + visibleItemCount == totalItemCount) {
+                if (mCurrentPage < (mTotalPage - 1) && !mIsLoading) {
                     mIsLoading = true;
                     mCurrentPage++;
                     mListener.onLoadMore(mCurrentPage);
@@ -68,4 +98,5 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
             }
         }
     }
+
 }

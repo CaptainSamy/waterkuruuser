@@ -19,7 +19,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.utils.DateConvert;
-import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
 
 /**
@@ -83,8 +82,6 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         } else {
             holderUser = (ChatDetailHolderUser) convertView.getTag();
         }
-
-        Logger.d("DaiKySy", position + "");
         holderUser.bind(chat, position);
         return convertView;
     }

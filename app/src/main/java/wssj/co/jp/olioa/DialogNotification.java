@@ -18,7 +18,7 @@ import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.Utils;
 import wssj.co.jp.olioa.widget.EasyDialog;
-import wssj.co.jp.olioa.widget.ILoadMoreListView;
+import wssj.co.jp.olioa.widget.ILoadMoreListener;
 import wssj.co.jp.olioa.widget.LoadMoreListView;
 
 /**
@@ -45,12 +45,12 @@ public class DialogNotification implements SwipeRefreshLayout.OnRefreshListener 
 
     private long mLastClickTime = 0;
 
-    public DialogNotification(Activity activity, ImageView viewAttached, ILoadMoreListView callback) {
+    public DialogNotification(Activity activity, ImageView viewAttached, ILoadMoreListener callback) {
         mActivity = activity;
         initDialog(viewAttached, callback);
     }
 
-    private void initDialog(ImageView viewAttached, ILoadMoreListView callback) {
+    private void initDialog(ImageView viewAttached, ILoadMoreListener callback) {
         mEasyDialog = new EasyDialog(mActivity, callback)
                 .setGravity(EasyDialog.GRAVITY_BOTTOM)
                 .setBackgroundColor(mActivity.getResources().getColor(android.R.color.white))

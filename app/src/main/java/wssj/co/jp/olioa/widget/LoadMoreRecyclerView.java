@@ -46,7 +46,7 @@ public class LoadMoreRecyclerView extends RecyclerView {
                             mIsLoading = true;
                             if (mListener != null) {
                                 Logger.d(TAG, "#onLoadMore");
-                                mListener.onLoadMore();
+                                mListener.onLoadMore(0);
                             }
                         }
                     }

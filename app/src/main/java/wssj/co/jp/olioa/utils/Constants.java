@@ -76,6 +76,14 @@ public final class Constants {
 
     public static final String KEY_GEN_AUTO_LOGIN = "1abcc71e-9864-4b6e-af84-144ec74aea6d";//"eb62190e-c4d2-476f-b108-992bf30367cf";//
 
+    public static final int SUCCESSFULLY = 1;
+
+    public static final int FAILURE = 2;
+
+    public static final int MAX_ITEM_PAGE = 30;
+
+    public static final int MAX_ITEM_PAGE_CHAT = 50;
+
     private Constants() {
     }
 

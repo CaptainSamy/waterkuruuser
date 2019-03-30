@@ -6,6 +6,6 @@ package wssj.co.jp.olioa.widget;
 
 public interface ILoadMoreListener {
 
-    void onLoadMore();
+    void onLoadMore(int page);
 
 }

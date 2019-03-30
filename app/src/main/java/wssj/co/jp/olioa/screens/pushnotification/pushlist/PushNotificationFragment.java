@@ -21,7 +21,7 @@ import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
-import wssj.co.jp.olioa.widget.ILoadMoreListView;
+import wssj.co.jp.olioa.widget.ILoadMoreListener;
 import wssj.co.jp.olioa.widget.LoadMoreListView;
 
 /**
@@ -29,7 +29,7 @@ import wssj.co.jp.olioa.widget.LoadMoreListView;
  */
 
 public class PushNotificationFragment extends BaseFragment<IPushNotificationListView, PushNotificationListPresenter>
-        implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener, ILoadMoreListView {
+        implements IPushNotificationListView, SwipeRefreshLayout.OnRefreshListener, ILoadMoreListener {
 
     private static final String TAG = "PushNotificationFragment";
 

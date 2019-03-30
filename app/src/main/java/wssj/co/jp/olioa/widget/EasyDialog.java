@@ -108,11 +108,11 @@ public class EasyDialog {
 
     private SwipeRefreshLayout mRefreshLayout;
 
-    public EasyDialog(Context context, ILoadMoreListView callback) {
+    public EasyDialog(Context context, ILoadMoreListener callback) {
         initDialog(context, callback);
     }
 
-    private void initDialog(final Context context, ILoadMoreListView callback) {
+    private void initDialog(final Context context, ILoadMoreListener callback) {
         this.context = context;
         LayoutInflater layoutInflater = ((Activity) context).getLayoutInflater();
         View dialogView = layoutInflater.inflate(R.layout.layout_dialog, null);

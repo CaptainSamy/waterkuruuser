@@ -315,7 +315,7 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
     }
 
     @Override
-    public void onLoadMore() {
+    public void onLoadMore(int page) {
         setRefresh(true);
         if (mAdapter != null && mAdapter.getItemCount() > 1) {
             getPresenter().getTimelineDetail(mUserManagerId, mAdapter.getLastTimelineId());

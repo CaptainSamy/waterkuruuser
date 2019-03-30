@@ -241,6 +241,6 @@
     <!--OLIOA-->
     <string name="check_in_success">ともだちになりました</string>
     <string name="title_dialog_check_in">通知</string>
-
+    <string name="title_store_push">チェット</string>
 
 </resources>

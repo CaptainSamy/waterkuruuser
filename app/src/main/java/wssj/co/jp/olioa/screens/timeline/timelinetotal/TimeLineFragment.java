@@ -123,7 +123,7 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
     }
 
     @Override
-    public void onLoadMore() {
+    public void onLoadMore(int page) {
         setRefresh(true);
         getPresenter().getTimeline(mAdapter.getLastTimelineId());
     }

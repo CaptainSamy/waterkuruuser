@@ -3,34 +3,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <!--<wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayout-->
-        <!--android:id="@+id/refreshHistoryChat"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_above="@+id/line"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--app:srl_direction="both">-->
 
-        <ListView
-            android:layout_above="@+id/line"
-            android:visibility="visible"
-            android:id="@+id/lvStoreFollow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:paddingBottom="15dp"
-            android:stackFromBottom="true"
-            android:transcriptMode="normal"/>
+    <ListView
+        android:id="@+id/lvStoreFollow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingBottom="15dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal"
+        android:visibility="visible"/>
 
-    <!--</wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayout>-->
 
     <TextView
         android:id="@+id/textNoItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/refreshHistoryChat"
-        android:layout_alignTop="@id/refreshHistoryChat"
         android:gravity="center"
         android:visibility="gone"/>
 
@@ -68,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingRight="6dp">
+
             <ImageView
                 android:id="@+id/tvSendChat"
                 android:layout_width="wrap_content"

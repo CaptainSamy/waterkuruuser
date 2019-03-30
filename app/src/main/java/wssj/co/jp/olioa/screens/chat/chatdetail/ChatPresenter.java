@@ -20,7 +20,7 @@ public class ChatPresenter extends FragmentPresenter<IChatView> {
         registerModel(new SharedPreferencesModel(view.getViewContext()));
     }
 
-    public void getHistoryChat(int storeId, int lastChatId) {
+    public void getHistoryChat(int storeId, long lastChatId) {
         getView().showProgress();
         getModel(ChatModel.class).getHistoryChat(storeId, lastChatId, new APICallback<List<ChatMessage>>() {
 

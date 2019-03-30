@@ -1,13 +1,13 @@
 package wssj.co.jp.olioa.screens.chat.chatdetail;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -27,20 +27,18 @@ import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
-import wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayout;
-import wssj.co.jp.olioa.widget.swipyrefreshlayout.SwipyRefreshLayoutDirection;
+import wssj.co.jp.olioa.widget.ILoadMoreTopListener;
+import wssj.co.jp.olioa.widget.LoadMoreListView;
 
 /**
  * Created by Nguyen Huu Ta on 26/6/2017.
  */
 
-public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> implements IChatView, SwipyRefreshLayout.OnRefreshListener {
+public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> implements IChatView, ILoadMoreTopListener {
 
     private static String TAG = "ChatFragment";
 
-    private SwipyRefreshLayout mRefreshListChat;
-
-    private ListView mListViewChat;
+    private LoadMoreListView mListViewChat;
 
     private EditText mInputChat;
 
@@ -56,7 +54,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private StoreInfo storeInfo;
 
-    private String lastTime;
+    private String lastTime = Constants.EMPTY_STRING;
 
     public static ChatFragment newInstance(Bundle b) {
         ChatFragment fragment = new ChatFragment();
@@ -107,9 +105,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     protected void initViews(View rootView) {
-        mRefreshListChat = (SwipyRefreshLayout) rootView.findViewById(R.id.refreshHistoryChat);
-        mRefreshListChat.setDirection(SwipyRefreshLayoutDirection.BOTH);
-        mListViewChat = (ListView) rootView.findViewById(R.id.lvStoreFollow);
+        mListViewChat = rootView.findViewById(R.id.lvStoreFollow);
         mInputChat = (EditText) rootView.findViewById(R.id.etChat);
         mButtonSend = (ImageView) rootView.findViewById(R.id.tvSendChat);
         mProgressSendChat = (ProgressBar) rootView.findViewById(R.id.progressSendChat);
@@ -119,6 +115,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     protected void initAction() {
+        mListViewChat.setOnLoadListenerTop(this);
         mInputChat.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -150,16 +147,13 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                 if (!TextUtils.isEmpty(mContent)) {
                     mProgressSendChat.setVisibility(View.VISIBLE);
                     mButtonSend.setVisibility(View.GONE);
-                    getPresenter().sendChat(storeInfo.getId(), StringEscapeUtils.escapeJava(mContent));
+                    getPresenter().sendChat(storeInfo.getId(), StringEscapeUtils.escapeJava(mContent.toString()));
                 }
                 Utils.hideSoftKeyboard(getActivity());
             }
         });
 
-        mRefreshListChat.setOnRefreshListener(this);
     }
-
-    private boolean isOnRefresh;
 
     @Override
     protected void initData() {
@@ -177,7 +171,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         });
         mListViewChat.setAdapter(mAdapter);
         mAdapter.setImageStore(storeInfo.getLogo());
-        mRefreshListChat.setRefreshing(true);
         getPresenter().getHistoryChat(storeInfo.getId(), 0);
     }
 
@@ -188,30 +181,27 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
-    public void onRefresh(SwipyRefreshLayoutDirection direction) {
-        if (direction != SwipyRefreshLayoutDirection.TOP) {
-            isOnRefresh = true;
-            getPresenter().getHistoryChat(storeInfo.getId(), 0);
-        } else {
-            if (mListChat != null && mListChat.size() > 0) {
-                long lastId = mListChat.get(0).getId();
-                getPresenter().getHistoryChat(storeInfo.getId(), (int) lastId);
-            }
-        }
-    }
-
-    @Override
     public void onGetHistoryChatSuccess(List<ChatMessage> history) {
-        mRefreshListChat.setRefreshing(false);
-        if (history != null && history.size() > 0) {
-            if (isOnRefresh) {
-                isOnRefresh = false;
-                mListChat.clear();
-            }
+        if (!Utils.isEmpty(history)) {
             sortListChat(history);
+            int size = mListChat.size();
             mListChat.addAll(0, history);
+            int newSize = mListChat.size() - size;
             mAdapter.notifyDataSetChanged();
+            mListViewChat.setSelection(newSize);
+            if (history.size() == Constants.MAX_ITEM_PAGE_CHAT) {
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        mListViewChat.notifyLoadComplete();
+                    }
+                }, 300);
+            } else {
+                mListViewChat.stopLoadMore();
+            }
         }
+
         if (mAdapter.getCount() == 0) {
             showTextNoItem(true, getString(R.string.no_conversation));
         } else {
@@ -220,7 +210,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     private void sortListChat(List<ChatMessage> history) {
-        lastTime = Constants.EMPTY_STRING;
+        //lastTime = Constants.EMPTY_STRING;
         for (ChatMessage chatData : history) {
             if (TextUtils.isEmpty(lastTime)) {
                 lastTime = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatData.getCreated());
@@ -272,5 +262,13 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     public void onDestroyView() {
         super.onDestroyView();
         Logger.d(TAG, "removeCallbacks ");
+    }
+
+    @Override
+    public void onLoadMoreTop(int page) {
+        if (mListChat.size() > 0) {
+            long lastId = mListChat.get(0).getId();
+            getPresenter().getHistoryChat(storeInfo.getId(), lastId);
+        }
     }
 }

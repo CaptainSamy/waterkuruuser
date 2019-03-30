@@ -17,7 +17,7 @@
     </style>
 
     <style name="AppTheme.ProgressDialog">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="EditTextTheme">

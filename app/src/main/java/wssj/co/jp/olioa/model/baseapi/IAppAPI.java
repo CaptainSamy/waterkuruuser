@@ -37,7 +37,7 @@ public interface IAppAPI {
     APICall<Integer> userConfirmCheckIn(@Body CheckInBody checkInBody);
 
     @GET("chat/get-message")
-    APICall<List<ChatMessage>> getHistoryChat(@Query("with_id") int storeId, @Query("max_id") int lastChatId);
+    APICall<List<ChatMessage>> getHistoryChat(@Query("with_id") int storeId, @Query("max_id") long lastChatId);
 
     @POST("chat/insert-message")
     APICall<ChatMessage> sendChat(@Body MessageBody chatUser);
