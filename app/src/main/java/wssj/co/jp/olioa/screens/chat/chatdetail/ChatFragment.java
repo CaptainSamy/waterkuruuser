@@ -1,7 +1,6 @@
 package wssj.co.jp.olioa.screens.chat.chatdetail;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
+import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
@@ -55,6 +55,12 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     private StoreInfo storeInfo;
 
     private String lastTime = Constants.EMPTY_STRING;
+
+    private long newestChatId;
+
+    private DBManager dbManager;
+
+    private boolean isGetFromDatabase;
 
     public static ChatFragment newInstance(Bundle b) {
         ChatFragment fragment = new ChatFragment();
@@ -157,6 +163,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     protected void initData() {
+        dbManager = DBManager.getInstance();
         mListChat = new ArrayList<>();
         mAdapter = new ChatAdapter(getActivityContext(), mListChat);
         mAdapter.setOnClickImageStore(new ChatAdapter.IClickImageStore() {
@@ -171,6 +178,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         });
         mListViewChat.setAdapter(mAdapter);
         mAdapter.setImageStore(storeInfo.getLogo());
+        newestChatId = dbManager.getChatId(storeInfo.getId(), true);
         getPresenter().getHistoryChat(storeInfo.getId(), 0);
     }
 
@@ -181,27 +189,37 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
-    public void onGetHistoryChatSuccess(List<ChatMessage> history) {
+    public void onGetHistoryChatSuccess(final List<ChatMessage> history) {
         if (!Utils.isEmpty(history)) {
+            if (newestChatId > 0) {
+                int endOf = history.size() - 1;
+                long newestChatIdServer = history.get(endOf).getId();
+                long distance = Math.abs(newestChatIdServer - newestChatId);
+                showLog(newestChatId + "/" + newestChatIdServer + " / distance:" + distance);
+                if (distance <= Constants.MAX_ITEM_PAGE_CHAT) {
+                    isGetFromDatabase = true;
+                }
+            }
+            dbManager.insertListChat(history);
             sortListChat(history);
             int size = mListChat.size();
             mListChat.addAll(0, history);
-            int newSize = mListChat.size() - size;
-            mAdapter.notifyDataSetChanged();
-            mListViewChat.setSelection(newSize);
-            if (history.size() == Constants.MAX_ITEM_PAGE_CHAT) {
-                new Handler().postDelayed(new Runnable() {
+            final int newSize = mListChat.size() - size;
+            mListViewChat.post(new Runnable() {
 
-                    @Override
-                    public void run() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                    mListViewChat.setSelection(newSize - 3);
+                    if (history.size() < Constants.MAX_ITEM_PAGE_CHAT) {
+                        mListViewChat.stopLoadMore();
+                    } else {
                         mListViewChat.notifyLoadComplete();
                     }
-                }, 300);
-            } else {
-                mListViewChat.stopLoadMore();
-            }
-        }
+                }
+            });
 
+        }
         if (mAdapter.getCount() == 0) {
             showTextNoItem(true, getString(R.string.no_conversation));
         } else {
@@ -210,7 +228,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     private void sortListChat(List<ChatMessage> history) {
-        //lastTime = Constants.EMPTY_STRING;
         for (ChatMessage chatData : history) {
             if (TextUtils.isEmpty(lastTime)) {
                 lastTime = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatData.getCreated());
@@ -242,13 +259,15 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         mInputChat.setText(Constants.EMPTY_STRING);
         mProgressSendChat.setVisibility(View.GONE);
         mButtonSend.setVisibility(View.VISIBLE);
-        String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
-        if (!lastTime.equals(time)) {
-            lastTime = time;
-            chatMessage.setDate(time);
+        if (chatMessage != null) {
+            String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
+            if (!lastTime.equals(time)) {
+                lastTime = time;
+                chatMessage.setDate(time);
+            }
+            mListChat.add(chatMessage);
+            mAdapter.notifyDataSetChanged();
         }
-        mListChat.add(chatMessage);
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -268,7 +287,31 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     public void onLoadMoreTop(int page) {
         if (mListChat.size() > 0) {
             long lastId = mListChat.get(0).getId();
-            getPresenter().getHistoryChat(storeInfo.getId(), lastId);
+            if (isGetFromDatabase) {
+                showLog("onLoadMoreTop getDatabase");
+                List<ChatMessage> list = dbManager.getListChatByLastChatId(storeInfo.getId(), lastId);
+                if (list.size() > 0) {
+                    sortListChat(list);
+                    int size = mListChat.size();
+                    mListChat.addAll(0, list);
+                    final int newSize = mListChat.size() - size;
+                    mListViewChat.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            mListViewChat.setSelection(newSize - 3);
+                            mListViewChat.notifyLoadComplete();
+                        }
+                    }, 100);
+                } else {
+                    isGetFromDatabase = false;
+                    getPresenter().getHistoryChat(storeInfo.getId(), lastId);
+                }
+            } else {
+                showLog("onLoadMoreTop request");
+                getPresenter().getHistoryChat(storeInfo.getId(), lastId);
+            }
         }
     }
 }

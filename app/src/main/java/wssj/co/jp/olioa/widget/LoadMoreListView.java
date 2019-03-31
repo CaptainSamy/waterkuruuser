@@ -80,14 +80,6 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
                 }
             }
         }
-//        else if (totalItemCount - visibleItemCount == firstVisibleItem) {
-//            View v = this.getChildAt(totalItemCount - 1);
-//            int offset = (v == null) ? 0 : v.getTop();
-//            if (offset == 0) {
-//                System.out.println("BOTTOM");
-//                return;
-//            }
-//        }
         if (mListener != null) {
             if (totalItemCount != 0 && firstVisibleItem + visibleItemCount == totalItemCount) {
                 if (mCurrentPage < (mTotalPage - 1) && !mIsLoading) {

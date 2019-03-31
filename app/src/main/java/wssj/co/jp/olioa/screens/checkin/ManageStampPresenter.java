@@ -81,7 +81,7 @@ class ManageStampPresenter extends FragmentPresenter<IManageStampView> {
             @Override
             public void onFailure(ErrorMessage errorMessage) {
                 getView().hideProgress();
-                getView().showListUnusedCardEmpty(0,Constants.EMPTY_STRING);
+                getView().showListUnusedCardEmpty(0, Constants.EMPTY_STRING);
                 getView().hideListCanUseCard();
             }
         });

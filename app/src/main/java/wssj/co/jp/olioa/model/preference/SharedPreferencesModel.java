@@ -29,8 +29,6 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String KEY_NAME = "name";
 
-    private static final String KEY_IMAGE_USER = "image_user";
-
     private static final String KEY_EMAIL = "email";
 
     private static final String KEY_LAST_SERVICE_ID = "last_service_company_id";
@@ -40,6 +38,10 @@ public class SharedPreferencesModel extends BaseModel {
     private static final String PHOTO_URL = "photo_user";
 
     private static final String OBJECT_PUSH = "object_push";
+
+    private static final String KEY_LAST_CHAT_ID = "last_chat_id";
+
+    private static final String KEY_LAST_TIME_READ_CHAT = "last_time_read";
 
     private final SharedPreferencesHelper mSharedPreference;
 
@@ -62,28 +64,8 @@ public class SharedPreferencesModel extends BaseModel {
         mSharedPreference.put(KEY_EXPIRE_DATE, expire);
     }
 
-    public long getExpireDate() {
-        return mSharedPreference.getLong(KEY_EXPIRE_DATE);
-    }
-
-    public void putSession(int session) {
-        mSharedPreference.put(KEY_SESSION, session);
-    }
-
-    public int getSession() {
-        return mSharedPreference.getInt(KEY_SESSION);
-    }
-
-    public void putServiceId(int serviceId) {
-        mSharedPreference.put(KEY_SERVICE_ID, serviceId);
-    }
-
     public int getServiceId() {
         return mSharedPreference.getInt(KEY_SERVICE_ID);
-    }
-
-    public void putServiceCompanyId(int serviceCompanyId) {
-        mSharedPreference.put(KEY_SERVICE_COMPANY_ID, serviceCompanyId);
     }
 
     public int getServiceCompanyId() {
@@ -114,12 +96,6 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getInt(KEY_LAST_SERVICE_ID);
     }
 
-    public void putUserId(String userId) {
-        if (!TextUtils.isEmpty(userId)) {
-            mSharedPreference.put(KEY_USER_ID, userId);
-        }
-    }
-
     public String getUserId() {
         return mSharedPreference.getString(KEY_USER_ID);
 
@@ -131,36 +107,12 @@ public class SharedPreferencesModel extends BaseModel {
         }
     }
 
-    public void putImageUser(String imageUser) {
-        if (!TextUtils.isEmpty(imageUser)) {
-            mSharedPreference.put(KEY_IMAGE_USER, imageUser);
-        }
-    }
-
-    public void putName(String name) {
-        if (!TextUtils.isEmpty(name)) {
-            mSharedPreference.put(KEY_NAME, name);
-        }
-    }
-
     public String getPassword() {
         return mSharedPreference.getString(KEY_PASSWORD);
     }
 
-    public void putTypeLogin(int typeLogin) {
-        mSharedPreference.put(TYPE_LOGIN, typeLogin);
-    }
-
-    public int getTypeLogin() {
-        return mSharedPreference.getInt(TYPE_LOGIN);
-    }
-
     public void putPhotoUrl(String photo) {
         mSharedPreference.put(PHOTO_URL, photo);
-    }
-
-    public String getPhotoUrl() {
-        return mSharedPreference.getString(PHOTO_URL);
     }
 
     public boolean isLogin() {
@@ -171,16 +123,16 @@ public class SharedPreferencesModel extends BaseModel {
         mSharedPreference.put(OBJECT_PUSH, objectPush);
     }
 
-    public String getObjectPush() {
-        return mSharedPreference.getString(OBJECT_PUSH);
-    }
-
-    public String getImageUser() {
-        return mSharedPreference.getString(KEY_IMAGE_USER);
-    }
-
     public String getName() {
         return mSharedPreference.getString(KEY_NAME);
+    }
+
+    public void putLastChatId(long chatId) {
+        mSharedPreference.put(KEY_LAST_CHAT_ID, chatId);
+    }
+
+    public long getLastChatId() {
+        return mSharedPreference.getLong(KEY_LAST_CHAT_ID);
     }
 
     public void clearSession() {

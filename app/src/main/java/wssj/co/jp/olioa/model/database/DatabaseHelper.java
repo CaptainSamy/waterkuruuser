@@ -4,15 +4,19 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import wssj.co.jp.olioa.utils.Logger;
+
 /**
  * Created by Nguyen Huu Ta on 16/10/2017.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    public static final String TAG = "DatabaseHelper";
+
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_NAME = "Iungo.db";
+    private static final String DATABASE_NAME = "Olioa.db";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -20,6 +24,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        createTablePush(db);
+        createTableChat(db);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Logger.d(TAG, "#onUpgrade");
+    }
+
+    private void createTablePush(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DatabaseContract.PushNotification.TABLE_NAME + " ("
                 + DatabaseContract.PushNotification.COLUMN_PUSH_ID + " INTEGER PRIMARY KEY, "
                 + DatabaseContract.PushNotification.COLUMN_PUSH_TIME + " INTEGER, "
@@ -32,8 +46,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DatabaseContract.PushNotification.COLUMN_STATUS_READ + " INTEGER) ");
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    private void createTableChat(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + DatabaseContract.ChatColumns.TABLE_NAME + " ("
+                + DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " INTEGER PRIMARY KEY, "
+                + DatabaseContract.ChatColumns.COLUMN_STORE_ID + " INTEGER, "
+                + DatabaseContract.ChatColumns.COLUMN_CONTENT + " TEXT, "
+                + DatabaseContract.ChatColumns.COLUMN_IMAGES + " TEXT, "
+                + DatabaseContract.ChatColumns.COLUMN_VIDEOS + " TEXT, "
+                + DatabaseContract.ChatColumns.COLUMN_IS_USER + " INTEGER, "
+                + DatabaseContract.ChatColumns.COLUMN_CREATED + " INTEGER) ");
     }
+
 }

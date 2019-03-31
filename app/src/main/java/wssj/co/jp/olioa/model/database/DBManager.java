@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.Logger;
+import wssj.co.jp.olioa.utils.Utils;
 
 /**
  * Created by Nguyen Huu Ta on 16/10/2017.
@@ -44,6 +46,103 @@ public class DBManager {
         }
         return mInstance;
     }
+
+    /*
+     *
+     * Chat
+     *
+     * */
+
+    public void insertListChat(List<ChatMessage> listChat) {
+        if (Utils.isNotEmpty(listChat)) {
+            for (ChatMessage chatMessage : listChat) {
+                if (chatMessage != null && !checkExitsChatId(chatMessage.getId())) {
+                    ContentValues values = new ContentValues();
+                    values.put(DatabaseContract.ChatColumns.COLUMN_CHAT_ID, chatMessage.getId());
+                    long storeId = chatMessage.isUser() ? chatMessage.getToId() : chatMessage.getFromId();
+                    values.put(DatabaseContract.ChatColumns.COLUMN_STORE_ID, storeId);
+                    values.put(DatabaseContract.ChatColumns.COLUMN_CONTENT, chatMessage.getContent());
+                    values.put(DatabaseContract.ChatColumns.COLUMN_IMAGES, Constants.EMPTY_STRING);
+                    values.put(DatabaseContract.ChatColumns.COLUMN_VIDEOS, Constants.EMPTY_STRING);
+                    values.put(DatabaseContract.ChatColumns.COLUMN_IS_USER, chatMessage.isUser() ? 1 : 0);
+                    values.put(DatabaseContract.ChatColumns.COLUMN_CREATED, chatMessage.getCreated());
+                    mDatabaseWrite.insert(DatabaseContract.ChatColumns.TABLE_NAME, null, values);
+                }
+            }
+        }
+    }
+
+    private boolean checkExitsChatId(long chatId) {
+        String columnSelection[] = new String[]{DatabaseContract.ChatColumns.COLUMN_CHAT_ID};
+        String selection = DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " = ?";
+        String selectionArgs[] = new String[]{String.valueOf(chatId)};
+
+        Cursor cursorPush = mDatabaseRead.query(DatabaseContract.ChatColumns.TABLE_NAME, columnSelection, selection, selectionArgs, null, null, null);
+        boolean isExits = cursorPush.moveToNext();
+        cursorPush.close();
+        return isExits;
+    }
+
+    public List<ChatMessage> getListChatByLastChatId(long storeId, long lastChatId) {
+        String selection = DatabaseContract.ChatColumns.COLUMN_STORE_ID + " = ? AND " + DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " < ?";
+        String selectionArgs[] = new String[]{String.valueOf(storeId), String.valueOf(lastChatId)};
+        String orderBy = DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " DESC";
+        Cursor cursorChats = mDatabaseRead.query(DatabaseContract.ChatColumns.TABLE_NAME, null, selection, selectionArgs, null, null, orderBy, String.valueOf(Constants.MAX_ITEM_PAGE_CHAT));
+        List<ChatMessage> chatMessages = new ArrayList<>();
+        while (cursorChats.moveToNext()) {
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setId(cursorChats.getLong(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CHAT_ID)));
+            chatMessage.setContent(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CONTENT)));
+            int isUser = cursorChats.getInt(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_IS_USER));
+            chatMessage.setUser(isUser == 1);
+            chatMessage.setCreated(cursorChats.getLong(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CREATED)));
+            chatMessages.add(0, chatMessage);
+        }
+        cursorChats.close();
+
+        return chatMessages;
+    }
+
+    public long getChatId(long storeId, boolean isNewest) {
+        String columnSelection[] = new String[]{DatabaseContract.ChatColumns.COLUMN_CHAT_ID};
+        String selection = DatabaseContract.ChatColumns.COLUMN_STORE_ID + " = ?";
+        String selectionArgs[] = new String[]{String.valueOf(storeId)};
+        String sort = isNewest ? " DESC" : " ASC";
+        String orderBy = DatabaseContract.ChatColumns.COLUMN_CHAT_ID + sort;
+        Cursor cursorChats = mDatabaseRead.query(DatabaseContract.ChatColumns.TABLE_NAME, columnSelection, selection, selectionArgs, null, null, orderBy, "1");
+        long chatId = 0;
+        if (cursorChats.moveToFirst()) {
+            chatId = cursorChats.getLong(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CHAT_ID));
+            cursorChats.close();
+        }
+        return chatId;
+    }
+
+    public void deleteChatId(long lastChatId) {
+        String whereClause = DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " > ? ";
+        String[] whereArgs = new String[]{String.valueOf(lastChatId)};
+        mDatabaseWrite.delete(DatabaseContract.ChatColumns.TABLE_NAME, whereClause, whereArgs);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*
      *
@@ -204,5 +303,6 @@ public class DBManager {
 
     public void clearDatabase() {
         mDatabaseRead.execSQL("DELETE FROM " + DatabaseContract.PushNotification.TABLE_NAME);
+        mDatabaseRead.execSQL("DELETE FROM " + DatabaseContract.ChatColumns.TABLE_NAME);
     }
 }

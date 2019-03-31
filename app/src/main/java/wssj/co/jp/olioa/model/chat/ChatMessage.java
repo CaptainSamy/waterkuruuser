@@ -78,4 +78,8 @@ public class ChatMessage {
     public boolean isUser() {
         return isUser;
     }
+
+    public void setUser(boolean user) {
+        isUser = user;
+    }
 }
