@@ -111,8 +111,8 @@ public class ListStorePushFragment extends BaseFragment<IListStoreCheckedInView,
     }
 
     @Override
-    protected void onGetDataAgain() {
-        super.onGetDataAgain();
+    protected void onRefreshFragment() {
+        super.onRefreshFragment();
         getPresenter().getListStoreCheckedIn(TYPE);
     }
 

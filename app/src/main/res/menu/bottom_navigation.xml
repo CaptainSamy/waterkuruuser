@@ -6,10 +6,11 @@
             android:icon="@drawable/dr_notification"
             android:title="@string/title_bottom_stamp"/>
 
-        <item
-            android:id="@+id/navigation_timeline"
-            android:icon="@drawable/item_home"
-            android:title="@string/title_screen_timeline"/>
+        <!--<item-->
+        <!--android:id="@+id/navigation_timeline"-->
+        <!--android:icon="@drawable/item_home"-->
+        <!--android:title="@string/title_screen_timeline"-->
+        <!--android:visible="false"/>-->
         <item
             android:id="@+id/navigation_chat"
             android:icon="@drawable/item_another"

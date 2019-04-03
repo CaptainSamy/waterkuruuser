@@ -36,6 +36,18 @@ public class DateConvert {
         return Constants.EMPTY_STRING;
     }
 
+    public static long convertDateToDate(String time, DateFormat originFormat) {
+        if (!TextUtils.isEmpty(time)) {
+            try {
+                return originFormat.parse(time).getTime();
+            } catch (ParseException e) {
+
+                e.printStackTrace();
+            }
+        }
+        return 0;
+    }
+
 //    public static String formatDate(int day, int month, int year) {
 //        Calendar calendar = Calendar.getInstance();
 //        calendar.set(year, month - 1, day);

@@ -94,6 +94,8 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 StoreInfo storeInfo = (StoreInfo) parent.getItemAtPosition(position);
+                getPresenter().saveLastTimeReadChat(storeInfo.getId());
+                mAdapter.notifyDataSetChanged();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ARG_STORE_INFO, storeInfo);
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
@@ -123,5 +125,17 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     public void onRefresh() {
         mRefreshLayout.setRefreshing(false);
         getPresenter().getListStoreCheckedIn(TYPE);
+    }
+
+    @Override
+    protected void onRefreshFragment() {
+        super.onRefreshFragment();
+        getPresenter().getListStoreCheckedIn(TYPE, false);
+    }
+
+    @Override
+    public void receiverDataFromFragment(Bundle bundle) {
+        super.receiverDataFromFragment(bundle);
+        getPresenter().getListStoreCheckedIn(TYPE, false);
     }
 }

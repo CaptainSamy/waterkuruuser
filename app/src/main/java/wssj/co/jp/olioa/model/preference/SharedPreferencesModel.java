@@ -39,8 +39,6 @@ public class SharedPreferencesModel extends BaseModel {
 
     private static final String OBJECT_PUSH = "object_push";
 
-    private static final String KEY_LAST_CHAT_ID = "last_chat_id";
-
     private static final String KEY_LAST_TIME_READ_CHAT = "last_time_read";
 
     private final SharedPreferencesHelper mSharedPreference;
@@ -127,12 +125,12 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getString(KEY_NAME);
     }
 
-    public void putLastChatId(long chatId) {
-        mSharedPreference.put(KEY_LAST_CHAT_ID, chatId);
+    public void putLastTimeReadChat(long storeId, long time) {
+        mSharedPreference.put(String.valueOf(storeId), time);
     }
 
-    public long getLastChatId() {
-        return mSharedPreference.getLong(KEY_LAST_CHAT_ID);
+    public long getLastTimeReadChat(long storeId) {
+        return mSharedPreference.getLong(String.valueOf(storeId));
     }
 
     public void clearSession() {

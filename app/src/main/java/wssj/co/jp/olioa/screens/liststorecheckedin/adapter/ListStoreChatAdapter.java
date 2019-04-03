@@ -1,6 +1,7 @@
 package wssj.co.jp.olioa.screens.liststorecheckedin.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
+import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Utils;
@@ -31,9 +33,12 @@ public class ListStoreChatAdapter extends BaseAdapter {
 
     private List<StoreInfo> mListStore;
 
+    private SharedPreferencesModel sharedPreferencesModel;
+
     public ListStoreChatAdapter(Context context, List<StoreInfo> listStoreList) {
         mContext = context;
         mListStore = listStoreList;
+        sharedPreferencesModel = new SharedPreferencesModel(context);
 
     }
 
@@ -83,32 +88,46 @@ public class ListStoreChatAdapter extends BaseAdapter {
 
         private TextView mStoreName;
 
+        private View newMessage;
+
         private TextView mLastMessage;
 
         private TextView mLastTimeMessage;
 
         private ImageView mLogoStore;
 
-        public StoreCheckedHolder(View view) {
+        StoreCheckedHolder(View view) {
             mStoreName = view.findViewById(R.id.storeName);
+            newMessage = view.findViewById(R.id.newMessage);
             mLastMessage = view.findViewById(R.id.lastMessage);
             mLastTimeMessage = view.findViewById(R.id.lastTimeMessage);
             mLogoStore = view.findViewById(R.id.logoStore);
         }
 
-        public void bindData(StoreInfo store) {
+        void bindData(StoreInfo store) {
             if (store != null) {
                 mStoreName.setText(store.getName());
                 if (!TextUtils.isEmpty(store.getLastMessage())) {
                     mLastMessage.setText(StringEscapeUtils.unescapeJava(store.getLastMessage()));
                 } else {
                     mLastMessage.setText(Constants.EMPTY_STRING);
+                    newMessage.setVisibility(View.GONE);
                 }
                 if (!TextUtils.isEmpty(store.getLastTimeMessage())) {
+                    long time = DateConvert.convertDateToDate(store.getLastTimeMessage(), DateConvert.DATE_NANO);
+                    long lastTimeRead = sharedPreferencesModel.getLastTimeReadChat(store.getId());
+                    if (lastTimeRead > 0 && lastTimeRead < time) {
+                        mLastMessage.setTypeface(null, Typeface.BOLD);
+                        newMessage.setVisibility(View.VISIBLE);
+                    } else {
+                        mLastMessage.setTypeface(null, Typeface.NORMAL);
+                        newMessage.setVisibility(View.GONE);
+                    }
                     String lastTime = DateConvert.convertDateToDate(store.getLastTimeMessage(), DateConvert.DATE_NANO, DateConvert.DATE_FULL_FORMAT);
                     mLastTimeMessage.setText(lastTime);
                 } else {
                     mLastTimeMessage.setText(Constants.EMPTY_STRING);
+                    newMessage.setVisibility(View.GONE);
                 }
                 Utils.fillImage(mContext, store.getLogo(), mLogoStore, R.drawable.logo_app);
             }

@@ -1,5 +1,7 @@
 package wssj.co.jp.olioa.screens;
 
+import android.app.ActivityManager;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +27,13 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 import wssj.co.jp.olioa.App;
 import wssj.co.jp.olioa.BuildConfig;
 import wssj.co.jp.olioa.R;
+import wssj.co.jp.olioa.firebase.FirebaseMsgService;
 import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
@@ -77,17 +82,37 @@ public class MainActivity extends AppCompatActivity
 
     private LogoutReceiver mLogoutReceiver;
 
-    private boolean mIsAppStart;
-
     private ListStorePushFragment mListStorePushFragment;
 
     private TimeLineFragment mTimelineFragment;
 
     private ListStoreChatFragment mListStoreChatFragment;
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Logger.d(TAG, "broadcastReceiver");
+            if (mCurrentFragment != null) {
+                Bundle bundle = intent.getBundleExtra(FirebaseMsgService.KEY_NOTIFICATION);
+                onReloadFragment(mCurrentFragment.getFragmentId(), bundle);
+            } else {
+                //TODO launch Activity
+            }
+        }
+    };
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Logger.d(TAG, "#onNewIntent " + intent);
+        mPresenter.displaySplashScreen();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Logger.d(TAG, "#onCreate");
         setContentView(R.layout.activity_main);
         FragmentFactory.init();
         mWindow = getWindow();
@@ -98,7 +123,7 @@ public class MainActivity extends AppCompatActivity
         App.getInstance().setActivity(this);
         mPresenter = new MainPresenter(this);
         setupFragmentBackStackManager();
-        mPresenter.displaySplashScreen();
+        onNewIntent(getIntent());
         initView();
         initAction();
         Fabric.with(this, new Crashlytics());
@@ -106,17 +131,7 @@ public class MainActivity extends AppCompatActivity
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
-        mIsAppStart = true;
     }
-
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Logger.d(TAG, "broadcastReceiver");
-            // mPresenter.getListPushNotification(Constants.INIT_PAGE, Constants.LIMIT);
-        }
-    };
 
     private void setupFragmentBackStackManager() {
         mFragmentBackStackManager = new FragmentBackStackManager(getSupportFragmentManager(), R.id.main_container);
@@ -150,9 +165,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 if (mCurrentFragment != null) {
-                    Runnable topNavigationClickListener = mCurrentFragment.onNavigationClickListener();
+                    Runnable topNavigationClickListener = mCurrentFragment.onBackButtonClickListener();
                     if (topNavigationClickListener != null) {
                         topNavigationClickListener.run();
+                        return;
                     }
                     mPresenter.onBackPress();
 
@@ -228,9 +244,9 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_push:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_PUSH, null);
                     return true;
-                case R.id.navigation_timeline:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
-                    return true;
+//                case R.id.navigation_timeline:
+//                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
+//                    return true;
                 case R.id.navigation_chat:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHAT, null);
                     return true;
@@ -393,6 +409,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void logout() {
+        mListStoreChatFragment = null;
+        mListStorePushFragment = null;
         FragmentFactory.destroy();
         clearBackStack();
         displayScreen(FRAGMENT_INTRODUCTION_SCREEN, true, false);
@@ -468,7 +486,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mIsAppStart = false;
         FragmentFactory.destroy();
         VolleySequence.getInstance().release();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
@@ -476,11 +493,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onReloadData(int fragmentId) {
+    public void onReloadFragment(int fragmentId, Bundle... bundles) {
         switch (fragmentId) {
             case IMainView.FRAGMENT_LIST_STORE_PUSH:
                 if (mListStorePushFragment != null) {
-                    mListStorePushFragment.setReloadData(true);
+                    mListStorePushFragment.setRefreshFragment(true);
+                }
+                break;
+            case IMainView.FRAGMENT_LIST_STORE_CHAT:
+                if (mListStoreChatFragment != null) {
+                    mListStoreChatFragment.setRefreshFragment(true);
+                    if (bundles.length > 0) {
+                        Bundle bundle = bundles[0];
+                        mListStoreChatFragment.receiverDataFromFragment(bundle);
+                    }
+
+                }
+                break;
+            case IMainView.FRAGMENT_CHAT:
+                if (mCurrentFragment != null) {
+                    if (bundles.length > 0) {
+                        Bundle bundle = bundles[0];
+                        mCurrentFragment.receiverDataFromFragment(bundle);
+                    }
                 }
                 break;
         }
@@ -499,4 +534,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    protected boolean isAppOnTop() {
+        ActivityManager am = (ActivityManager) this.getSystemService(Service.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks;
+        tasks = am.getRunningTasks(1);
+        ActivityManager.RunningTaskInfo running = tasks.get(0);
+        String packageName = running.topActivity.getPackageName();
+        if (packageName.equals(BuildConfig.APPLICATION_ID)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -115,10 +115,10 @@ public class TimeLineDetailFragment extends BaseFragment<ITimeLineView, TimeLine
         return true;
     }
 
-    @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_timeline;
-    }
+//    @Override
+//    public int getNavigationBottomId() {
+//        return R.id.navigation_timeline;
+//    }
 
     @Override
     protected ITimeLineView onCreateView() {

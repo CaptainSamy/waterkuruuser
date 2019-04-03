@@ -183,7 +183,7 @@ public class CalenderFragment extends BaseFragment<ICalenderView, CalenderPresen
 //                getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
                 NotificationMessage message = (NotificationMessage) parent.getAdapter().getItem(position);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
+                bundle.putParcelable(PushNotificationDetailFragment.NOTIFICATION_ARG, message);
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
             }
         });

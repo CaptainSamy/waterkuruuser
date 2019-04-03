@@ -22,8 +22,14 @@ public class ListStoreCheckedInPresenter extends FragmentPresenter<IListStoreChe
         registerModel(new UtilsModel(view.getViewContext()));
     }
 
-    public void getListStoreCheckedIn(int type) {
-        getView().showProgress();
+    private SharedPreferencesModel getShareModel() {
+        return getModel(SharedPreferencesModel.class);
+    }
+
+    public void getListStoreCheckedIn(int type, boolean... isShowProgress) {
+        if (isShowProgress.length == 0) {
+            getView().showProgress();
+        }
         getModel(StampModel.class).getListStoreCheckedIn(type, 0, new APICallback<List<StoreInfo>>() {
 
             @Override
@@ -38,5 +44,13 @@ public class ListStoreCheckedInPresenter extends FragmentPresenter<IListStoreChe
                 getView().showDialog(errorMessage);
             }
         });
+    }
+
+    void saveLastTimeReadChat(long storeId) {
+        getShareModel().putLastTimeReadChat(storeId, System.currentTimeMillis());
+    }
+
+    long getLasTimeRead(long storeId) {
+        return getShareModel().getLastTimeReadChat(storeId);
     }
 }

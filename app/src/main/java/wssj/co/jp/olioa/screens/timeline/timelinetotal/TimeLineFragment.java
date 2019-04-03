@@ -69,10 +69,10 @@ public class TimeLineFragment extends BaseFragment<ITimeLineView, TimeLinePresen
         return false;
     }
 
-    @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_timeline;
-    }
+//    @Override
+//    public int getNavigationBottomId() {
+//        return R.id.navigation_timeline;
+//    }
 
     @Override
     protected ITimeLineView onCreateView() {

@@ -1,10 +1,11 @@
 package wssj.co.jp.olioa.model.firebase;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,7 +15,7 @@ import wssj.co.jp.olioa.model.GsonSerializable;
  * Created by tuanle on 6/1/17.
  */
 
-public class NotificationMessage implements GsonSerializable, Serializable {
+public class NotificationMessage implements GsonSerializable, Parcelable {
 
     @SerializedName("id")
     private long mPushId;
@@ -34,8 +35,36 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     @SerializedName("logo")
     private String mLogo;
 
-
     private int day;
+
+    protected NotificationMessage(Parcel in) {
+        mPushId = in.readLong();
+        mUserPushId = in.readLong();
+        mTitle = in.readString();
+        mMessage = in.readString();
+        mPushTime = in.readLong();
+        mLogo = in.readString();
+        day = in.readInt();
+        mIsSound = in.readByte() != 0;
+        mStatusRead = in.readInt();
+        mAction = in.readString();
+        mStampId = in.readInt();
+        mIsLike = in.readInt();
+        mStoreAnnounce = in.readInt();
+    }
+
+    public static final Creator<NotificationMessage> CREATOR = new Creator<NotificationMessage>() {
+
+        @Override
+        public NotificationMessage createFromParcel(Parcel in) {
+            return new NotificationMessage(in);
+        }
+
+        @Override
+        public NotificationMessage[] newArray(int size) {
+            return new NotificationMessage[size];
+        }
+    };
 
     public int getDay() {
         if (mPushTime != 0) {
@@ -61,17 +90,17 @@ public class NotificationMessage implements GsonSerializable, Serializable {
     private boolean mIsSound;
 
     /*
-    *  1 - read
-    *  0 - not read
-    * */
+     *  1 - read
+     *  0 - not read
+     * */
     @SerializedName("status_read")
     private int mStatusRead;
 
     /*
-    * 1 : TYPE_NOTIFICATION
-    * 2 : TYPE_REMIND
-    * 3 : TYPE_REQUEST_REVIEW
-    * */
+     * 1 : TYPE_NOTIFICATION
+     * 2 : TYPE_REMIND
+     * 3 : TYPE_REQUEST_REVIEW
+     * */
     @SerializedName("type")
     private String mAction;
 
@@ -191,5 +220,27 @@ public class NotificationMessage implements GsonSerializable, Serializable {
 
     public void setUserPushId(long userPushId) {
         this.mUserPushId = userPushId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mPushId);
+        dest.writeLong(mUserPushId);
+        dest.writeString(mTitle);
+        dest.writeString(mMessage);
+        dest.writeLong(mPushTime);
+        dest.writeString(mLogo);
+        dest.writeInt(day);
+        dest.writeByte((byte) (mIsSound ? 1 : 0));
+        dest.writeInt(mStatusRead);
+        dest.writeString(mAction);
+        dest.writeInt(mStampId);
+        dest.writeInt(mIsLike);
+        dest.writeInt(mStoreAnnounce);
     }
 }

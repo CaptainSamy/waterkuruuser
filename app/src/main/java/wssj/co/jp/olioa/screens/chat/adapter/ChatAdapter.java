@@ -112,15 +112,15 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
                     Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
                     break;
             }
-            if (mImageStore != null && clickImageStore != null) {
-                mImageStore.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        clickImageStore.onClick(chat.getToId());
-                    }
-                });
-            }
+//            if (mImageStore != null && clickImageStore != null) {
+//                mImageStore.setOnClickListener(new View.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(View v) {
+//                        clickImageStore.onClick(chat.getToId());
+//                    }
+//                });
+//            }
             if (TextUtils.isEmpty(chat.getDate())) {
                 mLayoutDate.setVisibility(View.GONE);
             } else {

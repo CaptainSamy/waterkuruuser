@@ -15,9 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wssj.co.jp.olioa.R;
+import wssj.co.jp.olioa.firebase.FirebaseMsgService;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
+import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.chat.adapter.ChatAdapter;
@@ -56,7 +58,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private String lastTime = Constants.EMPTY_STRING;
 
-    private long newestChatId;
+    private long newestChatIdDatabase;
 
     private DBManager dbManager;
 
@@ -178,24 +180,18 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         });
         mListViewChat.setAdapter(mAdapter);
         mAdapter.setImageStore(storeInfo.getLogo());
-        newestChatId = dbManager.getChatId(storeInfo.getId(), true);
+        newestChatIdDatabase = dbManager.getChatId(storeInfo.getId(), true);
         getPresenter().getHistoryChat(storeInfo.getId(), 0);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     @Override
     public void onGetHistoryChatSuccess(final List<ChatMessage> history) {
         if (!Utils.isEmpty(history)) {
-            if (newestChatId > 0) {
+            if (newestChatIdDatabase > 0) {
                 int endOf = history.size() - 1;
                 long newestChatIdServer = history.get(endOf).getId();
-                long distance = Math.abs(newestChatIdServer - newestChatId);
-                showLog(newestChatId + "/" + newestChatIdServer + " / distance:" + distance);
+                long distance = Math.abs(newestChatIdServer - newestChatIdDatabase);
+                showLog(newestChatIdDatabase + "/" + newestChatIdServer + " / distance:" + distance);
                 if (distance <= Constants.MAX_ITEM_PAGE_CHAT) {
                     isGetFromDatabase = true;
                 }
@@ -312,6 +308,39 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                 showLog("onLoadMoreTop request");
                 getPresenter().getHistoryChat(storeInfo.getId(), lastId);
             }
+        }
+    }
+
+    @Override
+    public void receiverDataFromFragment(Bundle bundle) {
+        super.receiverDataFromFragment(bundle);
+        if (bundle == null) {
+            return;
+        }
+        NotificationMessage notification = bundle.getParcelable(FirebaseMsgService.KEY_NOTIFICATION);
+        if (notification != null) {
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage.setUser(false);
+            chatMessage.setContent(notification.getMessage());
+            chatMessage.setCreated(notification.getPushTime());
+            String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
+            if (!lastTime.equals(time)) {
+                lastTime = time;
+                chatMessage.setDate(time);
+            }
+            mListChat.add(chatMessage);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (storeInfo != null) {
+            if (getMainActivity() != null) {
+                getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
+            }
+            getPresenter().saveLastTimeReadChat(storeInfo.getId());
         }
     }
 }

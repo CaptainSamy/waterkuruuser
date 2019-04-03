@@ -20,6 +20,10 @@ public class ChatPresenter extends FragmentPresenter<IChatView> {
         registerModel(new SharedPreferencesModel(view.getViewContext()));
     }
 
+    public SharedPreferencesModel getShareModel() {
+        return getModel(SharedPreferencesModel.class);
+    }
+
     void getHistoryChat(int storeId, long lastChatId) {
         getView().showProgress();
         getModel(ChatModel.class).getHistoryChat(storeId, lastChatId, new APICallback<List<ChatMessage>>() {
@@ -53,7 +57,7 @@ public class ChatPresenter extends FragmentPresenter<IChatView> {
         });
     }
 
-    long getLastChatId() {
-        return getModel(SharedPreferencesModel.class).getLastChatId();
+    void saveLastTimeReadChat(long storeId) {
+        getShareModel().putLastTimeReadChat(storeId, System.currentTimeMillis());
     }
 }

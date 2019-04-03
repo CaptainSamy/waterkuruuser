@@ -23,6 +23,7 @@ import wssj.co.jp.olioa.screens.IActivityCallback;
 import wssj.co.jp.olioa.screens.MainActivity;
 import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.utils.Constants;
+import wssj.co.jp.olioa.utils.FragmentBackStackManager;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
 
@@ -53,7 +54,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     private TextView mTextNoItem;
 
-    private boolean isReloadData = false;
+    private boolean isRefreshFragment = false;
 
     @Override
     public Context getViewContext() {
@@ -98,6 +99,12 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         } else {
             mRootView = onCreateViewInternal(inflater, container);
         }
+        if (getArguments() != null) {
+            Bundle bundle = getArguments().getBundle(FragmentBackStackManager.KEY_RETURNED_EXTRA_BUNDLE);
+            if (bundle != null) {
+                receiverDataFromFragment(bundle);
+            }
+        }
         Utils.setupUI(mRootView, mActivity);
         return mRootView;
     }
@@ -141,9 +148,9 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         Logger.i(TAG, "#onResume" + getInternalLogTag());
         super.onResume();
         mPresenter.onFragmentResume();
-        if (isReloadData) {
-            isReloadData = false;
-            onGetDataAgain();
+        if (isRefreshFragment) {
+            isRefreshFragment = false;
+            onRefreshFragment();
         }
     }
 
@@ -283,7 +290,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return true;
     }
 
-    public Runnable onNavigationClickListener() {
+    public Runnable onBackButtonClickListener() {
         return null;
     }
 
@@ -340,7 +347,11 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     protected void initData() {
     }
 
-    protected void onGetDataAgain() {
+    protected void onRefreshFragment() {
+
+    }
+
+    public void receiverDataFromFragment(Bundle bundle) {
 
     }
 
@@ -379,8 +390,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         }
     }
 
-    public void setReloadData(boolean reloadData) {
-        isReloadData = reloadData;
+    public void setRefreshFragment(boolean refreshFragment) {
+        isRefreshFragment = refreshFragment;
     }
 
     public MainActivity getMainActivity() {
