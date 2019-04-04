@@ -33,9 +33,11 @@ import io.fabric.sdk.android.Fabric;
 import wssj.co.jp.olioa.App;
 import wssj.co.jp.olioa.BuildConfig;
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.firebase.FirebaseMsgService;
+import wssj.co.jp.olioa.firebase.FireBaseMsgService;
 import wssj.co.jp.olioa.model.database.DBManager;
+import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.chat.chatdetail.ChatFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
@@ -93,11 +95,24 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onReceive(Context context, Intent intent) {
             Logger.d(TAG, "broadcastReceiver");
-            if (mCurrentFragment != null) {
-                Bundle bundle = intent.getBundleExtra(FirebaseMsgService.KEY_NOTIFICATION);
-                onReloadFragment(mCurrentFragment.getFragmentId(), bundle);
-            } else {
-                //TODO launch Activity
+            if (mCurrentFragment == null) {
+                return;
+            }
+            boolean needRefresh = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_LIST_STORE_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_CHAT;
+            if (!needRefresh) {
+                return;
+            }
+            Bundle bundle = intent.getBundleExtra(FireBaseMsgService.KEY_NOTIFICATION);
+            if (bundle == null) {
+                return;
+            }
+            NotificationMessage notification = bundle.getParcelable(FireBaseMsgService.KEY_NOTIFICATION);
+            if (notification != null) {
+                switch (notification.getAction()) {
+                    case FireBaseMsgService.ACTION_PUSH_CHAT:
+                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                        break;
+                }
             }
         }
     };
@@ -106,7 +121,19 @@ public class MainActivity extends AppCompatActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Logger.d(TAG, "#onNewIntent " + intent);
-        mPresenter.displaySplashScreen();
+//        Bundle bundle = intent.getBundleExtra(FireBaseMsgService.KEY_NOTIFICATION);
+//        if (bundle != null) {
+//            NotificationMessage notification = bundle.getParcelable(FireBaseMsgService.KEY_NOTIFICATION);
+//            if (notification != null) {
+//                ChatMessage chatMessage = new ChatMessage();
+//                chatMessage.setUser(false);
+//                chatMessage.setContent(notification.getMessage());
+//                chatMessage.setCreated(notification.getPushTime());
+//                String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
+//                Logger.d(TAG, notification.getMessage());
+//            }
+//        }
+
     }
 
     @Override
@@ -123,6 +150,7 @@ public class MainActivity extends AppCompatActivity
         App.getInstance().setActivity(this);
         mPresenter = new MainPresenter(this);
         setupFragmentBackStackManager();
+        mPresenter.displaySplashScreen();
         onNewIntent(getIntent());
         initView();
         initAction();
@@ -359,7 +387,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement) {
+    public void switchScreen(int screenId, boolean hasAnimation,
+                             boolean addToBackStack, Bundle bundle, View sharedElement) {
         if (sharedElement == null) {
             switchScreen(screenId, hasAnimation, addToBackStack, bundle);
         } else {
@@ -382,7 +411,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack) {
+    public void displayScreen(final int screenId, final boolean hasAnimation,
+                              final boolean addToBackStack) {
         displayScreen(screenId, hasAnimation, addToBackStack, null);
     }
 
@@ -393,7 +423,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void displayScreen(final int screenId, final boolean hasAnimation, final boolean addToBackStack, final Bundle bundle, final View sharedElement) {
+    public void displayScreen(final int screenId, final boolean hasAnimation,
+                              final boolean addToBackStack, final Bundle bundle, final View sharedElement) {
         switchScreen(screenId, hasAnimation, addToBackStack, bundle, sharedElement);
     }
 
@@ -467,7 +498,8 @@ public class MainActivity extends AppCompatActivity
                 WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
-    private void replaceFragment(BaseFragment fragment, boolean hasAnimation, boolean addToBackStack) {
+    private void replaceFragment(BaseFragment fragment, boolean hasAnimation,
+                                 boolean addToBackStack) {
         if (fragment != null && !isFinishing()) {
             if (mCurrentFragment == null || mCurrentFragment.getFragmentId() != fragment.getFragmentId() || fragment instanceof PushNotificationDetailFragment) {
                 mFragmentBackStackManager.replaceFragment(fragment, hasAnimation, addToBackStack);
@@ -493,29 +525,32 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onReloadFragment(int fragmentId, Bundle... bundles) {
+    public void onReloadFragment(int fragmentId, boolean... reloadNow) {
+        if (!isAppOnTop()) {
+            return;
+        }
         switch (fragmentId) {
             case IMainView.FRAGMENT_LIST_STORE_PUSH:
                 if (mListStorePushFragment != null) {
-                    mListStorePushFragment.setRefreshFragment(true);
+                    if (reloadNow.length == 0) {
+                        mListStorePushFragment.flagRefreshWhenBackFragment();
+                    } else {
+                        mListStorePushFragment.onRefresh();
+                    }
                 }
                 break;
             case IMainView.FRAGMENT_LIST_STORE_CHAT:
                 if (mListStoreChatFragment != null) {
-                    mListStoreChatFragment.setRefreshFragment(true);
-                    if (bundles.length > 0) {
-                        Bundle bundle = bundles[0];
-                        mListStoreChatFragment.receiverDataFromFragment(bundle);
+                    if (reloadNow.length == 0) {
+                        mListStoreChatFragment.flagRefreshWhenBackFragment();
+                    } else {
+                        mListStoreChatFragment.onRefresh();
                     }
-
                 }
                 break;
             case IMainView.FRAGMENT_CHAT:
-                if (mCurrentFragment != null) {
-                    if (bundles.length > 0) {
-                        Bundle bundle = bundles[0];
-                        mCurrentFragment.receiverDataFromFragment(bundle);
-                    }
+                if (mCurrentFragment instanceof ChatFragment) {
+                    ((ChatFragment) mCurrentFragment).onRefresh();
                 }
                 break;
         }
@@ -532,6 +567,7 @@ public class MainActivity extends AppCompatActivity
                 logout();
             }
         }
+
     }
 
     protected boolean isAppOnTop() {

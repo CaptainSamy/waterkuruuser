@@ -5,7 +5,13 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import wssj.co.jp.olioa.model.BaseModel;
+import wssj.co.jp.olioa.model.baseapi.APICallback;
 
 /**
  * Created by HieuPT on 5/17/2017.
@@ -55,6 +61,17 @@ public class UtilsModel extends BaseModel {
             callback.onPermissionGranted();
         } else {
             callback.onPermissionDenied();
+        }
+    }
+
+    public void uploadImage(String path, APICallback<String> callback) {
+        File file = new File(path);
+        if (file.exists()) {
+            RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("upload", file.getName(), fileReqBody);
+            getApi().uploadImage(part).getAsyncResponse(callback);
+        } else {
+            callback.onFailure("File not exits");
         }
     }
 }

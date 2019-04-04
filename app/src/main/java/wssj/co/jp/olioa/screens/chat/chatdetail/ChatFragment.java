@@ -15,11 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.firebase.FirebaseMsgService;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
-import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.chat.adapter.ChatAdapter;
@@ -267,6 +265,11 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onSendChatFailure(String message) {
         mProgressSendChat.setVisibility(View.GONE);
         mButtonSend.setVisibility(View.VISIBLE);
@@ -311,26 +314,9 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         }
     }
 
-    @Override
-    public void receiverDataFromFragment(Bundle bundle) {
-        super.receiverDataFromFragment(bundle);
-        if (bundle == null) {
-            return;
-        }
-        NotificationMessage notification = bundle.getParcelable(FirebaseMsgService.KEY_NOTIFICATION);
-        if (notification != null) {
-            ChatMessage chatMessage = new ChatMessage();
-            chatMessage.setUser(false);
-            chatMessage.setContent(notification.getMessage());
-            chatMessage.setCreated(notification.getPushTime());
-            String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
-            if (!lastTime.equals(time)) {
-                lastTime = time;
-                chatMessage.setDate(time);
-            }
-            mListChat.add(chatMessage);
-            mAdapter.notifyDataSetChanged();
-        }
+    public void onRefresh() {
+        mListChat.clear();
+        getPresenter().getHistoryChat(storeInfo.getId(), 0, false);
     }
 
     @Override

@@ -54,7 +54,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     private TextView mTextNoItem;
 
-    private boolean isRefreshFragment = false;
+    private boolean isRefreshWhenBackFragment = false;
 
     @Override
     public Context getViewContext() {
@@ -102,8 +102,12 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         if (getArguments() != null) {
             Bundle bundle = getArguments().getBundle(FragmentBackStackManager.KEY_RETURNED_EXTRA_BUNDLE);
             if (bundle != null) {
-                receiverDataFromFragment(bundle);
+                onReceiverWhenBackFragment(bundle);
             }
+        }
+        if (isRefreshWhenBackFragment) {
+            isRefreshWhenBackFragment = false;
+            onRefreshWhenBackFragment();
         }
         Utils.setupUI(mRootView, mActivity);
         return mRootView;
@@ -148,10 +152,6 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         Logger.i(TAG, "#onResume" + getInternalLogTag());
         super.onResume();
         mPresenter.onFragmentResume();
-        if (isRefreshFragment) {
-            isRefreshFragment = false;
-            onRefreshFragment();
-        }
     }
 
     @Override
@@ -347,11 +347,11 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     protected void initData() {
     }
 
-    protected void onRefreshFragment() {
+    protected void onRefreshWhenBackFragment() {
 
     }
 
-    public void receiverDataFromFragment(Bundle bundle) {
+    public void onReceiverWhenBackFragment(Bundle bundle) {
 
     }
 
@@ -390,8 +390,8 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         }
     }
 
-    public void setRefreshFragment(boolean refreshFragment) {
-        isRefreshFragment = refreshFragment;
+    public void flagRefreshWhenBackFragment() {
+        isRefreshWhenBackFragment = true;
     }
 
     public MainActivity getMainActivity() {

@@ -19,11 +19,11 @@ import java.io.IOException;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
-import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
-import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.screens.scanner.dialog.ConfirmCheckInDialog;
+import wssj.co.jp.olioa.utils.Logger;
 
 /**
  * Created by HieuPT on 5/19/2017.
@@ -187,13 +187,8 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
             @Override
             public void buttonYesClick() {
-                String success = getString(R.string.check_in_success);
-//                if (success.equals(message)) {
-//                    if (getMainActivity() != null) {
-//                        getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_PUSH);
-//                    }
-//                }
                 getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_PUSH);
+                getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
                 backToPreviousScreen();
             }
         });

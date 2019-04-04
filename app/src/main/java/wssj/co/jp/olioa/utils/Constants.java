@@ -56,17 +56,9 @@ public final class Constants {
 
     public static final String KEY_SERVICE_COMPANY_ID = "KEY_SERVICE_COMPANY_ID";
 
-    public static final String KEY_FAST = "fast_";
-
-    public static final int STATUS_READ = 1;
-
-    public static final int STATUS_VIEW = 2;
-
     public static final int TIME_DELAY_GET_LIST_CHAT = 5000;
 
     public static final String KEY_VIDEO = "video_iungo";
-
-    public static final String KEY_FRAME_VIDEO = "frame_video";
 
     public static final String KEY_SPLIT_FRAME_VIDEO = "|";
 
@@ -79,6 +71,8 @@ public final class Constants {
     public static final int SUCCESSFULLY = 1;
 
     public static final int FAILURE = 2;
+
+    public static final String KEY_RELOAD = "key_reload";
 
     public static final int MAX_ITEM_PAGE = 30;
 

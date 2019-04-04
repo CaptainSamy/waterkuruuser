@@ -24,8 +24,10 @@ public class ChatPresenter extends FragmentPresenter<IChatView> {
         return getModel(SharedPreferencesModel.class);
     }
 
-    void getHistoryChat(int storeId, long lastChatId) {
-        getView().showProgress();
+    void getHistoryChat(int storeId, long lastChatId, boolean... isLoading) {
+        if (isLoading.length == 0) {
+            getView().showProgress();
+        }
         getModel(ChatModel.class).getHistoryChat(storeId, lastChatId, new APICallback<List<ChatMessage>>() {
 
             @Override

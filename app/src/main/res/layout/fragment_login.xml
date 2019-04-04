@@ -40,8 +40,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="8dp"
+            android:text="@string/reset_password"
             android:textColor="@color/colorText"
-            android:text="@string/reset_password"/>
+            android:visibility="gone"/>
     </LinearLayout>
 
 </RelativeLayout>

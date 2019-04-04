@@ -1,13 +1,12 @@
 package wssj.co.jp.olioa.screens.changepassword;
 
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import wssj.co.jp.olioa.R;
-import wssj.co.jp.olioa.model.auth.InfoUserResponse;
+import wssj.co.jp.olioa.model.entities.UserResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 
@@ -15,7 +14,7 @@ import wssj.co.jp.olioa.screens.base.BaseFragment;
  * Created by Nguyen Huu Ta on 11/5/2017.
  */
 
-public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordView, ChangePasswordPresenter> implements IChangePasswordView {
+public class ChangePasswordByCodeFragment extends BaseFragment<IChangeUserInfoView, ChangeUserInfoPresenter> implements IChangeUserInfoView {
 
     private static final String TAG = "ChangePasswordByCodeFragment";
 
@@ -44,8 +43,8 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     }
 
     @Override
-    protected ChangePasswordPresenter onCreatePresenter(IChangePasswordView view) {
-        return new ChangePasswordPresenter(view);
+    protected ChangeUserInfoPresenter onCreatePresenter(IChangeUserInfoView view) {
+        return new ChangeUserInfoPresenter(view);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     }
 
     @Override
-    protected IChangePasswordView onCreateView() {
+    protected IChangeUserInfoView onCreateView() {
         return this;
     }
 
@@ -119,17 +118,7 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangePasswordVi
     }
 
     @Override
-    public void onGetInfoUserFailure(String message) {
-
-    }
-
-    @Override
-    public void onGetInfoUserSuccess(InfoUserResponse.InfoUser infoUser) {
-
-    }
-
-    @Override
-    public void showPhotoDialog(Drawable drawable, int requestCode) {
+    public void onGetInfoUserSuccess(UserResponse infoUser) {
 
     }
 
