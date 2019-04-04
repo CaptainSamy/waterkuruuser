@@ -220,7 +220,7 @@
 
     <!--ChatMessage Fragment-->
     <string name="title_screen_store_follow">チャット</string>
-    <string name="title_screen_chat">チェット</string>
+    <string name="title_screen_chat">トーク</string>
     <string name="input_content_chat">メッセージを入力してください。</string>
     <string name="no_conversation">メッセージがありません。</string>
 
@@ -241,6 +241,6 @@
     <!--OLIOA-->
     <string name="check_in_success">ともだちになりました</string>
     <string name="title_dialog_check_in">通知</string>
-    <string name="title_store_push">チェット</string>
+    <string name="title_store_push">トーク</string>
 
 </resources>
