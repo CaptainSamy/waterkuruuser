@@ -91,7 +91,7 @@ public class ChatRealTimeFragment extends BaseFragment<IChatRealTimeView, ChatRe
 
     @Override
     public String getAppBarTitle() {
-        return "チェット";
+        return "トーク";
     }
 
     @Override
