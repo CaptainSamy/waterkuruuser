@@ -3,7 +3,6 @@ package wssj.co.jp.olioa.screens.dialogchoosen;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import wssj.co.jp.olioa.R;
@@ -27,8 +26,6 @@ public class DialogChoose extends BaseDialog<IDialogChooseView, DialogChoosePres
 
     private TextView mButtonTakePhoto, mButtonChooseGallery, mButtonCancel;
 
-    private RelativeLayout mLayoutDialogChoose;
-
     public DialogChoose(@NonNull Context context) {
         super(context, R.style.DialogThemeChoose);
         setCancelable(false);
@@ -48,7 +45,6 @@ public class DialogChoose extends BaseDialog<IDialogChooseView, DialogChoosePres
     }
 
     private void initView() {
-        mLayoutDialogChoose = (RelativeLayout) findViewById(R.id.dialogChoose);
         mButtonTakePhoto = (TextView) findViewById(R.id.tvTakePhoto);
         mButtonChooseGallery = (TextView) findViewById(R.id.tvChooseGallery);
         mButtonCancel = (TextView) findViewById(R.id.tvCancelDialog);
@@ -62,7 +58,6 @@ public class DialogChoose extends BaseDialog<IDialogChooseView, DialogChoosePres
 
     public void show(IListenerChooseCallback callback) {
         mCallback = callback;
-
         show();
     }
 

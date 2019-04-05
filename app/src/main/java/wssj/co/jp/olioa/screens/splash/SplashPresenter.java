@@ -30,13 +30,13 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
         return getModel(SharedPreferencesModel.class);
     }
 
-    public void onCreate() {
+    public void onCreate(int fragmentId) {
         final String token = getShareModel().getToken();
         if (TextUtils.isEmpty(token)) {
             getView().displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN);
         } else {
             APIService.getInstance().addAuthorizationHeader(token);
-            getView().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT);
+            getView().displayScreen(fragmentId);
         }
     }
 

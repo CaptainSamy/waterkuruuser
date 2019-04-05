@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Handler;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -161,7 +160,6 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     protected void initData() {
         super.initData();
         getPresenter().onGetInfoUser();
-        mButtonChangePassword.setEnabled(false);
     }
 
     @Override
@@ -191,14 +189,8 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
 
     @Override
     public void onChangePasswordSuccess(String message) {
-        showToast(message);
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_TIMELINE, true, false);
-            }
-        }, 1000);
+        //showToast(getString(R.string.change_password_success));
+        backToPreviousScreen();
     }
 
     @Override

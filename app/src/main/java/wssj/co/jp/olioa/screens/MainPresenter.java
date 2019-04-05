@@ -22,8 +22,8 @@ class MainPresenter extends BasePresenter<IMainView> {
         registerModel(new AuthModel(view.getViewContext()));
     }
 
-    void displaySplashScreen() {
-        getView().switchScreen(IMainView.FRAGMENT_SPLASH_SCREEN, true, false, null);
+    void displaySplashScreen(Bundle bundle) {
+        getView().switchScreen(IMainView.FRAGMENT_SPLASH_SCREEN, true, false, bundle);
     }
 
     void onBackPress() {

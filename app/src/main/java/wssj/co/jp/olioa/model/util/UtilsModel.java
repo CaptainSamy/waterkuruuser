@@ -68,7 +68,7 @@ public class UtilsModel extends BaseModel {
         File file = new File(path);
         if (file.exists()) {
             RequestBody fileReqBody = RequestBody.create(MediaType.parse("image/*"), file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("upload", file.getName(), fileReqBody);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("image", file.getName(), fileReqBody);
             getApi().uploadImage(part).getAsyncResponse(callback);
         } else {
             callback.onFailure("File not exits");

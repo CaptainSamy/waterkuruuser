@@ -68,14 +68,13 @@ public class FireBaseMsgService extends FirebaseMessagingService {
                     sentToActivity.putExtra(KEY_NOTIFICATION, bundle);
                     sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
 
-                    boolean actionPushChat = ACTION_PUSH_CHAT.equals(notificationMessage.getAction());
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(sentToActivity);
 //                    if (!isAppOnTop() || !actionPushChat) {
                     Intent intent = new Intent(FireBaseMsgService.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                             Intent.FLAG_ACTIVITY_SINGLE_TOP |
                             Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(KEY_NOTIFICATION, notificationMessage);
+                    intent.putExtra(KEY_NOTIFICATION, notificationMessage.getAction());
                     Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(FireBaseMsgService.this);
                     builder.setContentTitle(notificationMessage.getTitle());
@@ -91,7 +90,7 @@ public class FireBaseMsgService extends FirebaseMessagingService {
                     if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         builder.setColor(getResources().getColor(R.color.colorMain));
                     }
-                    builder.setSmallIcon(R.drawable.logo_app);
+                    builder.setSmallIcon(R.drawable.image_notification);
                     PendingIntent pendingIntent = PendingIntent.getActivity(FireBaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
                     builder.setContentIntent(pendingIntent);
                     mNotificationManager.notify((int) notificationMessage.getPushId(), builder.build());

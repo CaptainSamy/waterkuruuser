@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +41,8 @@ import wssj.co.jp.olioa.screens.comment.CommentFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
+import wssj.co.jp.olioa.screens.pushnotification.pushlist.PushNotificationFragment;
+import wssj.co.jp.olioa.screens.splash.SplashFragment;
 import wssj.co.jp.olioa.screens.timeline.timelinetotal.TimeLineFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.FragmentBackStackManager;
@@ -72,8 +73,6 @@ public class MainActivity extends AppCompatActivity
 
     private Window mWindow;
 
-    private ImageView imageNotification;
-
     private MainPresenter mPresenter;
 
     private FragmentBackStackManager mFragmentBackStackManager;
@@ -98,22 +97,29 @@ public class MainActivity extends AppCompatActivity
             if (mCurrentFragment == null) {
                 return;
             }
-            boolean needRefresh = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_LIST_STORE_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_CHAT;
-            if (!needRefresh) {
-                return;
-            }
             Bundle bundle = intent.getBundleExtra(FireBaseMsgService.KEY_NOTIFICATION);
             if (bundle == null) {
                 return;
             }
             NotificationMessage notification = bundle.getParcelable(FireBaseMsgService.KEY_NOTIFICATION);
-            if (notification != null) {
-                switch (notification.getAction()) {
-                    case FireBaseMsgService.ACTION_PUSH_CHAT:
-                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
-                        break;
-                }
+            if (notification == null) {
+                return;
             }
+            switch (mCurrentFragment.getFragmentId()) {
+                case IMainView.FRAGMENT_LIST_STORE_CHAT:
+                case IMainView.FRAGMENT_CHAT:
+                    if (FireBaseMsgService.ACTION_PUSH_CHAT.equals(notification.getAction())) {
+                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                    }
+                    break;
+                case IMainView.FRAGMENT_PUSH_NOTIFICATION:
+                    if (!FireBaseMsgService.ACTION_PUSH_CHAT.equals(notification.getAction())) {
+                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                    }
+                    break;
+            }
+
+
         }
     };
 
@@ -121,19 +127,19 @@ public class MainActivity extends AppCompatActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Logger.d(TAG, "#onNewIntent " + intent);
-//        Bundle bundle = intent.getBundleExtra(FireBaseMsgService.KEY_NOTIFICATION);
-//        if (bundle != null) {
-//            NotificationMessage notification = bundle.getParcelable(FireBaseMsgService.KEY_NOTIFICATION);
-//            if (notification != null) {
-//                ChatMessage chatMessage = new ChatMessage();
-//                chatMessage.setUser(false);
-//                chatMessage.setContent(notification.getMessage());
-//                chatMessage.setCreated(notification.getPushTime());
-//                String time = DateConvert.formatToString(DateConvert.DATE_FORMAT, chatMessage.getCreated());
-//                Logger.d(TAG, notification.getMessage());
-//            }
-//        }
-
+        if (intent != null && intent.getExtras() != null) {
+            String type = intent.getExtras().getString(FireBaseMsgService.KEY_NOTIFICATION);
+            if (type != null) {
+                switch (type) {
+                    case FireBaseMsgService.ACTION_PUSH_CHAT:
+                        displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT, false, false);
+                        break;
+                    default:
+                        displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, false, false);
+                        break;
+                }
+            }
+        }
     }
 
     @Override
@@ -142,6 +148,11 @@ public class MainActivity extends AppCompatActivity
         Logger.d(TAG, "#onCreate");
         setContentView(R.layout.activity_main);
         FragmentFactory.init();
+        Fabric.with(this, new Crashlytics());
+        DBManager.getInstance().init(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
+        mLogoutReceiver = new LogoutReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
         mWindow = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWindow.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -150,15 +161,26 @@ public class MainActivity extends AppCompatActivity
         App.getInstance().setActivity(this);
         mPresenter = new MainPresenter(this);
         setupFragmentBackStackManager();
-        mPresenter.displaySplashScreen();
-        onNewIntent(getIntent());
         initView();
         initAction();
-        Fabric.with(this, new Crashlytics());
-        DBManager.getInstance().init(this);
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
-        mLogoutReceiver = new LogoutReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
+        String type = null;
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            type = getIntent().getExtras().getString("type");
+        }
+        Bundle bundle = new Bundle();
+        if (TextUtils.isEmpty(type)) {
+            bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_CHAT);
+        } else {
+            switch (type) {
+                case FireBaseMsgService.ACTION_PUSH_CHAT:
+                    bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_CHAT);
+                    break;
+                default:
+                    bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_PUSH);
+                    break;
+            }
+        }
+        mPresenter.displaySplashScreen(bundle);
     }
 
     private void setupFragmentBackStackManager() {
@@ -182,7 +204,6 @@ public class MainActivity extends AppCompatActivity
         mToolbar.setNavigationIcon(R.drawable.ic_back);
         mToolbar.setShowIconNotificationButton(false);
         setSupportActionBar(mToolbar);
-        imageNotification = (ImageView) findViewById(R.id.iconTest);
     }
 
     private void initAction() {
@@ -537,6 +558,11 @@ public class MainActivity extends AppCompatActivity
                     } else {
                         mListStorePushFragment.onRefresh();
                     }
+                }
+                break;
+            case IMainView.FRAGMENT_PUSH_NOTIFICATION:
+                if (mCurrentFragment instanceof PushNotificationFragment) {
+                    ((PushNotificationFragment) mCurrentFragment).onRefresh();
                 }
                 break;
             case IMainView.FRAGMENT_LIST_STORE_CHAT:

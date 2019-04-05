@@ -62,7 +62,7 @@ public final class FragmentFactory {
         BaseFragment fragment = null;
         switch (screenId) {
             case IMainView.FRAGMENT_SPLASH_SCREEN:
-                fragment = new SplashFragment();
+                fragment = SplashFragment.newInstance(bundle);
                 break;
             case IMainView.FRAGMENT_INTRODUCTION_SCREEN:
                 fragment = new IntroductionFragment();

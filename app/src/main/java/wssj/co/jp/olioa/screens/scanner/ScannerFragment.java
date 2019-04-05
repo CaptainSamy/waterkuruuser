@@ -44,6 +44,8 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
     private ConfirmCheckInDialog mDialog;
 
+    private DialogMessage dialogMessage;
+
     private boolean mIsSurfaceCreated, mIsCameraStarted;
 
     private final Handler mHandler = new Handler();
@@ -183,15 +185,17 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
     @Override
     public void showDialog(final String message) {
-        DialogMessage dialogMessage = new DialogMessage(getActivityContext(), new DialogMessage.IOnClickListener() {
+        if (dialogMessage == null) {
+            dialogMessage = new DialogMessage(getActivityContext(), new DialogMessage.IOnClickListener() {
 
-            @Override
-            public void buttonYesClick() {
-                getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_PUSH);
-                getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
-                backToPreviousScreen();
-            }
-        });
+                @Override
+                public void buttonYesClick() {
+                    getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_PUSH);
+                    getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
+                    backToPreviousScreen();
+                }
+            });
+        }
         dialogMessage.setTitle(getString(R.string.title_dialog_check_in));
         dialogMessage.initData(message, getString(R.string.dialog_button_ok));
         dialogMessage.show();
@@ -202,7 +206,9 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     public void onResume() {
         super.onResume();
         if (getUserVisibleHint() && ContextCompat.checkSelfPermission(getActivityContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            startCamera();
+            if (dialogMessage == null || !dialogMessage.isShowing()) {
+                startCamera();
+            }
         }
     }
 
@@ -213,7 +219,9 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     }
 
     private void attemptStartCamera() {
-        getPresenter().attemptStartCamera();
+        if (dialogMessage == null || !dialogMessage.isShowing()) {
+            getPresenter().attemptStartCamera();
+        }
     }
 
     @Override

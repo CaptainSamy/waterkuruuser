@@ -1,5 +1,6 @@
 package wssj.co.jp.olioa.screens.splash;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
@@ -18,7 +19,16 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     private static final String TAG = "SplashFragment";
 
+    public static final String ARG_FRAGMENT_ID = "fragment_id";
+
     private SpotsDialog mDialog;
+
+    public static SplashFragment newInstance(Bundle args) {
+
+        SplashFragment fragment = new SplashFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected String getLogTag() {
@@ -74,7 +84,10 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
 
     @Override
     protected void initData() {
-        getPresenter().onCreate();
+        if (getArguments() != null) {
+            int fragmentId = getArguments().getInt(ARG_FRAGMENT_ID);
+            getPresenter().onCreate(fragmentId);
+        }
     }
 
     @Override
