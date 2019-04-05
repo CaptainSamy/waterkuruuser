@@ -36,7 +36,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
             getView().displayScreen(IMainView.FRAGMENT_INTRODUCTION_SCREEN);
         } else {
             APIService.getInstance().addAuthorizationHeader(token);
-            getView().displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH);
+            getView().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT);
         }
     }
 

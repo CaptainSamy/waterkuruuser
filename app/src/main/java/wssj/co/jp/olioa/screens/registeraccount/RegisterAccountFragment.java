@@ -274,6 +274,6 @@ public class RegisterAccountFragment extends BaseFragment<IRegisterAccountView, 
         String message = getString(R.string.register_success);
         showToast(message);
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, true, false);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT, true, false);
     }
 }

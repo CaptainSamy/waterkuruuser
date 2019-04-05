@@ -46,7 +46,7 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_store_push);
+        return getString(R.string.title_screen_chat);
     }
 
     @Override

@@ -134,7 +134,7 @@ public class IntroductionFragment extends BaseFragment<IIntroductionView, Introd
     @Override
     public void displayHomeScreen() {
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, false, false);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT, false, false);
     }
 
     @Override
