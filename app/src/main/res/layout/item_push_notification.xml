@@ -10,6 +10,7 @@
         android:id="@+id/iconNotification"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
         android:layout_margin="8dp"
         app:civ_border_color="@color/color_line"
         app:civ_border_width="1dp"
@@ -19,14 +20,16 @@
         android:id="@+id/layoutInfoNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
 
         <TextView
             android:id="@+id/title_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minLines="2"
-            android:text="夏お得のキャンベーン AA1"
+            android:text="夏お得のキャンベーン AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1AA1"
             android:textColor="@color/colorTextMain"
             android:textSize="12sp"
             android:textStyle="bold"/>
@@ -35,7 +38,8 @@
             android:id="@+id/layoutContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title_notification">
+            android:layout_below="@+id/title_notification"
+            android:layout_marginTop="4dp">
 
 
             <LinearLayout

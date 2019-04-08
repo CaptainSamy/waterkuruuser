@@ -46,7 +46,7 @@ public class ListStorePushFragment extends BaseFragment<IListStoreCheckedInView,
 
     @Override
     public String getAppBarTitle() {
-        return getString(R.string.title_screen_list_store_checked_in);
+        return getString(R.string.title_bottom_stamp);
     }
 
     @Override

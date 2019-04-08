@@ -94,7 +94,7 @@
 
     <!--Home fragment-->
     <string name="title_home">ホーム</string>
-    <string name="title_bottom_stamp">配信一覧</string>
+    <string name="title_bottom_stamp">ブログ</string>
     <string name="title_bottom_another">要望</string>
     <string name="read_qr_code">QRコードリーダー</string>
     <string name="show_qr_code">QR \n コード</string>
