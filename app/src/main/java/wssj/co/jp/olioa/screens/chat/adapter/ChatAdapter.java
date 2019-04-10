@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -127,7 +125,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
                 mLayoutDate.setVisibility(View.VISIBLE);
                 mDate.setText(chat.getDate());
             }
-            mContent.setText(StringEscapeUtils.unescapeJava(chat.getContent()));
+            mContent.setText((chat.getContent()));//StringEscapeUtils.unescapeJava
             String time = DateConvert.formatToString(DateConvert.TIME_FORMAT, chat.getCreated());
             mTime.setText(time);
         }

@@ -9,8 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -153,7 +151,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                 if (!TextUtils.isEmpty(mContent)) {
                     mProgressSendChat.setVisibility(View.VISIBLE);
                     mButtonSend.setVisibility(View.GONE);
-                    getPresenter().sendChat(storeInfo.getId(), StringEscapeUtils.escapeJava(mContent.toString()));
+                    getPresenter().sendChat(storeInfo.getId(),mContent);// StringEscapeUtils.escapeJava
                 }
                 Utils.hideSoftKeyboard(getActivity());
             }
