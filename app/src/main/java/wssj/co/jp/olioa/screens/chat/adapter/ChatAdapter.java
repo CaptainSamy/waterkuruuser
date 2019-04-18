@@ -133,6 +133,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         public void bind(final ChatMessage chat, int position) {
             switch (getItemViewType(position)) {
                 case TYPE_STORE:
+                case TYPE_STORE_IMAGE:
                     Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
                     break;
             }
