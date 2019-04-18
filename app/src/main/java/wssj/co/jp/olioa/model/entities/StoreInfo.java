@@ -23,6 +23,10 @@ public class StoreInfo implements Parcelable {
 
     private String lastTimeMessage;
 
+    public StoreInfo() {
+
+    }
+
     protected StoreInfo(Parcel in) {
         id = in.readInt();
         serviceCompanyId = in.readInt();
@@ -88,6 +92,19 @@ public class StoreInfo implements Parcelable {
 
     public String getLastTimeMessage() {
         return lastTimeMessage;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public void setLastTimeMessage(String lastTimeMessage) {
+        this.lastTimeMessage = lastTimeMessage;
     }
 
     @Override

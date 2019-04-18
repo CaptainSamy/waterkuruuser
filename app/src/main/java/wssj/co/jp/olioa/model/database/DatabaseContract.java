@@ -50,4 +50,21 @@ final class DatabaseContract {
 
         static final String COLUMN_CREATED = "created";
     }
+
+    static class StoreColumn implements BaseColumns {
+
+        static final String TABLE_NAME = "Store";
+
+        static final String COLUMN_STORE_ID = "StoreId";
+
+        static final String STORE_NAME = "StoreName";
+
+        static final String COLUMN_LAST_MESSAGE = "LastMessage";
+
+        static final String COLUMN_LAST_TIME_MESSAGE = "LastTimeMessage";
+
+        static final String COLUMN_LOGO_STORE = "LogoStore";
+
+    }
+
 }

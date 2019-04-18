@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import wssj.co.jp.olioa.model.chat.ChatMessage;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.Logger;
@@ -46,6 +47,59 @@ public class DBManager {
         }
         return mInstance;
     }
+    /*
+     *
+     *
+     * Store Chat
+     *
+     * */
+
+
+    public void insertStore(List<StoreInfo> listStore) {
+        if (Utils.isNotEmpty(listStore)) {
+            for (StoreInfo storeInfo : listStore) {
+                if (storeInfo != null && !checkExitsStoreId(storeInfo.getId())) {
+                    ContentValues values = new ContentValues();
+                    values.put(DatabaseContract.StoreColumn.COLUMN_STORE_ID, storeInfo.getId());
+                    values.put(DatabaseContract.StoreColumn.STORE_NAME, storeInfo.getName());
+                    values.put(DatabaseContract.StoreColumn.COLUMN_LAST_MESSAGE, storeInfo.getLastMessage());
+                    values.put(DatabaseContract.StoreColumn.COLUMN_LAST_TIME_MESSAGE, storeInfo.getLastTimeMessage());
+                    values.put(DatabaseContract.StoreColumn.COLUMN_LOGO_STORE, storeInfo.getLogo());
+                    mDatabaseWrite.insert(DatabaseContract.StoreColumn.TABLE_NAME, null, values);
+                }
+            }
+        }
+    }
+
+    private boolean checkExitsStoreId(long storeId) {
+        String columnSelection[] = new String[]{DatabaseContract.StoreColumn.COLUMN_STORE_ID};
+        String selection = DatabaseContract.ChatColumns.COLUMN_STORE_ID + " = ?";
+        String selectionArgs[] = new String[]{String.valueOf(storeId)};
+
+        Cursor cursorPush = mDatabaseRead.query(DatabaseContract.StoreColumn.TABLE_NAME, columnSelection, selection, selectionArgs, null, null, null);
+        boolean isExits = cursorPush.moveToNext();
+        cursorPush.close();
+        return isExits;
+    }
+
+    public List<StoreInfo> getListStore() {
+        String sql = "SELECT * FROM " + DatabaseContract.StoreColumn.TABLE_NAME;
+        Cursor cursorChats = mDatabaseRead.rawQuery(sql, null);
+        List<StoreInfo> storeInfos = new ArrayList<>();
+        while (cursorChats.moveToNext()) {
+            StoreInfo storeInfo = new StoreInfo();
+            storeInfo.setId(cursorChats.getInt(cursorChats.getColumnIndex(DatabaseContract.StoreColumn.COLUMN_STORE_ID)));
+            storeInfo.setName(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.StoreColumn.STORE_NAME)));
+            storeInfo.setLastMessage(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.StoreColumn.COLUMN_LAST_MESSAGE)));
+            storeInfo.setLastTimeMessage(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.StoreColumn.COLUMN_LAST_TIME_MESSAGE)));
+            storeInfo.setLogo(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.StoreColumn.COLUMN_LOGO_STORE)));
+            storeInfos.add(storeInfo);
+        }
+        cursorChats.close();
+        return storeInfos;
+    }
+
+
 
     /*
      *

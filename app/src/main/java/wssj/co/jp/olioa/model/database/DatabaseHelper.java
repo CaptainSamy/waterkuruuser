@@ -26,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         createTablePush(db);
         createTableChat(db);
+        createTableStore(db);
     }
 
     @Override
@@ -55,6 +56,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DatabaseContract.ChatColumns.COLUMN_VIDEOS + " TEXT, "
                 + DatabaseContract.ChatColumns.COLUMN_IS_USER + " INTEGER, "
                 + DatabaseContract.ChatColumns.COLUMN_CREATED + " INTEGER) ");
+    }
+
+    private void createTableStore(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + DatabaseContract.StoreColumn.TABLE_NAME + " ("
+                + DatabaseContract.StoreColumn.COLUMN_STORE_ID + " INTEGER PRIMARY KEY, "
+                + DatabaseContract.StoreColumn.STORE_NAME + " VARCHAR, "
+                + DatabaseContract.StoreColumn.COLUMN_LAST_MESSAGE + " VARCHAR, "
+                + DatabaseContract.StoreColumn.COLUMN_LAST_TIME_MESSAGE + " VARCHAR, "
+                + DatabaseContract.StoreColumn.COLUMN_LOGO_STORE + " VARCHAR) ");
     }
 
 }
