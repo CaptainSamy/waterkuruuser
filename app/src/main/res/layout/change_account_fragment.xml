@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ログインID" />
+
+    <EditText
+        android:id="@+id/accountName"
+        style="@style/ViewBorderTheme"
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="355dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="パスワード" />
+
+    <EditText
+        android:id="@+id/newPassword"
+        style="@style/ViewBorderTheme"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteY="299dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="パスワード(確認)" />
+
+    <EditText
+        android:id="@+id/confirmPassword"
+        style="@style/ViewBorderTheme"
+        android:inputType="textPassword"
+        tools:layout_editor_absoluteY="299dp" />
+
+    <TextView
+        android:id="@+id/buttonSave"
+        android:layout_width="match_parent"
+        android:text="変更"
+        android:textColor="@color/white"
+        android:gravity="center"
+        style="@style/ViewBorderTheme"
+        android:background="@drawable/bg_red_button"
+        android:layout_height="wrap_content" />
+</LinearLayout>

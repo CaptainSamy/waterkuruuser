@@ -18,8 +18,10 @@
     <color name="color_stamp">#F5F5F5</color>
 
 
-    <color name="colorMain">#D9594C</color>
-    <color name="colorMainPress">#f7301b</color>
+    <!--<color name="colorMain">#D9594C</color>-->
+    <!--<color name="colorMainPress">#f7301b</color>-->
+    <color name="colorMain">#474444</color>
+    <color name="colorMainPress">#8D8F8F8F</color>
     <color name="whitePress">#ececec</color>
     <color name="colorButtonRegister">#A6C36F</color>
     <color name="colorBackground">#FFFFFF</color>
@@ -34,7 +36,9 @@
     <color name="blumine">#59c1ec</color>
     <color name="store_name_in_list_store_checked_in">#317886</color>
     <color name="store_name_in_list_store_checked_in_press">#269cb3</color>
-    <color name="pressHighLightRed">#bf0000</color>
+    <!--<color name="pressHighLightRed">#bf0000</color>-->
+    <color name="pressHighLightRed">#8D8F8F8F</color>
+
     <color name="pressHighLightBLue">#003d4b</color>
     <color name="pressHighLightGray">#7c7c7c</color>
 

@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     private SwipeRefreshLayout mRefreshLayout;
 
     private ListView mListStoreCheckedIn;
+
+    private TextView mEmptyView;
 
     private ListStoreChatAdapter mAdapter;
 
@@ -84,6 +87,7 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
         super.initViews(view);
         mRefreshLayout = view.findViewById(R.id.refreshLayout);
         mListStoreCheckedIn = (ListView) view.findViewById(R.id.lvListStoreCheckedIn);
+        mEmptyView = view.findViewById(R.id.emptyView);
     }
 
     @Override
@@ -119,6 +123,7 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     @Override
     public void onGetListStoreCheckedInSuccess(List<StoreInfo> listStores) {
         mAdapter.setListStore(listStores);
+        mEmptyView.setVisibility(mAdapter.getCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
     @Override

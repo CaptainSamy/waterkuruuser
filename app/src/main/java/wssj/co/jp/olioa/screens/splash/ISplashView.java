@@ -1,5 +1,7 @@
 package wssj.co.jp.olioa.screens.splash;
 
+import android.os.Bundle;
+
 import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 /**
@@ -8,5 +10,5 @@ import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 public interface ISplashView extends IFragmentView {
 
-    void displayScreen(int fragmentId);
+    void displayScreen(int fragmentId, Bundle bundle);
 }

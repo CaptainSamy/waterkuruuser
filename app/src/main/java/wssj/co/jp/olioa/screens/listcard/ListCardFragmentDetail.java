@@ -158,15 +158,15 @@ public class ListCardFragmentDetail extends BaseFragment<IListCardDetailView, Li
             mServiceCompanyId = bundle.getInt(Constants.KEY_SERVICE_COMPANY_ID);
             getPresenter().getListCardByServiceCompany(mServiceCompanyId, Constants.INIT_PAGE, Constants.LIMIT);
 
-            mButtonListStore.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Bundle dataListStore = new Bundle();
-                    dataListStore.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
-                    getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, true, true, dataListStore);
-                }
-            });
+//            mButtonListStore.setOnClickListener(new View.OnClickListener() {
+//
+//                @Override
+//                public void onClick(View v) {
+//                    Bundle dataListStore = new Bundle();
+//                    dataListStore.putInt(Constants.KEY_SERVICE_COMPANY_ID, mServiceCompanyId);
+//                    getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, true, true, dataListStore);
+//                }
+//            });
         }
     }
 

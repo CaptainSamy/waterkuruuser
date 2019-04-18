@@ -27,7 +27,7 @@ interface IChangeUserInfoView extends IFragmentView {
 
     void requestStoragePermission(int requestCode);
 
-    void onOnUpdateInfoUserSuccess();
+    void onRegisterSuccess();
 
     void onOnUpdateInfoUserFailure(String message);
 

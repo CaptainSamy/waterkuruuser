@@ -49,12 +49,6 @@ public class AuthModel extends BaseModel {
 
     }
 
-    public interface IRegisterCallback {
-
-        void onRegisterSuccess(RegisterData data, String message);
-
-        void onRegisterFailure(ErrorMessage errorMessage);
-    }
 
     public interface ILoginCallback {
 
@@ -83,27 +77,6 @@ public class AuthModel extends BaseModel {
 
     }
 
-    public interface IOnCheckVersionAppCallback {
-
-        void onCheckVersionAppSuccess(CheckVersionAppResponse.CheckVersionAppData response);
-
-        void onCheckVersionAppFailure();
-    }
-
-    public interface IOnGetInfoUserCallback {
-
-        void onGetInfoUserSuccess(InfoUserResponse.InfoUser infoUser);
-
-        void onGetInfoUserFailure(String message);
-    }
-
-    public interface IOnUpdateInfoUserCallback {
-
-        void onOnUpdateInfoUserSuccess();
-
-        void onOnUpdateInfoUserFailure(String message);
-    }
-
     public interface IOnUploadImage {
 
         void onSuccess();
@@ -111,19 +84,6 @@ public class AuthModel extends BaseModel {
         void onFailure();
     }
 
-    public interface IOnValidate {
-
-        void onSuccess();
-
-        void onFailure(String message);
-    }
-
-    public interface IOnGetInitUserCallback {
-
-        void onGetInitUserSuccess(InitUserResponse.InitUserData initUser);
-
-        void onGetInitUserFailure(String message);
-    }
 
     private static final String TAG = "AuthModel";
 
@@ -162,9 +122,6 @@ public class AuthModel extends BaseModel {
             code = 3;
         } else if (TextUtils.isEmpty(password)) {
             errorMessage = new ErrorMessage(getContext().getString(R.string.password_not_null));
-            code = 4;
-        } else if (password.length() < 8 || password.length() > 14) {
-            errorMessage = new ErrorMessage(getContext().getString(R.string.password_length));
             code = 4;
         } else if (TextUtils.isEmpty(confirmPassword)) {
             errorMessage = new ErrorMessage(getContext().getString(R.string.confirm_password_not_null));
@@ -218,34 +175,6 @@ public class AuthModel extends BaseModel {
         getApi().loginUser(user).getAsyncResponse(callback);
     }
 
-    public void autoLogin(final ILoginCallback callback) {
-        Request loginRequest = APICreator.autoLogin(new Response.Listener<LoginResponse>() {
-
-            @Override
-            public void onResponse(LoginResponse response) {
-                Logger.d(TAG, "#autoLogin => onResponse");
-                if (response.isSuccess()) {
-                    callback.onLoginSuccess(response.getData());
-                } else {
-                    callback.onLoginFailure(new ErrorMessage(response.getMessage()));
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Logger.d(TAG, "#autoLogin => onResponse");
-                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                if (errorResponse != null) {
-                    callback.onLoginFailure(new ErrorMessage(errorResponse.getMessage()));
-                } else {
-                    callback.onLoginFailure(new ErrorMessage(getStringResource(R.string.network_error)));
-                }
-            }
-        });
-        loginRequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySequence.getInstance().addRequestToFrontQueue(loginRequest);
-    }
 
     public void registerAccount(String userId, String password, String name, String email, int sex, APICallback<AccessToken> callback) {
         User user = new User(userId, password);
@@ -323,7 +252,18 @@ public class AuthModel extends BaseModel {
         } else if (newPassword.length() < 8 || newPassword.length() > 14) {
             message = getStringResource(R.string.password_length);
         }
+        return message;
+    }
 
+    public String validateChangeAccount(String account, String newPassword, String confirmNewPassword) {
+        String message = Constants.EMPTY_STRING;
+        if (TextUtils.isEmpty(account)) {
+            message = getStringResource(R.string.user_not_null);
+        } else if (TextUtils.isEmpty(newPassword)) {
+            message = getStringResource(R.string.password_not_null);
+        } else if (!TextUtils.equals(newPassword, confirmNewPassword)) {
+            message = getStringResource(R.string.different_password);
+        }
         return message;
     }
 
@@ -390,46 +330,6 @@ public class AuthModel extends BaseModel {
         return message;
     }
 
-//    public void changePassword(String token, String currentPassword, String newPassword, String confirmNewPassword, final IOnChangePasswordCallback callback) {
-//        String isValid = validateInfoUser(currentPassword, newPassword, confirmNewPassword);
-//        if (TextUtils.isEmpty(isValid)) {
-//            Request resetPassword = APICreator.changePassword(token, currentPassword, newPassword,
-//                    new Response.Listener<RegisterResponse>() {
-//
-//                        @Override
-//                        public void onResponse(RegisterResponse response) {
-//                            Logger.d(TAG, "#changePassword => onResponse");
-//                            if (response.isSuccess()) {
-//                                if (TextUtils.isEmpty(response.getMessage())) {
-//                                    String message = getStringResource(R.string.change_password_success);
-//                                    callback.onChangePasswordSuccess(response.getData(), message);
-//                                } else {
-//                                    callback.onChangePasswordSuccess(response.getData(), response.getMessage());
-//                                }
-//                            } else {
-//                                callback.onChangePasswordFailure(response.getMessage());
-//                            }
-//                        }
-//                    },
-//                    new Response.ErrorListener() {
-//
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//                            Logger.d(TAG, "#changePassword => onErrorResponse");
-//                            ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-//                            if (errorResponse != null) {
-//                                callback.onChangePasswordFailure(errorResponse.getMessage());
-//                            } else {
-//                                callback.onChangePasswordFailure(getStringResource(R.string.network_error));
-//                            }
-//                        }
-//                    });
-//            VolleySequence.getInstance().addRequest(resetPassword);
-//        } else {
-//            callback.onValidateFailure(isValid);
-//        }
-//    }
-
     public void removeDeviceToken(String token) {
         String androidId = Settings.Secure.getString(getContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -456,105 +356,24 @@ public class AuthModel extends BaseModel {
         VolleySequence.getInstance().addRequest(removeDeviceToken);
     }
 
-    public void checkVersionApp(String token, int currentVersion, final IOnCheckVersionAppCallback callback) {
-        String deviceId = Settings.Secure.getString(getContext().getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-
-        Request requestCheckVersionApp = APICreator.checkVersionApp(token, currentVersion, deviceId, new Response.Listener<CheckVersionAppResponse>() {
-
-            @Override
-            public void onResponse(CheckVersionAppResponse response) {
-                if (response.isSuccess()) {
-                    callback.onCheckVersionAppSuccess(response.getData());
-                } else {
-                    callback.onCheckVersionAppFailure();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                callback.onCheckVersionAppFailure();
-            }
-        });
-        VolleySequence.getInstance().addRequest(requestCheckVersionApp);
-    }
 
     public void onGetInfoUser(APICallback<UserResponse> callback) {
         getApi().getUserInfo().getAsyncResponse(callback);
     }
 
-    public void uploadImageUser(final InfoUserResponse.InfoUser infoUser, final IOnUploadImage uploadImage) {
-        String url = infoUser.getAvatar();
-        if (!TextUtils.isEmpty(url)) {
-            File file = new File(url);
-            if (file.exists()) {
-                final String fileName = Utils.getFileName(url);
-                AmazonS3Utils.getInstance().upload(file, fileName, new TransferListener() {
-
-                    @Override
-                    public void onStateChanged(int id, TransferState state) {
-                        if (state == TransferState.COMPLETED) {
-                            infoUser.setAvatar(AmazonS3Utils.BASE_IMAGE_URL + fileName);
-                            uploadImage.onSuccess();
-                        }
-                    }
-
-                    @Override
-                    public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
-                        Logger.d(TAG, "#onProgressChanged " + bytesCurrent + "/" + bytesTotal);
-                    }
-
-                    @Override
-                    public void onError(int id, Exception ex) {
-                        Logger.d(TAG, "#onError " + ex);
-                        infoUser.setAvatar(Constants.EMPTY_STRING);
-                        uploadImage.onFailure();
-
-                    }
-                });
-            } else {
-                uploadImage.onSuccess();
-            }
-        } else {
-            uploadImage.onSuccess();
-        }
-
-    }
 
     public void onUpdateInfoUser(UserResponse infoUser, final APICallback callback) {
         getApi().updateUserInfo(infoUser).getAsyncResponse(callback);
     }
 
+    public void changeAccount(String account, String password,final APICallback<AccessToken> callback) {
+        User user = new User(account, password);
+        getApi().changeAccount(user).getAsyncResponse(callback);
+    }
+
+
     private boolean isEmailValid(CharSequence email) {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    public void checkInitUser(String token, final IOnGetInitUserCallback callback) {
-        Request resetPassword = APICreator.onCheckInitUser(token, new Response.Listener<InitUserResponse>() {
-
-            @Override
-            public void onResponse(InitUserResponse response) {
-                Logger.d(TAG, "#onCheckInitUser => onResponse");
-                if (response != null && response.isSuccess()) {
-                    callback.onGetInitUserSuccess(response.getData());
-                } else {
-                    callback.onGetInitUserFailure(response.getMessage());
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Logger.d(TAG, "#onCheckInitUser => onErrorResponse");
-                ErrorResponse errorResponse = Utils.parseErrorResponse(error);
-                if (errorResponse != null) {
-                    callback.onGetInitUserFailure(errorResponse.getMessage());
-                } else {
-                    callback.onGetInitUserFailure(getStringResource(R.string.network_error));
-                }
-            }
-        });
-        VolleySequence.getInstance().addRequest(resetPassword);
-    }
 }

@@ -91,12 +91,12 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     }
 
     @Override
-    public void displayScreen(final int fragmentId) {
+    public void displayScreen(final int fragmentId, final Bundle bundle) {
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                getActivityCallback().displayScreen(fragmentId, true, false);
+                getActivityCallback().displayScreen(fragmentId, true, false, bundle);
             }
         }, Constants.TIME_WAITING_SPLASH);
     }

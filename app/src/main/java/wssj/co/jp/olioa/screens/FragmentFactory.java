@@ -5,6 +5,7 @@ import android.util.SparseArray;
 
 import wssj.co.jp.olioa.screens.about.AboutFragment;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.changeaccount.ChangeAccountFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangePasswordByCodeFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
 import wssj.co.jp.olioa.screens.chat.StoreFollowFragment;
@@ -107,7 +108,7 @@ public final class FragmentFactory {
                 fragment = new ContactUsFragment();
                 break;
             case IMainView.FRAGMENT_CHANGE_PASSWORD:
-                fragment = new ChangeUserInfoFragment();
+                fragment = ChangeUserInfoFragment.newInstance(bundle);
                 break;
             case IMainView.FRAGMENT_POLICY:
                 fragment = new PolicyFragment();
@@ -160,10 +161,13 @@ public final class FragmentFactory {
                 fragment = ConversationsFragment.newInstance(bundle);
                 break;
             case IMainView.FRAGMENT_PUSH_NOTIFICATION:
-                fragment = PushNotificationFragment.newInstance(bundle);
+                fragment = new PushNotificationFragment();
                 break;
             case IMainView.FRAGMENT_SCANNER:
                 fragment = new ScannerFragment();
+                break;
+            case IMainView.FRAGMENT_CHANGE_ACCOUNT:
+                fragment = new ChangeAccountFragment();
                 break;
         }
         if (fragment != null) {

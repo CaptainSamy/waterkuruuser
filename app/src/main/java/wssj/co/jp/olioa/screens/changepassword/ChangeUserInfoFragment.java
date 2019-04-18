@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -46,17 +47,18 @@ import wssj.co.jp.olioa.utils.Utils;
 public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, ChangeUserInfoPresenter>
         implements IChangeUserInfoView, View.OnClickListener {
 
-    private static final String TAG = "ChangeUserInfoFragment";
+    private static final String TAG = "ChangeAccountFragment";
 
     private static final int REQUEST_CODE_PICKER_PHOTO_1 = 100;
 
     private static final int REQUEST_CODE_CAMERA_PHOTO_1 = 200;
+    public static final String ARG_FROM_MENU = "arg_check_in";
 
     private EditText mInputUserName, mInputEmail;
 
     private EditText mInputCurrentPassword, mInputNewPassword, mInputConfirmPassword;
 
-    private TextView mButtonChangePassword;
+    private TextView mButtonChangePassword, mButtonSkip, mButtonLogin, mButtonChangeAccount;
 
     private TextView mTextChangePassword;
 
@@ -78,6 +80,15 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
 
     private String mPathAvatar;
 
+    private boolean isFromMenu;
+
+    public static ChangeUserInfoFragment newInstance(Bundle args) {
+
+        ChangeUserInfoFragment fragment = new ChangeUserInfoFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public int getFragmentId() {
         return IMainView.FRAGMENT_CHANGE_PASSWORD;
@@ -86,6 +97,14 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     @Override
     protected int getResourceLayout() {
         return R.layout.fragment_change_password;
+    }
+
+    @Override
+    public boolean isDisplayActionBar() {
+        if (getArguments() != null) {
+            isFromMenu = getArguments().getBoolean(ARG_FROM_MENU);
+        }
+        return isFromMenu;
     }
 
     @Override
@@ -119,12 +138,20 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     }
 
     @Override
+    protected boolean isRetainState() {
+        return false;
+    }
+
+    @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
         mInputCurrentPassword = (EditText) rootView.findViewById(R.id.inputCurrentPassword);
         mInputNewPassword = (EditText) rootView.findViewById(R.id.inputNewPassword);
+        mButtonChangeAccount = rootView.findViewById(R.id.buttonChangeAccount);
         mInputConfirmPassword = (EditText) rootView.findViewById(R.id.inputConfirmPassword);
         mButtonChangePassword = (TextView) rootView.findViewById(R.id.buttonChangePassword);
+        mButtonSkip = (TextView) rootView.findViewById(R.id.buttonSkip);
+        mButtonLogin = (TextView) rootView.findViewById(R.id.buttonLogin);
         mInputUserName = (EditText) rootView.findViewById(R.id.etUserName);
         mInputEmail = (EditText) rootView.findViewById(R.id.etEmail);
         mRadioGroupSex = (RadioGroup) rootView.findViewById(R.id.radioGroupSex);
@@ -134,14 +161,24 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
         mLayoutChangePassword = (LinearLayout) rootView.findViewById(R.id.layoutChangePassword);
         mImageAvatar = (ImageView) rootView.findViewById(R.id.ivAvatar);
         mDialogChoose = new DialogChoose(getActivityContext());
+        if (isFromMenu) {
+            mButtonSkip.setVisibility(View.GONE);
+            mButtonLogin.setVisibility(View.GONE);
+        } else {
+            mButtonSkip.setVisibility(View.VISIBLE);
+            mButtonLogin.setVisibility(View.VISIBLE);
+        }
 
     }
 
     @Override
     protected void initAction() {
         super.initAction();
+        mButtonChangeAccount.setOnClickListener(this);
         mTextChangePassword.setOnClickListener(this);
         mButtonChangePassword.setOnClickListener(this);
+        mButtonSkip.setOnClickListener(this);
+        mButtonLogin.setOnClickListener(this);
         mImageAvatar.setOnClickListener(this);
         mRadioGroupSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -159,12 +196,20 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     @Override
     protected void initData() {
         super.initData();
-        getPresenter().onGetInfoUser();
+        if (isFromMenu) {
+            getPresenter().onGetInfoUser();
+        } else {
+            mInfoUser = new UserResponse();
+            mButtonChangeAccount.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onGetInfoUserSuccess(UserResponse infoUser) {
         if (infoUser != null) {
+            if (infoUser.getChangeAccount() == 0) {
+                mButtonChangeAccount.setVisibility(View.VISIBLE);
+            }
             mInfoUser = infoUser;
             mInputUserName.setText(infoUser.getName());
             mInputEmail.setText(infoUser.getEmail());
@@ -189,7 +234,6 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
 
     @Override
     public void onChangePasswordSuccess(String message) {
-        //showToast(getString(R.string.change_password_success));
         backToPreviousScreen();
     }
 
@@ -201,6 +245,9 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.buttonChangeAccount:
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_CHANGE_ACCOUNT, true, true);
+                break;
             case R.id.tvChangePassword:
                 if (mLayoutChangePassword.isShown()) {
                     mLayoutChangePassword.setVisibility(View.GONE);
@@ -211,24 +258,30 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
             case R.id.buttonChangePassword:
                 String nickName = mInputUserName.getText().toString().trim();
                 String email = mInputEmail.getText().toString().trim();
-                String currentPassword = mInputCurrentPassword.getText().toString().trim();
-                String newPassword = mInputNewPassword.getText().toString().trim();
-                String confirmPassword = mInputConfirmPassword.getText().toString().trim();
 
                 mInfoUser.setName(nickName);
                 mInfoUser.setEmail(email);
                 mInfoUser.setNewAvatar(mPathAvatar);
                 mInfoUser.setSex(mSex);
-                getPresenter().onUpdateInfoUser(mInfoUser);
-//                if (mInfoUser.isChangePassword()) {
-//                    newInfoUser.setChangePassword(mInfoUser.isChangePassword());
-//                    newInfoUser.setCurrentPassword(currentPassword);
-//                    newInfoUser.setNewPassword(newPassword);
-//                    newInfoUser.setConfirmPassword(confirmPassword);
-//                }
-//                if (isChangeData(newInfoUser) || newInfoUser.isChangePassword()) {
-//                    getPresenter().validateInfoUser(newInfoUser);
-//                }
+                if (isFromMenu) {
+                    getPresenter().onUpdateInfoUser(mInfoUser);
+                } else {
+                    long time = System.currentTimeMillis();
+                    String username = Constants.Register.ACCOUNT + time;
+                    String password = Constants.Register.PASSWORD + time;
+                    getPresenter().autoRegister(username, password, mInfoUser);
+                }
+                break;
+            case R.id.buttonSkip:
+                long time = System.currentTimeMillis();
+                String username = Constants.Register.ACCOUNT + time;
+                String password = Constants.Register.PASSWORD + time;
+                mInfoUser.setEmail(Constants.Register.EMAIL);
+                mInfoUser.setName(Constants.Register.NAME);
+                getPresenter().register(username, password, mInfoUser);
+                break;
+            case R.id.buttonLogin:
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_LOGIN, true, true);
                 break;
             case R.id.ivAvatar:
                 getPresenter().onImageViewClicked(REQUEST_CODE_PICKER_PHOTO_1, REQUEST_CODE_CAMERA_PHOTO_1);
@@ -237,8 +290,9 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     }
 
     @Override
-    public void onOnUpdateInfoUserSuccess() {
-        showToast(getString(R.string.success));
+    public void onRegisterSuccess() {
+        getActivityCallback().clearBackStack();
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT, false, false);
     }
 
     @Override

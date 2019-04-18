@@ -81,20 +81,6 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final class Introduction {
-
-        public static final String TWITTER_KEY = "";
-
-        public static final String TWITTER_SECRET = "";
-
-        public static final int TYPE_DEFAULT = 0;
-
-        public static final int TYPE_GOOGLE = 1;
-
-        public static final int TYPE_FACEBOOK = 2;
-
-        public static final int TYPE_TWITTER = 3;
-    }
 
     public static final class Register {
 
@@ -103,6 +89,14 @@ public final class Constants {
         public static final int MALE = 1;
 
         public static final int FE_MALE = 0;
+
+        public static final String ACCOUNT = "olioa_user";
+
+        public static final String PASSWORD = "olioa_password";
+
+        public static final String NAME = "OLIOA User";
+
+        public static final String EMAIL = "olioa@gmail.com";
     }
 
     public static final class CheckInStatus {

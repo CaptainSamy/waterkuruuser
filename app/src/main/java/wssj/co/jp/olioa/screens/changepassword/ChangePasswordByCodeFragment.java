@@ -148,7 +148,7 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangeUserInfoVi
     }
 
     @Override
-    public void onOnUpdateInfoUserSuccess() {
+    public void onRegisterSuccess() {
 
     }
 

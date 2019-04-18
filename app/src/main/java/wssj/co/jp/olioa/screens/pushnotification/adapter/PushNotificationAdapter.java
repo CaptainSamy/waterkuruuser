@@ -35,12 +35,10 @@ public class PushNotificationAdapter extends BaseAdapter {
 
     private boolean mIsEndOfPage;
 
-    private String logoStore;
 
-    public PushNotificationAdapter(Context context, List<PushNotification> objects, String logoStore) {
+    public PushNotificationAdapter(Context context, List<PushNotification> objects) {
         mContext = context;
         mListPush = objects;
-        this.logoStore = logoStore;
         mListPushTemp = new ArrayList<>();
     }
 
@@ -72,7 +70,7 @@ public class PushNotificationAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.fillDataToView(mContext, getItem(position), logoStore);
+        viewHolder.fillDataToView(mContext, getItem(position));
         if (position == (getCount() - 1) && mCallback != null && mIsAllowOnLoadMore && !mIsEndOfPage && getCount() >= Constants.LIMIT) {
             mCallback.onEndOfListView();
         }
@@ -91,9 +89,9 @@ public class PushNotificationAdapter extends BaseAdapter {
             mImageCompany = (CircleImageView) root.findViewById(R.id.iconNotification);
         }
 
-        void fillDataToView(final Context context, final PushNotification notificationMessage, String logoStore) {
+        void fillDataToView(final Context context, final PushNotification notificationMessage) {
             mTitle.setText(notificationMessage.getTitle());
-            Utils.fillImage(context, logoStore, mImageCompany, R.drawable.logo_app);
+            Utils.fillImage(context, notificationMessage.getLogo(), mImageCompany, R.drawable.logo_app);
             long timeSendPush = notificationMessage.getSendTime();
             if (timeSendPush != 0) {
                 String time = Utils.distanceTimes(timeSendPush);
@@ -105,20 +103,6 @@ public class PushNotificationAdapter extends BaseAdapter {
         }
     }
 
-    public void filter(String charText) {
-//        mListPush.clear();
-//        if (charText.length() == 0) {
-//            mListPush.addAll(mListPushTemp);
-//        } else {
-//            for (PushNotification notificationMessage : mListPushTemp) {
-//                if (notificationMessage.getTitle().contains(charText) || notificationMessage.getMessage().contains(charText)) {
-//                    mListPush.add(notificationMessage);
-//                }
-//            }
-//        }
-//        notifyDataSetChanged();
-
-    }
 
     public void setListPushTemp(List<PushNotification> objects) {
         mListPushTemp.clear();

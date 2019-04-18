@@ -54,10 +54,7 @@ public class ListStorePushFragment extends BaseFragment<IListStoreCheckedInView,
         return false;
     }
 
-    @Override
-    public int getFragmentId() {
-        return IMainView.FRAGMENT_LIST_STORE_PUSH;
-    }
+
 
     @Override
     public int getNavigationBottomId() {
@@ -67,6 +64,11 @@ public class ListStorePushFragment extends BaseFragment<IListStoreCheckedInView,
     @Override
     protected int getResourceLayout() {
         return R.layout.fragment_list_store_checked_in;
+    }
+
+    @Override
+    public int getFragmentId() {
+        return 0;//IMainView.FRAGMENT_LIST_STORE_PUSH;
     }
 
     @Override

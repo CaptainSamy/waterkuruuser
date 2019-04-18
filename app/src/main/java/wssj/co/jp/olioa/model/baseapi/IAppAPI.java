@@ -32,7 +32,7 @@ public interface IAppAPI {
     APICall<List<StoreInfo>> getStoreCheckedIn(@Query("type") int type, @Query("page") int page);
 
     @GET("api/get-push")
-    APICall<PushNotificationResponse> getPush(@Query("storeId") int storeId, @Query("page") int page);
+    APICall<PushNotificationResponse> getPush(@Query("page") int page);
 
     @POST("api/user-check-in")
     APICall<StoreInfo> checkIn(@Body CheckInBody checkInBody);
@@ -51,6 +51,9 @@ public interface IAppAPI {
 
     @POST("api/update-user-info")
     APICall updateUserInfo(@Body UserResponse response);
+
+    @POST("api/change-account")
+    APICall<AccessToken> changeAccount(@Body User body);
 
     @Multipart
     @POST("api/upload-image")

@@ -338,7 +338,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         return mPresenter;
     }
 
-    protected void initViews(View rootView) {
+    protected void initViews(View view) {
     }
 
     protected void initAction() {
@@ -395,7 +395,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     }
 
     public MainActivity getMainActivity() {
-        if (mActivity != null && mActivity instanceof MainActivity) {
+        if (mActivity instanceof MainActivity) {
             return (MainActivity) mActivity;
         }
         return null;

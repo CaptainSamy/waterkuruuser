@@ -40,8 +40,7 @@ public class PushNotification implements Serializable, Parcelable {
     @SerializedName("status")
     private int mStatus;
 
-    @SerializedName("number_user_get_push")
-
+    @SerializedName("logo")
     private String logo;
 
     public PushNotification(String title, String shortDesc, String body, long sendTime, int status) {

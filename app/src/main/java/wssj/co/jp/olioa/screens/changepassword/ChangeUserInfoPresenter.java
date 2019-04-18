@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import wssj.co.jp.olioa.model.auth.AuthModel;
 import wssj.co.jp.olioa.model.auth.RegisterData;
 import wssj.co.jp.olioa.model.baseapi.APICallback;
+import wssj.co.jp.olioa.model.baseapi.APIService;
+import wssj.co.jp.olioa.model.entities.AccessToken;
 import wssj.co.jp.olioa.model.entities.UserResponse;
 import wssj.co.jp.olioa.model.firebase.FirebaseModel;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
@@ -61,6 +63,60 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
             }
         });
     }
+
+    void autoRegister(final String username, final String password, final UserResponse infoUse) {
+        String message = getAuth().validateInfoUser(infoUse);
+        if (!message.isEmpty()) {
+            getView().showDialog(message);
+            return;
+        }
+        String newAvatar = infoUse.getNewAvatar();
+        if (TextUtils.isEmpty(newAvatar)) {
+            register(username, password, infoUse);
+        } else {
+            getUtils().uploadImage(newAvatar, new APICallback<String>() {
+
+                @Override
+                public void onSuccess(String s) {
+                    infoUse.setAvatar(s);
+                    register(username, password, infoUse);
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    register(username, password, infoUse);
+                }
+            });
+        }
+
+        getView().showProgress();
+
+    }
+
+    void register(final String username, final String password, final UserResponse infoUse) {
+        getAuth().registerAccount(username, password, infoUse.getName(), infoUse.getEmail(), infoUse.getSex(), new APICallback<AccessToken>() {
+            @Override
+            public void onSuccess(AccessToken accessToken) {
+                getView().hideProgress();
+                String token = "Bearer " + accessToken.getAccessToken();
+                APIService.getInstance().addAuthorizationHeader(token);
+                getModel(SharedPreferencesModel.class).putToken(token);
+                getModel(SharedPreferencesModel.class).putExpireDate(accessToken.getExpired());
+                getModel(SharedPreferencesModel.class).putUserName(username);
+                getModel(SharedPreferencesModel.class).putPassword(password);
+                getModel(SharedPreferencesModel.class).putEmail(infoUse.getEmail());
+                getModel(FirebaseModel.class).uploadDeviceToken(token, null);
+                getView().onRegisterSuccess();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                getView().hideProgress();
+                getView().showDialog(errorMessage);
+            }
+        });
+    }
+
 
     void onGetInfoUser() {
         getView().showProgress();

@@ -14,13 +14,12 @@ import java.util.List;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.ErrorMessage;
 import wssj.co.jp.olioa.model.entities.PushNotification;
-import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
-import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
+import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.widget.ILoadMoreListener;
 import wssj.co.jp.olioa.widget.LoadMoreListView;
 
@@ -43,14 +42,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private List<PushNotification> mListNotification;
 
-    private StoreInfo storeInfo;
-
-    public static PushNotificationFragment newInstance(Bundle args) {
-
-        PushNotificationFragment fragment = new PushNotificationFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     protected String getLogTag() {
@@ -72,6 +63,19 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
         return getString(R.string.title_push_notification_list);
     }
 
+
+    @Override
+    public boolean isDisplayBackButton() {
+        return false;
+    }
+
+
+    @Override
+    public int getNavigationBottomId() {
+        return R.id.navigation_push;
+    }
+
+
     @Override
     protected PushNotificationListPresenter onCreatePresenter(IPushNotificationListView view) {
         return new PushNotificationListPresenter(view);
@@ -91,20 +95,11 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     protected void initData() {
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            storeInfo = bundle.getParcelable(ListStorePushFragment.ARG_STORE_INFO);
-            if (storeInfo != null) {
-                mListNotification = new ArrayList<>();
-                mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification, storeInfo.getLogo());
-                getPresenter().getListPushNotification(storeInfo.getId(), 0);
-                mAdapter.setListPushTemp(mListNotification);
-                mListView.setAdapter(mAdapter);
-            }
-        } else {
-            backToPreviousScreen();
-        }
+        mListNotification = new ArrayList<>();
+        mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
+        getPresenter().getListPushNotification(0);
+        mAdapter.setListPushTemp(mListNotification);
+        mListView.setAdapter(mAdapter);
     }
 
     @Override
@@ -126,21 +121,23 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     public void onRefresh() {
         mRefreshLayout.setRefreshing(false);
-        if (storeInfo != null) {
-            getPresenter().getListPushNotification(storeInfo.getId(), 0);
-        }
+        mListView.reload();
+        getPresenter().getListPushNotification(0);
     }
 
     @Override
     public void showListPushNotification(PushNotificationResponse response) {
         if (response != null) {
-            if (response.getTotalPage() != 0) {
+            if (mListView.getCurrentPage() == 0) {
                 mListNotification.clear();
-                mListView.setCurrentPage(0);
-                mListView.setTotalPage(response.getTotalPage());
             }
             List<PushNotification> list = response.getListPushNotification();
             if (list != null && list.size() > 0) {
+                if (list.size() < Constants.MAX_ITEM_PAGE) {
+                    mListView.stopLoadMore();
+                } else {
+                    mListView.notifyLoadComplete();
+                }
                 mListNotification.addAll(list);
                 mAdapter.notifyDataSetChanged();
                 if (mAdapter.getCount() == 0) {
@@ -162,6 +159,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onLoadMore(int page) {
-        getPresenter().getListPushNotification(storeInfo.getId(), page);
+        getPresenter().getListPushNotification(page);
     }
 }

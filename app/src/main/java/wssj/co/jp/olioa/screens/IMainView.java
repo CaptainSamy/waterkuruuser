@@ -33,7 +33,7 @@ public interface IMainView extends IView {
 
     int FRAGMENT_PUSH_NOTIFICATION = 17;
 
-    int FRAGMENT_LIST_STORE_PUSH = 18;
+//    int FRAGMENT_LIST_STORE_PUSH = 18;
 
     int FRAGMENT_LIST_STORE_CHAT = 6;
 
@@ -88,6 +88,8 @@ public interface IMainView extends IView {
     int FRAGMENT_CHAT_REALTIME = 57;
 
     int FRAGMENT_CONVERSATION = 58;
+
+    int FRAGMENT_CHANGE_ACCOUNT = 59;
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 

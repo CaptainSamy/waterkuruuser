@@ -58,9 +58,13 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         mCurrentPage = currentPage;
     }
 
-    public void setTotalPage(int totalPage) {
-        mTotalPage = totalPage;
+    public int getCurrentPage() {
+        return mCurrentPage;
+    }
+
+    public void reload() {
         mCurrentPage = 0;
+        mIsLoading = false;
     }
 
     @Override
@@ -82,7 +86,7 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         }
         if (mListener != null) {
             if (totalItemCount != 0 && firstVisibleItem + visibleItemCount == totalItemCount) {
-                if (mCurrentPage < (mTotalPage - 1) && !mIsLoading) {
+                if (!mIsLoading) {
                     mIsLoading = true;
                     mCurrentPage++;
                     mListener.onLoadMore(mCurrentPage);

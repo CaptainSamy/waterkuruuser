@@ -36,6 +36,7 @@ import wssj.co.jp.olioa.firebase.FireBaseMsgService;
 import wssj.co.jp.olioa.model.database.DBManager;
 import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
 import wssj.co.jp.olioa.screens.chat.chatdetail.ChatFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
     private LogoutReceiver mLogoutReceiver;
 
-    private ListStorePushFragment mListStorePushFragment;
+    private PushNotificationFragment mListPushFragment;
 
     private TimeLineFragment mTimelineFragment;
 
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity
                         displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT, false, false);
                         break;
                     default:
-                        displayScreen(IMainView.FRAGMENT_LIST_STORE_PUSH, false, false);
+                        displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION, false, false);
                         break;
                 }
             }
@@ -176,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                     bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_CHAT);
                     break;
                 default:
-                    bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_PUSH);
+                    bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_PUSH_NOTIFICATION);
                     break;
             }
         }
@@ -291,7 +292,7 @@ public class MainActivity extends AppCompatActivity
             int menuId = item.getItemId();
             switch (menuId) {
                 case R.id.navigation_push:
-                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_PUSH, null);
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_PUSH_NOTIFICATION, null);
                     return true;
 //                case R.id.navigation_timeline:
 //                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
@@ -306,7 +307,9 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.onCloseDrawableLayout(FRAGMENT_PUSH_NOTIFICATION, true, true, null, menuId);
                     return true;
                 case R.id.menu_change_password:
-                    mPresenter.onCloseDrawableLayout(FRAGMENT_CHANGE_PASSWORD, true, true, null, menuId);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(ChangeUserInfoFragment.ARG_FROM_MENU,true);
+                    mPresenter.onCloseDrawableLayout(FRAGMENT_CHANGE_PASSWORD, true, true, bundle, menuId);
                     return true;
                 case R.id.menu_how_to_use:
                     mNavigationView.setCheckedItem(R.id.menu_how_to_use);
@@ -382,12 +385,12 @@ public class MainActivity extends AppCompatActivity
                              boolean addToBackStack, Bundle bundle) {
 
         switch (screenId) {
-            case FRAGMENT_LIST_STORE_PUSH:
-                if (mListStorePushFragment == null) {
-                    mListStorePushFragment = new ListStorePushFragment();
+            case FRAGMENT_PUSH_NOTIFICATION:
+                if (mListPushFragment == null) {
+                    mListPushFragment = new PushNotificationFragment();
                 }
                 clearBackStack();
-                replaceFragment(mListStorePushFragment, hasAnimation, addToBackStack);
+                replaceFragment(mListPushFragment, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_TIMELINE:
                 if (mTimelineFragment == null) {
@@ -462,7 +465,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void logout() {
         mListStoreChatFragment = null;
-        mListStorePushFragment = null;
+        mListPushFragment = null;
         FragmentFactory.destroy();
         clearBackStack();
         displayScreen(FRAGMENT_INTRODUCTION_SCREEN, true, false);
@@ -551,18 +554,13 @@ public class MainActivity extends AppCompatActivity
             return;
         }
         switch (fragmentId) {
-            case IMainView.FRAGMENT_LIST_STORE_PUSH:
-                if (mListStorePushFragment != null) {
-                    if (reloadNow.length == 0) {
-                        mListStorePushFragment.flagRefreshWhenBackFragment();
-                    } else {
-                        mListStorePushFragment.onRefresh();
-                    }
-                }
-                break;
             case IMainView.FRAGMENT_PUSH_NOTIFICATION:
-                if (mCurrentFragment instanceof PushNotificationFragment) {
-                    ((PushNotificationFragment) mCurrentFragment).onRefresh();
+                if (mListPushFragment != null) {
+                    if (reloadNow.length == 0) {
+                        mListPushFragment.flagRefreshWhenBackFragment();
+                    } else {
+                        mListPushFragment.onRefresh();
+                    }
                 }
                 break;
             case IMainView.FRAGMENT_LIST_STORE_CHAT:
