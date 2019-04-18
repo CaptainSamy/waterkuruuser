@@ -350,6 +350,39 @@ public final class Utils {
         }
     }
 
+
+    public static void fillImage(final Context context, final String imgPath, final ImageView imageView, final int placeHolder,int quality) {
+        Logger.d(TAG, "image " + imgPath);
+        if (!TextUtils.isEmpty(imgPath)) {
+            Glide.with(context)
+                    .load(imgPath)
+                    .fitCenter()
+                    .placeholder(placeHolder)
+                    .override(convertDpToPixel(context, quality), convertDpToPixel(context, quality))
+                    .into(new SimpleTarget<GlideDrawable>() {
+
+                        @Override
+                        public void onLoadStarted(Drawable placeholder) {
+                            imageView.setImageDrawable(placeholder);
+                        }
+
+                        @Override
+                        public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                            Logger.d(TAG, "onLoadFailed " + imgPath);
+                            imageView.setImageResource(placeHolder);
+                        }
+
+                        @Override
+                        public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            imageView.setImageDrawable(resource);
+                        }
+                    });
+        } else {
+            imageView.setImageResource(placeHolder);
+        }
+    }
+
+
     public static void fillImageQuantityOrigin(final Context context, String imgPath, final ImageView imageView, final int resIdError) {
         if (!TextUtils.isEmpty(imgPath)) {
             Glide.with(context)

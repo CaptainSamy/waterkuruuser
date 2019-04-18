@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +19,7 @@ import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Utils;
+import wssj.co.jp.olioa.widget.ImageRoundCorners;
 
 /**
  * Created by Nguyen Huu Ta on 12/9/2017.
@@ -29,7 +31,9 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
     private static final int TYPE_STORE = 1;
 
-    private static final int TYPE_COUNT = TYPE_STORE + 1;
+    private static final int TYPE_STORE_IMAGE = 2;
+
+    private static final int TYPE_COUNT = 3;
 
     private LayoutInflater mInflate;
 
@@ -51,7 +55,19 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
     public int getItemViewType(int position) {
         ChatMessage chat = getItem(position);
         if (chat != null) {
-            return chat.isUser() ? TYPE_USER : TYPE_STORE;
+            if (chat.isUser()) {
+                return TYPE_USER;
+            } else {
+                if (chat.getContentType() == null) {
+                    return TYPE_STORE;
+                }
+                switch (chat.getContentType()) {
+                    case ChatMessage.TYPE_IMAGE:
+                        return TYPE_STORE_IMAGE;
+                    default:
+                        return TYPE_STORE;
+                }
+            }
         }
         return TYPE_USER;
     }
@@ -60,6 +76,9 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ChatMessage chat = getItem(position);
+        if (chat == null) {
+            return null;
+        }
         ChatDetailHolderUser holderUser;
         int layoutResource;
         switch (getItemViewType(position)) {
@@ -68,6 +87,9 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
                 break;
             case TYPE_STORE:
                 layoutResource = R.layout.item_chat_store;
+                break;
+            case TYPE_STORE_IMAGE:
+                layoutResource = R.layout.item_chat_image_store;
                 break;
             default:
                 layoutResource = R.layout.item_chat_user;
@@ -92,6 +114,9 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
         private TextView mContent;
 
+        private ImageView
+                mContentImage;
+
         private CircleImageView mImageStore;
 
         private LinearLayout mLayoutDate;
@@ -99,6 +124,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         public ChatDetailHolderUser(View view) {
             mDate = (TextView) view.findViewById(R.id.tvDate);
             mContent = (TextView) view.findViewById(R.id.tvContent);
+            mContentImage = view.findViewById(R.id.imageContent);
             mTime = (TextView) view.findViewById(R.id.tvTime);
             mLayoutDate = (LinearLayout) view.findViewById(R.id.layoutDate);
             mImageStore = (CircleImageView) view.findViewById(R.id.imageStore);
@@ -110,22 +136,21 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
                     Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
                     break;
             }
-//            if (mImageStore != null && clickImageStore != null) {
-//                mImageStore.setOnClickListener(new View.OnClickListener() {
-//
-//                    @Override
-//                    public void onClick(View v) {
-//                        clickImageStore.onClick(chat.getToId());
-//                    }
-//                });
-//            }
             if (TextUtils.isEmpty(chat.getDate())) {
                 mLayoutDate.setVisibility(View.GONE);
             } else {
                 mLayoutDate.setVisibility(View.VISIBLE);
                 mDate.setText(chat.getDate());
             }
-            mContent.setText((chat.getContent()));//StringEscapeUtils.unescapeJava
+            if (mContentImage != null) {
+                ChatMessage.ContentChatImage contentChatImage = chat.getContentChatImage();
+                if (contentChatImage != null) {
+                    Utils.fillImage(getContext(), contentChatImage.getPreviewImageUrl(), mContentImage, R.drawable.image_choose, 100);
+                }
+            }
+            if (mContent != null) {
+                mContent.setText((chat.getContent()));
+            }
             String time = DateConvert.formatToString(DateConvert.TIME_FORMAT, chat.getCreated());
             mTime.setText(time);
         }
