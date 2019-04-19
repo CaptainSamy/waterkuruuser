@@ -54,11 +54,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     private String lastTime = Constants.EMPTY_STRING;
 
-    private long newestChatIdDatabase;
-
     private DBManager dbManager;
-
-    private boolean isGetFromDatabase;
 
     public static ChatFragment newInstance(Bundle b) {
         ChatFragment fragment = new ChatFragment();
@@ -151,7 +147,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                 if (!TextUtils.isEmpty(mContent)) {
                     mProgressSendChat.setVisibility(View.VISIBLE);
                     mButtonSend.setVisibility(View.GONE);
-                    getPresenter().sendChat(storeInfo.getId(),mContent);// StringEscapeUtils.escapeJava
+                    getPresenter().sendChat(storeInfo.getId(), mContent);// StringEscapeUtils.escapeJava
                 }
                 Utils.hideSoftKeyboard(getActivity());
             }
@@ -176,26 +172,20 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         });
         mListViewChat.setAdapter(mAdapter);
         mAdapter.setImageStore(storeInfo.getLogo());
-        newestChatIdDatabase = dbManager.getChatId(storeInfo.getId(), true);
         getPresenter().getHistoryChat(storeInfo.getId(), 0);
     }
 
     @Override
     public void onGetHistoryChatSuccess(final List<ChatMessage> history) {
         if (!Utils.isEmpty(history)) {
-            if (newestChatIdDatabase > 0) {
-                int endOf = history.size() - 1;
-                long newestChatIdServer = history.get(endOf).getId();
-                long distance = Math.abs(newestChatIdServer - newestChatIdDatabase);
-                showLog(newestChatIdDatabase + "/" + newestChatIdServer + " / distance:" + distance);
-                if (distance <= Constants.MAX_ITEM_PAGE_CHAT) {
-                    isGetFromDatabase = true;
-                }
-            }
             dbManager.insertListChat(history);
             sortListChat(history);
             int size = mListChat.size();
             mListChat.addAll(0, history);
+
+            dbManager.isExistsChatId(storeInfo.getId(), mListChat.get(0).getId());
+
+
             final int newSize = mListChat.size() - size;
             mListViewChat.post(new Runnable() {
 
@@ -284,8 +274,8 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     public void onLoadMoreTop(int page) {
         if (mListChat.size() > 0) {
             long lastId = mListChat.get(0).getId();
-            if (isGetFromDatabase) {
-                showLog("onLoadMoreTop getDatabase");
+            if (dbManager.isExistsChatId(storeInfo.getId(), lastId)) {
+                showLog("onLoadMoreTop with getDatabase");
                 List<ChatMessage> list = dbManager.getListChatByLastChatId(storeInfo.getId(), lastId);
                 if (list.size() > 0) {
                     sortListChat(list);
@@ -302,11 +292,11 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                         }
                     }, 100);
                 } else {
-                    isGetFromDatabase = false;
+                    showLog("onLoadMoreTop with request");
                     getPresenter().getHistoryChat(storeInfo.getId(), lastId);
                 }
             } else {
-                showLog("onLoadMoreTop request");
+                showLog("onLoadMoreTop with request");
                 getPresenter().getHistoryChat(storeInfo.getId(), lastId);
             }
         }

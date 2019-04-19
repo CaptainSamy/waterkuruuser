@@ -170,7 +170,7 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
 
             @Override
             public void onSuccess(Object o) {
-                getView().onChangePasswordSuccess("");
+                getView().onChangePasswordSuccess("更新しました。");
             }
 
             @Override

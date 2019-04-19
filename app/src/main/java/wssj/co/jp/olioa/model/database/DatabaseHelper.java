@@ -52,8 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " INTEGER PRIMARY KEY, "
                 + DatabaseContract.ChatColumns.COLUMN_STORE_ID + " INTEGER, "
                 + DatabaseContract.ChatColumns.COLUMN_CONTENT + " TEXT, "
-                + DatabaseContract.ChatColumns.COLUMN_IMAGES + " TEXT, "
-                + DatabaseContract.ChatColumns.COLUMN_VIDEOS + " TEXT, "
+                + DatabaseContract.ChatColumns.COLUMN_CONTENT_TYPE + " TEXT, "
                 + DatabaseContract.ChatColumns.COLUMN_IS_USER + " INTEGER, "
                 + DatabaseContract.ChatColumns.COLUMN_CREATED + " INTEGER) ");
     }

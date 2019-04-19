@@ -11,8 +11,6 @@ public class StoreInfo implements Parcelable {
 
     private int id;
 
-    private int serviceCompanyId;
-
     private String name;
 
     private String logo;
@@ -29,7 +27,6 @@ public class StoreInfo implements Parcelable {
 
     protected StoreInfo(Parcel in) {
         id = in.readInt();
-        serviceCompanyId = in.readInt();
         name = in.readString();
         logo = in.readString();
         checkInCode = in.readString();
@@ -54,13 +51,6 @@ public class StoreInfo implements Parcelable {
         return id;
     }
 
-    public int getServiceCompanyId() {
-        return serviceCompanyId;
-    }
-
-    public void setServiceCompanyId(int serviceCompanyId) {
-        this.serviceCompanyId = serviceCompanyId;
-    }
 
     public String getName() {
         return name;
@@ -94,7 +84,6 @@ public class StoreInfo implements Parcelable {
         return lastTimeMessage;
     }
 
-
     public void setId(int id) {
         this.id = id;
     }
@@ -115,7 +104,6 @@ public class StoreInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeInt(serviceCompanyId);
         dest.writeString(name);
         dest.writeString(logo);
         dest.writeString(checkInCode);

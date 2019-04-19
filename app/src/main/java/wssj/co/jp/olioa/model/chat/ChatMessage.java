@@ -82,6 +82,10 @@ public class ChatMessage {
         return contentType;
     }
 
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
     public long getCreated() {
         return created;
     }

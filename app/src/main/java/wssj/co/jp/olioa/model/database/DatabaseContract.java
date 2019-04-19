@@ -42,9 +42,7 @@ final class DatabaseContract {
 
         static final String COLUMN_CONTENT = "content";
 
-        static final String COLUMN_IMAGES = "images";
-
-        static final String COLUMN_VIDEOS = "videos";
+        static final String COLUMN_CONTENT_TYPE = "contentType";
 
         static final String COLUMN_IS_USER = "isUser";
 

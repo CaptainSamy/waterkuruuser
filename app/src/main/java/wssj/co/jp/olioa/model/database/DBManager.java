@@ -116,8 +116,7 @@ public class DBManager {
                     long storeId = chatMessage.isUser() ? chatMessage.getToId() : chatMessage.getFromId();
                     values.put(DatabaseContract.ChatColumns.COLUMN_STORE_ID, storeId);
                     values.put(DatabaseContract.ChatColumns.COLUMN_CONTENT, chatMessage.getContent());
-                    values.put(DatabaseContract.ChatColumns.COLUMN_IMAGES, Constants.EMPTY_STRING);
-                    values.put(DatabaseContract.ChatColumns.COLUMN_VIDEOS, Constants.EMPTY_STRING);
+                    values.put(DatabaseContract.ChatColumns.COLUMN_CONTENT_TYPE, chatMessage.getContentType());
                     values.put(DatabaseContract.ChatColumns.COLUMN_IS_USER, chatMessage.isUser() ? 1 : 0);
                     values.put(DatabaseContract.ChatColumns.COLUMN_CREATED, chatMessage.getCreated());
                     mDatabaseWrite.insert(DatabaseContract.ChatColumns.TABLE_NAME, null, values);
@@ -147,6 +146,7 @@ public class DBManager {
             ChatMessage chatMessage = new ChatMessage();
             chatMessage.setId(cursorChats.getLong(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CHAT_ID)));
             chatMessage.setContent(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CONTENT)));
+            chatMessage.setContentType(cursorChats.getString(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CONTENT_TYPE)));
             int isUser = cursorChats.getInt(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_IS_USER));
             chatMessage.setUser(isUser == 1);
             chatMessage.setCreated(cursorChats.getLong(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CREATED)));
@@ -171,6 +171,32 @@ public class DBManager {
         }
         return chatId;
     }
+
+    public boolean isExistsChatId(long storeId, long lastChatId) {
+        String columnSelection[] = new String[]{DatabaseContract.ChatColumns.COLUMN_CHAT_ID, DatabaseContract.ChatColumns.COLUMN_CHAT_ID};
+        String selection = DatabaseContract.ChatColumns.COLUMN_STORE_ID + " = ? AND " + DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " = ?";
+        String selectionArgs[] = new String[]{String.valueOf(storeId), String.valueOf(lastChatId)};
+        Cursor cursorChats = mDatabaseRead.query(DatabaseContract.ChatColumns.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        long chatId = 0;
+        if (cursorChats.moveToFirst()) {
+            chatId = cursorChats.getLong(cursorChats.getColumnIndex(DatabaseContract.ChatColumns.COLUMN_CHAT_ID));
+            cursorChats.close();
+        }
+        return chatId > 0;
+    }
+
+    private boolean isExistListChat(long storeId, long lastChatId) {
+        String selection = DatabaseContract.ChatColumns.COLUMN_STORE_ID + " = ? AND " + DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " < ?";
+        String selectionArgs[] = new String[]{String.valueOf(storeId), String.valueOf(lastChatId)};
+        Cursor cursorChats = mDatabaseRead.query(DatabaseContract.ChatColumns.TABLE_NAME, null, selection, selectionArgs, null, null, null);
+        boolean isExistList = false;
+        while (cursorChats.moveToFirst()) {
+            isExistList = true;
+        }
+        cursorChats.close();
+        return isExistList;
+    }
+
 
     public void deleteChatId(long lastChatId) {
         String whereClause = DatabaseContract.ChatColumns.COLUMN_CHAT_ID + " > ? ";
