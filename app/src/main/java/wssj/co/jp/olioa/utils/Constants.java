@@ -28,11 +28,9 @@ public final class Constants {
 
     public static final int LIMIT_TIMELINE = 10;
 
-    public static final int LIMIT_CHAT = 5;
 
     public static final int DURATION_DIALOG_NOTIFICATION = 350;
 
-    public static final int DELAY_TIME_TRANSFER_FRAGMENT = 200;
 
     public static final int MARGIN_LEFT = 110;
 
@@ -49,10 +47,6 @@ public final class Constants {
     public static final int TIME_OUT_CUSTOM = 60000;
 
     public static final String URL_CONTACT = BASE_URL + "/api/client/users/save-user-contact";
-
-    public static final String HASH_MD5 = "MD5";
-
-    public static final String SALT = "b50b1ffe2e7320b0d97062a9663d47a7adf1379392c58c66fd978171a2be7d65";
 
     public static final String KEY_SERVICE_COMPANY_ID = "KEY_SERVICE_COMPANY_ID";
 
@@ -77,6 +71,9 @@ public final class Constants {
     public static final int MAX_ITEM_PAGE = 30;
 
     public static final int MAX_ITEM_PAGE_CHAT = 50;
+
+    public static final String APP_CETIFICATE = "kijajsdutyamxnqjwh13241samk";
+
 
     private Constants() {
     }

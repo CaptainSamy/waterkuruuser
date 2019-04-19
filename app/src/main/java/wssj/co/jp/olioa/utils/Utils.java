@@ -289,15 +289,12 @@ public final class Utils {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time - 9 * 60 * 60 * 1000);
 
-//        String string = Locale.getDefault().getDisplayLanguage();
-
         PrettyTime prettyTime = new PrettyTime(new Locale("JA"));//if only setting Japan language, change string =JA
         return prettyTime.format(calendar.getTime());
     }
 
     public static String distanceTimesViet(long time) {
         Calendar calendar = Calendar.getInstance();
-//        String string = Locale.getDefault().getDisplayLanguage();
 
         PrettyTime prettyTime = new PrettyTime(new Locale("VN"));//if only setting Japan language, change string =JA
         return prettyTime.format(calendar.getTime());
@@ -442,31 +439,6 @@ public final class Utils {
         }
     }
 
-    public static void addRequestHeader(Request<?> request, Map<String, String> headers) {
-        if (request != null) {
-            try {
-                Map<String, String> baseHeaders = request.getHeaders();
-                if (baseHeaders != null && headers != null) {
-                    baseHeaders.putAll(headers);
-                }
-            } catch (AuthFailureError authFailureError) {
-                Logger.e(TAG, "AuthFailureError: " + authFailureError.getMessage());
-            }
-        }
-    }
-
-    public static void addRequestHeader(Request<?> request, String key, String value) {
-        if (request != null) {
-            try {
-                Map<String, String> baseHeaders = request.getHeaders();
-                if (baseHeaders != null && !TextUtils.isEmpty(key)) {
-                    baseHeaders.put(key, value);
-                }
-            } catch (AuthFailureError authFailureError) {
-                Logger.e(TAG, "AuthFailureError: " + authFailureError.getMessage());
-            }
-        }
-    }
 
     public static void overrideRequestHeader(Request<?> request, String key, String value) {
         if (request != null) {
@@ -481,32 +453,6 @@ public final class Utils {
         }
     }
 
-    public static final String toMD5(String password) {
-        try {
-            // Create MD5 Hash
-            password = Constants.SALT + password;
-            MessageDigest digest = MessageDigest.getInstance(Constants.HASH_MD5);
-            digest.update(password.getBytes());
-            byte messageDigest[] = digest.digest();
-            // Create Hex String
-            StringBuilder hexString = new StringBuilder();
-            for (byte aMessageDigest : messageDigest) {
-                String h = Integer.toHexString(0xFF & aMessageDigest);
-                while (h.length() < 2)
-                    h = "0" + h;
-                hexString.append(h);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return Constants.EMPTY_STRING;
-    }
-
-    public static void formatHtml(final TextView textView, final String html) {
-        formatHtml(textView, html, null);
-    }
 
     private static void formatHtml(final TextView textView, final String html, final Drawable result) {
         final Context context = textView.getContext();

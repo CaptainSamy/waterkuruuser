@@ -5,6 +5,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -17,14 +18,16 @@ import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.entities.User;
 import wssj.co.jp.olioa.model.entities.UserResponse;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
+import wssj.co.jp.olioa.utils.Constants;
 
 /**
  */
 public interface IAppAPI {
-
+    @Headers("app:" + Constants.APP_CETIFICATE)
     @POST("auth/register-user")
     APICall<AccessToken> registerUser(@Body User params);
 
+    @Headers("app:" + Constants.APP_CETIFICATE)
     @POST("auth/login-user")
     APICall<AccessToken> loginUser(@Body User params);
 

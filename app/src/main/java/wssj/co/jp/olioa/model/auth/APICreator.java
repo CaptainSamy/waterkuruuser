@@ -242,7 +242,7 @@ final class APICreator {
             protected Map<String, Object> getBodyParams() {
                 Map<String, Object> params = new HashMap<>();
                 params.put("code", code);
-                params.put("password", Utils.toMD5(newPassword));
+                params.put("password", newPassword);
                 return params;
             }
 
@@ -250,30 +250,6 @@ final class APICreator {
         };
     }
 
-    static GsonRequest<RegisterResponse> changePassword(String token, final String currentPassword, final String newPassword, final Response.Listener<RegisterResponse> responseListener,
-                                                        final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        ResponseListener<RegisterResponse> listener = new ResponseListener<>(TAG, "changePassword", responseListener, errorListener);
-        return new GsonJsonRequest<RegisterResponse>(Request.Method.POST,
-                CHANGE_PASSWORD_URL,
-                RegisterResponse.class,
-                headers,
-                listener,
-                listener) {
-
-            @Override
-            protected Map<String, Object> getBodyParams() {
-                Map<String, Object> params = new HashMap<>();
-                params.put("old_password", currentPassword);
-                params.put("new_password", newPassword);
-                return params;
-            }
-
-
-        };
-    }
 
     static GsonRequest<ResponseData> removeDeviceToken(String token, final String deviceId, final Response.Listener<ResponseData> responseListener,
                                                        final Response.ErrorListener errorListener) {
@@ -299,101 +275,6 @@ final class APICreator {
         };
     }
 
-    /*
-    *
-    * app_type: 1 (user app)
-                2 (store app)
-       os_type: 1 (android)
-    * */
-    static GsonRequest<CheckVersionAppResponse> checkVersionApp(String token, final int versionApp, final String deviceId, final Response.Listener<CheckVersionAppResponse> responseListener,
-                                                                final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        ResponseListener<CheckVersionAppResponse> listener = new ResponseListener<>(TAG, "removeDeviceToken", responseListener, errorListener);
-        return new GsonJsonRequest<CheckVersionAppResponse>(Request.Method.POST,
-                CHECK_VERSION_APP,
-                CheckVersionAppResponse.class,
-                headers,
-                listener,
-                listener) {
-
-            @Override
-            protected Map<String, Object> getBodyParams() {
-                Map<String, Object> params = new HashMap<>();
-                params.put("device_id", deviceId);
-                params.put("current_version", versionApp);
-                params.put("app_type", 1);
-                params.put("os_type", 1);
-                return params;
-            }
-        };
-    }
-
-    static GsonRequest<InfoUserResponse> onGetInfoUser(String token, final Response.Listener<InfoUserResponse> responseListener,
-                                                         final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        ResponseListener<InfoUserResponse> listener = new ResponseListener<>(TAG, "onGetInfoUser", responseListener, errorListener);
-        return new GsonJsonRequest<InfoUserResponse>(Request.Method.GET,
-                ON_GET_INFO_USER,
-                InfoUserResponse.class,
-                headers,
-                listener,
-                listener) {
-
-        };
-    }
-
-    static GsonRequest<ResponseData> onUpdateInfoUser(String token, final InfoUserResponse.InfoUser infoUser, final Response.Listener<ResponseData> responseListener,
-                                                      final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        ResponseListener<ResponseData> listener = new ResponseListener<>(TAG, "onUpdateInfoUser", responseListener, errorListener);
-        return new GsonJsonRequest<ResponseData>(Request.Method.POST,
-                ON_SET_INFO_USER,
-                ResponseData.class,
-                headers,
-                listener,
-                listener) {
-
-            @Override
-            protected Map<String, Object> getBodyParams() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("name", infoUser.getName());
-                map.put("age_avg", infoUser.getAvg());
-                map.put("img_url", infoUser.getAvatar());
-                map.put("email", infoUser.getEmail());
-                map.put("sex", infoUser.getSex());
-                String currentPassword = Constants.EMPTY_STRING;
-                String newPassword = Constants.EMPTY_STRING;
-                if (infoUser.isChangePassword()) {
-                    currentPassword = Utils.toMD5(infoUser.getCurrentPassword());
-                    newPassword = Utils.toMD5(infoUser.getNewPassword());
-                }
-                map.put("old_pass", currentPassword);
-                map.put("new_pass", newPassword);
-                return map;
-            }
-        };
-    }
-    static GsonRequest<InitUserResponse> onCheckInitUser(String token, final Response.Listener<InitUserResponse> responseListener,
-                                                       final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        ResponseListener<InitUserResponse> listener = new ResponseListener<>(TAG, "onCheckInitUser", responseListener, errorListener);
-        return new GsonJsonRequest<InitUserResponse>(Request.Method.GET,
-                ON_CHECK_INIT_USER,
-                InitUserResponse.class,
-                headers,
-                listener,
-                listener) {
-
-        };
-    }
 
     private APICreator() {
     }
