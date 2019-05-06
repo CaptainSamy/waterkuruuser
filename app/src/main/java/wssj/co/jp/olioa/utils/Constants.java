@@ -72,7 +72,9 @@ public final class Constants {
 
     public static final int MAX_ITEM_PAGE_CHAT = 50;
 
-    public static final String APP_CETIFICATE = "kijajsdutyamxnqjwh13241samk";
+    public static final String APP_CERTIFICATE = "kijajsdutyamxnqjwh13241samk";
+
+    public static final String TOKEN_UPLOAD_IMAGE = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIiLCJ1c2VySWQiOjAsImlhdCI6MTU1NTQ2NzEwNH0.XWxa58if0qzo82E03wInR1a6Aqld1Y_b7_NO_75khtZmsXNB1uDrD7JEBMcMBlm_ELDwMhGpYL4WzE3tws6LDA";
 
 
     private Constants() {

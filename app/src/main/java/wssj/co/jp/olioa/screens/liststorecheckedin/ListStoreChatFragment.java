@@ -117,7 +117,11 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     @Override
     public void onResume() {
         super.onResume();
-        getPresenter().getListStoreCheckedIn(TYPE);
+        if (mAdapter.getCount() == 0){
+            getPresenter().getListStoreCheckedIn(TYPE);
+        }else{
+            getPresenter().getListStoreCheckedIn(TYPE,false);
+        }
     }
 
     @Override

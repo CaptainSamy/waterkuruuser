@@ -12,6 +12,18 @@ public class User {
         this.password = password;
     }
 
+    public User(String username, String password, UserResponse data) {
+        if (data != null) {
+            this.username = username;
+            this.password = password;
+            this.name = data.getName();
+            this.email = data.getEmail();
+            this.sex = data.getSex();
+            this.avatar = data.getAvatar();
+        }
+        this.type = 1;
+    }
+
     @SerializedName("username")
     private String username;
 
@@ -27,9 +39,22 @@ public class User {
     @SerializedName("sex")
     private int sex;
 
+    @SerializedName("avatar")
+    private String avatar;
+
+    /*
+    * 1 : User
+    * 2 : Store
+    * */
+
     @SerializedName("type")
     private int type;
 
+
+    /*
+    * 0 : OLIOA
+    * 1 : OBIS
+    * */
     @SerializedName("appId")
     private int appId;
 
@@ -73,6 +98,14 @@ public class User {
         this.sex = sex;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public int getType() {
         return type;
     }
@@ -89,13 +122,4 @@ public class User {
         this.appId = appId;
     }
 
-    public User(String username, String email, String password, String name, int sex, int type, int appId) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.sex = sex;
-        this.type = type;
-        this.appId = appId;
-    }
 }

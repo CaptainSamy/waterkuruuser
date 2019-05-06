@@ -185,6 +185,12 @@ public class AuthModel extends BaseModel {
         getApi().registerUser(user).getAsyncResponse(callback);
     }
 
+    public void registerAccount(String username,String password,UserResponse infoUse, APICallback<AccessToken> callback) {
+        User user = new User(username, password, infoUse);
+        getApi().registerUser(user).getAsyncResponse(callback);
+    }
+
+
     public void validateResetPassword(String userId, IOnResetPasswordCallback callback) {
         String message = Constants.EMPTY_STRING;
         if (TextUtils.isEmpty(userId.trim())) {
@@ -366,7 +372,7 @@ public class AuthModel extends BaseModel {
         getApi().updateUserInfo(infoUser).getAsyncResponse(callback);
     }
 
-    public void changeAccount(String account, String password,final APICallback<AccessToken> callback) {
+    public void changeAccount(String account, String password, final APICallback<AccessToken> callback) {
         User user = new User(account, password);
         getApi().changeAccount(user).getAsyncResponse(callback);
     }

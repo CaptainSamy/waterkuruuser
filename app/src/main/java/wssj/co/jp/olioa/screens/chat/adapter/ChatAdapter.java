@@ -17,6 +17,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
+import wssj.co.jp.olioa.screens.MainActivity;
 import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Utils;
 import wssj.co.jp.olioa.widget.ImageRoundCorners;
@@ -39,11 +40,14 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
     private String mUrlImageStore;
 
+    private int mWidth;
+
     private IClickImageStore clickImageStore;
 
-    public ChatAdapter(@NonNull Context context, @NonNull List<ChatMessage> objects) {
+    public ChatAdapter(@NonNull MainActivity context, @NonNull List<ChatMessage> objects) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
+        mWidth = Utils.getWidthDevice(context) / 2;
     }
 
     @Override
@@ -128,6 +132,11 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
             mTime = (TextView) view.findViewById(R.id.tvTime);
             mLayoutDate = (LinearLayout) view.findViewById(R.id.layoutDate);
             mImageStore = (CircleImageView) view.findViewById(R.id.imageStore);
+            if (mContentImage != null) {
+                mContentImage.getLayoutParams().height = mWidth;
+                mContentImage.getLayoutParams().width = mWidth;
+            }
+
         }
 
         public void bind(final ChatMessage chat, int position) {

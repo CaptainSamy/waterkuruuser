@@ -32,6 +32,7 @@
         android:visible="false">
         <item
             android:id="@id/menu_how_to_use"
+            android:visible="false"
             android:icon="@drawable/how_to_use"
             android:title="@string/how_to_use"/>
     </group>
@@ -52,6 +53,7 @@
         <item
             android:id="@id/menu_contact_us"
             android:icon="@drawable/contact"
+            android:visible="false"
             android:title="@string/contact_us"/>
     </group>
     <group
@@ -60,6 +62,7 @@
         <item
             android:id="@id/menu_term_of_service"
             android:icon="@drawable/term_of_service"
+            android:visible="false"
             android:title="@string/term_of_service_menu"/>
     </group>
     <group
@@ -68,6 +71,7 @@
         <item
             android:id="@id/menu_privacy_policy"
             android:icon="@drawable/privacy_policy"
+            android:visible="false"
             android:title="@string/privacy_policy"/>
     </group>
     <group

@@ -159,7 +159,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     protected void initData() {
         dbManager = DBManager.getInstance();
         mListChat = new ArrayList<>();
-        mAdapter = new ChatAdapter(getActivityContext(), mListChat);
+        mAdapter = new ChatAdapter(getMainActivity(), mListChat);
         mAdapter.setOnClickImageStore(new ChatAdapter.IClickImageStore() {
 
             @Override

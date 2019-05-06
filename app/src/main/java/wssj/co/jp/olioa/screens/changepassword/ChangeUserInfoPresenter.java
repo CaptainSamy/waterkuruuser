@@ -7,11 +7,13 @@ import wssj.co.jp.olioa.model.auth.RegisterData;
 import wssj.co.jp.olioa.model.baseapi.APICallback;
 import wssj.co.jp.olioa.model.baseapi.APIService;
 import wssj.co.jp.olioa.model.entities.AccessToken;
+import wssj.co.jp.olioa.model.entities.User;
 import wssj.co.jp.olioa.model.entities.UserResponse;
 import wssj.co.jp.olioa.model.firebase.FirebaseModel;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.model.util.UtilsModel;
 import wssj.co.jp.olioa.screens.base.FragmentPresenter;
+import wssj.co.jp.olioa.utils.Constants;
 
 /**
  * Created by HieuPT on 5/15/2017.
@@ -74,6 +76,7 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
         if (TextUtils.isEmpty(newAvatar)) {
             register(username, password, infoUse);
         } else {
+            APIService.getInstance().addAuthorizationHeader(Constants.TOKEN_UPLOAD_IMAGE);
             getUtils().uploadImage(newAvatar, new APICallback<String>() {
 
                 @Override
@@ -94,7 +97,7 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
     }
 
     void register(final String username, final String password, final UserResponse infoUse) {
-        getAuth().registerAccount(username, password, infoUse.getName(), infoUse.getEmail(), infoUse.getSex(), new APICallback<AccessToken>() {
+        getAuth().registerAccount(username,password,infoUse, new APICallback<AccessToken>() {
             @Override
             public void onSuccess(AccessToken accessToken) {
                 getView().hideProgress();
@@ -137,9 +140,9 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
     }
 
     void onUpdateInfoUser(final UserResponse infoUser) {
-        getView().showProgress();
         String message = getAuth().validateInfoUser(infoUser);
         if (message.isEmpty()) {
+            getView().showProgress();
             String newAvatar = infoUser.getNewAvatar();
             if (TextUtils.isEmpty(newAvatar)) {
                 requestUpdate(infoUser);
@@ -170,11 +173,13 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
 
             @Override
             public void onSuccess(Object o) {
+                getView().hideProgress();
                 getView().onChangePasswordSuccess("更新しました。");
             }
 
             @Override
             public void onFailure(String errorMessage) {
+                getView().hideProgress();
                 getView().showDialog(errorMessage);
             }
         });

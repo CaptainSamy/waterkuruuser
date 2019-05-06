@@ -4,6 +4,9 @@ package wssj.co.jp.olioa.model.entities;
  * Created by DaiKySy on 4/4/2019.
  */
 public class UserResponse {
+    public UserResponse() {
+        sex = -1;
+    }
 
     private int id;
 

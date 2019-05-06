@@ -7,6 +7,8 @@
     <string name="server_client_id_product">610695143021-dnvgmn753ppdcmensiveq4m1vsjcpko4.apps.googleusercontent.com</string>
 
     <string name="success">成功</string>
+
+    <string name="OK">OK</string>
     <string name="failure">エラーが発生しました</string>
     <string name="permission_denied">アクセス拒否</string>
     <string name="network_error">インターネットは接続できませんでした。</string>
@@ -170,7 +172,7 @@
     <!-- Notification -->
     <string name="title_push_notification_list">ブログ</string>
     <string name="notification_date">%1$s</string>
-    <string name="title_push_detail">ブログ一覧</string>
+    <string name="title_push_detail">ブログ内容</string>
     <string name="text_no_item">未読の通知がありません。</string>
     <string name="text_no_item_push_all">データがありません。</string>
     <string name="question_naire">アンケート</string>

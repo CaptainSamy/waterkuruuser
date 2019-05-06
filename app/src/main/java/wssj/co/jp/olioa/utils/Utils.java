@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
@@ -19,6 +20,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.ErrorResponse;
 import wssj.co.jp.olioa.model.stamp.ListCardResponse;
+import wssj.co.jp.olioa.screens.MainActivity;
 
 /**
  * Created by Nguyen Huu Ta on 11/5/2017.
@@ -287,7 +290,7 @@ public final class Utils {
 
     public static String distanceTimes(long time) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time - 9 * 60 * 60 * 1000);
+        calendar.setTimeInMillis(time);
 
         PrettyTime prettyTime = new PrettyTime(new Locale("JA"));//if only setting Japan language, change string =JA
         return prettyTime.format(calendar.getTime());
@@ -504,6 +507,16 @@ public final class Utils {
 
     public static boolean isEmpty(String str) {
         return str == null || str.length() == 0;
+    }
+
+
+    public static int getWidthDevice(MainActivity activity){
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        return width;
     }
 
 }

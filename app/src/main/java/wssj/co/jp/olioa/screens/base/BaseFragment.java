@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -250,7 +251,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
     @Override
     public void showDialog(String message) {
         DialogMessage dialogMessage = new DialogMessage(getActivityContext(), null);
-        dialogMessage.initData(message, getString(getViewContext(), R.string.success));
+        dialogMessage.initData(message, getString(getViewContext(), R.string.OK));
         dialogMessage.show();
     }
 

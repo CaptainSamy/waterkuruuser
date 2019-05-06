@@ -23,11 +23,11 @@ import wssj.co.jp.olioa.utils.Constants;
 /**
  */
 public interface IAppAPI {
-    @Headers("app:" + Constants.APP_CETIFICATE)
+    @Headers("app:" + Constants.APP_CERTIFICATE)
     @POST("auth/register-user")
     APICall<AccessToken> registerUser(@Body User params);
 
-    @Headers("app:" + Constants.APP_CETIFICATE)
+    @Headers("app:" + Constants.APP_CERTIFICATE)
     @POST("auth/login-user")
     APICall<AccessToken> loginUser(@Body User params);
 
