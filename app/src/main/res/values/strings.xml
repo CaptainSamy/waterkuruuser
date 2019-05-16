@@ -245,4 +245,7 @@
     <string name="title_dialog_check_in">通知</string>
     <string name="title_store_push">トーク</string>
 
+
+    <string name="title_group_chat">コミュニティ</string>
+
 </resources>

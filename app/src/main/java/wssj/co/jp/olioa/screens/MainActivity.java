@@ -39,12 +39,11 @@ import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
 import wssj.co.jp.olioa.screens.chat.chatdetail.ChatFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
+import wssj.co.jp.olioa.screens.groupchat.ListGroupChatFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
-import wssj.co.jp.olioa.screens.liststorecheckedin.ListStorePushFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.screens.pushnotification.pushlist.PushNotificationFragment;
 import wssj.co.jp.olioa.screens.splash.SplashFragment;
-import wssj.co.jp.olioa.screens.timeline.timelinetotal.TimeLineFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.FragmentBackStackManager;
 import wssj.co.jp.olioa.utils.Logger;
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity
 
     private PushNotificationFragment mListPushFragment;
 
-    private TimeLineFragment mTimelineFragment;
+    private ListGroupChatFragment mGroupChat;
 
     private ListStoreChatFragment mListStoreChatFragment;
 
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         }
         Bundle bundle = new Bundle();
         if (TextUtils.isEmpty(type)) {
-            bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_CHAT);
+            bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_GROUP_CHAT);
         } else {
             switch (type) {
                 case FireBaseMsgService.ACTION_PUSH_CHAT:
@@ -294,9 +293,9 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_push:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_PUSH_NOTIFICATION, null);
                     return true;
-//                case R.id.navigation_timeline:
-//                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_TIMELINE, null);
-//                    return true;
+                case R.id.navigation_group_chat:
+                    mPresenter.onBottomNavigationButtonClicked(FRAGMENT_GROUP_CHAT, null);
+                    return true;
                 case R.id.navigation_chat:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHAT, null);
                     return true;
@@ -392,12 +391,12 @@ public class MainActivity extends AppCompatActivity
                 clearBackStack();
                 replaceFragment(mListPushFragment, hasAnimation, addToBackStack);
                 return;
-            case FRAGMENT_TIMELINE:
-                if (mTimelineFragment == null) {
-                    mTimelineFragment = new TimeLineFragment();
+            case FRAGMENT_GROUP_CHAT:
+                if (mGroupChat == null) {
+                    mGroupChat = new ListGroupChatFragment();
                 }
                 clearBackStack();
-                replaceFragment(mTimelineFragment, hasAnimation, addToBackStack);
+                replaceFragment(mGroupChat, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_LIST_STORE_CHAT:
                 if (mListStoreChatFragment == null) {

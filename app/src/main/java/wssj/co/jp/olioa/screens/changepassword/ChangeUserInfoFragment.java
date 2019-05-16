@@ -292,7 +292,7 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
     @Override
     public void onRegisterSuccess() {
         getActivityCallback().clearBackStack();
-        getActivityCallback().displayScreen(IMainView.FRAGMENT_LIST_STORE_CHAT, false, false);
+        getActivityCallback().displayScreen(IMainView.FRAGMENT_GROUP_CHAT, false, false);
     }
 
     @Override

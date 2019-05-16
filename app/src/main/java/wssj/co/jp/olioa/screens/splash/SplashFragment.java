@@ -78,7 +78,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
-        ProgressLayout progressLayout = (ProgressLayout) rootView.findViewById(R.id.dmax_spots_progress);
+        ProgressLayout progressLayout = rootView.findViewById(R.id.dmax_spots_progress);
         mDialog = new SpotsDialog(getActivity(), progressLayout);
     }
 

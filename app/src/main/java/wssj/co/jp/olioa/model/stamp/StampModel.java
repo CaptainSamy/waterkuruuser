@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +18,7 @@ import wssj.co.jp.olioa.model.ErrorMessage;
 import wssj.co.jp.olioa.model.ErrorResponse;
 import wssj.co.jp.olioa.model.ResponseData;
 import wssj.co.jp.olioa.model.baseapi.APICallback;
+import wssj.co.jp.olioa.model.entities.GroupChat;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.utils.Logger;
 import wssj.co.jp.olioa.utils.Utils;
@@ -135,6 +137,11 @@ public class StampModel extends BaseModel {
 
     public void getListStoreCheckedIn(int type, int page, APICallback<List<StoreInfo>> callback) {
         getApi().getStoreCheckedIn(type, page).getAsyncResponse(callback);
+
+    }
+
+    public void getListGroupChat(APICallback<List<GroupChat>> callback) {
+        getApi().getGroupChat().getAsyncResponse(callback);
 
     }
 

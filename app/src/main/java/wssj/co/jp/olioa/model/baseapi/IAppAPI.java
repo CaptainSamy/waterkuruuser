@@ -14,6 +14,7 @@ import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.chat.MessageBody;
 import wssj.co.jp.olioa.model.checkin.CheckInBody;
 import wssj.co.jp.olioa.model.entities.AccessToken;
+import wssj.co.jp.olioa.model.entities.GroupChat;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.entities.User;
 import wssj.co.jp.olioa.model.entities.UserResponse;
@@ -33,6 +34,9 @@ public interface IAppAPI {
 
     @GET("api/get-store-checked-in")
     APICall<List<StoreInfo>> getStoreCheckedIn(@Query("type") int type, @Query("page") int page);
+
+    @GET("chat/get-group-chat")
+    APICall<List<GroupChat>> getGroupChat();
 
     @GET("api/get-push")
     APICall<PushNotificationResponse> getPush(@Query("page") int page);
@@ -61,6 +65,7 @@ public interface IAppAPI {
     @Multipart
     @POST("api/upload-image")
     APICall<String> uploadImage(@Part MultipartBody.Part file);
+
 
 
 }

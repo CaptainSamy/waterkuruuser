@@ -133,6 +133,14 @@ public class SharedPreferencesModel extends BaseModel {
         return mSharedPreference.getLong(String.valueOf(storeId));
     }
 
+
+    public void putLastTimeReadChatGroup(String groupId, long time) {
+        mSharedPreference.put(groupId, time);
+    }
+    public long getLastTimeReadChatGroup(String groupId) {
+        return mSharedPreference.getLong(groupId);
+    }
+
     public void clearSession() {
         mSharedPreference.remove(KEY_SESSION);
         mSharedPreference.remove(KEY_SERVICE_ID);
