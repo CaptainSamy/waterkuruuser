@@ -1,6 +1,5 @@
-package wssj.co.jp.olioa.screens.chat.adapter;
+package wssj.co.jp.olioa.screens.groupchat.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -18,34 +17,27 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.entities.ContentChatImage;
+import wssj.co.jp.olioa.model.entities.GroupChatMessage;
 import wssj.co.jp.olioa.screens.MainActivity;
 import wssj.co.jp.olioa.utils.DateConvert;
 import wssj.co.jp.olioa.utils.Utils;
-import wssj.co.jp.olioa.widget.ImageRoundCorners;
 
-/**
- * Created by Nguyen Huu Ta on 12/9/2017.
- */
-
-public class ChatAdapter extends ArrayAdapter<ChatMessage> {
+public class GroupChatAdapter extends ArrayAdapter<GroupChatMessage> {
 
     private static final int TYPE_USER = 0;
 
-    private static final int TYPE_STORE = 1;
+    private static final int TYPE_GROUP = 1;
 
-    private static final int TYPE_STORE_IMAGE = 2;
+    private static final int TYPE_GROUP_IMAGE = 2;
 
     private static final int TYPE_COUNT = 3;
 
     private LayoutInflater mInflate;
 
-    private String mUrlImageStore;
-
     private int mWidth;
 
-    private IClickImageStore clickImageStore;
 
-    public ChatAdapter(@NonNull MainActivity context, @NonNull List<ChatMessage> objects) {
+    public GroupChatAdapter(@NonNull MainActivity context, @NonNull List<GroupChatMessage> objects) {
         super(context, 0, objects);
         mInflate = LayoutInflater.from(context);
         mWidth = Utils.getWidthDevice(context) / 2;
@@ -58,19 +50,19 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
     @Override
     public int getItemViewType(int position) {
-        ChatMessage chat = getItem(position);
+        GroupChatMessage chat = getItem(position);
         if (chat != null) {
-            if (chat.isUser()) {
+            if (chat.isFromMe()) {
                 return TYPE_USER;
             } else {
                 if (chat.getContentType() == null) {
-                    return TYPE_STORE;
+                    return TYPE_GROUP;
                 }
                 switch (chat.getContentType()) {
                     case ChatMessage.TYPE_IMAGE:
-                        return TYPE_STORE_IMAGE;
+                        return TYPE_GROUP_IMAGE;
                     default:
-                        return TYPE_STORE;
+                        return TYPE_GROUP;
                 }
             }
         }
@@ -80,21 +72,18 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ChatMessage chat = getItem(position);
-        if (chat == null) {
-            return null;
-        }
+        GroupChatMessage chat = getItem(position);
         ChatDetailHolderUser holderUser;
         int layoutResource;
         switch (getItemViewType(position)) {
             case TYPE_USER:
                 layoutResource = R.layout.item_chat_user;
                 break;
-            case TYPE_STORE:
-                layoutResource = R.layout.item_chat_store;
+            case TYPE_GROUP:
+                layoutResource = R.layout.item_chat_group;
                 break;
-            case TYPE_STORE_IMAGE:
-                layoutResource = R.layout.item_chat_image_store;
+            case TYPE_GROUP_IMAGE:
+                layoutResource = R.layout.item_chat_image_group;
                 break;
             default:
                 layoutResource = R.layout.item_chat_user;
@@ -107,7 +96,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         } else {
             holderUser = (ChatDetailHolderUser) convertView.getTag();
         }
-        holderUser.bind(chat, position);
+        holderUser.bind(chat);
         return convertView;
     }
 
@@ -117,17 +106,17 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
         private TextView mTime;
 
-        private TextView mContent;
+        private TextView mUserName, mContent;
 
-        private ImageView
-                mContentImage;
+        private ImageView mContentImage;
 
         private CircleImageView mImageStore;
 
         private LinearLayout mLayoutDate;
 
-        public ChatDetailHolderUser(View view) {
+        ChatDetailHolderUser(View view) {
             mDate = (TextView) view.findViewById(R.id.tvDate);
+            mUserName = view.findViewById(R.id.userName);
             mContent = (TextView) view.findViewById(R.id.tvContent);
             mContentImage = view.findViewById(R.id.imageContent);
             mTime = (TextView) view.findViewById(R.id.tvTime);
@@ -140,12 +129,12 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
         }
 
-        public void bind(final ChatMessage chat, int position) {
-            switch (getItemViewType(position)) {
-                case TYPE_STORE:
-                case TYPE_STORE_IMAGE:
-                    Utils.fillImage(getContext(), mUrlImageStore, mImageStore, R.drawable.icon_user);
-                    break;
+        void bind(final GroupChatMessage chat) {
+            if (mContentImage != null) {
+                Utils.fillImage(getContext(), chat.getAvatar(), mImageStore, R.drawable.icon_user);
+            }
+            if (mUserName != null) {
+                mUserName.setText(chat.getName());
             }
             if (TextUtils.isEmpty(chat.getDate())) {
                 mLayoutDate.setVisibility(View.GONE);
@@ -167,17 +156,5 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         }
     }
 
-    public void setImageStore(String imageStore) {
-        this.mUrlImageStore = imageStore;
-    }
-
-    public interface IClickImageStore {
-
-        void onClick(int managerId);
-    }
-
-    public void setOnClickImageStore(IClickImageStore clickImageStore) {
-        this.clickImageStore = clickImageStore;
-    }
 
 }

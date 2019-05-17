@@ -105,19 +105,18 @@ public class ListGroupChatAdapter extends BaseAdapter {
             mLogoStore = view.findViewById(R.id.logoStore);
         }
 
-        void bindData(GroupChat store) {
-            if (store != null) {
-                mStoreName.setText(store.getName());
-                if (!TextUtils.isEmpty(store.getLastMessage())) {
-                    mLastMessage.setText(StringEscapeUtils.unescapeJava(store.getLastMessage()));
+        void bindData(GroupChat groupChat) {
+            if (groupChat != null) {
+                mStoreName.setText(groupChat.getName());
+                if (!TextUtils.isEmpty(groupChat.getLastMessage())) {
+                    mLastMessage.setText(StringEscapeUtils.unescapeJava(groupChat.getLastMessage()));
                 } else {
                     mLastMessage.setText(Constants.EMPTY_STRING);
                     newMessage.setVisibility(View.GONE);
                 }
-                if (!TextUtils.isEmpty(store.getLastTimeMessage())) {
-                    long time = DateConvert.convertDateToDate(store.getLastTimeMessage(), DateConvert.DATE_NANO);
-                    String key = GroupChat.TAG + store.getId();
-                    long lastTimeRead = sharedPreferencesModel.getLastTimeReadChatGroup(key);
+                if (!TextUtils.isEmpty(groupChat.getLastTimeMessage())) {
+                    long time = DateConvert.convertDateToDate(groupChat.getLastTimeMessage(), DateConvert.DATE_NANO);
+                    long lastTimeRead = sharedPreferencesModel.getLastTimeReadChatGroup(groupChat.getId());
                     if (lastTimeRead > 0 && lastTimeRead < time) {
                         mLastMessage.setTypeface(null, Typeface.BOLD);
                         newMessage.setVisibility(View.VISIBLE);
@@ -125,13 +124,13 @@ public class ListGroupChatAdapter extends BaseAdapter {
                         mLastMessage.setTypeface(null, Typeface.NORMAL);
                         newMessage.setVisibility(View.GONE);
                     }
-                    String lastTime = DateConvert.convertDateToDate(store.getLastTimeMessage(), DateConvert.DATE_NANO, DateConvert.DATE_FULL_FORMAT);
+                    String lastTime = DateConvert.convertDateToDate(groupChat.getLastTimeMessage(), DateConvert.DATE_NANO, DateConvert.DATE_FULL_FORMAT);
                     mLastTimeMessage.setText(lastTime);
                 } else {
                     mLastTimeMessage.setText(Constants.EMPTY_STRING);
                     newMessage.setVisibility(View.GONE);
                 }
-                Utils.fillImage(mContext, store.getAvatar(), mLogoStore, R.drawable.logo_app);
+                Utils.fillImage(mContext, groupChat.getAvatar(), mLogoStore, R.drawable.logo_app);
             }
         }
     }

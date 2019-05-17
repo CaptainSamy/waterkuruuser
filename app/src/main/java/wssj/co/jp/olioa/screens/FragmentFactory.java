@@ -17,6 +17,7 @@ import wssj.co.jp.olioa.screens.contact.ContactUsFragment;
 import wssj.co.jp.olioa.screens.coupone.CouponeFragment;
 import wssj.co.jp.olioa.screens.coupone.detailunused.UnusedDetailCouponeFragment;
 import wssj.co.jp.olioa.screens.coupone.detailused.UsedDetailCouponeFragment;
+import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
 import wssj.co.jp.olioa.screens.howtouse.HowToUserFragment;
 import wssj.co.jp.olioa.screens.introduction.IntroductionFragment;
 import wssj.co.jp.olioa.screens.listcard.ListCardFragmentDetail;
@@ -168,6 +169,9 @@ public final class FragmentFactory {
                 break;
             case IMainView.FRAGMENT_CHANGE_ACCOUNT:
                 fragment = new ChangeAccountFragment();
+                break;
+            case IMainView.FRAGMENT_GROUP_CHAT_DETAIL:
+                fragment = GroupChatDetailFragment.newInstance(bundle);
                 break;
         }
         if (fragment != null) {

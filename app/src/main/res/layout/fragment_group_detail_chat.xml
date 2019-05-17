@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <wssj.co.jp.olioa.widget.LoadMoreListView
+        android:id="@+id/lvStoreFollow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/line"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingBottom="10dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="normal" />
+
+
+    <TextView
+        android:id="@+id/textNoItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@id/lvStoreFollow"
+        android:layout_alignBottom="@+id/lvStoreFollow"
+        android:gravity="center"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5sp"
+        android:layout_above="@+id/layoutInput"
+        android:background="@color/colorTextMain" />
+
+    <LinearLayout
+        android:id="@+id/layoutInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etChat"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/border_input_chat"
+            android:hint="@string/input_content_chat"
+            android:maxLines="5"
+            android:paddingLeft="8dp"
+            android:paddingTop="14dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="14dp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:paddingRight="6dp">
+
+
+            <ImageView
+                android:id="@+id/tvSendChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_send"
+                android:textColor="@color/black" />
+
+            <ProgressBar
+                android:id="@+id/progressSendChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tvSendChat"
+                android:layout_alignTop="@+id/tvSendChat"
+                android:layout_alignRight="@+id/tvSendChat"
+                android:layout_alignBottom="@+id/tvSendChat"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

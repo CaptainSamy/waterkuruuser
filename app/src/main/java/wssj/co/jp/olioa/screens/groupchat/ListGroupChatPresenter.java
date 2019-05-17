@@ -4,10 +4,8 @@ import java.util.List;
 
 import wssj.co.jp.olioa.model.baseapi.APICallback;
 import wssj.co.jp.olioa.model.entities.GroupChat;
-import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.model.stamp.StampModel;
-import wssj.co.jp.olioa.model.util.UtilsModel;
 import wssj.co.jp.olioa.screens.base.FragmentPresenter;
 
 /**
@@ -19,7 +17,7 @@ public class ListGroupChatPresenter extends FragmentPresenter<IGroupChatView> {
     protected ListGroupChatPresenter(IGroupChatView view) {
         super(view);
         registerModel(new StampModel(view.getViewContext()));
-        registerModel(new UtilsModel(view.getViewContext()));
+        registerModel(new SharedPreferencesModel(view.getViewContext()));
     }
 
     private SharedPreferencesModel getShareModel() {
@@ -45,8 +43,8 @@ public class ListGroupChatPresenter extends FragmentPresenter<IGroupChatView> {
         });
     }
 
-    void saveLastTimeReadChat(long storeId) {
-        getShareModel().putLastTimeReadChat(storeId, System.currentTimeMillis());
+    void saveLastTimeReadChat(int groupId) {
+        getShareModel().putLastTimeReadChatGroup(groupId, System.currentTimeMillis());
     }
 
 }

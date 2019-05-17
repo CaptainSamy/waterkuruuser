@@ -499,7 +499,6 @@ public class MainActivity extends AppCompatActivity
                 mToolbar.setNavigationIcon(null);
             }
             mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
-            mToolbar.setShowIconNotificationButton(fragment.isDisplayIconNotification());
             mToolbar.setTitleActionBar(fragment.getAppBarTitle());
             mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
             mToolbar.setBackgroundColor(fragment.getActionBarColor());

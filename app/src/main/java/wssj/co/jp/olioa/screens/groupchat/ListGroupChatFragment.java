@@ -16,6 +16,7 @@ import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.groupchat.adapter.ListGroupChatAdapter;
+import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
 
 /**
  * Created by Nguyen Huu Ta on 12/6/2017.
@@ -24,7 +25,6 @@ import wssj.co.jp.olioa.screens.groupchat.adapter.ListGroupChatAdapter;
 public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGroupChatPresenter> implements IGroupChatView, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = "ListGroupChatFragment";
-
 
     public static final String ARG_STORE_INFO = "storeInfo";
 
@@ -97,12 +97,12 @@ public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGrou
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                StoreInfo storeInfo = (StoreInfo) parent.getItemAtPosition(position);
-                getPresenter().saveLastTimeReadChat(storeInfo.getId());
+                GroupChat groupInfo = (GroupChat) parent.getItemAtPosition(position);
+                getPresenter().saveLastTimeReadChat(groupInfo.getId());
                 mAdapter.notifyDataSetChanged();
                 Bundle bundle = new Bundle();
-                bundle.putParcelable(ARG_STORE_INFO, storeInfo);
-                getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
+                bundle.putParcelable(GroupChatDetailFragment.ARG_GROUP, groupInfo);
+                getActivityCallback().displayScreen(IMainView.FRAGMENT_GROUP_CHAT_DETAIL, true, true, bundle);
             }
         });
     }

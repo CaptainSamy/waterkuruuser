@@ -1,52 +1,49 @@
-package wssj.co.jp.olioa.model.chat;
+package wssj.co.jp.olioa.model.entities;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-import wssj.co.jp.olioa.model.entities.ContentChatImage;
+import wssj.co.jp.olioa.model.chat.ChatMessage;
 
-/**
- * Created by DaiKySy on 3/28/2019.
- */
-public class ChatMessage {
+public class GroupChatMessage {
 
     //    public static final String TYPE_TEXT = "text";
     public static final String TYPE_IMAGE = "image";
 
 
+    public void mapping(ChatMessage chatMessage) {
+        id = chatMessage.getId();
+        content = chatMessage.getContent();
+        contentType = chatMessage.getContentType();
+        isFromMe = true;
+        created = chatMessage.getCreated();
+    }
+
     @SerializedName("id")
     private long id;
 
-    @SerializedName("from_id")
-    private int fromId;
+    @SerializedName("avatar")
+    private String avatar;
 
-    @SerializedName("to_id")
-    private int toId;
+    @SerializedName("name")
+    private String name;
 
     @SerializedName("content")
     private String content;
 
-    @SerializedName("content_type")
+    @SerializedName("contentType")
     private String contentType;
 
     @SerializedName("created")
     private long created;
 
-    @SerializedName("isUser")
-    private boolean isUser;
+    @SerializedName("isFromMe")
+    private boolean isFromMe;
 
 
     private String date;
 
     private ContentChatImage contentChatImage;
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public long getId() {
         return id;
@@ -56,20 +53,20 @@ public class ChatMessage {
         this.id = id;
     }
 
-    public int getFromId() {
-        return fromId;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setFromId(int fromId) {
-        this.fromId = fromId;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public int getToId() {
-        return toId;
+    public String getName() {
+        return name;
     }
 
-    public void setToId(int toId) {
-        this.toId = toId;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getContent() {
@@ -96,12 +93,20 @@ public class ChatMessage {
         this.created = created;
     }
 
-    public boolean isUser() {
-        return isUser;
+    public boolean isFromMe() {
+        return isFromMe;
     }
 
-    public void setUser(boolean user) {
-        isUser = user;
+    public void setFromMe(boolean fromMe) {
+        isFromMe = fromMe;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public ContentChatImage getContentChatImage() {
@@ -111,7 +116,5 @@ public class ChatMessage {
         }
         return contentChatImage;
     }
-
-
 
 }

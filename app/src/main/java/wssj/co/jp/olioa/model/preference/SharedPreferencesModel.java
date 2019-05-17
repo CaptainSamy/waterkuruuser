@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import wssj.co.jp.olioa.model.BaseModel;
+import wssj.co.jp.olioa.model.entities.GroupChat;
 
 /**
  * Created by HieuPT on 5/17/2017.
@@ -134,11 +135,12 @@ public class SharedPreferencesModel extends BaseModel {
     }
 
 
-    public void putLastTimeReadChatGroup(String groupId, long time) {
-        mSharedPreference.put(groupId, time);
+    public void putLastTimeReadChatGroup(int groupId, long time) {
+        mSharedPreference.put(GroupChat.TAG + groupId, time);
     }
-    public long getLastTimeReadChatGroup(String groupId) {
-        return mSharedPreference.getLong(groupId);
+
+    public long getLastTimeReadChatGroup(int groupId) {
+        return mSharedPreference.getLong(GroupChat.TAG + groupId);
     }
 
     public void clearSession() {

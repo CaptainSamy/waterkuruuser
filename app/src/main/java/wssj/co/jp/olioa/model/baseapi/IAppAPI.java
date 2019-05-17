@@ -15,6 +15,7 @@ import wssj.co.jp.olioa.model.chat.MessageBody;
 import wssj.co.jp.olioa.model.checkin.CheckInBody;
 import wssj.co.jp.olioa.model.entities.AccessToken;
 import wssj.co.jp.olioa.model.entities.GroupChat;
+import wssj.co.jp.olioa.model.entities.GroupChatMessage;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.entities.User;
 import wssj.co.jp.olioa.model.entities.UserResponse;
@@ -65,6 +66,12 @@ public interface IAppAPI {
     @Multipart
     @POST("api/upload-image")
     APICall<String> uploadImage(@Part MultipartBody.Part file);
+
+    @GET("chat/get-message-group")
+    APICall<List<GroupChatMessage>> getHistoryGroupChat(@Query("group_id") int groupId, @Query("last_message_id") long lastChatId);
+
+    @POST("chat/insert-message-group")
+    APICall<ChatMessage> sendGroupChat(@Body MessageBody chatUser);
 
 
 
