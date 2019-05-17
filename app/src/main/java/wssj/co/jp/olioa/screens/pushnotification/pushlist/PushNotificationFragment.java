@@ -97,7 +97,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     protected void initData() {
         mListNotification = new ArrayList<>();
         mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
-        getPresenter().getListPushNotification(0);
         mAdapter.setListPushTemp(mListNotification);
         mListView.setAdapter(mAdapter);
     }
@@ -126,6 +125,13 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mListView.reload();
+        getPresenter().getListPushNotification(0);
+    }
+
+    @Override
     public void showListPushNotification(PushNotificationResponse response) {
         if (response != null) {
             if (mListView.getCurrentPage() == 0) {
@@ -139,13 +145,13 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                     mListView.notifyLoadComplete();
                 }
                 mListNotification.addAll(list);
-                mAdapter.notifyDataSetChanged();
                 if (mAdapter.getCount() == 0) {
                     showTextNoItem(true, getString(R.string.no_timeline));
                 } else {
                     showTextNoItem(false, null);
                 }
             }
+            mAdapter.notifyDataSetChanged();
         }
         mTextNoItem.setVisibility(mListNotification.size() == 0 ? View.VISIBLE : View.GONE);
     }

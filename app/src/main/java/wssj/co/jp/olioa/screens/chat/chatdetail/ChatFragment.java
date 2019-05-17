@@ -275,7 +275,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
         if (mListChat.size() > 0) {
             long lastId = mListChat.get(0).getId();
             if (dbManager.isExistsChatId(storeInfo.getId(), lastId)) {
-                showLog("onLoadMoreTop with getDatabase");
+                print("onLoadMoreTop with getDatabase");
                 List<ChatMessage> list = dbManager.getListChatByLastChatId(storeInfo.getId(), lastId);
                 if (list.size() > 0) {
                     sortListChat(list);
@@ -292,11 +292,11 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
                         }
                     }, 100);
                 } else {
-                    showLog("onLoadMoreTop with request");
+                    print("onLoadMoreTop with request");
                     getPresenter().getHistoryChat(storeInfo.getId(), lastId);
                 }
             } else {
-                showLog("onLoadMoreTop with request");
+                print("onLoadMoreTop with request");
                 getPresenter().getHistoryChat(storeInfo.getId(), lastId);
             }
         }

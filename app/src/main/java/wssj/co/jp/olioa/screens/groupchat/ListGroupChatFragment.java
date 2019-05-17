@@ -12,7 +12,6 @@ import java.util.List;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.entities.GroupChat;
-import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.groupchat.adapter.ListGroupChatAdapter;

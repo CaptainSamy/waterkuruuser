@@ -6,6 +6,7 @@ import java.util.List;
 
 import wssj.co.jp.olioa.model.BaseModel;
 import wssj.co.jp.olioa.model.baseapi.APICallback;
+import wssj.co.jp.olioa.model.entities.BlockChatStore;
 import wssj.co.jp.olioa.model.entities.GroupChatMessage;
 
 /**
@@ -38,4 +39,13 @@ public class ChatModel extends BaseModel {
         MessageBody messageBody = new MessageBody(storeId, content);
         getApi().sendGroupChat(messageBody).getAsyncResponse(callback);
     }
+
+    public void getListStoreBlock(APICallback<List<BlockChatStore>> callback){
+        getApi().getBlockChat().getAsyncResponse(callback);
+    }
+
+    public void blockStore(BlockChatStore param,APICallback callback){
+        getApi().saveListBlock(param).getAsyncResponse(callback);
+    }
+
 }

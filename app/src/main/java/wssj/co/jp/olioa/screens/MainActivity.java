@@ -337,6 +337,9 @@ public class MainActivity extends AppCompatActivity
                     mPresenter.logout();
                     DBManager.getInstance().clearDatabase();
                     return true;
+                case R.id.menu_block_chat:
+                    mPresenter.onCloseDrawableLayout(FRAGMENT_BLOCK_CHAT, true, true, null, menuId);
+                    break;
             }
         }
         return false;
@@ -490,6 +493,11 @@ public class MainActivity extends AppCompatActivity
             int navigationBottomId = fragment.getNavigationBottomId();
             if (navigationBottomId != 0) {
                 mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
+                mToolbar.setShowExtraNavigationButton(true);
+                enableDrawerLayout();
+            }else {
+                mToolbar.setShowExtraNavigationButton(false);
+                disableDrawerLayout();
             }
             mBottomNavigationView.getMenu().setGroupEnabled(R.id.navigation_bottom_group, fragment.isEnableBottomNavigationMenu());
             boolean isShowNavigationButton = fragment.isDisplayBackButton();
@@ -498,7 +506,7 @@ public class MainActivity extends AppCompatActivity
             } else {
                 mToolbar.setNavigationIcon(null);
             }
-            mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
+//            mToolbar.setShowExtraNavigationButton(fragment.isDisplayExtraNavigationButton());
             mToolbar.setTitleActionBar(fragment.getAppBarTitle());
             mToolbar.setVisibility(fragment.isDisplayActionBar() ? View.VISIBLE : View.GONE);
             mToolbar.setBackgroundColor(fragment.getActionBarColor());

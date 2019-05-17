@@ -5,6 +5,7 @@ import android.util.SparseArray;
 
 import wssj.co.jp.olioa.screens.about.AboutFragment;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.blockchat.BlockChatFragment;
 import wssj.co.jp.olioa.screens.changeaccount.ChangeAccountFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangePasswordByCodeFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
@@ -172,6 +173,9 @@ public final class FragmentFactory {
                 break;
             case IMainView.FRAGMENT_GROUP_CHAT_DETAIL:
                 fragment = GroupChatDetailFragment.newInstance(bundle);
+                break;
+            case IMainView.FRAGMENT_BLOCK_CHAT:
+                fragment = new BlockChatFragment();
                 break;
         }
         if (fragment != null) {

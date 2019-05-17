@@ -14,6 +14,7 @@ import wssj.co.jp.olioa.model.chat.ChatMessage;
 import wssj.co.jp.olioa.model.chat.MessageBody;
 import wssj.co.jp.olioa.model.checkin.CheckInBody;
 import wssj.co.jp.olioa.model.entities.AccessToken;
+import wssj.co.jp.olioa.model.entities.BlockChatStore;
 import wssj.co.jp.olioa.model.entities.GroupChat;
 import wssj.co.jp.olioa.model.entities.GroupChatMessage;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
@@ -73,6 +74,11 @@ public interface IAppAPI {
     @POST("chat/insert-message-group")
     APICall<ChatMessage> sendGroupChat(@Body MessageBody chatUser);
 
+    @GET("api/get-block-chat-store")
+    APICall<List<BlockChatStore>> getBlockChat();
+
+    @POST("api/save-block-chat-store")
+    APICall saveListBlock(@Body  BlockChatStore params);
 
 
 }

@@ -255,7 +255,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
         dialogMessage.show();
     }
 
-    public void showLog(String message) {
+    public void print(String message) {
         Logger.d(getLogTag(), message);
     }
 

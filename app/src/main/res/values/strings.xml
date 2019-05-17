@@ -7,7 +7,7 @@
     <string name="server_client_id_product">610695143021-dnvgmn753ppdcmensiveq4m1vsjcpko4.apps.googleusercontent.com</string>
 
     <string name="success">成功</string>
-
+    <string name="CANCEL">Cancel</string>
     <string name="OK">OK</string>
     <string name="failure">エラーが発生しました</string>
     <string name="permission_denied">アクセス拒否</string>
@@ -247,5 +247,8 @@
 
 
     <string name="title_group_chat">コミュニティ</string>
+    <string name="scan_string">友達追加</string>
+
+    <string name="block_chat">ブロック管理</string>
 
 </resources>

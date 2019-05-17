@@ -95,6 +95,8 @@ public interface IMainView extends IView {
 
     int FRAGMENT_GROUP_CHAT_DETAIL = 61;
 
+    int FRAGMENT_BLOCK_CHAT = 62;
+
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle);
 
     void switchScreen(int screenId, boolean hasAnimation, boolean addToBackStack, Bundle bundle, View sharedElement);

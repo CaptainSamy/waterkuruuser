@@ -155,7 +155,7 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
     @Override
     public void checkInSuccess(StoreInfo storeInfo) {
         if (storeInfo == null) {
-            showLog("checkInSuccess failure");
+            print("checkInSuccess failure");
             startCamera();
             return;
         }
@@ -195,6 +195,11 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
                         getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
                     }
                     backToPreviousScreen();
+                }
+
+                @Override
+                public void buttonCancelClick() {
+
                 }
             });
         }

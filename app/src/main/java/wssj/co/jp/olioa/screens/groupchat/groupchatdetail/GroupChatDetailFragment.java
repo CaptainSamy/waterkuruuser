@@ -251,7 +251,7 @@ public class GroupChatDetailFragment extends BaseFragment<IGroupChatDetailView, 
     @Override
     public void onLoadMoreTop(int page) {
         if (mListChat.size() > 0) {
-            showLog("onLoadMoreTop with request");
+            print("onLoadMoreTop with request");
             long lastId = mListChat.get(0).getId();
             getPresenter().getHistoryChat(groupInfo.getId(), lastId);
         }

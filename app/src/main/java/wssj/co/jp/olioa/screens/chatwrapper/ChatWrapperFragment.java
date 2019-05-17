@@ -48,10 +48,6 @@ public class ChatWrapperFragment extends SwitcherFragment<IChatWrapperView, Chat
         return true;
     }
 
-    @Override
-    public int getNavigationBottomId() {
-        return R.id.navigation_chat;
-    }
 
     @Override
     protected boolean isRetainState() {

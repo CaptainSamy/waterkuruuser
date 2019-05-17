@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.screens.base.BaseDialog;
+import wssj.co.jp.olioa.screens.base.IFragmentView;
 
 /**
  * Created by Nguyen Huu Ta on 21/6/2017.
@@ -83,6 +84,9 @@ public class DialogMessage extends BaseDialog<IDialogErrorView, DialogErrorPrese
                 break;
             case R.id.tvCancel:
                 dismissDialogView();
+                if (mCallback != null){
+                    mCallback.buttonCancelClick();
+                }
                 break;
         }
     }
@@ -90,6 +94,8 @@ public class DialogMessage extends BaseDialog<IDialogErrorView, DialogErrorPrese
     public interface IOnClickListener {
 
         void buttonYesClick();
+
+        void buttonCancelClick();
 
     }
 }

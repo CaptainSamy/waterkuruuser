@@ -16,7 +16,6 @@ import java.util.List;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.entities.GroupChat;
-import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.DateConvert;
