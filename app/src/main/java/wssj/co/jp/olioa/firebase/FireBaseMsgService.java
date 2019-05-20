@@ -39,6 +39,8 @@ public class FireBaseMsgService extends FirebaseMessagingService {
 
     public static final String ACTION_PUSH_CHAT = "1000";
 
+    public static final String ACTION_PUSH_GROUP = "2000";
+
     private FirebaseModel mFireBaseModel;
 
     private NotificationManager mNotificationManager;
@@ -62,12 +64,13 @@ public class FireBaseMsgService extends FirebaseMessagingService {
 
                 @Override
                 public void onSuccess(NotificationMessage notificationMessage) {
+                    //app not running
                     Intent sentToActivity = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(KEY_NOTIFICATION, notificationMessage);
                     sentToActivity.putExtra(KEY_NOTIFICATION, bundle);
                     sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
-
+                    //app  is top stack
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(sentToActivity);
 //                    if (!isAppOnTop() || !actionPushChat) {
                     Intent intent = new Intent(FireBaseMsgService.this, MainActivity.class);

@@ -311,9 +311,6 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     public void onStop() {
         super.onStop();
         if (storeInfo != null) {
-            if (getMainActivity() != null) {
-                getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
-            }
             getPresenter().saveLastTimeReadChat(storeInfo.getId());
         }
     }

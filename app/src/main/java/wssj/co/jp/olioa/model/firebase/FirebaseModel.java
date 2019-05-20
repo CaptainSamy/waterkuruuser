@@ -73,7 +73,19 @@ public class FirebaseModel extends BaseModel {
         String message = data.get("body");
         String pushIdText = data.get("push_id");
         String actionPush = data.get("type");
-        int stampId = 0;
+        int storeId;
+        try {
+            storeId = Integer.parseInt(data.get("store_id"));
+        }catch (Exception e){
+            storeId = -1;
+        }
+
+        int groupId;
+        try {
+            groupId = Integer.parseInt(data.get("group_id"));
+        }catch (Exception e){
+            groupId = -1;
+        }
 
         long pushId = 1;
         if (!TextUtils.isEmpty(pushIdText)) {
@@ -82,7 +94,7 @@ public class FirebaseModel extends BaseModel {
         if (TextUtils.isEmpty(title)) {
             callback.onFailure(new ErrorMessage(getStringResource(R.string.msg_parse_message_failure)));
         } else {
-            callback.onSuccess(new NotificationMessage(pushId, title, message, actionPush, stampId));
+            callback.onSuccess(new NotificationMessage(pushId, title, message, actionPush, storeId, groupId));
         }
     }
 

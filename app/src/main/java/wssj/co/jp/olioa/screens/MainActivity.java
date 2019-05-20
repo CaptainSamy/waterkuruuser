@@ -105,20 +105,27 @@ public class MainActivity extends AppCompatActivity
             if (notification == null) {
                 return;
             }
-            switch (mCurrentFragment.getFragmentId()) {
-                case IMainView.FRAGMENT_LIST_STORE_CHAT:
-                case IMainView.FRAGMENT_CHAT:
-                    if (FireBaseMsgService.ACTION_PUSH_CHAT.equals(notification.getAction())) {
+
+
+            switch (notification.getAction()) {
+                case FireBaseMsgService.ACTION_PUSH_CHAT:
+                    boolean fragmentChat = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_LIST_STORE_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_CHAT;
+                    if (fragmentChat) {
                         onReloadFragment(mCurrentFragment.getFragmentId(), true);
                     }
                     break;
-                case IMainView.FRAGMENT_PUSH_NOTIFICATION:
-                    if (!FireBaseMsgService.ACTION_PUSH_CHAT.equals(notification.getAction())) {
+                case FireBaseMsgService.ACTION_PUSH_GROUP:
+                    boolean fragmentGroupChat = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_GROUP_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_GROUP_CHAT_DETAIL;
+                    if (fragmentGroupChat) {
+                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                    }
+                    break;
+                default:
+                    if (mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_PUSH_NOTIFICATION){
                         onReloadFragment(mCurrentFragment.getFragmentId(), true);
                     }
                     break;
             }
-
 
         }
     };
@@ -174,6 +181,9 @@ public class MainActivity extends AppCompatActivity
             switch (type) {
                 case FireBaseMsgService.ACTION_PUSH_CHAT:
                     bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_CHAT);
+                    break;
+                case FireBaseMsgService.ACTION_PUSH_GROUP:
+                    bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_GROUP_CHAT);
                     break;
                 default:
                     bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_PUSH_NOTIFICATION);
@@ -307,7 +317,7 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 case R.id.menu_change_password:
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(ChangeUserInfoFragment.ARG_FROM_MENU,true);
+                    bundle.putBoolean(ChangeUserInfoFragment.ARG_FROM_MENU, true);
                     mPresenter.onCloseDrawableLayout(FRAGMENT_CHANGE_PASSWORD, true, true, bundle, menuId);
                     return true;
                 case R.id.menu_how_to_use:
@@ -495,7 +505,7 @@ public class MainActivity extends AppCompatActivity
                 mBottomNavigationView.setSelectedItemIdWithoutNotify(navigationBottomId);
                 mToolbar.setShowExtraNavigationButton(true);
                 enableDrawerLayout();
-            }else {
+            } else {
                 mToolbar.setShowExtraNavigationButton(false);
                 disableDrawerLayout();
             }
@@ -555,26 +565,26 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onReloadFragment(int fragmentId, boolean... reloadNow) {
+    public void onReloadFragment(int fragmentId, boolean reloadNow) {
         if (!isAppOnTop()) {
             return;
         }
         switch (fragmentId) {
             case IMainView.FRAGMENT_PUSH_NOTIFICATION:
                 if (mListPushFragment != null) {
-                    if (reloadNow.length == 0) {
-                        mListPushFragment.flagRefreshWhenBackFragment();
-                    } else {
+                    if (reloadNow) {
                         mListPushFragment.onRefresh();
+                    } else {
+                        mListPushFragment.flagRefreshWhenBackFragment();
                     }
                 }
                 break;
             case IMainView.FRAGMENT_LIST_STORE_CHAT:
                 if (mListStoreChatFragment != null) {
-                    if (reloadNow.length == 0) {
-                        mListStoreChatFragment.flagRefreshWhenBackFragment();
-                    } else {
+                    if (reloadNow) {
                         mListStoreChatFragment.onRefresh();
+                    } else {
+                        mListStoreChatFragment.flagRefreshWhenBackFragment();
                     }
                 }
                 break;

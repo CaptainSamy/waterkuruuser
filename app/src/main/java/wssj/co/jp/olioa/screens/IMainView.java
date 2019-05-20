@@ -33,8 +33,6 @@ public interface IMainView extends IView {
 
     int FRAGMENT_PUSH_NOTIFICATION = 17;
 
-//    int FRAGMENT_LIST_STORE_PUSH = 18;
-
     int FRAGMENT_LIST_STORE_CHAT = 6;
 
     int FRAGMENT_HOW_TO_USE = 19;

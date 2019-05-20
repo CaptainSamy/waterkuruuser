@@ -77,8 +77,10 @@ public class BlockChatFragment extends BaseFragment<IBlockChatView, BlockChatPre
             public void onAction(int type, BlockChatStore... data) {
                 if (data.length == 0) return;
                 final BlockChatStore store = data[0];
+                int newStatus = store.getStatus() == 1 ? 2 : 1;
+                print("newStatus " + newStatus);
+                store.setStatus(newStatus);
                 if (store.getStatus() == 2) {
-                    //TODO disable
                      DialogMessage mDialog = new DialogMessage(getActivityContext(), new DialogMessage.IOnClickListener() {
                         @Override
                         public void buttonYesClick() {

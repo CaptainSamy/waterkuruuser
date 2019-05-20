@@ -35,6 +35,10 @@ public class NotificationMessage implements GsonSerializable, Parcelable {
     @SerializedName("logo")
     private String mLogo;
 
+    private int storeId;
+
+    private int groupId;
+
     private int day;
 
     protected NotificationMessage(Parcel in) {
@@ -51,6 +55,8 @@ public class NotificationMessage implements GsonSerializable, Parcelable {
         mStampId = in.readInt();
         mIsLike = in.readInt();
         mStoreAnnounce = in.readInt();
+        storeId = in.readInt();
+        groupId = in.readInt();
     }
 
     public static final Creator<NotificationMessage> CREATOR = new Creator<NotificationMessage>() {
@@ -116,11 +122,12 @@ public class NotificationMessage implements GsonSerializable, Parcelable {
 
     }
 
-    public NotificationMessage(long pushId, String title, String message, String action, int stampId) {
+    public NotificationMessage(long pushId, String title, String message, String action, int storeId, int groupId) {
         this.mTitle = title;
         this.mMessage = message;
         mAction = action;
-        mStampId = stampId;
+        this.storeId = storeId;
+        this.groupId = groupId;
         mPushId = pushId;
         mIsSound = true;
         mPushTime = System.currentTimeMillis();
@@ -222,6 +229,15 @@ public class NotificationMessage implements GsonSerializable, Parcelable {
         this.mUserPushId = userPushId;
     }
 
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -242,5 +258,7 @@ public class NotificationMessage implements GsonSerializable, Parcelable {
         dest.writeInt(mStampId);
         dest.writeInt(mIsLike);
         dest.writeInt(mStoreAnnounce);
+        dest.writeInt(storeId);
+        dest.writeInt(groupId);
     }
 }

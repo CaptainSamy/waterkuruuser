@@ -190,10 +190,6 @@ public class ScannerFragment extends BaseFragment<IScannerView, ScannerPresenter
 
                 @Override
                 public void buttonYesClick() {
-                    if (getMainActivity() != null) {
-                        getMainActivity().onReloadFragment(IMainView.FRAGMENT_PUSH_NOTIFICATION);
-                        getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
-                    }
                     backToPreviousScreen();
                 }
 

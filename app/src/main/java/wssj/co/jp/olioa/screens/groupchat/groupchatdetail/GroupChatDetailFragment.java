@@ -266,9 +266,6 @@ public class GroupChatDetailFragment extends BaseFragment<IGroupChatDetailView, 
     public void onStop() {
         super.onStop();
         if (groupInfo != null) {
-            if (getMainActivity() != null) {
-                getMainActivity().onReloadFragment(IMainView.FRAGMENT_LIST_STORE_CHAT);
-            }
             getPresenter().saveLastTimeReadChat(groupInfo.getId());
         }
     }

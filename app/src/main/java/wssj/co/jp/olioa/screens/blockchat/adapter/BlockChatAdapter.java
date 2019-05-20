@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -86,12 +85,10 @@ public class BlockChatAdapter extends BaseAdapter {
             Utils.fillImage(mContext,store.getLogoStore(),imageStore,R.drawable.icon_user);
             mStoreName.setText(store.getStoreName());
             mSwitchView.setChecked(store.getStatus() == 1);
-            mSwitchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            mSwitchView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    int status = isChecked ? 1 : 2;
-                    store.setStatus(status);
-                    callback.onAction(Constants.SUCCESSFULLY, store);
+                public void onClick(View v) {
+                    callback.onAction(Constants.SUCCESSFULLY,store);
                 }
             });
 
