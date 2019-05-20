@@ -25,8 +25,10 @@ public class PushNotificationListPresenter extends FragmentPresenter<IPushNotifi
         registerModel(new PushNotificationModel(view.getViewContext()));
     }
 
-    public void getListPushNotification(int page) {
-        getView().showProgress();
+    public void getListPushNotification(int page, boolean isShowProgress) {
+        if (isShowProgress) {
+            getView().showProgress();
+        }
         getModel(PushNotificationModel.class).getListPushNotification(page, new APICallback<PushNotificationResponse>() {
 
             @Override

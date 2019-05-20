@@ -121,14 +121,14 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     public void onRefresh() {
         mRefreshLayout.setRefreshing(false);
         mListView.reload();
-        getPresenter().getListPushNotification(0);
+        getPresenter().getListPushNotification(0, true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mListView.reload();
-        getPresenter().getListPushNotification(0);
+        getPresenter().getListPushNotification(0, mListNotification.size() == 0);
     }
 
     @Override
@@ -165,6 +165,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onLoadMore(int page) {
-        getPresenter().getListPushNotification(page);
+        getPresenter().getListPushNotification(page,true);
     }
 }

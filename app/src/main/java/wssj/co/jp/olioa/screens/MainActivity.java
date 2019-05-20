@@ -40,6 +40,7 @@ import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
 import wssj.co.jp.olioa.screens.chat.chatdetail.ChatFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
 import wssj.co.jp.olioa.screens.groupchat.ListGroupChatFragment;
+import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.screens.pushnotification.pushlist.PushNotificationFragment;
@@ -111,18 +112,18 @@ public class MainActivity extends AppCompatActivity
                 case FireBaseMsgService.ACTION_PUSH_CHAT:
                     boolean fragmentChat = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_LIST_STORE_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_CHAT;
                     if (fragmentChat) {
-                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                        onReloadFragment(mCurrentFragment.getFragmentId());
                     }
                     break;
                 case FireBaseMsgService.ACTION_PUSH_GROUP:
                     boolean fragmentGroupChat = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_GROUP_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_GROUP_CHAT_DETAIL;
                     if (fragmentGroupChat) {
-                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                        onReloadFragment(mCurrentFragment.getFragmentId());
                     }
                     break;
                 default:
-                    if (mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_PUSH_NOTIFICATION){
-                        onReloadFragment(mCurrentFragment.getFragmentId(), true);
+                    if (mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_PUSH_NOTIFICATION) {
+                        onReloadFragment(mCurrentFragment.getFragmentId());
                     }
                     break;
             }
@@ -565,27 +566,29 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void onReloadFragment(int fragmentId, boolean reloadNow) {
+    public void onReloadFragment(int fragmentId) {
         if (!isAppOnTop()) {
             return;
         }
         switch (fragmentId) {
             case IMainView.FRAGMENT_PUSH_NOTIFICATION:
                 if (mListPushFragment != null) {
-                    if (reloadNow) {
-                        mListPushFragment.onRefresh();
-                    } else {
-                        mListPushFragment.flagRefreshWhenBackFragment();
-                    }
+                    mListPushFragment.onRefresh();
+                }
+                break;
+            case IMainView.FRAGMENT_GROUP_CHAT:
+                if (mGroupChat != null) {
+                    mGroupChat.onRefresh();
+                }
+                break;
+            case IMainView.FRAGMENT_GROUP_CHAT_DETAIL:
+                if (mCurrentFragment instanceof GroupChatDetailFragment){
+                    ((GroupChatDetailFragment) mCurrentFragment).onRefresh();
                 }
                 break;
             case IMainView.FRAGMENT_LIST_STORE_CHAT:
                 if (mListStoreChatFragment != null) {
-                    if (reloadNow) {
-                        mListStoreChatFragment.onRefresh();
-                    } else {
-                        mListStoreChatFragment.flagRefreshWhenBackFragment();
-                    }
+                    mListStoreChatFragment.onRefresh();
                 }
                 break;
             case IMainView.FRAGMENT_CHAT:

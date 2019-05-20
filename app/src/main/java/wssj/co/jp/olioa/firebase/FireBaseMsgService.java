@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -72,40 +73,41 @@ public class FireBaseMsgService extends FirebaseMessagingService {
                     sentToActivity.setAction(Constants.ACTION_REFRESH_LIST_PUSH);
                     //app  is top stack
                     LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(sentToActivity);
-//                    if (!isAppOnTop() || !actionPushChat) {
-                    Intent intent = new Intent(FireBaseMsgService.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                            Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra(KEY_NOTIFICATION, notificationMessage.getAction());
-                    Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
-                    NotificationCompat.Builder builder = new NotificationCompat.Builder(FireBaseMsgService.this);
-                    builder.setContentTitle(notificationMessage.getTitle());
-                    if (!TextUtils.isEmpty(notificationMessage.getMessage())) {
-                        builder.setContentText(notificationMessage.getMessage());
+                    if (isAppOnTop()) {
+                        try {
+                            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                            r.play();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Intent intent = new Intent(FireBaseMsgService.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                                Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra(KEY_NOTIFICATION, notificationMessage.getAction());
+                        Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
+                        NotificationCompat.Builder builder = new NotificationCompat.Builder(FireBaseMsgService.this);
+                        builder.setContentTitle(notificationMessage.getTitle());
+                        if (!TextUtils.isEmpty(notificationMessage.getMessage())) {
+                            builder.setContentText(notificationMessage.getMessage());
+                        }
+                        builder.setLights(Color.BLUE, 500, 500);
+                        long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
+                        builder.setVibrate(pattern);
+                        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        builder.setSound(alarmSound);
+                        builder.setAutoCancel(true);
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            builder.setColor(getResources().getColor(R.color.colorMain));
+                        }
+                        builder.setSmallIcon(R.drawable.image_notification);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(FireBaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                        builder.setContentIntent(pendingIntent);
+                        mNotificationManager.notify((int) notificationMessage.getPushId(), builder.build());
+
                     }
-                    builder.setLights(Color.BLUE, 500, 500);
-                    long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
-                    builder.setVibrate(pattern);
-                    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    builder.setSound(alarmSound);
-                    builder.setAutoCancel(true);
-                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder.setColor(getResources().getColor(R.color.colorMain));
-                    }
-                    builder.setSmallIcon(R.drawable.image_notification);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(FireBaseMsgService.this, (int) notificationMessage.getPushId(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-                    builder.setContentIntent(pendingIntent);
-                    mNotificationManager.notify((int) notificationMessage.getPushId(), builder.build());
-//                    } else {
-//                        try {
-//                            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-//                            r.play();
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
                 }
 
                 @Override
