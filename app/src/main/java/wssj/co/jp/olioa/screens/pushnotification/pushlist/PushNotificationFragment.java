@@ -90,6 +90,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     protected void initViews(View rootView) {
         mRefreshLayout = rootView.findViewById(R.id.refresh_layout);
         mListView = rootView.findViewById(R.id.list_push_notification);
+        mListView.setMaxItemPage(Constants.MAX_ITEM_PAGE);
         mTextNoItem = rootView.findViewById(R.id.textNoItem);
     }
 
@@ -121,6 +122,8 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     public void onRefresh() {
         mRefreshLayout.setRefreshing(false);
         mListView.reload();
+        mListNotification.clear();
+        mAdapter.notifyDataSetChanged();
         getPresenter().getListPushNotification(0, true);
     }
 
@@ -128,13 +131,13 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     public void onResume() {
         super.onResume();
         mListView.reload();
-        getPresenter().getListPushNotification(0, mListNotification.size() == 0);
+        getPresenter().getListPushNotification(0, false);
     }
 
     @Override
     public void showListPushNotification(PushNotificationResponse response) {
         if (response != null) {
-            if (mListView.getCurrentPage() == 0) {
+            if (mListView.getCurrentPage() == 0){
                 mListNotification.clear();
             }
             List<PushNotification> list = response.getListPushNotification();
@@ -165,6 +168,6 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     public void onLoadMore(int page) {
-        getPresenter().getListPushNotification(page,true);
+        getPresenter().getListPushNotification(page, true);
     }
 }

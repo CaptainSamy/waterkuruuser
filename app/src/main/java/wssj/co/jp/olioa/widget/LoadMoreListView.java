@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
+import wssj.co.jp.olioa.utils.Logger;
+
 /**
  * Created by HieuPT on 7/3/2017.
  */
@@ -14,7 +16,7 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
 
     private boolean mIsLoading;
 
-    private int mCurrentPage, mTotalPage;
+    private int mCurrentPage, mMaxItemPage;
 
     private ILoadMoreListener mListener;
 
@@ -54,8 +56,8 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
         //interface method
     }
 
-    public void setCurrentPage(int currentPage) {
-        mCurrentPage = currentPage;
+    public void setMaxItemPage(int mMaxItemPage) {
+        this.mMaxItemPage = mMaxItemPage;
     }
 
     public int getCurrentPage() {
@@ -85,7 +87,9 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
             }
         }
         if (mListener != null) {
-            if (totalItemCount != 0 && firstVisibleItem + visibleItemCount == totalItemCount) {
+
+            Logger.d("TAG", totalItemCount + "/" + (firstVisibleItem + visibleItemCount));
+            if (totalItemCount >= mMaxItemPage && firstVisibleItem + visibleItemCount == totalItemCount) {//totalItemCount != 0
                 if (!mIsLoading) {
                     mIsLoading = true;
                     mCurrentPage++;

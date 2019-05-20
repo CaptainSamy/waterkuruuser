@@ -72,7 +72,6 @@ public class DialogNotification implements SwipeRefreshLayout.OnRefreshListener 
         int page = 0;
         if (totalPage.length > 0) {
             page = totalPage[0];
-            mListViewNotification.setCurrentPage(0);
         }
         if (mPushNotificationAdapter == null) {
             mListNotification = new ArrayList<>();

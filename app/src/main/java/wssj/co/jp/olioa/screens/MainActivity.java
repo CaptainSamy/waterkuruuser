@@ -1,11 +1,13 @@
 package wssj.co.jp.olioa.screens;
 
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +42,7 @@ import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
 import wssj.co.jp.olioa.screens.chat.chatdetail.ChatFragment;
 import wssj.co.jp.olioa.screens.comment.CommentFragment;
+import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.screens.groupchat.ListGroupChatFragment;
 import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
@@ -48,6 +52,7 @@ import wssj.co.jp.olioa.screens.splash.SplashFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.FragmentBackStackManager;
 import wssj.co.jp.olioa.utils.Logger;
+import wssj.co.jp.olioa.utils.NetworkUtils;
 import wssj.co.jp.olioa.utils.ReflectionUtils;
 import wssj.co.jp.olioa.utils.VolleySequence;
 import wssj.co.jp.olioa.widget.CenterTitleToolbar;
@@ -131,6 +136,50 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    private BroadcastReceiver broadcastCheckChangeNetwork = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int status = NetworkUtils.getConnectivityStatusString(context);
+
+            networkNotConnected = status == NetworkUtils.NETWORK_STATUS_NOT_CONNECTED;
+            Logger.d(TAG, "#STATUS NETWORK " + networkNotConnected);
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
+                if (status == NetworkUtils.NETWORK_STATUS_NOT_CONNECTED) {
+                    showDialogNetwork();
+                } else {
+                    if (dialogMessage != null) {
+                        dialogMessage.dismissDialogView();
+                    }
+                    if (mCurrentFragment != null) {
+                        onReloadFragment(mCurrentFragment.getFragmentId());
+                    }
+                }
+            }
+        }
+    };
+
+    private DialogMessage dialogMessage;
+    public boolean networkNotConnected;
+
+    private void showDialogNetwork() {
+        if (dialogMessage == null) {
+            dialogMessage = new DialogMessage(this, new DialogMessage.IOnClickListener() {
+                @Override
+                public void buttonYesClick() {
+                    showDialogNetwork();
+                }
+
+                @Override
+                public void buttonCancelClick() {
+
+                }
+            });
+            dialogMessage.initData("インターネットは接続できませんでした", getString(R.string.OK));
+        }
+        dialogMessage.show();
+    }
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -159,6 +208,9 @@ public class MainActivity extends AppCompatActivity
         Fabric.with(this, new Crashlytics());
         DBManager.getInstance().init(this);
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(Constants.ACTION_REFRESH_LIST_PUSH));
+        registerReceiver(broadcastCheckChangeNetwork, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+
         mLogoutReceiver = new LogoutReceiver();
         LocalBroadcastManager.getInstance(this).registerReceiver(mLogoutReceiver, new IntentFilter(ACTION_LOGOUT));
         mWindow = getWindow();
@@ -563,6 +615,8 @@ public class MainActivity extends AppCompatActivity
         VolleySequence.getInstance().release();
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(broadcastReceiver);
         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(mLogoutReceiver);
+        unregisterReceiver(broadcastCheckChangeNetwork);
+
 
     }
 
@@ -582,7 +636,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 break;
             case IMainView.FRAGMENT_GROUP_CHAT_DETAIL:
-                if (mCurrentFragment instanceof GroupChatDetailFragment){
+                if (mCurrentFragment instanceof GroupChatDetailFragment) {
                     ((GroupChatDetailFragment) mCurrentFragment).onRefresh();
                 }
                 break;
