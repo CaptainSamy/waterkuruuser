@@ -89,7 +89,6 @@ public class ChangePasswordByCodeFragment extends BaseFragment<IChangeUserInfoVi
                 String code = mInputCode.getText().toString().trim();
                 String newPassword = mInputNewPassword.getText().toString().trim();
                 String confirmPassword = mInputConfirmPassword.getText().toString().trim();
-                getPresenter().onChangePasswordByCodeClicked(code, newPassword, confirmPassword);
             }
         });
     }

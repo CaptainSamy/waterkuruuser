@@ -37,34 +37,6 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
         return getModel(UtilsModel.class);
     }
 
-    void onChangePasswordByCodeClicked(String code, String password, String confirmPassword) {
-        getView().showProgress();
-        getAuth().changePasswordByCode(code, password, confirmPassword, new AuthModel.IOnChangePasswordCallback() {
-
-            @Override
-            public void onValidateFailure(String message) {
-                getView().hideProgress();
-                getView().onValidateFailure(message);
-            }
-
-            @Override
-            public void onChangePasswordSuccess(RegisterData data, String message) {
-                getView().hideProgress();
-                if (data != null) {
-                    getModel(SharedPreferencesModel.class).putToken(data.getToken());
-                    getModel(SharedPreferencesModel.class).putExpireDate(data.getExpireDate());
-                    getModel(FirebaseModel.class).uploadDeviceToken(data.getToken(), null);
-                }
-                getView().onChangePasswordSuccess(message);
-            }
-
-            @Override
-            public void onChangePasswordFailure(String message) {
-                getView().hideProgress();
-                getView().onChangePasswordFailure(message);
-            }
-        });
-    }
 
     void autoRegister(final String username, final String password, final UserResponse infoUse) {
         String message = getAuth().validateInfoUser(infoUse);
@@ -97,7 +69,7 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
     }
 
     void register(final String username, final String password, final UserResponse infoUse) {
-        getAuth().registerAccount(username,password,infoUse, new APICallback<AccessToken>() {
+        getAuth().registerAccount(username, password, infoUse, new APICallback<AccessToken>() {
             @Override
             public void onSuccess(AccessToken accessToken) {
                 getView().hideProgress();

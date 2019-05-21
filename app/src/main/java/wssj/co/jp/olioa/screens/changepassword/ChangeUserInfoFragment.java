@@ -35,6 +35,7 @@ import wssj.co.jp.olioa.model.entities.UserResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.dialogchoosen.DialogChoose;
+import wssj.co.jp.olioa.screens.dialogerror.DialogMessage;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.ImmediateResultCameraModule;
 import wssj.co.jp.olioa.utils.Logger;
@@ -234,7 +235,19 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
 
     @Override
     public void onChangePasswordSuccess(String message) {
-        backToPreviousScreen();
+        DialogMessage dialogMessage = new DialogMessage(getActivityContext(), new DialogMessage.IOnClickListener() {
+            @Override
+            public void buttonYesClick() {
+                backToPreviousScreen();
+            }
+
+            @Override
+            public void buttonCancelClick() {
+
+            }
+        });
+        dialogMessage.initData(message, getString(R.string.OK));
+        dialogMessage.show();
     }
 
     @Override
