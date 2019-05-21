@@ -13,12 +13,15 @@ import java.util.List;
 
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.model.ErrorMessage;
+import wssj.co.jp.olioa.model.entities.GroupChat;
 import wssj.co.jp.olioa.model.entities.PushNotification;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationResponse;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
 import wssj.co.jp.olioa.screens.pushnotification.adapter.PushNotificationAdapter;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
+import wssj.co.jp.olioa.screens.splash.SplashFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.widget.ILoadMoreListener;
 import wssj.co.jp.olioa.widget.LoadMoreListView;
@@ -42,6 +45,14 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     private List<PushNotification> mListNotification;
 
+    private int mPushId;
+
+    public static PushNotificationFragment newInstance(Bundle args) {
+
+        PushNotificationFragment fragment = new PushNotificationFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected String getLogTag() {
@@ -96,6 +107,10 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
 
     @Override
     protected void initData() {
+        if (getArguments() != null) {
+            mPushId = getArguments().getInt(SplashFragment.ARG_ID, -1);
+        }
+
         mListNotification = new ArrayList<>();
         mAdapter = new PushNotificationAdapter(getActivityContext(), mListNotification);
         mAdapter.setListPushTemp(mListNotification);
@@ -137,7 +152,7 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
     @Override
     public void showListPushNotification(PushNotificationResponse response) {
         if (response != null) {
-            if (mListView.getCurrentPage() == 0){
+            if (mListView.getCurrentPage() == 0) {
                 mListNotification.clear();
             }
             List<PushNotification> list = response.getListPushNotification();
@@ -148,15 +163,25 @@ public class PushNotificationFragment extends BaseFragment<IPushNotificationList
                     mListView.notifyLoadComplete();
                 }
                 mListNotification.addAll(list);
-                if (mAdapter.getCount() == 0) {
-                    showTextNoItem(true, getString(R.string.no_timeline));
-                } else {
-                    showTextNoItem(false, null);
-                }
             }
             mAdapter.notifyDataSetChanged();
         }
         mTextNoItem.setVisibility(mListNotification.size() == 0 ? View.VISIBLE : View.GONE);
+        if (mPushId != -1) {
+            PushNotification item = null;
+            for (PushNotification groupChat : mListNotification) {
+                if (groupChat.getmId() == mPushId) {
+                    item = groupChat;
+                    break;
+                }
+            }
+            mPushId = -1;
+            if (item == null) return;
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(PushNotificationDetailFragment.NOTIFICATION_ARG, item);
+            getActivityCallback().displayScreen(IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL, true, true, bundle);
+        }
+
     }
 
     @Override

@@ -11,10 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wssj.co.jp.olioa.R;
+import wssj.co.jp.olioa.model.entities.GroupChat;
 import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.screens.IMainView;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
+import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
 import wssj.co.jp.olioa.screens.liststorecheckedin.adapter.ListStoreChatAdapter;
+import wssj.co.jp.olioa.screens.splash.SplashFragment;
 
 /**
  * Created by Nguyen Huu Ta on 12/6/2017.
@@ -35,6 +38,8 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     private TextView mEmptyView;
 
     private ListStoreChatAdapter mAdapter;
+
+    private int mStoreId;
 
     public static ListStoreChatFragment newInstance(Bundle args) {
         ListStoreChatFragment fragment = new ListStoreChatFragment();
@@ -110,6 +115,9 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     @Override
     protected void initData() {
         super.initData();
+        if (getArguments() != null) {
+            mStoreId = getArguments().getInt(SplashFragment.ARG_ID, -1);
+        }
         mAdapter = new ListStoreChatAdapter(getActivityContext(), new ArrayList<StoreInfo>());
         mListStoreCheckedIn.setAdapter(mAdapter);
     }
@@ -117,10 +125,10 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     @Override
     public void onResume() {
         super.onResume();
-        if (mAdapter.getCount() == 0){
+        if (mAdapter.getCount() == 0) {
             getPresenter().getListStoreCheckedIn(TYPE);
-        }else{
-            getPresenter().getListStoreCheckedIn(TYPE,false);
+        } else {
+            getPresenter().getListStoreCheckedIn(TYPE, false);
         }
     }
 
@@ -128,6 +136,22 @@ public class ListStoreChatFragment extends BaseFragment<IListStoreCheckedInView,
     public void onGetListStoreCheckedInSuccess(List<StoreInfo> listStores) {
         mAdapter.setListStore(listStores);
         mEmptyView.setVisibility(mAdapter.getCount() == 0 ? View.VISIBLE : View.GONE);
+
+        if (mStoreId != -1) {
+            StoreInfo item = null;
+            for (StoreInfo storeInfo : listStores) {
+                if (storeInfo.getId() == mStoreId) {
+                    item = storeInfo;
+                    break;
+                }
+            }
+            mStoreId = -1;
+            if (item == null) return;
+            getPresenter().saveLastTimeReadChat(item.getId());
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(ARG_STORE_INFO, item);
+            getActivityCallback().displayScreen(IMainView.FRAGMENT_CHAT, true, true, bundle);
+        }
     }
 
     @Override

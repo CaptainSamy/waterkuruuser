@@ -77,6 +77,11 @@ public class PushNotification implements Serializable, Parcelable {
         }
     };
 
+
+    public int getmId() {
+        return mId;
+    }
+
     public void setManagerUserId(int mManagerUserId) {
         this.mManagerUserId = mManagerUserId;
     }

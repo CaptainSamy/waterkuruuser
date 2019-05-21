@@ -20,6 +20,7 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     private static final String TAG = "SplashFragment";
 
     public static final String ARG_FRAGMENT_ID = "fragment_id";
+    public static final String ARG_ID = "store_or_group_id";
 
     private SpotsDialog mDialog;
 
@@ -86,7 +87,8 @@ public class SplashFragment extends BaseFragment<ISplashView, SplashPresenter> i
     protected void initData() {
         if (getArguments() != null) {
             int fragmentId = getArguments().getInt(ARG_FRAGMENT_ID);
-            getPresenter().onCreate(fragmentId);
+            int id = getArguments().getInt(ARG_ID, -1);
+            getPresenter().onCreate(fragmentId, id);
         }
     }
 

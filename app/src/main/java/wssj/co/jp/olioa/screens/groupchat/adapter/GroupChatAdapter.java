@@ -130,7 +130,7 @@ public class GroupChatAdapter extends ArrayAdapter<GroupChatMessage> {
         }
 
         void bind(final GroupChatMessage chat) {
-            if (mContentImage != null) {
+            if (mImageStore != null) {
                 Utils.fillImage(getContext(), chat.getAvatar(), mImageStore, R.drawable.icon_user);
             }
             if (mUserName != null) {

@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
 
-
             switch (notification.getAction()) {
                 case FireBaseMsgService.ACTION_PUSH_CHAT:
                     boolean fragmentChat = mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_LIST_STORE_CHAT || mCurrentFragment.getFragmentId() == IMainView.FRAGMENT_CHAT;
@@ -224,9 +223,29 @@ public class MainActivity extends AppCompatActivity
         initView();
         initAction();
         String type = null;
+        int storeId = -1, groupId = -1, pushId = -1;
         if (getIntent() != null && getIntent().getExtras() != null) {
-            type = getIntent().getExtras().getString("type");
+            Bundle bundle = getIntent().getExtras();
+            type = bundle.getString("type");
+            try {
+                pushId = Integer.parseInt(bundle.getString("push_id"));
+            } catch (Exception e) {
+                pushId = -1;
+            }
+            try {
+                storeId = Integer.parseInt(bundle.getString("store_id"));
+            } catch (Exception e) {
+                storeId = -1;
+            }
+
+            try {
+                groupId = Integer.parseInt(bundle.getString("group_id"));
+            } catch (Exception e) {
+                groupId = -1;
+            }
         }
+
+        Logger.d(TAG, "#TYPE 4 = " + type);
         Bundle bundle = new Bundle();
         if (TextUtils.isEmpty(type)) {
             bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_GROUP_CHAT);
@@ -234,12 +253,15 @@ public class MainActivity extends AppCompatActivity
             switch (type) {
                 case FireBaseMsgService.ACTION_PUSH_CHAT:
                     bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_LIST_STORE_CHAT);
+                    bundle.putInt(SplashFragment.ARG_ID, storeId);
                     break;
                 case FireBaseMsgService.ACTION_PUSH_GROUP:
                     bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_GROUP_CHAT);
+                    bundle.putInt(SplashFragment.ARG_ID, groupId);
                     break;
                 default:
                     bundle.putInt(SplashFragment.ARG_FRAGMENT_ID, IMainView.FRAGMENT_PUSH_NOTIFICATION);
+                    bundle.putInt(SplashFragment.ARG_ID, pushId);
                     break;
             }
         }
@@ -452,21 +474,21 @@ public class MainActivity extends AppCompatActivity
         switch (screenId) {
             case FRAGMENT_PUSH_NOTIFICATION:
                 if (mListPushFragment == null) {
-                    mListPushFragment = new PushNotificationFragment();
+                    mListPushFragment = PushNotificationFragment.newInstance(bundle);
                 }
                 clearBackStack();
                 replaceFragment(mListPushFragment, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_GROUP_CHAT:
                 if (mGroupChat == null) {
-                    mGroupChat = new ListGroupChatFragment();
+                    mGroupChat = ListGroupChatFragment.newInstance(bundle);
                 }
                 clearBackStack();
                 replaceFragment(mGroupChat, hasAnimation, addToBackStack);
                 return;
             case FRAGMENT_LIST_STORE_CHAT:
                 if (mListStoreChatFragment == null) {
-                    mListStoreChatFragment = new ListStoreChatFragment();
+                    mListStoreChatFragment = ListStoreChatFragment.newInstance(bundle);
                 }
                 clearBackStack();
                 replaceFragment(mListStoreChatFragment, hasAnimation, addToBackStack);

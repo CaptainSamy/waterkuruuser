@@ -17,6 +17,7 @@ import wssj.co.jp.olioa.screens.MainActivity;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.groupchat.adapter.ListGroupChatAdapter;
 import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
+import wssj.co.jp.olioa.screens.splash.SplashFragment;
 
 /**
  * Created by Nguyen Huu Ta on 12/6/2017.
@@ -26,7 +27,6 @@ public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGrou
 
     private static final String TAG = "ListGroupChatFragment";
 
-    public static final String ARG_STORE_INFO = "storeInfo";
 
     private SwipeRefreshLayout mRefreshLayout;
 
@@ -35,6 +35,9 @@ public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGrou
     private TextView mEmptyView;
 
     private ListGroupChatAdapter mAdapter;
+
+
+    private int mGroupId;
 
     public static ListGroupChatFragment newInstance(Bundle args) {
         ListGroupChatFragment fragment = new ListGroupChatFragment();
@@ -110,6 +113,10 @@ public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGrou
     @Override
     protected void initData() {
         super.initData();
+        if (getArguments() != null) {
+            mGroupId = getArguments().getInt(SplashFragment.ARG_ID, -1);
+        }
+        print("#GROUPID :" + mGroupId);
         mAdapter = new ListGroupChatAdapter(getActivityContext(), new ArrayList<GroupChat>());
         mListStoreCheckedIn.setAdapter(mAdapter);
     }
@@ -118,7 +125,7 @@ public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGrou
     public void onResume() {
         super.onResume();
         MainActivity mainActivity = getMainActivity();
-        if (mainActivity == null || mainActivity.networkNotConnected){
+        if (mainActivity == null || mainActivity.networkNotConnected) {
             return;
         }
         getPresenter().getGroupChat(mAdapter.getCount() == 0);
@@ -128,6 +135,22 @@ public class ListGroupChatFragment extends BaseFragment<IGroupChatView, ListGrou
     public void onGetListGroupSuccess(List<GroupChat> listGroup) {
         mAdapter.setListStore(listGroup);
         mEmptyView.setVisibility(mAdapter.getCount() == 0 ? View.VISIBLE : View.GONE);
+        if (mGroupId != -1) {
+            GroupChat item = null;
+            for (GroupChat groupChat : listGroup) {
+                if (groupChat.getId() == mGroupId) {
+                    item = groupChat;
+                    break;
+                }
+            }
+            mGroupId = -1;
+            if (item == null) return;
+            getPresenter().saveLastTimeReadChat(item.getId());
+            final Bundle bundle = new Bundle();
+            bundle.putParcelable(GroupChatDetailFragment.ARG_GROUP, item);
+            getActivityCallback().displayScreen(IMainView.FRAGMENT_GROUP_CHAT_DETAIL, true, true, bundle);
+        }
+
     }
 
     @Override

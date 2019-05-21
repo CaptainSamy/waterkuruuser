@@ -1,6 +1,7 @@
 package wssj.co.jp.olioa.screens.splash;
 
 import android.os.Bundle;
+import android.text.Spannable;
 import android.text.TextUtils;
 
 import wssj.co.jp.olioa.model.auth.AuthModel;
@@ -32,7 +33,7 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
         return getModel(SharedPreferencesModel.class);
     }
 
-    public void onCreate(int fragmentId) {
+    public void onCreate(int fragmentId, int id) {
         final String token = getShareModel().getToken();
         if (TextUtils.isEmpty(token)) {
             Bundle bundle = new Bundle();
@@ -40,7 +41,12 @@ public class SplashPresenter extends FragmentPresenter<ISplashView> {
             getView().displayScreen(IMainView.FRAGMENT_CHANGE_PASSWORD, bundle);
         } else {
             APIService.getInstance().addAuthorizationHeader(token);
-            getView().displayScreen(fragmentId, null);
+            Bundle bundle = null;
+            if (id > -1) {
+                bundle = new Bundle();
+                bundle.putInt(SplashFragment.ARG_ID, id);
+            }
+            getView().displayScreen(fragmentId, bundle);
         }
     }
 

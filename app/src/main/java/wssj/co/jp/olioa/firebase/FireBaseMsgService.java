@@ -86,7 +86,7 @@ public class FireBaseMsgService extends FirebaseMessagingService {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                                 Intent.FLAG_ACTIVITY_SINGLE_TOP |
                                 Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(KEY_NOTIFICATION, notificationMessage.getAction());
+                        //intent.putExtra(KEY_NOTIFICATION, notificationMessage.getAction());
                         Logger.d(TAG, "#parseNotificationData onSuccess " + notificationMessage.getMessage());
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(FireBaseMsgService.this);
                         builder.setContentTitle(notificationMessage.getTitle());
