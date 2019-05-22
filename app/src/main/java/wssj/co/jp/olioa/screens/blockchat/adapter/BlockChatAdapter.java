@@ -2,6 +2,7 @@ package wssj.co.jp.olioa.screens.blockchat.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,6 +24,7 @@ public class BlockChatAdapter extends BaseAdapter {
     private IOlioaCallback<BlockChatStore> callback;
     private LayoutInflater inflater;
     private Context mContext;
+
     public BlockChatAdapter(Context context, List<BlockChatStore> mListStore, IOlioaCallback<BlockChatStore> callback) {
         if (mListStore == null) {
             mListStore = new ArrayList<>();
@@ -82,13 +84,20 @@ public class BlockChatAdapter extends BaseAdapter {
         }
 
         void bindData(final BlockChatStore store) {
-            Utils.fillImage(mContext,store.getLogoStore(),imageStore,R.drawable.icon_user);
+            Utils.fillImage(mContext, store.getLogoStore(), imageStore, R.drawable.icon_user);
             mStoreName.setText(store.getStoreName());
             mSwitchView.setChecked(store.getStatus() == 1);
+            mSwitchView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return event.getActionMasked() == MotionEvent.ACTION_MOVE;
+                }
+            });
+
             mSwitchView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    callback.onAction(Constants.SUCCESSFULLY,store);
+                    callback.onAction(Constants.SUCCESSFULLY, store);
                 }
             });
 

@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity
 
                 }
             });
+            dialogMessage.setCanceledOnTouchOutside(false);
             dialogMessage.initData("インターネットは接続できませんでした", getString(R.string.OK));
         }
         dialogMessage.show();
