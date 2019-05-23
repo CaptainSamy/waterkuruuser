@@ -55,7 +55,7 @@
 
         </LinearLayout>
 
-        <wssj.co.jp.olioa.widget.ExpandableTextView
+        <wssj.co.jp.obis.widget.ExpandableTextView
             android:id="@+id/tvContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -158,7 +158,7 @@
                 android:background="@color/colorTextDisable"/>
         </LinearLayout>
 
-        <wssj.co.jp.olioa.widget.likefacebook.ReactionView
+        <wssj.co.jp.obis.widget.likefacebook.ReactionView
             android:id="@+id/reactionFacebook"
             android:layout_width="match_parent"
             android:layout_height="200dp"

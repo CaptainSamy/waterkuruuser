@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <wssj.co.jp.olioa.widget.LoadMoreListView
+        <wssj.co.jp.obis.widget.LoadMoreListView
             android:id="@+id/list_push_notification"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

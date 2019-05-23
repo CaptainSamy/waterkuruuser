@@ -59,7 +59,7 @@
 
         </LinearLayout>
 
-        <wssj.co.jp.olioa.widget.ImageRoundCorners
+        <wssj.co.jp.obis.widget.ImageRoundCorners
             android:id="@+id/ivPhoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

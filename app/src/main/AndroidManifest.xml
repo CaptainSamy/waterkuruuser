@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="wssj.co.jp.olioa">
+          package="wssj.co.jp.obis">
 
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -16,7 +16,7 @@
         android:required="true"/>
 
     <application
-        android:name="wssj.co.jp.olioa.App"
+        android:name="wssj.co.jp.obis.App"
         android:allowBackup="true"
         android:icon="@mipmap/logo_app"
         android:label="@string/app_name"
@@ -37,7 +37,7 @@
         <!--</intent-filter>-->
         <!--</activity>-->
         <activity
-            android:name="wssj.co.jp.olioa.screens.MainActivity"
+            android:name="wssj.co.jp.obis.screens.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing">
@@ -58,12 +58,12 @@
         </activity>
 
         <activity
-            android:name=".screens.QuestionNaireActivity"
+            android:name="wssj.co.jp.obis.screens.QuestionNaireActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustNothing">
         </activity>
         <activity
-            android:name=".screens.PlayVideoActivity"/>
+            android:name="wssj.co.jp.obis.screens.PlayVideoActivity"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -75,13 +75,13 @@
             />
 
         <service
-            android:name=".firebase.FirebaseIDService">
+            android:name="wssj.co.jp.obis.firebase.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".firebase.FireBaseMsgService">
+            android:name="wssj.co.jp.obis.firebase.FireBaseMsgService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

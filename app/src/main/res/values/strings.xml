@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">OLIOA</string>
+    <string name="app_name">Obis</string>
 
     <string name="facebook_app_id">1604900466188470</string>
     <string name="fabook_login_protocol_scheme">fb1604900466188470</string>

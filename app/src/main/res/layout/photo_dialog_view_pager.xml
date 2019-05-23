@@ -16,7 +16,7 @@
         android:background="@drawable/border_dialog"
         android:paddingTop="10dp">
 
-        <wssj.co.jp.olioa.widget.CirclePageIndicator
+        <wssj.co.jp.obis.widget.CirclePageIndicator
             android:id="@+id/indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

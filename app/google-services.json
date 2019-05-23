@@ -8,12 +8,72 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:751629868410:android:109cbb65a1a5c0b7",
+        "android_client_info": {
+          "package_name": "wssj.co.jp.obis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751629868410-5nd4mj69mp4mc6dvpi880rs4tukln6al.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wssj.co.jp.obis",
+            "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
+          }
+        },
+        {
+          "client_id": "751629868410-aasn54bm2opkejtq82d97642ovhqav4p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wssj.co.jp.obis",
+            "certificate_hash": "a3d07df76dc256ad147cdd9a61f23e0eea0eb5f2"
+          }
+        },
+        {
+          "client_id": "751629868410-ooqfmalb9j2msfo77rqfjuh06uoj54ok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt2nZERFxYSz1RhXK1ZWKyiqsrvLW8BFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751629868410-ooqfmalb9j2msfo77rqfjuh06uoj54ok.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "751629868410-95hmg9et06jc953veg90gjuicp7sgjdc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.co.wssj.resaleyards"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:751629868410:android:8651e0cc9a883954",
         "android_client_info": {
           "package_name": "wssj.co.jp.olioa"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "751629868410-3ginmf93bv2lh7dgi4rrvug8c2g45n0s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wssj.co.jp.olioa",
+            "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
+          }
+        },
         {
           "client_id": "751629868410-q0pu9468f1n0q3hsgnv04r4fjigt6g1b.apps.googleusercontent.com",
           "client_type": 1,
@@ -33,27 +93,72 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "751629868410-ooqfmalb9j2msfo77rqfjuh06uoj54ok.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "751629868410-hv7t1baedpb6bf3indhn39p7dbustht7.apps.googleusercontent.com",
+              "client_id": "751629868410-95hmg9et06jc953veg90gjuicp7sgjdc.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "wssj.co.jp.olioastore"
+                "bundle_id": "jp.co.wssj.resaleyards"
               }
             }
           ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751629868410:android:782dea6a0649c443",
+        "android_client_info": {
+          "package_name": "wssj.co.jp.olioastore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751629868410-4g9hniceamaardtib9rp8oam8ukbm3ga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wssj.co.jp.olioastore",
+            "certificate_hash": "78d0a5424ad558d6d6678dc35e6a04120b79553d"
+          }
         },
-        "ads_service": {
-          "status": 2
+        {
+          "client_id": "751629868410-e3bapijtapgl31ap593o8n13ucfe1nbo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wssj.co.jp.olioastore",
+            "certificate_hash": "a3d07df76dc256ad147cdd9a61f23e0eea0eb5f2"
+          }
+        },
+        {
+          "client_id": "751629868410-ooqfmalb9j2msfo77rqfjuh06uoj54ok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt2nZERFxYSz1RhXK1ZWKyiqsrvLW8BFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751629868410-ooqfmalb9j2msfo77rqfjuh06uoj54ok.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "751629868410-95hmg9et06jc953veg90gjuicp7sgjdc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "jp.co.wssj.resaleyards"
+              }
+            }
+          ]
         }
       }
     }

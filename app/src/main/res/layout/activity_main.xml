@@ -8,14 +8,14 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:fitsSystemWindows="false"
-    tools:context="wssj.co.jp.olioa.screens.MainActivity">
+    tools:context="wssj.co.jp.obis.screens.MainActivity">
 
     <RelativeLayout
         android:id="@+id/viewGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <wssj.co.jp.olioa.widget.CenterTitleToolbar
+        <wssj.co.jp.obis.widget.CenterTitleToolbar
             android:id="@+id/tool_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:layout_above="@+id/navigation"
             android:background="@color/colorTextDisable"/>
 
-        <wssj.co.jp.olioa.widget.EnhancedBottomNavigationView
+        <wssj.co.jp.obis.widget.EnhancedBottomNavigationView
             android:id="@+id/navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

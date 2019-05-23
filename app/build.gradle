@@ -25,8 +25,8 @@ android {
     //https://s1v6tsqmni.execute-api.ap-northeast-1.amazonaws.com/dev
     productFlavors {
         development {
-            applicationId "wssj.co.jp.olioa"
-            buildConfigField "String", "HOST", "\"http://192.168.1.22:8745/olioa/\""
+            applicationId "wssj.co.jp.obis"
+            buildConfigField "String", "HOST", "\"http://api.iungo.jp/olioa/\""
             minSdkVersion 17
             targetSdkVersion 25
             versionCode 24
@@ -34,8 +34,8 @@ android {
             signingConfig signingConfigs.product
         }
         product {
-            applicationId "wssj.co.jp.olioa"
-            buildConfigField "String", "HOST", "\"http://133.130.73.227:8745/olioa/\""
+            applicationId "wssj.co.jp.obis"
+            buildConfigField "String", "HOST", "\"http://api.iungo.jp/olioa/\""
             minSdkVersion 17
             targetSdkVersion 25
             versionCode 24

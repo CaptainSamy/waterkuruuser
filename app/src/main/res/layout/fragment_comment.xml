@@ -24,7 +24,7 @@
                 android:background="@color/black"
                 />
 
-            <wssj.co.jp.olioa.widget.CirclePageIndicator
+            <wssj.co.jp.obis.widget.CirclePageIndicator
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

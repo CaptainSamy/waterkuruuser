@@ -14,7 +14,7 @@
         android:text="?attr/DialogTitleText"
         android:textAppearance="?attr/DialogTitleAppearance"/>
 
-    <wssj.co.jp.olioa.widget.dialog.ProgressLayout
+    <wssj.co.jp.obis.widget.dialog.ProgressLayout
         android:id="@+id/dmax_spots_progress"
         android:layout_width="@dimen/progress_width"
         android:layout_height="wrap_content"
