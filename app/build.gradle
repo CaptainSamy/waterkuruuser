@@ -28,18 +28,18 @@ android {
             applicationId "wssj.co.jp.obis"
             buildConfigField "String", "HOST", "\"http://api.iungo.jp/olioa/\""
             minSdkVersion 17
-            targetSdkVersion 25
-            versionCode 24
-            versionName "1.1.8.dev"
+            targetSdkVersion 26
+            versionCode 30
+            versionName "2.0.0.dev"
             signingConfig signingConfigs.product
         }
         product {
             applicationId "wssj.co.jp.obis"
             buildConfigField "String", "HOST", "\"http://api.iungo.jp/olioa/\""
             minSdkVersion 17
-            targetSdkVersion 25
-            versionCode 24
-            versionName "1.1.8"
+            targetSdkVersion 26
+            versionCode 30
+            versionName "2.0.0"
             signingConfig signingConfigs.product
         }
     }
