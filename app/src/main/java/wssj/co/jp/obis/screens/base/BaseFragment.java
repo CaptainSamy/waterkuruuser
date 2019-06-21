@@ -36,7 +36,7 @@ public abstract class BaseFragment<V extends IFragmentView, P extends FragmentPr
 
     public static final String KEY_SET_BOTTOM_NAVIGATION_ID = "KEY_SET_BOTTOM_NAVIGATION_ID";
 
-    private String TAG = "BaseFragment";
+    public String TAG = "BaseFragment";
 
     protected static final String KEY_SET_GLOBAL = "BaseFragment" + "_KEY_SET_GLOBAL";
 

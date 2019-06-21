@@ -49,7 +49,7 @@
 
                 <data
                     android:host="checkin"
-                    android:scheme="iungoenterprise"/>
+                    android:scheme="@string/scheme"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
