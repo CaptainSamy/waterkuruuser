@@ -18,7 +18,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -666,7 +665,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentResumed(BaseFragment fragment) {
-        Logger.d(TAG, "#onFragmentResumed ");
+        Logger.d(TAG, "#onFragmentResumed");
         if (fragment != null) {
             disablePushUpView();
             if (fragment.isEnableDrawableLayout()) {
