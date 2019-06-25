@@ -1,7 +1,6 @@
 package wssj.co.jp.olioa.screens;
 
 import android.app.ActivityManager;
-import android.app.Dialog;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,7 +18,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -36,7 +34,9 @@ import wssj.co.jp.olioa.App;
 import wssj.co.jp.olioa.BuildConfig;
 import wssj.co.jp.olioa.R;
 import wssj.co.jp.olioa.firebase.FireBaseMsgService;
+import wssj.co.jp.olioa.model.baseapi.APICallback;
 import wssj.co.jp.olioa.model.database.DBManager;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.firebase.NotificationMessage;
 import wssj.co.jp.olioa.screens.base.BaseFragment;
 import wssj.co.jp.olioa.screens.changepassword.ChangeUserInfoFragment;
@@ -48,6 +48,7 @@ import wssj.co.jp.olioa.screens.groupchat.groupchatdetail.GroupChatDetailFragmen
 import wssj.co.jp.olioa.screens.liststorecheckedin.ListStoreChatFragment;
 import wssj.co.jp.olioa.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.olioa.screens.pushnotification.pushlist.PushNotificationFragment;
+import wssj.co.jp.olioa.screens.scanner.dialog.ConfirmCheckInDialog;
 import wssj.co.jp.olioa.screens.splash.SplashFragment;
 import wssj.co.jp.olioa.utils.Constants;
 import wssj.co.jp.olioa.utils.FragmentBackStackManager;
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity
     private ListGroupChatFragment mGroupChat;
 
     private ListStoreChatFragment mListStoreChatFragment;
+
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
@@ -180,6 +182,11 @@ public class MainActivity extends AppCompatActivity
         dialogMessage.show();
     }
 
+
+    /*
+     *
+     * case app opened
+     * */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -197,7 +204,18 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+
+        if (intent != null && intent.getDataString() != null) {
+            String urlScheme = intent.getDataString();
+            String[] split = urlScheme.split("url_add_friend=");
+            if (split.length == 2) {
+                mCodeAutoCheckIn = split[1];
+                autoCheckIn();
+            }
+        }
     }
+
+    private String mCodeAutoCheckIn = Constants.EMPTY_STRING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,6 +243,20 @@ public class MainActivity extends AppCompatActivity
         initAction();
         String type = null;
         int storeId = -1, groupId = -1, pushId = -1;
+
+
+        if (getIntent() != null && getIntent().getDataString() != null) {
+            //case app not open
+            String urlScheme = getIntent().getDataString();
+            String[] split = urlScheme.split("url_add_friend=");
+            if (split.length == 2) {
+                String code = split[1];
+                mCodeAutoCheckIn = code;
+                //autoCheckIn(code);
+            }
+        }
+
+
         if (getIntent() != null && getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             type = bundle.getString("type");
@@ -268,6 +300,75 @@ public class MainActivity extends AppCompatActivity
         }
         mPresenter.displaySplashScreen(bundle);
     }
+
+    private void autoCheckIn() {
+        if (mCurrentFragment instanceof SplashFragment || mCodeAutoCheckIn.isEmpty()) {
+            return;
+        }
+
+
+        mCurrentFragment.showProgress();
+        mPresenter.checkInCode(mCodeAutoCheckIn, new APICallback<StoreInfo>() {
+            @Override
+            public void onSuccess(StoreInfo storeInfo) {
+                mCurrentFragment.hideProgress();
+                showDialogStoreCheckin(storeInfo);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                mCodeAutoCheckIn = Constants.EMPTY_STRING;
+                mCurrentFragment.hideProgress();
+                showDialogMessage(errorMessage);
+            }
+        });
+    }
+
+
+    private void showDialogStoreCheckin(StoreInfo storeInfo) {
+        ConfirmCheckInDialog mDialog = new ConfirmCheckInDialog(getViewContext(), new ConfirmCheckInDialog.IListenerDismissDialog() {
+
+            @Override
+            public void onConfirm(String code) {
+                onRequestConfirm(code);
+            }
+
+            @Override
+            public void onDismissDialog() {
+                //TODO nothing here
+            }
+        });
+        mDialog.initData(storeInfo);
+        mDialog.show();
+    }
+
+    private void onRequestConfirm(String code) {
+        mCurrentFragment.showProgress();
+        mPresenter.onConfirm(code, new APICallback<Integer>() {
+            @Override
+            public void onSuccess(Integer integer) {
+                mCurrentFragment.hideProgress();
+                mCodeAutoCheckIn = Constants.EMPTY_STRING;
+                onReloadFragment(mCurrentFragment.getFragmentId());
+                showDialogMessage(getString(R.string.check_in_success));
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                mCurrentFragment.hideProgress();
+                mCodeAutoCheckIn = Constants.EMPTY_STRING;
+                showDialogMessage(errorMessage);
+            }
+        });
+    }
+
+    private void showDialogMessage(String message) {
+        DialogMessage dialogMessage = new DialogMessage(getViewContext(), null);
+        dialogMessage.setTitle(getString(R.string.title_dialog_check_in));
+        dialogMessage.initData(message, getString(R.string.dialog_button_ok));
+        dialogMessage.show();
+    }
+
 
     private void setupFragmentBackStackManager() {
         mFragmentBackStackManager = new FragmentBackStackManager(getSupportFragmentManager(), R.id.main_container);
@@ -600,6 +701,10 @@ public class MainActivity extends AppCompatActivity
                 mNavigationView.setCheckedItem(R.id.menu_visible);
             } else {
                 mNavigationView.setCheckedItem(fragment.getNavigationMenuId());
+            }
+
+            if (!mCodeAutoCheckIn.isEmpty()) {
+                autoCheckIn();
             }
         }
     }

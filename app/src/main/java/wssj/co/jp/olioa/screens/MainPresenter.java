@@ -3,7 +3,9 @@ package wssj.co.jp.olioa.screens;
 import android.os.Bundle;
 
 import wssj.co.jp.olioa.model.auth.AuthModel;
+import wssj.co.jp.olioa.model.baseapi.APICallback;
 import wssj.co.jp.olioa.model.checkin.CheckInModel;
+import wssj.co.jp.olioa.model.entities.StoreInfo;
 import wssj.co.jp.olioa.model.preference.SharedPreferencesModel;
 import wssj.co.jp.olioa.model.pushnotification.PushNotificationModel;
 import wssj.co.jp.olioa.model.util.UtilsModel;
@@ -76,6 +78,15 @@ class MainPresenter extends BasePresenter<IMainView> {
 
     public void savePush(String objectPush) {
         getModel(SharedPreferencesModel.class).putObjectPush(objectPush);
+    }
+
+
+    void checkInCode(String code, APICallback<StoreInfo> call) {
+        getModel(CheckInModel.class).checkIn(code, call);
+    }
+
+    void onConfirm(String code, APICallback<Integer> call) {
+        getModel(CheckInModel.class).userConfirm(code, call);
     }
 
 }
