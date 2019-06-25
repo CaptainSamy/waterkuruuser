@@ -210,7 +210,9 @@ public class MainActivity extends AppCompatActivity
             String[] split = urlScheme.split("url_add_friend=");
             if (split.length == 2) {
                 mCodeAutoCheckIn = split[1];
-                autoCheckIn();
+                if (mCodeAutoCheckIn != null && !mCodeAutoCheckIn.isEmpty()) {
+                    autoCheckIn();
+                }
             }
         }
     }
@@ -302,7 +304,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void autoCheckIn() {
-        if (mCurrentFragment instanceof SplashFragment || mCodeAutoCheckIn.isEmpty()) {
+        if (mCurrentFragment instanceof SplashFragment) {
+            return;
+        }
+        String token = mPresenter.getToken();
+        if (token == null || token.isEmpty()) {
             return;
         }
 
@@ -335,7 +341,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDismissDialog() {
-                //TODO nothing here
+                mCodeAutoCheckIn = Constants.EMPTY_STRING;
             }
         });
         mDialog.initData(storeInfo);
