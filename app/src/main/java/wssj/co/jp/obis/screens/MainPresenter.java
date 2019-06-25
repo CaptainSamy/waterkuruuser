@@ -73,6 +73,10 @@ class MainPresenter extends BasePresenter<IMainView> {
         return getModel(SharedPreferencesModel.class).getUserName();
     }
 
+    public String getToken() {
+        return getModel(SharedPreferencesModel.class).getToken();
+    }
+
     public boolean isLogin() {
         return getModel(SharedPreferencesModel.class).isLogin();
     }
