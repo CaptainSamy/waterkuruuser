@@ -42,35 +42,35 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
             getView().showDialog(message);
             return;
         }
-        String newAvatar = infoUse.getNewAvatar();
-        if (TextUtils.isEmpty(newAvatar)) {
-            register(username, password, infoUse);
-        } else {
-            APIService.getInstance().addAuthorizationHeader(Constants.TOKEN_UPLOAD_IMAGE);
-            getUtils().uploadImage(newAvatar, new APICallback<String>() {
+        register(username, password, infoUse);
 
-                @Override
-                public void onSuccess(String s) {
-                    infoUse.setAvatar(s);
-                    register(username, password, infoUse);
-                }
+//        if (TextUtils.isEmpty(newAvatar)) {
+//            register(username, password, infoUse);
+//        } else {
+//            APIService.getInstance().addAuthorizationHeader(Constants.TOKEN_UPLOAD_IMAGE);
+//            getUtils().uploadImage(newAvatar, new APICallback<String>() {
+//
+//                @Override
+//                public void onSuccess(String s) {
+//                    infoUse.setAvatar(s);
+//                    register(username, password, infoUse);
+//                }
+//
+//                @Override
+//                public void onFailure(String errorMessage) {
+//                    register(username, password, infoUse);
+//                }
+//            });
+//        }
 
-                @Override
-                public void onFailure(String errorMessage) {
-                    register(username, password, infoUse);
-                }
-            });
-        }
-
-        getView().showProgress();
 
     }
 
-    void register(final String username, final String password, final UserResponse infoUse) {
+    private void register(final String username, final String password, final UserResponse infoUse) {
+        getView().showProgress();
         getAuth().registerAccount(username, password, infoUse, new APICallback<AccessToken>() {
             @Override
             public void onSuccess(AccessToken accessToken) {
-                getView().hideProgress();
                 String token = "Bearer " + accessToken.getAccessToken();
                 APIService.getInstance().addAuthorizationHeader(token);
                 getModel(SharedPreferencesModel.class).putToken(token);
@@ -79,13 +79,35 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
                 getModel(SharedPreferencesModel.class).putPassword(password);
                 getModel(SharedPreferencesModel.class).putEmail(infoUse.getEmail());
                 getModel(FirebaseModel.class).uploadDeviceToken(token, null);
-                getView().onRegisterSuccess();
+                if (TextUtils.isEmpty(infoUse.getNewAvatar())) {
+                    getView().hideProgress();
+                    getView().onRegisterSuccess();
+                } else {
+                    uploadImage(infoUse);
+                }
             }
 
             @Override
             public void onFailure(String errorMessage) {
                 getView().hideProgress();
                 getView().showDialog(errorMessage);
+            }
+        });
+    }
+
+    private void uploadImage(final UserResponse infoUse) {
+        getUtils().uploadImage(infoUse.getNewAvatar(), new APICallback<String>() {
+
+            @Override
+            public void onSuccess(String s) {
+                infoUse.setAvatar(s);
+                requestUpdate(infoUse, true);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                getView().hideProgress();
+                getView().onRegisterSuccess();
             }
         });
     }
@@ -115,19 +137,19 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
             getView().showProgress();
             String newAvatar = infoUser.getNewAvatar();
             if (TextUtils.isEmpty(newAvatar)) {
-                requestUpdate(infoUser);
+                requestUpdate(infoUser, false);
             } else {
                 getUtils().uploadImage(newAvatar, new APICallback<String>() {
 
                     @Override
                     public void onSuccess(String s) {
                         infoUser.setAvatar(s);
-                        requestUpdate(infoUser);
+                        requestUpdate(infoUser, false);
                     }
 
                     @Override
                     public void onFailure(String errorMessage) {
-                        requestUpdate(infoUser);
+                        requestUpdate(infoUser, false);
                     }
                 });
             }
@@ -137,20 +159,29 @@ class ChangeUserInfoPresenter extends FragmentPresenter<IChangeUserInfoView> {
 
     }
 
-    private void requestUpdate(UserResponse infoUser) {
-
+    private void requestUpdate(UserResponse infoUser, final boolean isFromRegister) {
         getAuth().onUpdateInfoUser(infoUser, new APICallback() {
 
             @Override
             public void onSuccess(Object o) {
                 getView().hideProgress();
-                getView().onChangePasswordSuccess("更新しました。");
+                if (isFromRegister) {
+                    getView().onRegisterSuccess();
+                } else {
+                    getView().onChangePasswordSuccess("更新しました。");
+                }
             }
 
             @Override
             public void onFailure(String errorMessage) {
                 getView().hideProgress();
-                getView().showDialog(errorMessage);
+                if (isFromRegister) {
+                    getView().onRegisterSuccess();
+                } else {
+                    getView().showDialog(errorMessage);
+                }
+
+
             }
         });
     }

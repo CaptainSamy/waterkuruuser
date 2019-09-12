@@ -80,6 +80,7 @@
     <string name="email_not_null">メールアドレスを入力していませんでした。入力してください。</string>
     <string name="email_container_chars">Email must container chars</string>
     <string name="email_validate">メールアドレスに誤りがあります。正しく入力してください。</string>
+    <string name="avatar_not_null">画像を選択してください。</string>
     <string name="term_of_service">上の会員登録ボタンを押すことにより、\n利用規約に同意したことになります</string>
     <string name="link">利用規約</string>
     <string name="register_success">登録を完了しました。これからご利用できます。</string>
@@ -251,5 +252,7 @@
     <string name="scan_string">友達追加</string>
 
     <string name="block_chat">ブロック管理</string>
+
+    <string name="image_transaction_name">image_transaction</string>
 
 </resources>

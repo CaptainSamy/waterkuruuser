@@ -66,7 +66,6 @@ public final class Constants {
 
     public static final int FAILURE = 2;
 
-    public static final String KEY_RELOAD = "key_reload";
 
     public static final int MAX_ITEM_PAGE = 30;
 
@@ -74,9 +73,7 @@ public final class Constants {
 
     public static final String APP_CERTIFICATE = "2iu34huksdfnasjkay2ualsdmkk";
 
-    public static final String TOKEN_UPLOAD_IMAGE = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIiLCJ1c2VySWQiOjAsImlhdCI6MTU1NTQ2NzEwNH0.XWxa58if0qzo82E03wInR1a6Aqld1Y_b7_NO_75khtZmsXNB1uDrD7JEBMcMBlm_ELDwMhGpYL4WzE3tws6LDA";
-
-
+    public static final String TEST = "http://133.130.73.227:8745/olioa/";
     private Constants() {
     }
 

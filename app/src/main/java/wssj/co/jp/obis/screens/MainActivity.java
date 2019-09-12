@@ -803,14 +803,9 @@ public class MainActivity extends AppCompatActivity
 
     protected boolean isAppOnTop() {
         ActivityManager am = (ActivityManager) this.getSystemService(Service.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> tasks;
-        tasks = am.getRunningTasks(1);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         ActivityManager.RunningTaskInfo running = tasks.get(0);
         String packageName = running.topActivity.getPackageName();
-        if (packageName.equals(BuildConfig.APPLICATION_ID)) {
-            return true;
-        } else {
-            return false;
-        }
+        return packageName.equals(BuildConfig.APPLICATION_ID);
     }
 }

@@ -48,7 +48,7 @@ import wssj.co.jp.obis.utils.Utils;
 public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, ChangeUserInfoPresenter>
         implements IChangeUserInfoView, View.OnClickListener {
 
-    private static final String TAG = "ChangeAccountFragment";
+    private static final String TAG = "ChangeUserInfoFragment";
 
     private static final int REQUEST_CODE_PICKER_PHOTO_1 = 100;
 
@@ -59,7 +59,7 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
 
     private EditText mInputCurrentPassword, mInputNewPassword, mInputConfirmPassword;
 
-    private TextView mButtonChangePassword, mButtonSkip, mButtonLogin, mButtonChangeAccount;
+    private TextView mButtonChangePassword, mButtonLogin, mButtonChangeAccount;
 
     private TextView mTextChangePassword;
 
@@ -151,7 +151,6 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
         mButtonChangeAccount = rootView.findViewById(R.id.buttonChangeAccount);
         mInputConfirmPassword = (EditText) rootView.findViewById(R.id.inputConfirmPassword);
         mButtonChangePassword = (TextView) rootView.findViewById(R.id.buttonChangePassword);
-        mButtonSkip = (TextView) rootView.findViewById(R.id.buttonSkip);
         mButtonLogin = (TextView) rootView.findViewById(R.id.buttonLogin);
         mInputUserName = (EditText) rootView.findViewById(R.id.etUserName);
         mInputEmail = (EditText) rootView.findViewById(R.id.etEmail);
@@ -163,10 +162,8 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
         mImageAvatar = (ImageView) rootView.findViewById(R.id.ivAvatar);
         mDialogChoose = new DialogChoose(getActivityContext());
         if (isFromMenu) {
-            mButtonSkip.setVisibility(View.GONE);
             mButtonLogin.setVisibility(View.GONE);
         } else {
-            mButtonSkip.setVisibility(View.VISIBLE);
             mButtonLogin.setVisibility(View.VISIBLE);
         }
 
@@ -178,7 +175,6 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
         mButtonChangeAccount.setOnClickListener(this);
         mTextChangePassword.setOnClickListener(this);
         mButtonChangePassword.setOnClickListener(this);
-        mButtonSkip.setOnClickListener(this);
         mButtonLogin.setOnClickListener(this);
         mImageAvatar.setOnClickListener(this);
         mRadioGroupSex.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -284,14 +280,6 @@ public class ChangeUserInfoFragment extends BaseFragment<IChangeUserInfoView, Ch
                     String password = Constants.Register.PASSWORD + time;
                     getPresenter().autoRegister(username, password, mInfoUser);
                 }
-                break;
-            case R.id.buttonSkip:
-                long time = System.currentTimeMillis();
-                String username = Constants.Register.ACCOUNT + time;
-                String password = Constants.Register.PASSWORD + time;
-                mInfoUser.setEmail(Constants.Register.EMAIL);
-                mInfoUser.setName(Constants.Register.NAME);
-                getPresenter().register(username, password, mInfoUser);
                 break;
             case R.id.buttonLogin:
                 getActivityCallback().displayScreen(IMainView.FRAGMENT_LOGIN, true, true);

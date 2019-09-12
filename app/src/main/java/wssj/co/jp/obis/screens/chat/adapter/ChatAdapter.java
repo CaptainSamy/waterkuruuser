@@ -1,7 +1,10 @@
 package wssj.co.jp.obis.screens.chat.adapter;
 
+import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.obis.R;
 import wssj.co.jp.obis.model.chat.ChatMessage;
 import wssj.co.jp.obis.model.entities.ContentChatImage;
+import wssj.co.jp.obis.screens.ImageDetailActivity;
 import wssj.co.jp.obis.screens.MainActivity;
 import wssj.co.jp.obis.utils.DateConvert;
 import wssj.co.jp.obis.utils.Utils;
@@ -43,8 +47,11 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
     private IClickImageStore clickImageStore;
 
+    private MainActivity mainActivity;
+
     public ChatAdapter(@NonNull MainActivity context, @NonNull List<ChatMessage> objects) {
         super(context, 0, objects);
+        this.mainActivity = context;
         mInflate = LayoutInflater.from(context);
         mWidth = Utils.getWidthDevice(context) / 2;
     }
@@ -117,8 +124,7 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
 
         private TextView mContent;
 
-        private ImageView
-                mContentImage;
+        private ImageView mContentImage;
 
         private CircleImageView mImageStore;
 
@@ -135,7 +141,6 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
                 mContentImage.getLayoutParams().height = mWidth;
                 mContentImage.getLayoutParams().width = mWidth;
             }
-
         }
 
         public void bind(final ChatMessage chat, int position) {
@@ -152,10 +157,27 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
                 mDate.setText(chat.getDate());
             }
             if (mContentImage != null) {
-                ContentChatImage contentChatImage = chat.getContentChatImage();
+                final ContentChatImage contentChatImage = chat.getContentChatImage();
                 if (contentChatImage != null) {
                     Utils.fillImage(getContext(), contentChatImage.getPreviewImageUrl(), mContentImage, R.drawable.image_choose, 100);
                 }
+
+
+                mContentImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mainActivity, ImageDetailActivity.class);
+                        intent.putExtra(ImageDetailActivity.ARG_IMAGE, contentChatImage.getPreviewImageUrl());
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ActivityOptionsCompat options = ActivityOptionsCompat.
+                                    makeSceneTransitionAnimation(mainActivity, v, mainActivity.getString(R.string.image_transaction_name));
+                            mainActivity.startActivity(intent, options.toBundle());
+                        } else {
+                            mainActivity.startActivity(intent);
+                        }
+                    }
+                });
+
             }
             if (mContent != null) {
                 mContent.setText((chat.getContent()));
