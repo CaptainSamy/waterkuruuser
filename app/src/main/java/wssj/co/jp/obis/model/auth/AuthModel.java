@@ -313,9 +313,11 @@ public class AuthModel extends BaseModel {
             message = getStringResource(R.string.user_name_not_null);
         } else if (!isEmailValid(infoUser.getEmail())) {
             message = getStringResource(R.string.email_validate);
-        }else if (TextUtils.isEmpty(infoUser.getNewAvatar())){
-            message = getStringResource(R.string.avatar_not_null);
         }
+
+//        else if (TextUtils.isEmpty(infoUser.getNewAvatar())){
+//            message = getStringResource(R.string.avatar_not_null);
+//        }
 //        else if (infoUser.isChangePassword()) {
 //            if (TextUtils.isEmpty(infoUser.getCurrentPassword())) {
 //                message = getStringResource(R.string.current_password_not_null);
