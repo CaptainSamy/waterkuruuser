@@ -28,18 +28,18 @@ android {
             applicationId "wssj.co.jp.obis"
             buildConfigField "String", "HOST", "\"http://api.iungo.jp/olioa/\""
             minSdkVersion 17
-            targetSdkVersion 26
-            versionCode 30
-            versionName "2.0.0.dev"
+            targetSdkVersion 28
+            versionCode 32
+            versionName "2.0.2.dev"
             signingConfig signingConfigs.product
         }
         product {
             applicationId "wssj.co.jp.obis"
             buildConfigField "String", "HOST", "\"http://api.iungo.jp/olioa/\""
             minSdkVersion 17
-            targetSdkVersion 26
-            versionCode 30
-            versionName "2.0.0"
+            targetSdkVersion 28
+            versionCode 32
+            versionName "2.0.2"
             signingConfig signingConfigs.product
         }
     }
@@ -93,8 +93,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.google.firebase:firebase-messaging:10.2.6'
     compile 'com.iarcuschin:simpleratingbar:0.1.5'
-    compile 'com.amazonaws:aws-android-sdk-core:2.4.4'
-    compile 'com.amazonaws:aws-android-sdk-s3:2.4.4'
     compile 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
     compile 'com.facebook.android:facebook-android-sdk:4.28.0'
     compile 'com.twitter.sdk.android:twitter:3.0.0'

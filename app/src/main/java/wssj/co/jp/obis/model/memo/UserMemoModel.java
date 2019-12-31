@@ -3,22 +3,16 @@ package wssj.co.jp.obis.model.memo;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import java.io.File;
 import java.util.List;
 
 import wssj.co.jp.obis.R;
 import wssj.co.jp.obis.model.BaseModel;
 import wssj.co.jp.obis.model.ErrorResponse;
 import wssj.co.jp.obis.model.ResponseData;
-import wssj.co.jp.obis.utils.AmazonS3Utils;
-import wssj.co.jp.obis.utils.Constants;
-import wssj.co.jp.obis.utils.Logger;
 import wssj.co.jp.obis.utils.Utils;
 import wssj.co.jp.obis.utils.VolleySequence;
 
