@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 import wssj.co.jp.olioa.model.entities.ContentChatImage;
+import wssj.co.jp.olioa.model.entities.ContentImageMap;
 
 /**
  * Created by DaiKySy on 3/28/2019.
@@ -11,6 +12,7 @@ import wssj.co.jp.olioa.model.entities.ContentChatImage;
 public class ChatMessage {
 
     //    public static final String TYPE_TEXT = "text";
+    public static final String TYPE_IMAGE_MAP = "imagemap";
     public static final String TYPE_IMAGE = "image";
 
 
@@ -39,6 +41,8 @@ public class ChatMessage {
     private String date;
 
     private ContentChatImage contentChatImage;
+
+    private ContentImageMap contentImageMap;
 
     public String getDate() {
         return date;
@@ -110,6 +114,14 @@ public class ChatMessage {
             contentChatImage = gson.fromJson(content, ContentChatImage.class);
         }
         return contentChatImage;
+    }
+
+    public ContentImageMap getContentImageMap() {
+        if (contentImageMap == null) {
+            Gson gson = new Gson();
+            contentImageMap = gson.fromJson(content, ContentImageMap.class);
+        }
+        return contentImageMap;
     }
 
 
