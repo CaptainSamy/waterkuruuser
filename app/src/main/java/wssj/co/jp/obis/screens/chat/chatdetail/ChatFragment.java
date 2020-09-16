@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -178,6 +179,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
     @Override
     public void onGetHistoryChatSuccess(final List<ChatMessage> history) {
         if (!Utils.isEmpty(history)) {
+            Log.d(TAG, "get history chat success");
             dbManager.insertListChat(history);
             sortListChat(history);
             int size = mListChat.size();
@@ -272,6 +274,7 @@ public class ChatFragment extends BaseFragment<IChatView, ChatPresenter> impleme
 
     @Override
     public void onLoadMoreTop(int page) {
+        Log.d(TAG, "Load more: "+page);
         if (mListChat.size() > 0) {
             long lastId = mListChat.get(0).getId();
             if (dbManager.isExistsChatId(storeInfo.getId(), lastId)) {

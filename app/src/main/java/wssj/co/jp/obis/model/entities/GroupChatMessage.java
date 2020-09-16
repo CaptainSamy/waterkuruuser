@@ -45,6 +45,8 @@ public class GroupChatMessage {
 
     private ContentChatImage contentChatImage;
 
+    private ContentImageMap contentImageMap;
+
     public long getId() {
         return id;
     }
@@ -115,6 +117,14 @@ public class GroupChatMessage {
             contentChatImage = gson.fromJson(content, ContentChatImage.class);
         }
         return contentChatImage;
+    }
+
+    public ContentImageMap getContentImageMap(){
+        if (contentImageMap == null) {
+            Gson gson = new Gson();
+            contentImageMap = gson.fromJson(content, ContentImageMap.class);
+        }
+        return contentImageMap;
     }
 
 }

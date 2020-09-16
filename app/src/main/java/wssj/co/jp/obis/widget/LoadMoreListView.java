@@ -72,8 +72,12 @@ public class LoadMoreListView extends ListView implements AbsListView.OnScrollLi
     @Override
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if (mListenerTop != null) {
+            Logger.d("LoadMoreListView", totalItemCount + "/" + (firstVisibleItem + visibleItemCount));
             if (totalItemCount > 0) {
+                Logger.d("LoadMoreListView", totalItemCount + " > 0" );
+                Logger.d("LoadMoreListView", "First visible item : " + firstVisibleItem );
                 if (firstVisibleItem == 0) {
+                    Logger.d("ScrLoadMoreListView", firstVisibleItem + " = 0" );
                     View v = this.getChildAt(0);
                     int offset = (v == null) ? 0 : v.getTop();
                     if (offset == 0) {
