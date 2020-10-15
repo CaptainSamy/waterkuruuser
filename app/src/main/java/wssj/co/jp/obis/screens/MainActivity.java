@@ -40,8 +40,7 @@ import wssj.co.jp.obis.model.entities.StoreInfo;
 import wssj.co.jp.obis.model.firebase.NotificationMessage;
 import wssj.co.jp.obis.screens.base.BaseFragment;
 import wssj.co.jp.obis.screens.changepassword.ChangeUserInfoFragment;
-//import wssj.co.jp.obis.screens.chat.chatdetail.ChatFragment;
-//import wssj.co.jp.obis.screens.comment.CommentFragment;
+import wssj.co.jp.obis.screens.chat.chatdetail.ChatFragment;
 import wssj.co.jp.obis.screens.dialogerror.DialogMessage;
 import wssj.co.jp.obis.screens.groupchat.ListGroupChatFragment;
 import wssj.co.jp.obis.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
@@ -779,11 +778,11 @@ public class MainActivity extends AppCompatActivity
                     mListStoreChatFragment.onRefresh();
                 }
                 break;
-//            case IMainView.FRAGMENT_CHAT:
-//                if (mCurrentFragment instanceof ChatFragment) {
-//                    ((ChatFragment) mCurrentFragment).onRefresh();
-//                }
-//                break;
+            case IMainView.FRAGMENT_CHAT:
+                if (mCurrentFragment instanceof ChatFragment) {
+                    ((ChatFragment) mCurrentFragment).onRefresh();
+                }
+                break;
         }
     }
 

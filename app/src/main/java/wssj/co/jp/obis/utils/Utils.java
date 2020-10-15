@@ -60,7 +60,6 @@ import java.util.concurrent.TimeUnit;
 
 import wssj.co.jp.obis.R;
 import wssj.co.jp.obis.model.ErrorResponse;
-import wssj.co.jp.obis.model.stamp.ListCardResponse;
 import wssj.co.jp.obis.screens.MainActivity;
 
 /**
@@ -75,16 +74,16 @@ public final class Utils {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
-    @NonNull
-    public static List<ListCardResponse.ListCardData.CardData> getListCardByType(List<ListCardResponse.ListCardData.CardData> cards, String cardType) {
-        List<ListCardResponse.ListCardData.CardData> list = new ArrayList<>();
-        for (ListCardResponse.ListCardData.CardData card : cards) {
-            if (TextUtils.equals(card.getCardStatus(), cardType)) {
-                list.add(card);
-            }
-        }
-        return list;
-    }
+//    @NonNull
+//    public static List<ListCardResponse.ListCardData.CardData> getListCardByType(List<ListCardResponse.ListCardData.CardData> cards, String cardType) {
+//        List<ListCardResponse.ListCardData.CardData> list = new ArrayList<>();
+//        for (ListCardResponse.ListCardData.CardData card : cards) {
+//            if (TextUtils.equals(card.getCardStatus(), cardType)) {
+//                list.add(card);
+//            }
+//        }
+//        return list;
+//    }
 
     public static int convertDpToPixel(Context context, float dp) {
         if (context != null && context.getResources() != null) {

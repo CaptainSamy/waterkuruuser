@@ -1,11 +1,8 @@
 package wssj.co.jp.obis.widget;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +24,6 @@ import wssj.co.jp.obis.R;
 //import wssj.co.jp.obis.screens.comment.CommentFragment;
 import wssj.co.jp.obis.model.entities.VideoObject;
 import wssj.co.jp.obis.screens.IActivityCallback;
-import wssj.co.jp.obis.screens.IMainView;
-import wssj.co.jp.obis.screens.PlayVideoActivity;
 import wssj.co.jp.obis.utils.Constants;
 import wssj.co.jp.obis.utils.Utils;
 

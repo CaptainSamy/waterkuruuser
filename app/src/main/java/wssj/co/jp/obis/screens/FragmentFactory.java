@@ -15,12 +15,10 @@ import wssj.co.jp.obis.screens.groupchat.groupchatdetail.GroupChatDetailFragment
 import wssj.co.jp.obis.screens.login.LoginFragment;
 import wssj.co.jp.obis.screens.pushnotification.detail.PushNotificationDetailFragment;
 import wssj.co.jp.obis.screens.pushnotification.pushlist.PushNotificationFragment;
-import wssj.co.jp.obis.screens.registeraccount.RegisterAccountFragment;
-import wssj.co.jp.obis.screens.resetpassword.ResetPasswordFragment;
 import wssj.co.jp.obis.screens.scanner.ScannerFragment;
 import wssj.co.jp.obis.screens.splash.SplashFragment;
-import wssj.co.jp.obis.screens.termofservice.fragment.TermOfServiceFragment;
-import wssj.co.jp.obis.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
+//import wssj.co.jp.obis.screens.termofservice.fragment.TermOfServiceFragment;
+//import wssj.co.jp.obis.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
 
 /**
  * Created by HieuPT on 10/18/2017.
@@ -51,20 +49,8 @@ public final class FragmentFactory {
             case IMainView.FRAGMENT_LOGIN:
                 fragment = new LoginFragment();
                 break;
-            case IMainView.FRAGMENT_RESET_PASSWORD:
-                fragment = new ResetPasswordFragment();
-                break;
             case IMainView.FRAGMENT_CHANGE_PASSWORD_CODE:
                 fragment = new ChangePasswordByCodeFragment();
-                break;
-            case IMainView.FRAGMENT_REGISTER_ACCOUNT:
-                fragment = new RegisterAccountFragment();
-                break;
-            case IMainView.FRAGMENT_TERM_OF_SERVICE:
-                fragment = new TermOfServiceFragment();
-                break;
-            case IMainView.FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM:
-                fragment = new TermOfServiceNoMenuBottom();
                 break;
             case IMainView.FRAGMENT_PUSH_NOTIFICATION_DETAIL:
                 fragment = PushNotificationDetailFragment.newInstance(bundle);
