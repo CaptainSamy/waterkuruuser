@@ -2,7 +2,7 @@ package wssj.co.jp.obis.screens.chat.dialog;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+//import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,9 +19,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import wssj.co.jp.obis.R;
 import wssj.co.jp.obis.model.timeline.ProfileResponse;
 import wssj.co.jp.obis.screens.IActivityCallback;
-import wssj.co.jp.obis.screens.IMainView;
+//import wssj.co.jp.obis.screens.IMainView;
 import wssj.co.jp.obis.screens.base.BaseDialog;
-import wssj.co.jp.obis.screens.timeline.timelinedetail.TimeLineDetailFragment;
+//import wssj.co.jp.obis.screens.timeline.timelinedetail.TimeLineDetailFragment;
 import wssj.co.jp.obis.utils.Constants;
 import wssj.co.jp.obis.utils.Utils;
 
@@ -107,21 +107,21 @@ public class DialogProfile extends BaseDialog<IDialogProfileView, DialogProfileP
             case R.id.buttonCancel:
                 dismiss();
                 break;
-            case R.id.buttonHome:
-                Bundle bundle = new Bundle();
-                bundle.putInt(TimeLineDetailFragment.KEY_USER_MANAGER_ID, mManagerId);
-                bundle.putString(TimeLineDetailFragment.KEY_IMAGE_STORE, mUrlAvatar);
-                bundle.putString(TimeLineDetailFragment.KEY_STORE_NAME, mStoreName);
-                mMainCallback.displayScreen(IMainView.FRAGMENT_TIMELINE_DETAIL, true, true, bundle);
-                dismiss();
-                break;
-            case R.id.buttonProfile:
-                Bundle bundleProfile = new Bundle();
-                bundleProfile.putInt(TimeLineDetailFragment.KEY_USER_MANAGER_ID, mManagerId);
-                bundleProfile.putString(TimeLineDetailFragment.KEY_STORE_NAME, mStoreName);
-                mMainCallback.displayScreen(IMainView.FRAGMENT_PROFILE, true, true, bundleProfile);
-                dismiss();
-                break;
+//            case R.id.buttonHome:
+//                Bundle bundle = new Bundle();
+//                bundle.putInt(TimeLineDetailFragment.KEY_USER_MANAGER_ID, mManagerId);
+//                bundle.putString(TimeLineDetailFragment.KEY_IMAGE_STORE, mUrlAvatar);
+//                bundle.putString(TimeLineDetailFragment.KEY_STORE_NAME, mStoreName);
+//                mMainCallback.displayScreen(IMainView.FRAGMENT_TIMELINE_DETAIL, true, true, bundle);
+//                dismiss();
+//                break;
+//            case R.id.buttonProfile:
+//                Bundle bundleProfile = new Bundle();
+//                bundleProfile.putInt(TimeLineDetailFragment.KEY_USER_MANAGER_ID, mManagerId);
+//                bundleProfile.putString(TimeLineDetailFragment.KEY_STORE_NAME, mStoreName);
+//                mMainCallback.displayScreen(IMainView.FRAGMENT_PROFILE, true, true, bundleProfile);
+//                dismiss();
+//                break;
         }
 
     }

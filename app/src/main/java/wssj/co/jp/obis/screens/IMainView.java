@@ -19,12 +19,6 @@ public interface IMainView extends IView {
 
     int FRAGMENT_REGISTER_ACCOUNT = 5;
 
-    int FRAGMENT_MEMO_MANAGER = 8;
-
-    int FRAGMENT_USER_MEMO = 12;
-
-    int FRAGMENT_LIST_CARD = 13;
-
     int FRAGMENT_TERM_OF_SERVICE_N0_BOTTOM = 14;
 
     int FRAGMENT_PUSH_NOTIFICATION_LIST = 15;
@@ -49,39 +43,15 @@ public interface IMainView extends IView {
 
     int FRAGMENT_TERM_OF_SERVICE = 25;
 
-    int FRAGMENT_QA_DETAIL = 27;
-
     int FRAGMENT_CHAT = 29;
-
-    int FRAGMENT_COMMENT = 36;
 
     int FRAGMENT_TIMELINE = 37;
 
     int FRAGMENT_STORE_FOLLOW = 40;
 
-    int FRAGMENT_WAIT_STORE_CONFIRM = 41;
-
-    int FRAGMENT_MANAGE_STAMP = 42;
-
     int FRAGMENT_SCANNER = 43;
 
     int FRAGMENT_HOME = 44;
-
-    int FRAGMENT_CHAT_WRAPPER = 45;
-
-    int FRAGMENT_TIMELINE_DETAIL = 48;
-
-    int FRAGMENT_PROFILE = 49;
-
-    int FRAGMENT_COUPONE = 50;
-
-    int FRAGMENT_USED_DETAIL_COUPONE = 53;
-
-    int FRAGMENT_UNUSED_DETAIL_COUPONE = 54;
-
-    int FRAGMENT_SCREEN_TEST = 55;
-
-    int FRAGMENT_CALENDER = 56;
 
     int FRAGMENT_CHAT_REALTIME = 57;
 

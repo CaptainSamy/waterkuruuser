@@ -1,8 +1,0 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="rectangle">
-    <solid android:color="@color/colorBackground_Actionbar" />
-    <corners android:radius="3dp" />
-    <stroke
-        android:width="1.2dp"
-        android:color="@color/colorStroke" />
-</shape>

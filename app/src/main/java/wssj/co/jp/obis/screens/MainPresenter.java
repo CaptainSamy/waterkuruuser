@@ -3,7 +3,6 @@ package wssj.co.jp.obis.screens;
 import android.os.Bundle;
 
 import wssj.co.jp.obis.model.auth.AuthModel;
-import wssj.co.jp.obis.model.baseapi.APICall;
 import wssj.co.jp.obis.model.baseapi.APICallback;
 import wssj.co.jp.obis.model.checkin.CheckInModel;
 import wssj.co.jp.obis.model.entities.StoreInfo;

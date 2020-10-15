@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import wssj.co.jp.obis.R;
-import wssj.co.jp.obis.screens.comment.CommentFragment;
+//import wssj.co.jp.obis.screens.comment.CommentFragment;
 import wssj.co.jp.obis.model.entities.VideoObject;
 import wssj.co.jp.obis.screens.IActivityCallback;
 import wssj.co.jp.obis.screens.IMainView;
@@ -238,54 +238,54 @@ public class ViewContainerImages extends LinearLayout implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.image1:
-                commentFragment(0, v);
-                break;
-            case R.id.image2:
-                commentFragment(1, v);
-                break;
-            case R.id.image3:
-                commentFragment(2, v);
-                break;
-            case R.id.image4:
-                commentFragment(3, v);
-                break;
-            case R.id.image5:
-                commentFragment(4, v);
-                break;
-            case R.id.frameVideo:
-                Intent intent = new Intent(getContext(), PlayVideoActivity.class);
-                intent.putExtra(PlayVideoActivity.KEY_URL_VIDEO, mVideoObject.getUrlVideo());
-                getContext().startActivity(intent);
-                break;
-            case R.id.tvNumberComment:
-            case R.id.layoutComment:
-                if (mListUrlImage != null && mListUrlImage.size() > 0) {
-                    commentFragment(0, mImageView1);
-                } else {
-                    commentFragment(0, null);
-                }
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.image1:
+//                commentFragment(0, v);
+//                break;
+//            case R.id.image2:
+//                commentFragment(1, v);
+//                break;
+//            case R.id.image3:
+//                commentFragment(2, v);
+//                break;
+//            case R.id.image4:
+//                commentFragment(3, v);
+//                break;
+//            case R.id.image5:
+//                commentFragment(4, v);
+//                break;
+//            case R.id.frameVideo:
+//                Intent intent = new Intent(getContext(), PlayVideoActivity.class);
+//                intent.putExtra(PlayVideoActivity.KEY_URL_VIDEO, mVideoObject.getUrlVideo());
+//                getContext().startActivity(intent);
+//                break;
+//            case R.id.tvNumberComment:
+//            case R.id.layoutComment:
+//                if (mListUrlImage != null && mListUrlImage.size() > 0) {
+//                    commentFragment(0, mImageView1);
+//                } else {
+//                    commentFragment(0, null);
+//                }
+//                break;
+//        }
     }
 
-    private void commentFragment(int positionClick, View sharedView) {
-        if (mActivityCallback != null) {
-            if (sharedView != null) {
-                String urlImage = mListUrlImage.get(positionClick);
-                String fileName = urlImage.substring(urlImage.lastIndexOf("/") + 1);
-                ViewCompat.setTransitionName(sharedView, fileName);
-            }
-            Bundle bundle = new Bundle();
-            bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimelineId);
-            bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
-            bundle.putString(CommentFragment.KEY_STORE_NAME, mTextStoreName);
-            bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
-            mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, sharedView);
-
+//    private void commentFragment(int positionClick, View sharedView) {
+//        if (mActivityCallback != null) {
+//            if (sharedView != null) {
+//                String urlImage = mListUrlImage.get(positionClick);
+//                String fileName = urlImage.substring(urlImage.lastIndexOf("/") + 1);
+//                ViewCompat.setTransitionName(sharedView, fileName);
+//            }
+//            Bundle bundle = new Bundle();
+//            bundle.putInt(CommentFragment.KEY_TIME_LIKE_ID, mTimelineId);
+//            bundle.putInt(CommentFragment.KEY_ITEM_POSITION, positionClick);
+//            bundle.putString(CommentFragment.KEY_STORE_NAME, mTextStoreName);
+//            bundle.putStringArrayList(CommentFragment.KEY_LIST_ITEMS, (ArrayList<String>) mListUrlImage);
+//            mActivityCallback.displayScreen(IMainView.FRAGMENT_COMMENT, true, true, bundle, sharedView);
+//
 //                mActivityCallback.onComment(imageView, mListUrlImage, positionClick);
-
+//
 //                ViewCompat.setTransitionName(imageView, "simple_activity_transition");
 //                Intent intent = new Intent(mContext, CommentActivity.class);
 //                ActivityOptionsCompat options = ActivityOptionsCompat.
@@ -295,8 +295,8 @@ public class ViewContainerImages extends LinearLayout implements View.OnClickLis
 //                intent.putStringArrayListExtra("LIST_URL", (ArrayList<String>) mListUrlImage);
 //                intent.putExtra("POSITION", positionClick);
 //                mContext.startActivity(intent, options.toBundle());
-
-        }
-    }
+//
+//        }
+//    }
 
 }

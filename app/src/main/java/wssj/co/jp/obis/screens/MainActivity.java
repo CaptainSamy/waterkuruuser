@@ -40,8 +40,8 @@ import wssj.co.jp.obis.model.entities.StoreInfo;
 import wssj.co.jp.obis.model.firebase.NotificationMessage;
 import wssj.co.jp.obis.screens.base.BaseFragment;
 import wssj.co.jp.obis.screens.changepassword.ChangeUserInfoFragment;
-import wssj.co.jp.obis.screens.chat.chatdetail.ChatFragment;
-import wssj.co.jp.obis.screens.comment.CommentFragment;
+//import wssj.co.jp.obis.screens.chat.chatdetail.ChatFragment;
+//import wssj.co.jp.obis.screens.comment.CommentFragment;
 import wssj.co.jp.obis.screens.dialogerror.DialogMessage;
 import wssj.co.jp.obis.screens.groupchat.ListGroupChatFragment;
 import wssj.co.jp.obis.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
@@ -492,9 +492,9 @@ public class MainActivity extends AppCompatActivity
                 case R.id.navigation_chat:
                     mPresenter.onBottomNavigationButtonClicked(FRAGMENT_LIST_STORE_CHAT, null);
                     return true;
-                case R.id.menu_memo:
-                    mPresenter.onCloseDrawableLayout(FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
-                    return true;
+//                case R.id.menu_memo:
+//                    mPresenter.onCloseDrawableLayout(FRAGMENT_MEMO_MANAGER, true, true, null, menuId);
+//                    return true;
                 case R.id.menu_push_notification:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_PUSH_NOTIFICATION, true, true, null, menuId);
                     return true;
@@ -611,11 +611,11 @@ public class MainActivity extends AppCompatActivity
         if (sharedElement == null) {
             switchScreen(screenId, hasAnimation, addToBackStack, bundle);
         } else {
-            switch (screenId) {
-                case FRAGMENT_COMMENT:
-                    replaceFragment(CommentFragment.newInstance(bundle), sharedElement);
-                    break;
-            }
+//            switch (screenId) {
+//                case FRAGMENT_COMMENT:
+//                    replaceFragment(CommentFragment.newInstance(bundle), sharedElement);
+//                    break;
+//            }
         }
     }
 
@@ -779,11 +779,11 @@ public class MainActivity extends AppCompatActivity
                     mListStoreChatFragment.onRefresh();
                 }
                 break;
-            case IMainView.FRAGMENT_CHAT:
-                if (mCurrentFragment instanceof ChatFragment) {
-                    ((ChatFragment) mCurrentFragment).onRefresh();
-                }
-                break;
+//            case IMainView.FRAGMENT_CHAT:
+//                if (mCurrentFragment instanceof ChatFragment) {
+//                    ((ChatFragment) mCurrentFragment).onRefresh();
+//                }
+//                break;
         }
     }
 
