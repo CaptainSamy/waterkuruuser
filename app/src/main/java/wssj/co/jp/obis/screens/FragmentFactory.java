@@ -17,8 +17,6 @@ import wssj.co.jp.obis.screens.pushnotification.detail.PushNotificationDetailFra
 import wssj.co.jp.obis.screens.pushnotification.pushlist.PushNotificationFragment;
 import wssj.co.jp.obis.screens.scanner.ScannerFragment;
 import wssj.co.jp.obis.screens.splash.SplashFragment;
-//import wssj.co.jp.obis.screens.termofservice.fragment.TermOfServiceFragment;
-//import wssj.co.jp.obis.screens.termofservice.fragment.TermOfServiceNoMenuBottom;
 
 /**
  * Created by HieuPT on 10/18/2017.

@@ -94,8 +94,6 @@ public class ConversationsFragment extends BaseFragment<IConversationsView, Conv
     @Override
     protected void initViews(View rootView) {
         super.initViews(rootView);
-//        mRefreshListChat = (SwipyRefreshLayout) rootView.findViewById(R.id.refreshHistoryChat);
-//        mRefreshListChat.setDirection(SwipyRefreshLayoutDirection.BOTH);
         mListViewChat = (ListView) rootView.findViewById(R.id.lvStoreFollow);
         mInputChat = (EditText) rootView.findViewById(R.id.etChat);
         mButtonSend = (ImageView) rootView.findViewById(R.id.tvSendChat);

@@ -95,31 +95,31 @@ public final class Constants {
         public static final String EMAIL = "obis@gmail.com";
     }
 
-    public static final class CheckInStatus {
+//    public static final class CheckInStatus {
+//
+//        public static final String STATUS_WAIT_CONFIRM = "wait_confirm";
+//
+//        public static final String STATUS_CHECKED_IN = "checked_in";
+//
+//        public static final String STATUS_CHECKED_OUT = "check_out";
+//
+//        public static final String STATUS_CANCEL = "cancel";
+//
+//        private CheckInStatus() {
+//        }
+//    }
 
-        public static final String STATUS_WAIT_CONFIRM = "wait_confirm";
-
-        public static final String STATUS_CHECKED_IN = "checked_in";
-
-        public static final String STATUS_CHECKED_OUT = "check_out";
-
-        public static final String STATUS_CANCEL = "cancel";
-
-        private CheckInStatus() {
-        }
-    }
-
-    public static final class CardTypes {
-
-        public static final String CARD_TYPE_UNUSED = "unused";
-
-        public static final String CARD_TYPE_CAN_USE = "can_use";
-
-        public static final String CARD_TYPE_USED = "used";
-
-        private CardTypes() {
-        }
-    }
+//    public static final class CardTypes {
+//
+//        public static final String CARD_TYPE_UNUSED = "unused";
+//
+//        public static final String CARD_TYPE_CAN_USE = "can_use";
+//
+//        public static final String CARD_TYPE_USED = "used";
+//
+//        private CardTypes() {
+//        }
+//    }
 
     public static final class PushNotification {
 
@@ -138,38 +138,38 @@ public final class Constants {
         public static final int TYPE_PUSH_ANNOUNCE = 3;
     }
 
-    public static final class MemoConfig {
+//    public static final class MemoConfig {
+//
+//        public static final int NUMBER_LINE = 10;
+//
+//        public static final int TIME_DELAY_SHOW_VIEW = 200;
+//
+//        public static final int TYPE_SHORT_TEXT = 1;
+//
+//        public static final int TYPE_LONG_TEXT = 2;
+//
+//        public static final int TYPE_IMAGE = 3;
+//
+//        public static final int TYPE_COMBO_BOX = 4;
+//
+//        public static final int TYPE_SWITCH = 5;
+//
+//        public static final int TYPE_LEVEL = 6;
+//    }
 
-        public static final int NUMBER_LINE = 10;
-
-        public static final int TIME_DELAY_SHOW_VIEW = 200;
-
-        public static final int TYPE_SHORT_TEXT = 1;
-
-        public static final int TYPE_LONG_TEXT = 2;
-
-        public static final int TYPE_IMAGE = 3;
-
-        public static final int TYPE_COMBO_BOX = 4;
-
-        public static final int TYPE_SWITCH = 5;
-
-        public static final int TYPE_LEVEL = 6;
-    }
-
-    public static final class Like {
-
-        public static final String LIKE = "いいね！";
-
-        public static final String LOVE = "超いいね！";
-
-        public static final String HAHA = "うけるね";
-
-        public static final String WOW = "すごいね";
-
-        public static final String CRY = "悲しいね";
-
-        public static final String ANGRY = "ひどいね";
-
-    }
+//    public static final class Like {
+//
+//        public static final String LIKE = "いいね！";
+//
+//        public static final String LOVE = "超いいね！";
+//
+//        public static final String HAHA = "うけるね";
+//
+//        public static final String WOW = "すごいね";
+//
+//        public static final String CRY = "悲しいね";
+//
+//        public static final String ANGRY = "ひどいね";
+//
+//    }
 }

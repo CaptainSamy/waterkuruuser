@@ -24,7 +24,7 @@ public class APICreator {
 
     private static final String API_GET_LIST_NOTIFICATION = Constants.BASE_URL + "/api/client/users/get-notification-list-user";
 
-    private static final String API_GET_LIST_PUSH_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-questionnaire-list-user";
+//    private static final String API_GET_LIST_PUSH_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-questionnaire-list-user";
 
     private static final String API_GET_LIST_NOTIFICATION_FOR_STORE_ANNOUNCE = Constants.BASE_URL + "/api/client/users/get-list-push-notification-by-service-company-id";
 
@@ -36,7 +36,7 @@ public class APICreator {
 
     private static final String API_GET_CONTENT_PUSH = Constants.BASE_URL + "/api/client/users/get-push-notification-by-id";
 
-    private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-code-to-survey";
+//    private static final String API_GET_QUESTION_NAIRE = Constants.BASE_URL + "/api/client/users/get-code-to-survey";
 
     static GsonRequest<ListNotificationResponse> getListNotification(final String token, final long userPushId, final int isSearch, final String keySearch, final int serviceCompanyId, final int typePush, final String fromDate, final String toDate,
                                                                      final Response.Listener<ListNotificationResponse> listener,
@@ -51,9 +51,9 @@ public class APICreator {
             case Constants.TypePush.TYPE_PUSH_ANNOUNCE:
                 url = API_GET_LIST_NOTIFICATION_FOR_STORE_ANNOUNCE;
                 break;
-            case Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH:
-                url = API_GET_LIST_PUSH_QUESTION_NAIRE;
-                break;
+//            case Constants.TypePush.TYPE_QUESTION_NAIRE_PUSH:
+//                url = API_GET_LIST_PUSH_QUESTION_NAIRE;
+//                break;
             default:
                 url = API_GET_LIST_NOTIFICATION;
                 break;
@@ -110,50 +110,50 @@ public class APICreator {
         };
     }
 
-    static GsonRequest<ListNotificationResponse> getListPushQuestionNaire(final String token, final long userPushId, final int isSearch, final String keySearch,
-                                                                          final Response.Listener<ListNotificationResponse> listener,
-                                                                          final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
-                API_GET_LIST_PUSH_QUESTION_NAIRE,
-                ListNotificationResponse.class,
-                headers,
-                new Response.Listener<ListNotificationResponse>() {
-
-                    @Override
-                    public void onResponse(ListNotificationResponse response) {
-                        Logger.d(TAG, "#getListNotification -> onResponse ");
-                        if (listener != null) {
-                            listener.onResponse(response);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getListNotification -> onErrorResponse");
-                        if (errorListener != null) {
-                            errorListener.onErrorResponse(error);
-                        }
-                    }
-                }) {
-
-            @Override
-            protected Map<String, Object> getBodyParams() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("last_user_push_id", userPushId);
-                map.put("limit", Constants.LIMIT);
-                if (isSearch == 1) {
-                    map.put("is_search", isSearch);
-                    map.put("text_search", keySearch);
-                }
-                return map;
-            }
-        };
-    }
+//    static GsonRequest<ListNotificationResponse> getListPushQuestionNaire(final String token, final long userPushId, final int isSearch, final String keySearch,
+//                                                                          final Response.Listener<ListNotificationResponse> listener,
+//                                                                          final Response.ErrorListener errorListener) {
+//        Map<String, String> headers = new HashMap<>();
+//        headers.put("Accept", "application/json");
+//        headers.put("Authorization", token);
+//        return new GsonJsonRequest<ListNotificationResponse>(Request.Method.POST,
+//                API_GET_LIST_PUSH_QUESTION_NAIRE,
+//                ListNotificationResponse.class,
+//                headers,
+//                new Response.Listener<ListNotificationResponse>() {
+//
+//                    @Override
+//                    public void onResponse(ListNotificationResponse response) {
+//                        Logger.d(TAG, "#getListNotification -> onResponse ");
+//                        if (listener != null) {
+//                            listener.onResponse(response);
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Logger.d(TAG, "#getListNotification -> onErrorResponse");
+//                        if (errorListener != null) {
+//                            errorListener.onErrorResponse(error);
+//                        }
+//                    }
+//                }) {
+//
+//            @Override
+//            protected Map<String, Object> getBodyParams() {
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("last_user_push_id", userPushId);
+//                map.put("limit", Constants.LIMIT);
+//                if (isSearch == 1) {
+//                    map.put("is_search", isSearch);
+//                    map.put("text_search", keySearch);
+//                }
+//                return map;
+//            }
+//        };
+//    }
 
     static GsonRequest<ListNotificationResponse> getListNotificationForStoreAnnounce(final String token, final int serviceCompanyId, final long lastUserPushId, final int isSearch, final String keySearch,
                                                                                      final Response.Listener<ListNotificationResponse> listener,
@@ -354,39 +354,39 @@ public class APICreator {
         };
     }
 
-    static GsonJsonRequest<QuestionNaireResponse> getQuestionNaire(final String token, final long pushId,
-                                                                   final Response.Listener<QuestionNaireResponse> listener,
-                                                                   final Response.ErrorListener errorListener) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Accept", "application/json");
-        headers.put("Authorization", token);
-        return new GsonJsonRequest<QuestionNaireResponse>(Request.Method.POST,
-                API_GET_QUESTION_NAIRE,
-                QuestionNaireResponse.class,
-                headers,
-                new Response.Listener<QuestionNaireResponse>() {
-
-                    @Override
-                    public void onResponse(QuestionNaireResponse response) {
-                        Logger.d(TAG, "#getContentPush -> onResponse ");
-                        listener.onResponse(response);
-                    }
-                },
-                new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Logger.d(TAG, "#getContentPush -> onErrorResponse");
-                        errorListener.onErrorResponse(error);
-                    }
-                }) {
-
-            @Override
-            protected Map<String, Object> getBodyParams() {
-                Map<String, Object> map = new HashMap<>();
-                map.put("push_id", pushId);
-                return map;
-            }
-        };
-    }
+//    static GsonJsonRequest<QuestionNaireResponse> getQuestionNaire(final String token, final long pushId,
+//                                                                   final Response.Listener<QuestionNaireResponse> listener,
+//                                                                   final Response.ErrorListener errorListener) {
+//        Map<String, String> headers = new HashMap<>();
+//        headers.put("Accept", "application/json");
+//        headers.put("Authorization", token);
+//        return new GsonJsonRequest<QuestionNaireResponse>(Request.Method.POST,
+//                API_GET_QUESTION_NAIRE,
+//                QuestionNaireResponse.class,
+//                headers,
+//                new Response.Listener<QuestionNaireResponse>() {
+//
+//                    @Override
+//                    public void onResponse(QuestionNaireResponse response) {
+//                        Logger.d(TAG, "#getContentPush -> onResponse ");
+//                        listener.onResponse(response);
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Logger.d(TAG, "#getContentPush -> onErrorResponse");
+//                        errorListener.onErrorResponse(error);
+//                    }
+//                }) {
+//
+//            @Override
+//            protected Map<String, Object> getBodyParams() {
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("push_id", pushId);
+//                return map;
+//            }
+//        };
+//    }
 }
