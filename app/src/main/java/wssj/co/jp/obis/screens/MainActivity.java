@@ -41,6 +41,7 @@ import wssj.co.jp.obis.model.firebase.NotificationMessage;
 import wssj.co.jp.obis.screens.base.BaseFragment;
 import wssj.co.jp.obis.screens.changepassword.ChangeUserInfoFragment;
 import wssj.co.jp.obis.screens.chat.chatdetail.ChatFragment;
+//import wssj.co.jp.obis.screens.comment.CommentFragment;
 import wssj.co.jp.obis.screens.dialogerror.DialogMessage;
 import wssj.co.jp.obis.screens.groupchat.ListGroupChatFragment;
 import wssj.co.jp.obis.screens.groupchat.groupchatdetail.GroupChatDetailFragment;
@@ -506,18 +507,18 @@ public class MainActivity extends AppCompatActivity
                     mNavigationView.setCheckedItem(R.id.menu_how_to_use);
                     mPresenter.onCloseDrawableLayout(FRAGMENT_HOW_TO_USE, true, true, null, menuId);
                     return true;
-                case R.id.menu_question_answer:
-                    mPresenter.onCloseDrawableLayout(FRAGMENT_QA, true, true, null, menuId);
-                    return true;
+//                case R.id.menu_question_answer:
+//                    mPresenter.onCloseDrawableLayout(FRAGMENT_QA, true, true, null, menuId);
+//                    return true;
                 case R.id.menu_contact_us:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_CONTACT_US, true, true, null, menuId);
                     return true;
                 case R.id.menu_term_of_service:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_TERM_OF_SERVICE, true, true, null, menuId);
                     return true;
-                case R.id.menu_privacy_policy:
-                    mPresenter.onCloseDrawableLayout(FRAGMENT_POLICY, true, true, null, menuId);
-                    return true;
+//                case R.id.menu_privacy_policy:
+//                    mPresenter.onCloseDrawableLayout(FRAGMENT_POLICY, true, true, null, menuId);
+//                    return true;
                 case R.id.menu_version:
                     mPresenter.onCloseDrawableLayout(FRAGMENT_ABOUT, true, true, null, menuId);
                     return true;
